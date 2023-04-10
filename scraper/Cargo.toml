@@ -6,3 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+async-trait = "0.1.68"
+crabler-tokio = "0.1.29"
+tokio = { version = "1.27.0", features = ["macros", "net", "rt-multi-thread", "test-util"] }
+url = "2.3.1"
