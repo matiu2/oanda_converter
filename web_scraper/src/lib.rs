@@ -12,6 +12,8 @@ pub mod types {
 
     pub struct EndpointDoc {
         pub http_method: HttpMethod,
+        pub path: String,
+        pub doc_string: String,
     }
 
     pub enum HttpMethod {
@@ -44,15 +46,31 @@ fn endpoint_docs(document: &Html) -> Result<Vec<EndpointDoc>> {
     let body_selector =
         Selector::parse("#single-column > div.endpoint_body").map_err(Error::from)?;
     // Get the HTTP method and path from the headers
-    let method_selector = Selector::parse(".method").map_err(Error::from)?;
+    let http_method_selector = Selector::parse(".method").map_err(Error::from)?;
+    let path_selector = Selector::parse(".path").map_err(Error::from)?;
+    let doc_string_selector = Selector::parse(".path > p").map_err(Error::from)?;
+    #[derive(Debug)]
+    struct Header {
+        http_method: String,
+        path: String,
+        doc_string: String
+    }
     let headers = document.select(&header_selector).map(|header_fragment| {
         // Is it a header or a body
         // Get the http method fragment
-        let Some(method) = header_fragment.select(&method_selector).next()
-            else { bail!(Error::new(format!("Couldn't find the div holding the http method, with {method_selector:#?}: {}", header_fragment.html()[..1000].to_string()))); };
-        let Some(method) = method.text().next() else { bail!(Error::new(format!("Couldn't extract the method text: {}", method.html())))};
-        Ok(method)
-    }).collect::<Result<Vec<&str>>>()?;
+        let Some(http_method) = header_fragment.select(&http_method_selector).next().and_then(|element| element.text().next().map(str::to_string)) else { 
+            bail!(Error::new(format!("Couldn't find the http method, with {http_method_selector:#?}: {}", header_fragment.html()[..1000].to_string()))); 
+        };
+        // Read the path
+        let Some(path) = header_fragment.select(&path_selector).next().and_then(|element| element.text().next()).map(str::to_string) else {
+            bail!(Error::new(format!("Couldn't find the path with {path_selector:#?}: {}", header_fragment.html())));
+        };
+        // Read the docstring
+        let Some(doc_string) = header_fragment.select(&doc_string_selector).next().and_then(|element| element.text().next()).map(str::to_string) else {
+            bail!(Error::new(format!("Couldn't find the doc_string with {doc_string_selector:#?}: {}", header_fragment.html())));
+        };
+        Ok(Header{http_method, path, doc_string })
+    }).collect::<Result<Vec<Header>>>()?;
     println!("{headers:#?}");
     // TODO: Parse the bodies
     Ok(vec![])
