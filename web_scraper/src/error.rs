@@ -8,9 +8,9 @@ pub struct Error {
 }
 
 impl Error {
-    pub fn new(message: String) -> Self {
+    pub fn new(message: impl ToString) -> Self {
         Self {
-            message: Some(message),
+            message: Some(message.to_string()),
         }
     }
 }
