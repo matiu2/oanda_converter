@@ -17,7 +17,14 @@ impl Error {
 
 impl Display for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "Web Scraper Error")
+        write!(
+            f,
+            "{}",
+            self.message
+                .as_ref()
+                .map(String::as_str)
+                .unwrap_or("Web Scraper Error")
+        )
     }
 }
 

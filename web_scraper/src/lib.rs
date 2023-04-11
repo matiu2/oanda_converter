@@ -39,12 +39,22 @@ async fn get_content(url: Url) -> Result<()> {
 
 /// Get the documentation for the endpoint docs
 fn endpoint_docs(document: &Html) -> Result<Vec<EndpointDoc>> {
-    let top_selector = Selector::parse("#single-column > div").map_err(Error::from)?;
+    let header_selector =
+        Selector::parse("#single-column > div.endpoint_header").map_err(Error::from)?;
+    let body_selector =
+        Selector::parse("#single-column > div.endpoint_body").map_err(Error::from)?;
+    // Get the HTTP method and path from the headers
     let method_selector = Selector::parse(".method").map_err(Error::from)?;
-    let Some(top_fragment) = document.select(&top_selector).next()  else { return Ok(vec!()) };
-    let Some(method) = top_fragment.select(&method_selector).next() else { bail!(Error::new("Unable to find http method"))};
-    let Some(method) = method.text().next() else { bail!(Error::new("Couldn't extract the method text"))};
-    println!("Got HTTP method: {method}");
+    let headers = document.select(&header_selector).map(|header_fragment| {
+        // Is it a header or a body
+        // Get the http method fragment
+        let Some(method) = header_fragment.select(&method_selector).next()
+            else { bail!(Error::new(format!("Couldn't find the div holding the http method, with {method_selector:#?}: {}", header_fragment.html()[..1000].to_string()))); };
+        let Some(method) = method.text().next() else { bail!(Error::new(format!("Couldn't extract the method text: {}", method.html())))};
+        Ok(method)
+    }).collect::<Result<Vec<&str>>>()?;
+    println!("{headers:#?}");
+    // TODO: Parse the bodies
     Ok(vec![])
 }
 
@@ -81,11 +91,15 @@ fn endpoint_links(document: &Html, base_url: &Url) -> Result<Vec<Url>> {
 #[cfg(test)]
 mod tests {
     use super::get_content;
+    use error_stack::ResultExt;
 
     #[tokio::test]
     async fn it_works() {
         let url = reqwest::Url::parse("https://developer.oanda.com/rest-live-v20/instrument-ep/")
             .unwrap();
-        get_content(url).await.unwrap();
+        get_content(url.clone())
+            .await
+            .attach_printable_lazy(|| format!("At url: {url}"))
+            .unwrap();
     }
 }
