@@ -1,5 +1,5 @@
 [package]
-name = "scraper"
+name = "web_scraper"
 version = "0.1.0"
 edition = "2021"
 
@@ -7,6 +7,8 @@ edition = "2021"
 
 [dependencies]
 async-trait = "0.1.68"
-crabler-tokio = "0.1.29"
+error-stack = "0.3.1"
+reqwest = { version = "0.11.16", default-features = false, features = ["gzip", "deflate", "brotli", "rustls-tls", "h3", "trust-dns"] }
+scraper = "0.16.0"
+thiserror = "1.0.40"
 tokio = { version = "1.27.0", features = ["macros", "net", "rt-multi-thread", "test-util"] }
-url = "2.3.1"

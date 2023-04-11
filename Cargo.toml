@@ -1,2 +1,2 @@
 [workspace]
-members = ["scraper", "converter", "writer", "oanda_converter"]
+members = ["web_scraper", "converter", "writer", "oanda_converter"]
