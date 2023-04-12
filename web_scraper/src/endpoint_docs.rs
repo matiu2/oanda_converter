@@ -1,5 +1,5 @@
-use crate::{Error, Result};
-use error_stack::{bail, IntoReport, ResultExt};
+use crate::{bail, Error, Result};
+use error_stack::{IntoReport, ResultExt};
 use model::{RestCall, RestCallParameter};
 use scraper::{ElementRef, Html, Selector};
 
@@ -19,11 +19,11 @@ pub fn endpoint_docs(document: &Html, name: String) -> Result<Vec<RestCall>> {
     let parameter_sets = get_all_rest_call_parameters(document)?;
     // Now zip them together
     if headers.len() != parameter_sets.len() {
-        bail!(Error::new(format!(
+        bail!(
             "The number of table headers and table bodies differs: {} headers and {} bodies",
             headers.len(),
             parameter_sets.len()
-        )))
+        )
     }
     headers
         .into_iter()
@@ -68,15 +68,15 @@ fn get_rest_call_headers(document: &Html) -> Result<Vec<Header>> {
         // Is it a header or a body
         // Get the http method fragment
         let Some(http_method) = get_text(&http_method_selector) else {
-            bail!(Error::new(format!("Couldn't find the http method, with {http_method_selector:#?}: {}", header_fragment.html()[..1000].to_string()))); 
+            bail!("Couldn't find the http method, with {http_method_selector:#?}: {}", header_fragment.html()[..1000].to_string()); 
         };
         // Read the path
         let Some(path) = get_text(&path_selector) else {
-            bail!(Error::new(format!("Couldn't find the path with {path_selector:#?}: {}", header_fragment.html())));
+            bail!("Couldn't find the path with {path_selector:#?}: {}", header_fragment.html());
         };
         // Read the docstring
         let Some(doc_string) = get_text(&doc_string_selector) else {
-            bail!(Error::new(format!("Couldn't find the doc_string with {doc_string_selector:#?}: {}", header_fragment.html())));
+            bail!("Couldn't find the doc_string with {doc_string_selector:#?}: {}", header_fragment.html());
         };
         Ok(Header{http_method, path, doc_string })
     }).collect()
@@ -97,12 +97,12 @@ fn get_all_rest_call_parameters(document: &Html) -> Result<Vec<Vec<RestCallParam
                 .collect();
             const EXPECTED: [&str; 4] = ["Name", "Located In", "Type", "Description"];
             if table_rows.as_slice() != EXPECTED {
-                bail!(Error::new(format!(
+                bail!(
                     "The table rows have changed. \nExpected: {EXPECTED:?}\nGot:    {table_rows:?}"
-                )))
+                )
             }
             // Now read each row
-            let Some(tbody) = fragment.select(&tbody_selector).next() else { bail!(Error::new(format!("Couldn't find table body for api call docs: using {tbody_selector:?} in {}", fragment.html())))};
+            let Some(tbody) = fragment.select(&tbody_selector).next() else { bail!("Couldn't find table body for api call docs: using {tbody_selector:?} in {}", fragment.html())};
             get_rest_call_parameters(tbody)
         })
         .collect()

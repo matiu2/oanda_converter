@@ -4,8 +4,15 @@ use reqwest::Url;
 pub mod error;
 use endpoint_docs::endpoint_docs;
 pub use error::Error;
-use error_stack::{bail, IntoReport, Result as ErrorStackResult, ResultExt};
+use error_stack::{IntoReport, Result as ErrorStackResult, ResultExt};
 use scraper::Html;
+
+#[macro_export]
+macro_rules! bail {
+    ($($arg:tt)*) => {
+        error_stack::bail!(Error::new(format!($($arg)*)))
+    };
+}
 
 pub type Result<T> = ErrorStackResult<T, Error>;
 
@@ -22,7 +29,7 @@ pub async fn get_content(url: Url) -> Result<()> {
     let urls = endpoint_links(&document, &url)?;
     // Extract the endpoint name from the url
     // Get all the endpoint documentation
-    let Some(endpoint_name) = endpoint_name(&url) else { bail!(Error::new(format!("Unable to extract endpoint name from url: {url:#?}")))};
+    let Some(endpoint_name) = endpoint_name(&url) else { bail!("Unable to extract endpoint name from url: {url:#?}")};
     let endpoint_docs = endpoint_docs(&document, endpoint_name)?;
     println!("{endpoint_docs:#?}");
     Ok(())
