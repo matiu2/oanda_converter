@@ -1,5 +1,6 @@
 pub mod endpoint_docs;
 
+use model::RestCall;
 use reqwest::Url;
 pub mod error;
 use endpoint_docs::endpoint_docs;
@@ -16,7 +17,12 @@ macro_rules! bail {
 
 pub type Result<T> = ErrorStackResult<T, Error>;
 
-pub async fn get_content(url: Url) -> Result<()> {
+pub struct Content {
+    pub urls: Vec<Url>,
+    pub endpoint_docs: Vec<RestCall>,
+}
+
+pub async fn get_content(url: Url) -> Result<Content> {
     let html = reqwest::get(url.clone())
         .await
         .into_report()
@@ -32,7 +38,10 @@ pub async fn get_content(url: Url) -> Result<()> {
     let Some(endpoint_name) = endpoint_name(&url) else { bail!("Unable to extract endpoint name from url: {url:#?}")};
     let endpoint_docs = endpoint_docs(&document, endpoint_name)?;
     println!("{endpoint_docs:#?}");
-    Ok(())
+    Ok(Content {
+        urls,
+        endpoint_docs,
+    })
 }
 
 /// Extracts the endpoint name from the url if possible
@@ -73,12 +82,13 @@ mod tests {
     use error_stack::ResultExt;
 
     #[tokio::test]
-    async fn it_works() {
+    async fn instrument_page() {
         let url = reqwest::Url::parse("https://developer.oanda.com/rest-live-v20/instrument-ep/")
             .unwrap();
-        get_content(url.clone())
+        let content = get_content(url.clone())
             .await
             .attach_printable_lazy(|| format!("At url: {url}"))
             .unwrap();
+        todo!("Test the output");
     }
 }
