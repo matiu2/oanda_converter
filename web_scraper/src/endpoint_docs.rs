@@ -1,6 +1,6 @@
 use crate::{bail, Error, Result};
 use error_stack::{IntoReport, ResultExt};
-use model::{RestCall, RestCallParameter};
+use model::endpoint_docs::{RestCall, RestCallParameter};
 use scraper::{ElementRef, Html, Selector};
 
 #[derive(Debug)]

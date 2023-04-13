@@ -1,6 +1,7 @@
+pub mod definitions;
 pub mod endpoint_docs;
 
-use model::RestCall;
+use model::endpoint_docs::RestCall;
 use reqwest::Url;
 pub mod error;
 use endpoint_docs::endpoint_docs;
@@ -79,7 +80,7 @@ fn endpoint_links(document: &Html, base_url: &Url) -> Result<Vec<Url>> {
 mod tests {
     use super::get_content;
     use error_stack::ResultExt;
-    use model::{Endpoint, HttpMethod};
+    use model::endpoint_docs::{Endpoint, HttpMethod};
     use reqwest::Url;
 
     #[tokio::test]
