@@ -80,6 +80,8 @@ fn endpoint_links(document: &Html, base_url: &Url) -> Result<Vec<Url>> {
 mod tests {
     use super::get_content;
     use error_stack::ResultExt;
+    use model::{Endpoint, HttpMethod};
+    use reqwest::Url;
 
     #[tokio::test]
     async fn instrument_page() {
@@ -89,6 +91,28 @@ mod tests {
             .await
             .attach_printable_lazy(|| format!("At url: {url}"))
             .unwrap();
-        todo!("Test the output");
+        assert!(content
+            .urls
+            .contains(&Url::parse("https://developer.oanda.com/rest-live-v20/trade-ep/").unwrap()));
+        let first_api_call_docs = &content.endpoint_docs[0];
+        assert_eq!(first_api_call_docs.http_method, HttpMethod::Get);
+        assert_eq!(
+            first_api_call_docs.doc_string.as_str(),
+            "Fetch candlestick data for an instrument."
+        );
+        assert!(content
+            .endpoint_docs
+            .iter()
+            .all(|docs| docs.endpoint == Endpoint::Instrument));
+        assert_eq!(
+            first_api_call_docs.path.as_str(),
+            "/v3/instruments/{instrument}/candles"
+        );
+        let third_parameter = &first_api_call_docs.parameters[3];
+        assert_eq!(third_parameter.type_name.as_str(), "PricingComponent");
+        assert_eq!(
+            third_parameter.description.as_str(),
+            "The Price component(s) to get candlestick data for. [default=M]"
+        );
     }
 }
