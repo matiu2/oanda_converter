@@ -57,8 +57,7 @@ fn endpoint_name(url: &Url) -> Option<String> {
 
 /// Read and navidgae the links to endpoint on the left side of the page
 fn endpoint_links(document: &Html, base_url: &Url) -> Result<Vec<Url>> {
-    let selector = scraper::Selector::parse("#resources-api-menu #accordion:nth-child(2) a")
-        .map_err(Error::from)?;
+    let selector = scraper::Selector::parse("#resources-api-menu a").map_err(Error::from)?;
     let mut out = Vec::new();
     for element in document.select(&selector) {
         if let Some(href) = element.value().attr("href") {
@@ -91,9 +90,14 @@ mod tests {
             .await
             .attach_printable_lazy(|| format!("At url: {url}"))
             .unwrap();
+        // Make sure it got the trade-ep URL
         assert!(content
             .urls
             .contains(&Url::parse("https://developer.oanda.com/rest-live-v20/trade-ep/").unwrap()));
+        // Make sure it got the instrument-df URL
+        assert!(content.urls.contains(
+            &Url::parse("https://developer.oanda.com/rest-live-v20/instrument-df/").unwrap()
+        ));
         let first_api_call_docs = &content.endpoint_docs[0];
         assert_eq!(first_api_call_docs.http_method, HttpMethod::Get);
         assert_eq!(
