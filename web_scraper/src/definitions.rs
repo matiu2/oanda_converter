@@ -1,6 +1,6 @@
 //! Reads the definitions, eg: https://developer.oanda.com/rest-live-v20/instrument-df/
-use crate::{bail, Error, Result};
-use model::defintion_docs::Definition;
+use crate::{bail, report, Error, Result};
+use model::defintion_docs::{Definition, EnumItem, Struct, Value};
 use scraper::{ElementRef, Html};
 
 #[derive(Debug)]
@@ -14,8 +14,15 @@ fn get_definitions(document: &Html) -> Result<Vec<Definition>> {
         scraper::Selector::parse("#content-api-section .endpoint_header").map_err(Error::from)?;
     let headers = document
         .select(&header_selector)
-        .map(|fragment| read_header(fragment))
+        .map(read_header)
         .collect::<Result<Vec<Header>>>()?;
+    let body_selector =
+        scraper::Selector::parse("#content-api-section .definition_body").map_err(Error::from)?;
+    let bodies = document
+        .select(&body_selector)
+        .map(read_body)
+        .inspect(|body| println!("Got this body: {body:#?}"))
+        .collect::<Result<Vec<Value>>>()?;
     println!("headers: {headers:#?}");
     todo!()
 }
@@ -30,6 +37,56 @@ fn read_header(fragment: ElementRef) -> Result<Header> {
         type_name,
         description,
     })
+}
+
+fn read_body(fragment: ElementRef) -> Result<Value> {
+    let enum_selector = scraper::Selector::parse("table.parameter_table").map_err(Error::from)?;
+    let struct_selector = scraper::Selector::parse("pre.json_schema").map_err(Error::from)?;
+    let enum_fragment = fragment.select(&enum_selector).next();
+    let struct_fragment = fragment.select(&struct_selector).next();
+    match (enum_fragment, struct_fragment) {
+        (Some(_), Some(_)) => bail!("Found both an enum and struct definition in the same body: {fragment:#?} using {enum_selector:#?} and {struct_selector:#?}"),
+        (Some(enum_fragment), None) => Ok(Value::Enum(read_enum(enum_fragment)?)),
+        (None, Some(struct_fragment)) => Ok(Value::Struct(read_struct(struct_fragment)?)),
+        (None, None) => bail!("Unable to find either an enum nor a strcut definition in {fragment:#?} using {enum_selector:#?} and {struct_selector:#?}"),
+    }
+}
+
+fn read_enum(fragment: ElementRef) -> Result<Vec<EnumItem>> {
+    let th_selector = scraper::Selector::parse("th").map_err(Error::from)?;
+    let table_headers: Vec<&str> = fragment
+        .select(&th_selector)
+        .flat_map(|th| th.text())
+        .collect();
+    let expected = [["Type", "string"], ["Value", "Description"]];
+    if !expected
+        .iter()
+        .any(|expected_option| table_headers.as_slice() == expected_option)
+    {
+        bail!("Unexpected table headers for enum: got {table_headers:#?} expected: {expected:#?}");
+    }
+    // Read in the values
+    let row_selector = scraper::Selector::parse("tbody tr").map_err(Error::from)?;
+    let cell_selector = scraper::Selector::parse("th,td").map_err(Error::from)?;
+    let get_row = |row: ElementRef| {
+        let mut cells = row.select(&cell_selector);
+        let mut next = move || Some(cells.next()?.text().next()?.to_string());
+        let value = next()?;
+        let description = next()?;
+        Some(EnumItem { value, description })
+    };
+    let rows = fragment.select(&row_selector);
+    if rows.clone().take(2).count() != 2 {
+        bail!("Enum {} doesn't even have two entries.", fragment.html())
+    }
+    rows.clone().map(|row| {
+         get_row(row).ok_or_else(|| report!("Unable to read value and description from enum table row: {} using {cell_selector:#?}", row.html()))
+    })
+    .collect()
+}
+
+fn read_struct(fragment: ElementRef) -> Result<Struct> {
+    todo!()
 }
 
 #[cfg(test)]

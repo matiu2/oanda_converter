@@ -16,6 +16,13 @@ macro_rules! bail {
     };
 }
 
+#[macro_export]
+macro_rules! report {
+    ($($arg:tt)*) => {
+        error_stack::report!(Error::new(format!($($arg)*)))
+    };
+}
+
 pub type Result<T> = ErrorStackResult<T, Error>;
 
 pub struct Content {
