@@ -61,18 +61,25 @@ fn endpoint_links(document: &Html, base_url: &Url) -> Result<Vec<Url>> {
     let selector = scraper::Selector::parse("#resources-api-menu a").map_err(Error::from)?;
     document
         .select(&selector)
-        .flat_map(|element| element.value().attr("href"))
-        .map(|href| {
-            // If it's an abolute url, it'll parse
-            Url::parse(href).or_else(|_| {
-                // If it's not an absolute url, try and join it to our base url
-                base_url
-                    .join(href)
-                    .into_report()
-                    .change_context(Error::new(format!(
-                        "Unable to parse url: {href} with base_url: {base_url:#?}"
-                    )))
-            })
+        .map(|element| {
+            element
+                .value()
+                .attr("href")
+                // If we find an ancchor element without an href, something has changed on the site and we should know about it
+                .ok_or_else(|| Error::new(format!("Found an anchor without an href: {element:#?}")))
+                .into_report()
+                .and_then(|href| {
+                    // If it's an abolute url, it'll parse
+                    Url::parse(href).or_else(|_| {
+                        // If it's not an absolute url, try and join it to our base url
+                        base_url
+                            .join(href)
+                            .into_report()
+                            .change_context(Error::new(format!(
+                                "Unable to parse url: {href} with base_url: {base_url:#?}"
+                            )))
+                    })
+                })
         })
         .collect()
 }
