@@ -56,22 +56,23 @@ fn endpoint_name(url: &Url) -> Option<String> {
     )
 }
 
-/// Read and navidgae the links to endpoint on the left side of the page
+/// Read and navigate the links to endpoint on the left side of the page
 fn endpoint_links(document: &Html, base_url: &Url) -> Result<Vec<Url>> {
     let selector = scraper::Selector::parse("#resources-api-menu a").map_err(Error::from)?;
     let mut out = Vec::new();
-    for element in document.select(&selector) {
-        if let Some(href) = element.value().attr("href") {
-            // Create absolute URL
-            let url = match Url::parse(&href) {
-                Ok(url) => url,
-                Err(_) => base_url
-                    .join(&href)
-                    .into_report()
-                    .change_context(Error::default())?,
-            };
-            out.push(url);
-        }
+    for href in document
+        .select(&selector)
+        .flat_map(|element| element.value().attr("href"))
+    {
+        // Create absolute URL
+        let url = match Url::parse(&href) {
+            Ok(url) => url,
+            Err(_) => base_url
+                .join(&href)
+                .into_report()
+                .change_context(Error::default())?,
+        };
+        out.push(url);
     }
     Ok(out)
 }
