@@ -56,25 +56,25 @@ fn endpoint_name(url: &Url) -> Option<String> {
     )
 }
 
-/// Read and navigate the links to endpoint on the left side of the page
+/// Gather the endpoint and definition links from the left side of the page
 fn endpoint_links(document: &Html, base_url: &Url) -> Result<Vec<Url>> {
     let selector = scraper::Selector::parse("#resources-api-menu a").map_err(Error::from)?;
-    let mut out = Vec::new();
-    for href in document
+    document
         .select(&selector)
         .flat_map(|element| element.value().attr("href"))
-    {
-        // Create absolute URL
-        let url = match Url::parse(&href) {
-            Ok(url) => url,
-            Err(_) => base_url
-                .join(&href)
-                .into_report()
-                .change_context(Error::default())?,
-        };
-        out.push(url);
-    }
-    Ok(out)
+        .map(|href| {
+            // If it's an abolute url, it'll parse
+            Url::parse(href).or_else(|_| {
+                // If it's not an absolute url, try and join it to our base url
+                base_url
+                    .join(href)
+                    .into_report()
+                    .change_context(Error::new(format!(
+                        "Unable to parse url: {href} with base_url: {base_url:#?}"
+                    )))
+            })
+        })
+        .collect()
 }
 
 #[cfg(test)]
