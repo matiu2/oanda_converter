@@ -61,7 +61,7 @@ fn read_body(fragment: ElementRef) -> Result<Value> {
     let struct_selector = Selector::parse("pre.json_schema").map_err(Error::from)?;
     let enum_fragment = fragment.select(&enum_selector).next();
     let struct_fragment = fragment.select(&struct_selector).next();
-    // TODO: Read response code when inside .endpoint_body divs
+    // TODO: Read response pseudo json when inside `.endpoint_body` divs
     match (enum_fragment, struct_fragment) {
         (Some(enum_fragment), _) => Ok(Value::Enum(read_enum(enum_fragment)?)),
         (None, Some(struct_fragment)) => Ok(Value::Struct(read_struct(struct_fragment)?)),
