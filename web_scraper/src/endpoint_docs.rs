@@ -14,7 +14,6 @@ struct Header {
 pub fn endpoint_docs(document: &Html, name: String) -> Result<Vec<RestCall>> {
     // Get the HTTP method and path from the headers
     let headers = get_rest_call_headers(document)?;
-    println!("{headers:#?}");
     // Get all the parameter tables
     let parameter_sets = get_all_rest_call_parameters(document)?;
     // Now zip them together

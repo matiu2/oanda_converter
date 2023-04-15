@@ -1,7 +1,8 @@
 pub mod definitions;
 pub mod endpoint_docs;
 
-use model::endpoint_docs::RestCall;
+use definitions::get_definitions;
+use model::{defintion_docs::Definition, endpoint_docs::RestCall};
 use reqwest::Url;
 pub mod error;
 use endpoint_docs::endpoint_docs;
@@ -25,9 +26,11 @@ macro_rules! report {
 
 pub type Result<T> = ErrorStackResult<T, Error>;
 
+//// The content of one page of the oanda docs
 pub struct Content {
     pub urls: Vec<Url>,
     pub endpoint_docs: Vec<RestCall>,
+    pub definitions: Vec<Definition>,
 }
 
 pub async fn get_content(url: Url) -> Result<Content> {
@@ -44,11 +47,18 @@ pub async fn get_content(url: Url) -> Result<Content> {
     // Extract the endpoint name from the url
     // Get all the endpoint documentation
     let Some(endpoint_name) = endpoint_name(&url) else { bail!("Unable to extract endpoint name from url: {url:#?}")};
-    let endpoint_docs = endpoint_docs(&document, endpoint_name)?;
-    println!("{endpoint_docs:#?}");
+    // TODO: Turn this into an enum
+    let (endpoint_docs, definitions) = if url.path().ends_with("-ep/") {
+        (endpoint_docs(&document, endpoint_name)?, vec![])
+    } else if url.path().ends_with("-df/") {
+        (vec![], get_definitions(&document)?)
+    } else {
+        bail!("Unknown url ending: {url}");
+    };
     Ok(Content {
         urls,
         endpoint_docs,
+        definitions,
     })
 }
 

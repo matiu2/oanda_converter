@@ -13,3 +13,5 @@ scraper = "0.16.0"
 thiserror = "1.0.40"
 tokio = { version = "1.27.0", features = ["macros", "net", "rt-multi-thread", "test-util"] }
 model = { path = "../model" }
+pest = { version = "2.5.7", features = ["pretty-print"] }
+pest_derive = "2.5.7"

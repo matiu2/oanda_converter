@@ -1,0 +1,21 @@
+WHITESPACE = _{ " " | "\t" }
+new_line   = _{ ("\n" | "\r")+ }
+
+punctuation     = _{ "‘" | "“" | "”" | "’" | "!" | "\"" | "#" | "$" | "%" | "&" | "'" | "(" | ")" | "*" | "+" | "," | "-" | "." | "/" | ":" | ";" | "<" | "=" | ">" | "?" | "@" | "[" | "\\" | "]" | "^" | "_" | "`" | "{" | "|" | "}" | "~" }
+doc_string_line =  { (ASCII_ALPHANUMERIC | punctuation)+ }
+comment_line    = _{ WHITESPACE? ~ "#" ~ doc_string_line? ~ new_line }
+comments        = _{ comment_line+ }
+
+word             = _{ ASCII_ALPHA+ }
+field_name       = @{ word }
+array_wrap       = _{ "Array[" ~ type_name_array ~ "]" }
+type_name_array  = @{ word }
+type_name_normal = @{ word }
+type_name        = _{ array_wrap | type_name_normal }
+default          = @{ word }
+deprecated       = @{ "deprecated" }
+type_name_wrap   = _{ "(" ~ type_name ~ (("," ~ "default=" ~ default) | ("," ~ deprecated) | "") ~ ")" }
+
+field_definition = _{ WHITESPACE* ~ field_name ~ ":" ~ type_name_wrap ~ ","? ~ new_line }
+field            =  { comments ~ field_definition }
+data             = _{ SOI ~ "{" ~ new_line ~ (field | new_line)* ~ "}" ~ new_line* ~ EOI }
