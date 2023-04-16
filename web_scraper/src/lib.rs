@@ -29,8 +29,12 @@ pub type Result<T> = ErrorStackResult<T, Error>;
 //// The content of one page of the oanda docs
 pub struct Content {
     pub urls: Vec<Url>,
-    pub endpoint_docs: Vec<RestCall>,
-    pub definitions: Vec<Definition>,
+    pub documentation: Documentation,
+}
+
+pub enum Documentation {
+    Endpoint(Vec<RestCall>),
+    Definitions(Vec<Definition>),
 }
 
 pub async fn get_content(url: Url) -> Result<Content> {
@@ -47,17 +51,16 @@ pub async fn get_content(url: Url) -> Result<Content> {
     // Extract the endpoint name from the url
     // Get all the endpoint documentation
     let Some(endpoint_name) = endpoint_name(&url) else { bail!("Unable to extract endpoint name from url: {url:#?}")};
-    let (endpoint_docs, definitions) = if url.path().ends_with("-ep/") {
-        (endpoint_docs(&document, endpoint_name)?, vec![])
+    let documentation = if url.path().ends_with("-ep/") {
+        Documentation::Endpoint(endpoint_docs(&document, endpoint_name)?)
     } else if url.path().ends_with("-df/") {
-        (vec![], get_definitions(&document)?)
+        Documentation::Definitions(get_definitions(&document)?)
     } else {
         bail!("Unknown url ending: {url}");
     };
     Ok(Content {
         urls,
-        endpoint_docs,
-        definitions,
+        documentation,
     })
 }
 
@@ -102,6 +105,8 @@ fn endpoint_links(document: &Html, base_url: &Url) -> Result<Vec<Url>> {
 
 #[cfg(test)]
 mod tests {
+    use crate::Documentation;
+
     use super::get_content;
     use error_stack::ResultExt;
     use model::endpoint_docs::{Endpoint, HttpMethod};
@@ -123,14 +128,15 @@ mod tests {
         assert!(content.urls.contains(
             &Url::parse("https://developer.oanda.com/rest-live-v20/instrument-df/").unwrap()
         ));
-        let first_api_call_docs = &content.endpoint_docs[0];
+        // We're just reading the endpoint docs here:
+        let Documentation::Endpoint(endpoint_docs) = &content.documentation else { panic!("Expected endpoint docs") };
+        let first_api_call_docs = &endpoint_docs[0];
         assert_eq!(first_api_call_docs.http_method, HttpMethod::Get);
         assert_eq!(
             first_api_call_docs.doc_string.as_str(),
             "Fetch candlestick data for an instrument."
         );
-        assert!(content
-            .endpoint_docs
+        assert!(endpoint_docs
             .iter()
             .all(|docs| docs.endpoint == Endpoint::Instrument));
         assert_eq!(
