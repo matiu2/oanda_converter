@@ -12,6 +12,30 @@ struct Header {
     description: String,
 }
 
+/// Retrieves a list of definitions from a OANDA REST
+/// API defnitions page (where the URL ends with '-df/')
+/// eg. (https://developer.oanda.com/rest-live-v20/instrument-df/).
+///
+/// The function parses the document and extracts headers and bodies
+/// from the definition sections (the main body).  It then zips the
+/// headers and bodies together to create a list of `Definition` structs.
+///
+/// # Arguments
+///
+/// * `document` - A reference to an `Html` object containing the HTML
+/// content of the OANDA REST API definitions page.
+///
+/// # Returns
+///
+/// * `Result<Vec<Definition>>` - A result containing a vector of
+/// `Definition` structs if successful, or an error if an issue occurred
+/// during the scraping process.
+///
+/// # Errors
+///
+/// This function may return an error if there is a mismatch between
+/// the number of headers and bodies, or if there is an issue parsing
+/// the HTML content.
 pub fn get_definitions(document: &Html) -> Result<Vec<Definition>> {
     let header_selector =
         Selector::parse("#content-api-section .endpoint_header").map_err(Error::from)?;
@@ -43,6 +67,23 @@ pub fn get_definitions(document: &Html) -> Result<Vec<Definition>> {
         .collect())
 }
 
+/// Reads a header block from an HTML fragment containing the `type_name` and `description`
+/// of the item being documented.
+///
+/// # Arguments
+///
+/// * `fragment` - An `ElementRef` instance representing the HTML fragment to be parsed
+///
+/// # Returns
+///
+/// * `Result<Header>` - A `Result` containing a `Header` struct with the `type_name` and
+/// `description` if successful, otherwise an `Error` if there are any issues with the CSS selectors
+///
+/// # Errors
+///
+/// This function will return an error in the following cases:
+/// * The CSS selectors for `type_name` and `description` are not valid
+/// * The expected elements are not found in the HTML fragment
 fn read_header(fragment: ElementRef) -> Result<Header> {
     let type_name_selector = Selector::parse(".method").map_err(Error::from)?;
     let description_selector =
@@ -56,6 +97,13 @@ fn read_header(fragment: ElementRef) -> Result<Header> {
     })
 }
 
+/// Reads the body of a definition. It may be an enum table or a struct
+/// (pseudo json)
+///
+/// # Errors
+///
+/// This function will return an error if there are any issues with the
+/// css selectors or parsing the pseudo json
 fn read_body(fragment: ElementRef) -> Result<Value> {
     let enum_selector = Selector::parse("table.parameter_table").map_err(Error::from)?;
     let struct_selector = Selector::parse("pre.json_schema").map_err(Error::from)?;
@@ -63,12 +111,29 @@ fn read_body(fragment: ElementRef) -> Result<Value> {
     let struct_fragment = fragment.select(&struct_selector).next();
     // TODO: Read response pseudo json when inside `.endpoint_body` divs
     match (enum_fragment, struct_fragment) {
-        (Some(enum_fragment), _) => Ok(Value::Enum(read_enum(enum_fragment)?)),
+        (Some(enum_fragment), Some(struct_fragment)) => bail!("Found both an enum and struct inside the same body:\nenum: {}\nstruct: {},\nbody: {}", enum_fragment.html(), struct_fragment.html(), fragment.html()),
+        (Some(enum_fragment), None) => Ok(Value::Enum(read_enum(enum_fragment)?)),
         (None, Some(struct_fragment)) => Ok(Value::Struct(read_struct(struct_fragment)?)),
         (None, None) => bail!("Unable to find either an enum nor a strcut definition in {} using {enum_selector:#?} and {struct_selector:#?}", fragment.html()),
     }
 }
 
+/// Reads an enum table
+///
+/// # Arguments
+///
+/// * `fragment: ElementRef` - An ElementRef object representing the
+/// HTML block to be parsed.
+///
+/// # Result
+///
+/// Returns a `Result<Vec<EnumItem>>` - A Result containing a vector of
+/// EnumItem objects if successful, or an error in case of failures.
+///
+/// # Errors
+///
+/// This function will return an error if css selectors aren't working
+/// on the given HTML block
 fn read_enum(fragment: ElementRef) -> Result<Vec<EnumItem>> {
     let th_selector = Selector::parse("th").map_err(Error::from)?;
     let table_headers: Vec<&str> = fragment
@@ -102,6 +167,23 @@ fn read_enum(fragment: ElementRef) -> Result<Vec<EnumItem>> {
     .collect()
 }
 
+/// CSS selects, converts to text, and parses a pseudo json struct definition
+///
+/// # Arguments
+///
+/// * `fragment` - An `ElementRef` containing the HTML fragment to be parsed for the struct definition
+///
+/// # Result
+///
+/// * A `Result<Struct>` containing the parsed struct on success, or an error if the parsing fails
+///
+/// # Errors
+///
+/// This function will return an error if:
+/// * The selector fails to parse
+/// * An unexpected element is encountered within the definition text
+/// * An anchor element has no text inside it
+/// * The definition child node is neither text nor an <a> element
 fn read_struct(fragment: ElementRef) -> Result<Struct> {
     // Create a selector for <a> tags
     let a_selector = Selector::parse("a").map_err(Error::from)?;

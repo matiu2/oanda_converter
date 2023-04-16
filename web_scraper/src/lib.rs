@@ -47,7 +47,6 @@ pub async fn get_content(url: Url) -> Result<Content> {
     // Extract the endpoint name from the url
     // Get all the endpoint documentation
     let Some(endpoint_name) = endpoint_name(&url) else { bail!("Unable to extract endpoint name from url: {url:#?}")};
-    // TODO: Turn this into an enum
     let (endpoint_docs, definitions) = if url.path().ends_with("-ep/") {
         (endpoint_docs(&document, endpoint_name)?, vec![])
     } else if url.path().ends_with("-df/") {
