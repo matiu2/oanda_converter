@@ -184,7 +184,7 @@ fn read_enum(fragment: ElementRef) -> Result<Vec<EnumItem>> {
 /// * An unexpected element is encountered within the definition text
 /// * An anchor element has no text inside it
 /// * The definition child node is neither text nor an <a> element
-fn read_struct(fragment: ElementRef) -> Result<Struct> {
+pub(crate) fn read_struct(fragment: ElementRef) -> Result<Struct> {
     // Create a selector for <a> tags
     let a_selector = Selector::parse("a").map_err(Error::from)?;
     let mut anchor_texts = fragment.select(&a_selector).flat_map(|a| a.text());

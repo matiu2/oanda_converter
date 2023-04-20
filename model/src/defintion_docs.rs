@@ -20,6 +20,7 @@ pub struct EnumItem {
 /// A struct definition. Used to create serde types to match oanda json types
 #[derive(Debug)]
 pub struct Struct {
+    // TODO: Maybe add a name and doc_string for the struct itself
     pub fields: Vec<Field>,
 }
 
