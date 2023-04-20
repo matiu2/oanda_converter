@@ -1,4 +1,8 @@
+use std::collections::HashMap;
+
 use parse_display::{Display, FromStr};
+
+use crate::defintion_docs::Definition;
 
 /// All the different endpoint types
 #[derive(Display, FromStr, PartialEq, Debug)]
@@ -21,6 +25,7 @@ pub struct RestCall {
     pub path: String,
     pub doc_string: String,
     pub parameters: Vec<RestCallParameter>,
+    pub responses: HashMap<u16, Definition>,
 }
 
 #[derive(Display, FromStr, PartialEq, Debug)]
