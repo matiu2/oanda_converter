@@ -4,38 +4,44 @@
 //! * Responses
 use crate::{bail, Error, Result};
 use error_stack::{IntoReport, ResultExt};
-use model::{
-    defintion_docs::Definition,
-    endpoint_docs::{RestCall, RestCallParameter},
-};
+use model::endpoint_docs::Response;
+use model::endpoint_docs::RestCallParameter;
 use scraper::{ElementRef, Html, Selector};
-use std::collections::HashMap;
+
+use responses::parse_response_docs_group;
 
 mod responses;
 
-/// Just the body part of teh RestCall docs
+/// Just the body part of the RestCall docs
 pub(crate) struct RestCallBody {
     pub parameters: Vec<RestCallParameter>,
-    pub responses: HashMap<u16, Definition>,
+    pub responses: Vec<Response>,
 }
 
 /// Given an html document representing a single endpoint,
 /// finds each REST API call documentation block, and parses and returns it
-pub(crate) fn get_all_rest_call_bodies(document: &Html) -> Result<Vec<RestCall>> {
+pub(crate) fn get_all_rest_call_bodies(document: &Html) -> Result<Vec<RestCallBody>> {
     let response_selector =
         Selector::parse("#single-column > div.endpoint_body").map_err(Error::from)?;
     let bodies: Vec<ElementRef> = document.select(&response_selector).collect();
     // Get all the HTTP parameter definitions
-    let _all_parameters = bodies
+    let all_parameters = bodies
         .iter()
         .map(get_rest_call_parameters)
         .collect::<Result<Vec<Vec<RestCallParameter>>>>()?;
     // Get all the responses for each all the API calls in this endpoint
-    // let all_parameters = bodies
-    //     .iter()
-    //     .map(responses::get_responses)
-    //     .collect::<Result<Vec<ElementRef>>>()?;
-    todo!()
+    let responses = bodies
+        .iter()
+        .map(parse_response_docs_group)
+        .collect::<Result<Vec<Vec<Response>>>>()?;
+    Ok(all_parameters
+        .into_iter()
+        .zip(responses)
+        .map(|(parameters, responses)| RestCallBody {
+            parameters,
+            responses,
+        })
+        .collect())
 }
 
 /// Given a .endpoint_body div, extracts the table headers and rows, which are the
