@@ -26,7 +26,7 @@ pub(crate) fn get_all_rest_call_bodies(document: &Html) -> Result<Vec<RestCall>>
         Selector::parse("#single-column > div.endpoint_body").map_err(Error::from)?;
     let bodies: Vec<ElementRef> = document.select(&response_selector).collect();
     // Get all the HTTP parameter definitions
-    let all_parameters = bodies
+    let _all_parameters = bodies
         .iter()
         .map(get_rest_call_parameters)
         .collect::<Result<Vec<Vec<RestCallParameter>>>>()?;

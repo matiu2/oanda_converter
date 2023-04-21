@@ -1,10 +1,11 @@
 //! Parses all the possible responses for an API call
 
-
+use std::collections::HashMap;
 
 use crate::{bail, definitions::read_struct, Error, Result};
 use error_stack::{IntoReport, ResultExt};
 use model::{
+    defintion_docs::{Definition, Struct},
     endpoint_docs::{Response, ResponseHeader},
 };
 use scraper::{ElementRef, Selector};
@@ -129,6 +130,95 @@ mod unit_tests {
                 description: "A link to the Order that was just created".to_string(),
             },
             header
+        );
+    }
+
+    #[test]
+    fn test_parse_single_response_doc() {
+        let input = r##"
+            <div class="panel panel-default">
+<div class="panel-heading" role="tab" id="heading_2_201">
+<span class="panel-title">
+<a class="" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_2_201" aria-expanded="false" aria-controls="collapse_2_201">
+<b>HTTP 201</b> – The Order was created as specified
+</a>
+</span>
+</div>
+<div id="collapse_2_201" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading_2_201" style="">
+<div class="panel-body">
+<b>Response Headers</b>
+<p>
+</p><ul>
+<li>Location - A link to the Order that was just created</li>
+<li>RequestID - The unique identifier generated for the request</li>
+</ul>
+<b>Response Body Schema (application/json)</b>
+<p>
+</p><pre class="json_schema">{
+    # 
+    # The Transaction that created the Order specified by the request.
+    # 
+    orderCreateTransaction : (<a href="../transaction-df/#Transaction">Transaction</a>),
+
+    # 
+    # The Transaction that filled the newly created Order. Only provided when
+    # the Order was immediately filled.
+    # 
+    orderFillTransaction : (<a href="../transaction-df/#OrderFillTransaction">OrderFillTransaction</a>),
+
+    # 
+    # The Transaction that cancelled the newly created Order. Only provided
+    # when the Order was immediately cancelled.
+    # 
+    orderCancelTransaction : (<a href="../transaction-df/#OrderCancelTransaction">OrderCancelTransaction</a>),
+
+    # 
+    # The Transaction that reissues the Order. Only provided when the Order is
+    # configured to be reissued for its remaining units after a partial fill
+    # and the reissue was successful.
+    # 
+    orderReissueTransaction : (<a href="../transaction-df/#Transaction">Transaction</a>),
+
+    # 
+    # The Transaction that rejects the reissue of the Order. Only provided when
+    # the Order is configured to be reissued for its remaining units after a
+    # partial fill and the reissue was rejected.
+    # 
+    orderReissueRejectTransaction : (<a href="../transaction-df/#Transaction">Transaction</a>),
+
+    # 
+    # The IDs of all Transactions that were created while satisfying the
+    # request.
+    # 
+    relatedTransactionIDs : (Array[<a href="../transaction-df/#TransactionID">TransactionID</a>]),
+
+    # 
+    # The ID of the most recent Transaction created for the Account
+    # 
+    lastTransactionID : (<a href="../transaction-df/#TransactionID">TransactionID</a>)
+}
+</pre>
+</div> </div></div>
+        "##;
+        let html = Html::parse_fragment(input);
+        let panel = html.root_element();
+        let response = super::parse_single_response_doc(panel).unwrap();
+        assert_eq!(201, response.code);
+        assert_eq!("The Order was created as specified", &response.description);
+        assert!(response
+            .headers
+            .iter()
+            .any(|header| &header.name == "RequestID"));
+        let field = response
+            .schema
+            .fields
+            .iter()
+            .find(|field| field.name == "lastTransactionID")
+            .unwrap();
+        assert_eq!("TransactionID", field.type_name);
+        assert_eq!(
+            "The ID of the most recent Transaction created for the Account",
+            field.doc_string
         );
     }
 }
