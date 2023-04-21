@@ -18,6 +18,7 @@ use scraper::{ElementRef, Selector};
 /// And extracts the (200, "The list of Trades requested")
 fn parse_response_title(a: ElementRef) -> Result<(u8, String)> {
     let code_selector = Selector::parse("b").map_err(Error::from)?;
+
     let Some(code) = a.select(&code_selector).next() else { bail!("No <b> holding the reponse code while parsing response docs: {}", a.html())};
     // The code should be in the format "HTTP 200" - We just want the 200
     let get_code = || code.text().next()?.split_whitespace().nth(1);
@@ -32,7 +33,6 @@ fn parse_response_title(a: ElementRef) -> Result<(u8, String)> {
         .map(str::trim)
         .filter(|text| !text.trim().is_empty() && !text.starts_with("HTTP"))
         .flat_map(|text| text.strip_prefix("– "))
-        .inspect(|text| println!("Text: {text}"))
         .collect();
     Ok((code, description))
 }
@@ -80,7 +80,8 @@ fn parse_response_http_header(li: ElementRef) -> Result<ResponseHeader> {
 
 /// Given an div.endpoint_body documentation html block, extracts all of the responses
 pub(crate) fn parse_response_docs_group(body: &ElementRef) -> Result<Vec<Response>> {
-    let response_selector = Selector::parse("div.panel_group > div.panel").map_err(Error::from)?;
+    let response_selector =
+        Selector::parse("div.panel-group:nth-child(4) > div.panel").map_err(Error::from)?;
     body.select(&response_selector)
         .map(parse_single_response_doc)
         .collect()

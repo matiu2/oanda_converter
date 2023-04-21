@@ -149,5 +149,31 @@ mod tests {
             third_parameter.description.as_str(),
             "The Price component(s) to get candlestick data for. [default=M]"
         );
+        // Check the endpoint doc responses
+        let candles = endpoint_docs.first().unwrap();
+        let ok_response = candles.responses.first().unwrap();
+        assert_eq!(200, ok_response.code);
+        assert_eq!(
+            "Pricing information has been successfully provided.",
+            &ok_response.description
+        );
+        let header = ok_response.headers.first().unwrap();
+        assert_eq!("RequestID", &header.name);
+        assert_eq!(
+            "The unique identifier generated for the request",
+            &header.description
+        );
+        let field = ok_response
+            .schema
+            .fields
+            .iter()
+            .find(|field| field.name == "candles")
+            .unwrap();
+        assert_eq!(true, field.is_array);
+        assert_eq!(
+            "The list of candlesticks that satisfy the request.",
+            &field.doc_string
+        );
+        assert_eq!("Candlestick", field.type_name);
     }
 }
