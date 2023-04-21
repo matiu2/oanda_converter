@@ -1,11 +1,10 @@
 //! Parses all the possible responses for an API call
 
-use std::collections::HashMap;
+
 
 use crate::{bail, definitions::read_struct, Error, Result};
 use error_stack::{IntoReport, ResultExt};
 use model::{
-    defintion_docs::{Definition, Struct},
     endpoint_docs::{Response, ResponseHeader},
 };
 use scraper::{ElementRef, Selector};
