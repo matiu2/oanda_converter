@@ -128,12 +128,12 @@ mod unit_tests {
         let price = get_field("price");
         assert_eq!(&price.doc_string, "The price (midpoint) for the order book’s instrument at the time of the order book snapshot");
         assert_eq!(&price.type_name, "PriceValue");
-        assert_eq!(price.is_array, false);
+        assert!(!price.is_array);
         assert_eq!(price.default, None);
         // See if it can read an array OK
         let buckets = get_field("buckets");
         assert_eq!(&buckets.type_name, "OrderBookBucket");
-        assert_eq!(buckets.is_array, true);
+        assert!(buckets.is_array);
         assert_eq!(buckets.default, None);
         assert_eq!(&buckets.doc_string, "The partitioned order book, divided into buckets using a default bucket width. These buckets are only provided for price ranges which actually contain order or position data.");
         // Make sure it ignores the deprecated field
@@ -144,7 +144,7 @@ mod unit_tests {
         // Read a default value
         let type_field = get_field("type");
         assert_eq!(&type_field.type_name, "string");
-        assert_eq!(type_field.is_array, false);
+        assert!(!type_field.is_array);
         assert_eq!(type_field.default.as_deref(), Some("PRICE"));
         assert_eq!(
             &type_field.doc_string,

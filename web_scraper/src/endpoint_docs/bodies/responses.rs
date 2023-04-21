@@ -49,7 +49,7 @@ fn parse_single_response_doc(panel: ElementRef) -> Result<Response> {
     let headers_selector = Selector::parse(".panel ul li").map_err(Error::from)?;
     let headers = panel
         .select(&headers_selector)
-        .map(|li| parse_response_http_header(li))
+        .map(parse_response_http_header)
         .collect::<Result<Vec<ResponseHeader>>>()?;
     // Get the body
     let body_selector = Selector::parse(".panel-body pre.json_schema").map_err(Error::from)?;
@@ -65,7 +65,7 @@ fn parse_single_response_doc(panel: ElementRef) -> Result<Response> {
 
 fn parse_response_http_header(li: ElementRef) -> Result<ResponseHeader> {
     let Some(text) = li.text().next() else {bail!("No text inside of li: {}", li.html())};
-    let parts: Vec<&str> = text.splitn(2, "-").collect();
+    let parts: Vec<&str> = text.splitn(2, '-').collect();
     match parts.as_slice() {
         [name, description] => Ok(ResponseHeader {
             name: name.trim().to_string(),

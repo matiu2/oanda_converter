@@ -20,9 +20,7 @@ impl Display for Error {
         write!(
             f,
             "{}",
-            self.message
-                .as_ref()
-                .map(String::as_str)
+            self.message.as_deref()
                 .unwrap_or("Web Scraper Error")
         )
     }
