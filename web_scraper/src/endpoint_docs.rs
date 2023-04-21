@@ -41,6 +41,7 @@ pub fn endpoint_docs(document: &Html, name: String) -> Result<Vec<RestCall>> {
                 doc_string: header.doc_string,
                 responses: body.responses,
                 parameters: body.parameters,
+                other_responses: body.other_responses,
             })
         })
         .collect()

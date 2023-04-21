@@ -16,14 +16,14 @@ use scraper::{ElementRef, Selector};
 /// </a>
 /// ```
 /// And extracts the (200, "The list of Trades requested")
-fn parse_response_title(a: ElementRef) -> Result<(u8, String)> {
+fn parse_response_title(a: ElementRef) -> Result<(u16, String)> {
     let code_selector = Selector::parse("b").map_err(Error::from)?;
 
     let Some(code) = a.select(&code_selector).next() else { bail!("No <b> holding the reponse code while parsing response docs: {}", a.html())};
     // The code should be in the format "HTTP 200" - We just want the 200
     let get_code = || code.text().next()?.split_whitespace().nth(1);
     let Some(code) = get_code() else { bail!("Unable to get the code out of: {}", code.html())};
-    let code: u8 = code
+    let code: u16 = code
         .parse()
         .into_report()
         .change_context(Error::default())?;
@@ -79,11 +79,22 @@ fn parse_response_http_header(li: ElementRef) -> Result<ResponseHeader> {
 }
 
 /// Given an div.endpoint_body documentation html block, extracts all of the responses
-pub(crate) fn parse_response_docs_group(body: &ElementRef) -> Result<Vec<Response>> {
+pub(crate) fn parse_responses_docs_group(body: &ElementRef) -> Result<Vec<Response>> {
     let response_selector =
         Selector::parse("div.panel-group:nth-child(4) > div.panel").map_err(Error::from)?;
     body.select(&response_selector)
         .map(parse_single_response_doc)
+        .collect()
+}
+
+/// Given a .endpoint_body extracts the extra resopnse http codes
+pub(crate) fn parse_extra_resonses(body: &ElementRef) -> Result<Vec<u16>> {
+    // Get the other http responses that it can return
+    let extra_responses_selector =
+        Selector::parse(".endpoint_body > p > a").map_err(Error::from)?;
+    body.select(&extra_responses_selector)
+        .flat_map(|a| a.text())
+        .map(|code| code.parse().into_report().change_context(Error::default()))
         .collect()
 }
 

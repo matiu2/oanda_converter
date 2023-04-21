@@ -8,7 +8,9 @@ use model::endpoint_docs::Response;
 use model::endpoint_docs::RestCallParameter;
 use scraper::{ElementRef, Html, Selector};
 
-use responses::parse_response_docs_group;
+use responses::parse_responses_docs_group;
+
+use self::responses::parse_extra_resonses;
 
 mod responses;
 
@@ -16,6 +18,7 @@ mod responses;
 pub(crate) struct RestCallBody {
     pub parameters: Vec<RestCallParameter>,
     pub responses: Vec<Response>,
+    pub other_responses: Vec<u16>,
 }
 
 /// Given an html document representing a single endpoint,
@@ -32,14 +35,20 @@ pub(crate) fn get_all_rest_call_bodies(document: &Html) -> Result<Vec<RestCallBo
     // Get all the responses for each all the API calls in this endpoint
     let responses = bodies
         .iter()
-        .map(parse_response_docs_group)
+        .map(parse_responses_docs_group)
         .collect::<Result<Vec<Vec<Response>>>>()?;
+    let all_other_responses = bodies
+        .iter()
+        .map(parse_extra_resonses)
+        .collect::<Result<Vec<Vec<u16>>>>()?;
     Ok(all_parameters
         .into_iter()
         .zip(responses)
-        .map(|(parameters, responses)| RestCallBody {
+        .zip(all_other_responses)
+        .map(|((parameters, responses), other_responses)| RestCallBody {
             parameters,
             responses,
+            other_responses,
         })
         .collect())
 }

@@ -175,5 +175,7 @@ mod tests {
             &field.doc_string
         );
         assert_eq!("Candlestick", field.type_name);
+        // Make sure it got the extra responses
+        assert_eq!(&vec![400, 401, 404, 405,], &candles.other_responses);
     }
 }

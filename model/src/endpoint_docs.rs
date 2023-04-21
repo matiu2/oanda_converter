@@ -24,11 +24,22 @@ pub struct RestCall {
     pub doc_string: String,
     pub parameters: Vec<RestCallParameter>,
     pub responses: Vec<Response>,
+    /// Other reponses taht of type HTTPErrorResponse
+    pub other_responses: Vec<u16>,
+}
+
+/// The documentation for a possible http error response.
+/// Not an actual http error, just documention for it
+/// See here: https://developer.oanda.com/rest-live-v20/troubleshooting-errors/#400
+#[derive(Debug)]
+pub enum HTTPErrorResponse {
+    ErrorMessage { error_message: String },
+    RejectReason { reject_reason: String },
 }
 
 #[derive(Debug)]
 pub struct Response {
-    pub code: u8,
+    pub code: u16,
     pub description: String,
     pub headers: Vec<ResponseHeader>,
     pub schema: Struct,
