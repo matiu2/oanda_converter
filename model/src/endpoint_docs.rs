@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use parse_display::{Display, FromStr};
 
-use crate::defintion_docs::Definition;
+use crate::defintion_docs::{Definition, Struct};
 
 /// All the different endpoint types
 #[derive(Display, FromStr, PartialEq, Debug)]
@@ -33,7 +33,7 @@ pub struct Response {
     pub code: u8,
     pub description: String,
     pub headers: Vec<ResponseHeader>,
-    pub schema: Definition,
+    pub schema: Struct,
 }
 
 #[derive(Debug, PartialEq, Eq)]

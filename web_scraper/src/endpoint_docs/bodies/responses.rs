@@ -21,13 +21,13 @@ use scraper::{ElementRef, Selector};
 /// </a>
 /// ```
 /// And extracts the (200, "The list of Trades requested")
-fn parse_response_title(a: ElementRef) -> Result<(u16, String)> {
+fn parse_response_title(a: ElementRef) -> Result<(u8, String)> {
     let code_selector = Selector::parse("b").map_err(Error::from)?;
     let Some(code) = a.select(&code_selector).next() else { bail!("No <b> holding the reponse code while parsing response docs: {}", a.html())};
     // The code should be in the format "HTTP 200" - We just want the 200
     let get_code = || code.text().next()?.split_whitespace().nth(1);
     let Some(code) = get_code() else { bail!("Unable to get the code out of: {}", code.html())};
-    let code: u16 = code
+    let code: u8 = code
         .parse()
         .into_report()
         .change_context(Error::default())?;
@@ -42,8 +42,8 @@ fn parse_response_title(a: ElementRef) -> Result<(u16, String)> {
     Ok((code, description))
 }
 
-/// Takes a .panel_group div and extracts the response data ot of it
-fn parse_response_docs(panel: ElementRef) -> Result<Response> {
+/// Takes a .panel div for a single response and extracts the data out of it
+fn parse_single_response_doc(panel: ElementRef) -> Result<Response> {
     let title_selector = Selector::parse(".panel-heading .panel-title a").map_err(Error::from)?;
     // Get the title
     let Some(a) = panel
@@ -54,8 +54,18 @@ fn parse_response_docs(panel: ElementRef) -> Result<Response> {
     let headers_selector = Selector::parse(".panel ul li").map_err(Error::from)?;
     let headers = panel
         .select(&headers_selector)
-        .flat_map(|li| li.text().next());
-    todo!()
+        .map(|li| parse_response_http_header(li))
+        .collect::<Result<Vec<ResponseHeader>>>()?;
+    // Get the body
+    let body_selector = Selector::parse(".panel-body pre.json_schema").map_err(Error::from)?;
+    let Some(body) = panel.select(&body_selector).next() else { bail!("Unable to find schema in response docs: {}", panel.html())};
+    let schema = read_struct(body)?;
+    Ok(Response {
+        code,
+        description,
+        headers,
+        schema,
+    })
 }
 
 fn parse_response_http_header(li: ElementRef) -> Result<ResponseHeader> {
