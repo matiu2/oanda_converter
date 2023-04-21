@@ -169,7 +169,7 @@ mod tests {
             .iter()
             .find(|field| field.name == "candles")
             .unwrap();
-        assert_eq!(true, field.is_array);
+        assert!(field.is_array);
         assert_eq!(
             "The list of candlesticks that satisfy the request.",
             &field.doc_string
