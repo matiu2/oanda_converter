@@ -84,18 +84,18 @@ fn parse_response_http_header(li: ElementRef) -> Result<ResponseHeader> {
 }
 
 /// Given an div.endpoint_body documentation html block, extracts all of the responses
-fn parse_response_docs_group(body: ElementRef) -> Result<Vec<Response>> {
-    let response_selector = Selector::parse("div.panel_group > div.panel").map_err(Error::from)?;
-    todo!("Iterate through the panels calling parse_response_docs");
-    // Get the bodies
-    let body_selector = Selector::parse("pre.json_schema").map_err(Error::from)?;
-    let bodies = body
-        .select(&body_selector)
-        .map(read_struct)
-        .collect::<Result<Vec<Struct>>>()?;
-    // Now get the actual definiton table
-    todo!()
-}
+// fn parse_response_docs_group(body: ElementRef) -> Result<Vec<Response>> {
+//     let response_selector = Selector::parse("div.panel_group > div.panel").map_err(Error::from)?;
+//     todo!("Iterate through the panels calling parse_response_docs");
+//     // Get the bodies
+//     let body_selector = Selector::parse("pre.json_schema").map_err(Error::from)?;
+//     let bodies = body
+//         .select(&body_selector)
+//         .map(read_struct)
+//         .collect::<Result<Vec<Struct>>>()?;
+//     // Now get the actual definiton table
+//     todo!()
+// }
 
 #[cfg(test)]
 mod unit_tests {
