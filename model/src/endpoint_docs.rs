@@ -25,7 +25,21 @@ pub struct RestCall {
     pub path: String,
     pub doc_string: String,
     pub parameters: Vec<RestCallParameter>,
-    pub responses: HashMap<u16, Definition>,
+    pub responses: Response,
+}
+
+#[derive(Debug)]
+pub struct Response {
+    pub code: u8,
+    pub description: String,
+    pub headers: Vec<ResponseHeader>,
+    pub schema: Definition,
+}
+
+#[derive(Debug, PartialEq, Eq)]
+pub struct ResponseHeader {
+    pub name: String,
+    pub description: String,
 }
 
 #[derive(Display, FromStr, PartialEq, Debug)]

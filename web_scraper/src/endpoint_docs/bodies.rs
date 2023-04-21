@@ -40,7 +40,7 @@ pub(crate) fn get_all_rest_call_bodies(document: &Html) -> Result<Vec<RestCall>>
 
 /// Given a .endpoint_body div, extracts the table headers and rows, which are the
 /// Rest API call parameters
-pub(crate) fn get_rest_call_parameters(body: ElementRef) -> Result<Vec<RestCallParameter>> {
+pub(crate) fn get_rest_call_parameters(body: &ElementRef) -> Result<Vec<RestCallParameter>> {
     let th_selector = Selector::parse("th").map_err(Error::from)?;
     let tbody_selector = Selector::parse("tbody").map_err(Error::from)?;
     // Just make sure they haven't changed up the table rows on us
