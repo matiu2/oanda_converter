@@ -12,13 +12,24 @@ pub enum Value {
 }
 
 #[derive(Debug)]
-pub struct EnumItem {
-    pub value: String,
-    pub description: String,
+pub enum EnumItem {
+    ValueDescription {
+        value: String,
+        description: String,
+    },
+    Example {
+        r#type: String,
+        format: String,
+        example: String,
+    },
+    Format {
+        r#type: String,
+        format: String,
+    },
 }
 
 /// A struct definition. Used to create serde types to match oanda json types
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct Struct {
     // TODO: Maybe add a name and doc_string for the struct itself
     pub fields: Vec<Field>,

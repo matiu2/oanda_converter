@@ -64,10 +64,10 @@ pub async fn get_content(url: Url) -> Result<Content> {
         .change_context(Error::default())?;
     let document = Html::parse_document(&html);
     let urls = endpoint_links(&document, &url)?;
-    // Extract the endpoint name from the url
     // Get all the endpoint documentation
-    let Some(endpoint_name) = endpoint_name(&url) else { bail!("Unable to extract endpoint name from url: {url:#?}")};
     let documentation = if url.path().ends_with("-ep/") {
+        // Extract the endpoint name from the url
+        let Some(endpoint_name) = endpoint_name(&url) else { bail!("Unable to extract endpoint name from url: {url:#?}")};
         Documentation::Endpoint(endpoint_docs(&document, endpoint_name)?)
     } else if url.path().ends_with("-df/") {
         Documentation::Definitions(get_definitions(&document)?)
@@ -155,8 +155,8 @@ pub async fn get_all_content() -> Result<Vec<Content>> {
     for result in futures::future::join_all(tasks).await {
         match result {
             Ok(Ok(contents)) => all_content.push(contents),
-            Ok(Err(err)) => return Err(err).attach_printable("Error getting the content"),
-            Err(err) => return annotate!(Err(err), "Error waiting for get_content"),
+            Ok(Err(err)) => tracing::error!("While getting content: {err:#?}"),
+            Err(err) => tracing::error!("Error while waiting for get_content: {err:#?}"),
         }
     }
 
@@ -241,6 +241,10 @@ mod tests {
 
     #[tokio::test]
     async fn test_get_all_content() -> super::Result<()> {
+        tracing_subscriber::fmt()
+            .with_env_filter(tracing_subscriber::EnvFilter::from_default_env())
+            .try_init()
+            .ok();
         let all_content = super::get_all_content().await?;
         println!("{all_content:#?}");
         Ok(())

@@ -32,7 +32,7 @@ pub(crate) fn get_all_rest_call_bodies(document: &Html) -> Result<Vec<RestCallBo
         .iter()
         .map(get_rest_call_parameters)
         .collect::<Result<Vec<Vec<RestCallParameter>>>>()?;
-    // Get all the responses for each all the API calls in this endpoint
+    // Get all the responses for all the API calls in this endpoint
     let responses = bodies
         .iter()
         .map(parse_responses_docs_group)

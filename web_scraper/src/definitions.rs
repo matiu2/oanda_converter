@@ -1,4 +1,5 @@
 //! Reads the definitions, eg: https://developer.oanda.com/rest-live-v20/instrument-df/
+use error_stack::ResultExt;
 mod struct_parser;
 use crate::{bail, report, Error, Result};
 use model::defintion_docs::{Definition, EnumItem, Struct, Value};
@@ -140,29 +141,43 @@ fn read_enum(fragment: ElementRef) -> Result<Vec<EnumItem>> {
         .select(&th_selector)
         .flat_map(|th| th.text())
         .collect();
-    let expected = [["Type", "string"], ["Value", "Description"]];
-    if !expected
-        .iter()
-        .any(|expected_option| table_headers.as_slice() == expected_option)
-    {
-        bail!("Unexpected table headers for enum: got {table_headers:#?} expected: {expected:#?}");
-    }
-    // Read in the values
     let row_selector = Selector::parse("tbody tr").map_err(Error::from)?;
     let cell_selector = Selector::parse("th,td").map_err(Error::from)?;
-    let get_row = |row: ElementRef| {
-        let mut cells = row.select(&cell_selector);
-        let mut next = move || Some(cells.next()?.text().next()?.to_string());
-        let value = next()?;
-        let description = next()?;
-        Some(EnumItem { value, description })
+    let get_row = match table_headers.as_slice() {
+        ["Type", "string"] | ["Value", "Description"] => |cells: &[&str]| {
+            Ok(match cells {
+                [value, description] => EnumItem::ValueDescription { value: value.to_string(), description: description.to_string() },
+                other => bail!("Expected cells for `value` and `description`, but got the wrong amount of values {other:#?}")
+            })
+        },
+        ["Type", "Format"] => |cells: &[&str]| {
+            Ok(match cells {
+                [r#type, format] => EnumItem::Format { r#type: r#type.to_string(), format: format.to_string() },
+                other => bail!("Expected cells for `type` and `format`, but got the wrong amount of values {other:#?}")
+            })
+        },
+        ["Type", "Format", "Example"] => |cells: &[&str]| {
+            Ok(match cells {
+                [r#type, format, example] => EnumItem::Example { r#type: r#type.to_string(), format: format.to_string(), example: example.to_string() },
+                other => bail!("Expected cells for `type`, `format`, and `example` but got the wrong amount of values {other:#?}")
+            })
+        },
+        table_headers => {
+            return Err(
+                report!("Unexpected table headers for enum: got {table_headers:#?}")
+                    .attach_printable(format!("In html fragment: {}", fragment.html())),
+            )
+        }
     };
+    // Read in the values
     let rows = fragment.select(&row_selector);
     if rows.clone().take(2).count() != 2 {
         bail!("Enum {} doesn't even have two entries.", fragment.html())
     }
     rows.clone().map(|row| {
-         get_row(row).ok_or_else(|| report!("Unable to read value and description from enum table row: {} using {cell_selector:#?}", row.html()))
+        let cells: Vec<&str> = row.select(&cell_selector).flat_map(|cell| cell.text().next()).collect();
+        get_row(cells.as_slice())
+            .attach_printable_lazy(|| format!("Unable to read value and description from enum table row: {} using {cell_selector:#?}", row.html()))
     })
     .collect()
 }
@@ -211,7 +226,7 @@ pub(crate) fn read_struct(fragment: ElementRef) -> Result<Struct> {
 mod test {
     use crate::{bail, report, Error, Result};
     use error_stack::{IntoReport, ResultExt};
-    use model::defintion_docs::Value;
+    use model::defintion_docs::{EnumItem, Value};
     use scraper::Html;
 
     #[tokio::test]
@@ -240,16 +255,26 @@ mod test {
         let s5 = values
             .first()
             .ok_or_else(|| report!("No entries in granularities enum"))?;
-        assert_eq!(&s5.value, "S5");
-        assert_eq!(&s5.description, "5 second candlesticks, minute alignment");
+        match s5 {
+            EnumItem::ValueDescription { value, description } => {
+                assert_eq!(value, "S5");
+                assert_eq!(description, "5 second candlesticks, minute alignment");
+            }
+            other => panic!("Unexpuected EnumItem: {other:#?}"),
+        };
         let m = values
             .last()
             .ok_or_else(|| report!("Couldn't get last granularity"))?;
-        assert_eq!(&m.value, "M");
-        assert_eq!(
-            &m.description,
-            "1 month candlesticks, aligned to first day of the month"
-        );
+        match m {
+            EnumItem::ValueDescription { value, description } => {
+                assert_eq!(value, "M");
+                assert_eq!(
+                    description,
+                    "1 month candlesticks, aligned to first day of the month"
+                );
+            }
+            other => panic!("Unexpuected EnumItem: {other:#?}"),
+        };
         // Check the first struct
         let candlestick = &definitions[2];
         assert_eq!(&candlestick.name, "Candlestick");

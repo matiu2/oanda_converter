@@ -43,18 +43,24 @@ fn parse_single_response_doc(panel: ElementRef) -> Result<Response> {
     // Get the title
     let Some(a) = panel
         .select(&title_selector)
-        .next()else { bail!("Couldn't find response title in {}", panel.html())};
+        .next() else { bail!("Couldn't find response title in {}", panel.html())};
     let (code, description) = parse_response_title(a)?;
     // Get the response http headers
     let headers_selector = Selector::parse(".panel ul li").map_err(Error::from)?;
     let headers = panel
         .select(&headers_selector)
         .map(parse_response_http_header)
-        .collect::<Result<Vec<ResponseHeader>>>()?;
+        .collect::<Result<Vec<ResponseHeader>>>()
+        .attach_printable_lazy(|| format!("In {code} {description}"))?;
     // Get the body
     let body_selector = Selector::parse(".panel-body pre.json_schema").map_err(Error::from)?;
-    let Some(body) = panel.select(&body_selector).next() else { bail!("Unable to find schema in response docs: {}", panel.html())};
-    let schema = read_struct(body)?;
+    // TODO: in https://developer.oanda.com/rest-live-v20/transaction-ep/ for /v3/accounts/{accountID}/transactions/stream
+    // It has a stream. We need to parse this differently
+    let schema = if let Some(body) = panel.select(&body_selector).next() {
+        read_struct(body)?
+    } else {
+        Default::default()
+    };
     Ok(Response {
         code,
         description,
@@ -70,6 +76,10 @@ fn parse_response_http_header(li: ElementRef) -> Result<ResponseHeader> {
         [name, description] => Ok(ResponseHeader {
             name: name.trim().to_string(),
             description: description.trim().to_string(),
+        }),
+        [name] => Ok(ResponseHeader {
+            name: name.trim().to_string(),
+            description: String::new(),
         }),
         _ => bail!(
             "Unable to extract name and description from response header html: {}",
@@ -129,6 +139,21 @@ mod unit_tests {
             ResponseHeader {
                 name: "Location".to_string(),
                 description: "A link to the Order that was just created".to_string(),
+            },
+            header
+        );
+    }
+
+    #[test]
+    fn test_parse_response_http_header_no_description() {
+        let html = r#"<li><a href="../transaction-df/#Transaction">Transaction</a>
+</li>"#;
+        let input = Html::parse_fragment(html);
+        let header = super::parse_response_http_header(input.root_element()).unwrap();
+        assert_eq!(
+            ResponseHeader {
+                name: "Transaction".to_string(),
+                description: String::new(),
             },
             header
         );
