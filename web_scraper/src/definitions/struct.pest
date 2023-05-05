@@ -14,7 +14,8 @@ type_name_normal = @{ word }
 type_name        = _{ array_wrap | type_name_normal }
 default          = @{ word }
 deprecated       = @{ "deprecated" }
-type_name_wrap   = _{ "(" ~ type_name ~ (("," ~ "default=" ~ default) | ("," ~ deprecated) | "") ~ ")" }
+required         = @{ "required" }
+type_name_wrap   = _{ "(" ~ type_name ~ (("," ~ "default=" ~ default) | ("," ~ (deprecated | required)) | "") ~ ")" }
 
 field_definition = _{ WHITESPACE* ~ field_name ~ ":" ~ type_name_wrap ~ ","? ~ new_line }
 field            =  { comments ~ field_definition }

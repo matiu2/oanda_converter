@@ -37,4 +37,6 @@ pub struct Field {
     pub is_array: bool,
     /// default value if applicable
     pub default: Option<String>,
+    /// True if the field is required
+    pub required: bool,
 }

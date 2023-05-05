@@ -16,3 +16,4 @@ model = { path = "../model" }
 pest = { version = "2.5.7", features = ["pretty-print"] }
 pest_derive = "2.5.7"
 pretty_assertions = "1.3.0"
+futures = "0.3.28"

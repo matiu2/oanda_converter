@@ -24,14 +24,30 @@ macro_rules! report {
     };
 }
 
+#[macro_export]
+macro_rules! annotate {
+    ($result:expr, $fmt:expr) => {
+        {
+            $result.into_report().change_context(Error::new(format!($fmt)))
+        }
+    };
+   ($result:expr, $fmt:expr, $($arg:expr),*) => {
+        {
+            $result.into_report().change_context(Error::new(format!($fmt, $($arg),*)))
+        }
+    };
+}
+
 pub type Result<T> = ErrorStackResult<T, Error>;
 
 //// The content of one page of the oanda docs
+#[derive(Debug)]
 pub struct Content {
     pub urls: Vec<Url>,
     pub documentation: Documentation,
 }
 
+#[derive(Debug)]
 pub enum Documentation {
     Endpoint(Vec<RestCall>),
     Definitions(Vec<Definition>),
@@ -103,17 +119,48 @@ fn endpoint_links(document: &Html, base_url: &Url) -> Result<Vec<Url>> {
         .collect()
 }
 
+/// Gets all content on the oanda site from all URLs
+///
+/// # Panics
+///
+/// Panics if .
+///
+/// # Errors
+///
+/// This function will return an error if .
 pub async fn get_all_content() -> Result<Vec<Content>> {
     let instrument_url =
         reqwest::Url::parse("https://developer.oanda.com/rest-live-v20/instrument-ep/").unwrap();
+
     let content = get_content(instrument_url.clone())
         .await
-        .attach_printable_lazy(|| format!("At url: {instrument_url}"))
-        .unwrap();
-    // Remember which URLs we've visited
-    for url in content.urls.iter().filter(|&&url| url != instrument_url) {
-        todo!("Spawn a child process for each url and wait for them all")
+        .attach_printable_lazy(|| format!("At url: {instrument_url}"))?;
+
+    let mut tasks = Vec::new();
+
+    for url in content
+        .urls
+        .into_iter()
+        .filter(|url| url != &instrument_url)
+    {
+        tasks.push(tokio::spawn(async move {
+            get_content(url.clone())
+                .await
+                .attach_printable_lazy(|| format!("At url: {url}"))
+        }));
     }
+
+    let mut all_content = Vec::new();
+
+    for result in futures::future::join_all(tasks).await {
+        match result {
+            Ok(Ok(contents)) => all_content.push(contents),
+            Ok(Err(err)) => return Err(err).attach_printable("Error getting the content"),
+            Err(err) => return annotate!(Err(err), "Error waiting for get_content"),
+        }
+    }
+
+    Ok(all_content)
 }
 
 #[cfg(test)]
@@ -190,5 +237,12 @@ mod tests {
         assert_eq!("Candlestick", field.type_name);
         // Make sure it got the extra responses
         assert_eq!(&vec![400, 401, 404, 405,], &candles.other_responses);
+    }
+
+    #[tokio::test]
+    async fn test_get_all_content() -> super::Result<()> {
+        let all_content = super::get_all_content().await?;
+        println!("{all_content:#?}");
+        Ok(())
     }
 }

@@ -2,7 +2,7 @@ use model::defintion_docs::{Field, Struct};
 use pest::Parser;
 use pest_derive::Parser;
 
-use crate::{bail, Error, Result};
+use crate::{bail, Error, Result, annotate};
 use error_stack::{IntoReport, ResultExt};
 
 #[derive(Parser)]
@@ -13,9 +13,7 @@ struct FieldsParser;
 /// json from the oanda docs and gives you a nice rust representation
 pub fn parse_struct(input: &str) -> Result<Struct> {
     let mut fields = Vec::new();
-    let pairs = FieldsParser::parse(Rule::data, input)
-        .into_report()
-        .change_context(Error::default())?;
+    let pairs = annotate!(FieldsParser::parse(Rule::data, input), "While parsing {input}")?;
 
     for pair in pairs.into_iter() {
         let (line, col) = pair.line_col();
@@ -48,6 +46,7 @@ pub fn parse_struct(input: &str) -> Result<Struct> {
                     .clone()
                     .find(|pair| pair.as_rule() == Rule::type_name_array)
                     .map(|pair| pair.as_str().to_string());
+                let required = rest.clone().find(|pair| pair.as_rule() == Rule::required).is_some();
                 let (type_name, is_array) = match (type_name_normal, type_name_array) {
                     (None, None) => bail!("No type_name found in field {span} at {line}:{col} in {input}"),
                     (None, Some(type_name)) => (type_name, true),
@@ -60,6 +59,7 @@ pub fn parse_struct(input: &str) -> Result<Struct> {
                     type_name,
                     is_array,
                     default,
+                    required,
                 });
             }
             // End of input
@@ -75,6 +75,8 @@ pub fn parse_struct(input: &str) -> Result<Struct> {
 
 #[cfg(test)]
 mod unit_tests {
+    use crate::{Error, report};
+
 
     #[test]
     fn parse_field() {
@@ -150,5 +152,38 @@ mod unit_tests {
             &type_field.doc_string,
             "The string “PRICE”. Used to identify the a Price object when found in a stream."
         );
+    }
+
+    #[test]
+    fn test_required() -> crate::Result<()> {
+        let input = r#"{
+    #
+    # The transaction that rejects the configuration of the Account.
+    #
+    clientConfigureRejectTransaction : (ClientConfigureRejectTransaction),
+
+    #
+    # The ID of the last Transaction created for the Account.
+    #
+    lastTransactionID : (TransactionID),
+
+    #
+    # The code of the error that has occurred. This field may not be returned
+    # for some errors.
+    #
+    errorCode : (string),
+
+    #
+    # The human-readable description of the error that has occurred.
+    #
+    errorMessage : (string, required)
+}"#;
+        let got = super::parse_struct(input)?;
+        println!("{got:#?}");
+        let error_message = got.fields.iter().find(|field| field.name == "errorMessage").ok_or_else(|| report!("No errorMessage field found"))?;
+        assert!(error_message.required);
+        let last_transaction_id = got.fields.iter().find(|field| field.name == "lastTransactionID").ok_or_else(|| report!("No lastTransactionID field found"))?;
+        assert!(!last_transaction_id.required);
+        Ok(())
     }
 }
