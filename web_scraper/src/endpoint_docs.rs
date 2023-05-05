@@ -1,6 +1,6 @@
 //! Scrapes the endpoint docs. URLs that end in "-ep/".
 
-use crate::{bail, Error, Result};
+use crate::{annotate, bail, Error, Result};
 use error_stack::{IntoReport, ResultExt};
 use model::endpoint_docs::RestCall;
 use scraper::Html;
@@ -28,15 +28,12 @@ pub fn endpoint_docs(document: &Html, name: String) -> Result<Vec<RestCall>> {
         .zip(bodies)
         .map(|(header, body)| {
             Ok(RestCall {
-                endpoint: name
-                    .parse()
-                    .into_report()
-                    .change_context(Error::default())?,
-                http_method: header
-                    .http_method
-                    .parse()
-                    .into_report()
-                    .change_context(Error::default())?,
+                endpoint: annotate!(name.parse(), "While parsing {name}")?,
+                http_method: annotate!(
+                    header.http_method.parse(),
+                    "While parsing {}",
+                    header.http_method
+                )?,
                 path: header.path,
                 doc_string: header.doc_string,
                 responses: body.responses,

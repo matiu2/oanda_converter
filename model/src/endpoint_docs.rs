@@ -57,6 +57,7 @@ pub enum HttpMethod {
     Get,
     Post,
     Put,
+    Patch,
 }
 
 /// How a parameter should be sent to an http request
