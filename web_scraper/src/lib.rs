@@ -103,6 +103,19 @@ fn endpoint_links(document: &Html, base_url: &Url) -> Result<Vec<Url>> {
         .collect()
 }
 
+pub async fn get_all_content() -> Result<Vec<Content>> {
+    let instrument_url =
+        reqwest::Url::parse("https://developer.oanda.com/rest-live-v20/instrument-ep/").unwrap();
+    let content = get_content(instrument_url.clone())
+        .await
+        .attach_printable_lazy(|| format!("At url: {instrument_url}"))
+        .unwrap();
+    // Remember which URLs we've visited
+    for url in content.urls.iter().filter(|&&url| url != instrument_url) {
+        todo!("Spawn a child process for each url and wait for them all")
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use crate::Documentation;
