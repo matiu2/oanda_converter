@@ -155,8 +155,8 @@ pub async fn get_all_content() -> Result<Vec<Content>> {
     for result in futures::future::join_all(tasks).await {
         match result {
             Ok(Ok(contents)) => all_content.push(contents),
-            Ok(Err(err)) => tracing::error!("While getting content: {err:#?}"),
-            Err(err) => tracing::error!("Error while waiting for get_content: {err:#?}"),
+            Ok(Err(err)) => bail!("While getting content: {err:#?}"),
+            Err(err) => bail!("Error while waiting for get_content: {err:#?}"),
         }
     }
 

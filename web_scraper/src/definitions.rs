@@ -143,22 +143,44 @@ fn read_enum(fragment: ElementRef) -> Result<Vec<EnumItem>> {
         .collect();
     let row_selector = Selector::parse("tbody tr").map_err(Error::from)?;
     let cell_selector = Selector::parse("th,td").map_err(Error::from)?;
+    #[derive(Debug)]
+    enum Entry {
+        // Used for rotated tables, where the keys are in the first column of every header
+        KeyValue { key: String, value: String },
+        EnumItem(EnumItem),
+    }
+    impl Entry {
+        /// If this Entry is a key value entry, and the key matches the input_key, returns the value
+        fn value(&self, input_key: &str) -> Option<&str> {
+            match self {
+                Entry::KeyValue { key, value } if key == input_key => Some(value),
+                _ => None,
+            }
+        }
+    }
     let get_row = match table_headers.as_slice() {
-        ["Type", "string"] | ["Value", "Description"] => |cells: &[&str]| {
+        ["Type", "string"] => |cells: &[&str]| {
             Ok(match cells {
-                [value, description] => EnumItem::ValueDescription { value: value.to_string(), description: description.to_string() },
+                [key, value] => Entry::KeyValue { key: key.to_string(), value: value.to_string() },
+                other => bail!("Expected cells for `key` and `value`, but got the wrong amount of values {other:#?}")
+            })
+        },
+        ["Value", "Description"] => |cells: &[&str]| {
+            Ok(match cells {
+                [value, description] => Entry::EnumItem(EnumItem::ValueDescription { value: value.to_string(), description: description.to_string() }),
                 other => bail!("Expected cells for `value` and `description`, but got the wrong amount of values {other:#?}")
             })
         },
         ["Type", "Format"] => |cells: &[&str]| {
             Ok(match cells {
-                [r#type, format] => EnumItem::Format { r#type: r#type.to_string(), format: format.to_string() },
+                [r#type, format] => Entry::EnumItem(EnumItem::Format { r#type: r#type.to_string(), format: format.to_string() }),
                 other => bail!("Expected cells for `type` and `format`, but got the wrong amount of values {other:#?}")
             })
         },
         ["Type", "Format", "Example"] => |cells: &[&str]| {
             Ok(match cells {
-                [r#type, format, example] => EnumItem::Example { r#type: r#type.to_string(), format: format.to_string(), example: example.to_string() },
+                [r#type, format, example] => Entry::EnumItem(EnumItem::Example { r#type: r#type.to_string(), format: format.to_string(), example: example.to_string() }),
+                [key, value] => Entry::KeyValue{key: key.to_string(),value: value.to_string()},
                 other => bail!("Expected cells for `type`, `format`, and `example` but got the wrong amount of values {other:#?}")
             })
         },
@@ -174,12 +196,38 @@ fn read_enum(fragment: ElementRef) -> Result<Vec<EnumItem>> {
     if rows.clone().take(2).count() != 2 {
         bail!("Enum {} doesn't even have two entries.", fragment.html())
     }
-    rows.clone().map(|row| {
+    let parsed = rows.clone().map(|row| {
         let cells: Vec<&str> = row.select(&cell_selector).flat_map(|cell| cell.text().next()).collect();
         get_row(cells.as_slice())
             .attach_printable_lazy(|| format!("Unable to read value and description from enum table row: {} using {cell_selector:#?}", row.html()))
     })
-    .collect()
+    .collect::<Result<Vec<Entry>>>()?;
+    if let Some(Entry::KeyValue { .. }) = parsed.first() {
+        // Handle tables that have been rotated, so that the keys are in the first column, rather than along the top row
+        let Some(r#type) = parsed.iter().flat_map(|entry| entry.value("Type")).next().map(str::to_string)
+            else { bail!("Expected a type row. {parsed:#?}")};
+        let Some(format) = parsed.iter().flat_map(|entry| entry.value("Format")).next().map(str::to_string)
+            else { bail!("Expected a format row. {parsed:#?}")};
+        let Some(example) = parsed.iter().flat_map(|entry| entry.value("Example")).next().map(str::to_string)
+            else { bail!("Expected a format row. {parsed:#?}")};
+        Ok(vec![EnumItem::Example {
+            r#type,
+            format,
+            example,
+        }])
+    } else {
+        // This is a normal table with the keys along the top row, so each entry is it's own enum possible value
+        parsed
+            .into_iter()
+            .map(|entry| {
+                if let Entry::EnumItem(enum_item) = entry {
+                    Ok(enum_item)
+                } else {
+                    bail!("Expected EnumItem, but got KeyValue: {entry:#?}")
+                }
+            })
+            .collect()
+    }
 }
 
 /// CSS selects, converts to text, and parses a pseudo json struct definition
@@ -283,6 +331,32 @@ mod test {
         let time = &data.fields[0];
         assert_eq!(time.name, "time");
         // Testing more of the struct is beyond the scope of this test, but can be seen in `struct_parser.rs`
+        Ok(())
+    }
+
+    #[test]
+    fn test_rotated_tables() -> Result<()> {
+        let input = r#"<table class="parameter_table">
+<tbody>
+<tr>
+<th class="pt_15">Type</th>
+<td class="pt_85">string</td>
+</tr>
+<tr>
+<th>Format</th>
+<td>“-“-delimited string with format “{siteID}-{divisionID}-{userID}-{accountNumber}”</td>
+</tr>
+<tr>
+<th>Example</th>
+<td>001-011-5838423-001</td>
+</tr>
+</tbody>
+</table>"#;
+        let fragment = Html::parse_fragment(input);
+        let got = super::read_enum(fragment.root_element())?;
+        assert_eq!(got, vec![EnumItem::Example{r#type: "string".to_string(),
+            format:"“-“-delimited string with format “{siteID}-{divisionID}-{userID}-{accountNumber}”".to_string(),
+            example: "001-011-5838423-001".to_string() }]);
         Ok(())
     }
 }

@@ -11,7 +11,7 @@ pub enum Value {
     Struct(Struct),
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 pub enum EnumItem {
     ValueDescription {
         value: String,
