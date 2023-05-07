@@ -114,6 +114,8 @@ mod unit_tests {
     use pretty_assertions::assert_eq;
     use scraper::Html;
 
+    use crate::{bail, Error, Result};
+
     #[test]
     fn test_parse_response_title() {
         let html = r##"
@@ -246,5 +248,30 @@ mod unit_tests {
             "The ID of the most recent Transaction created for the Account",
             field.doc_string
         );
+    }
+
+    #[test]
+    fn test_read_struct() -> Result<()> {
+        let input = r#"{
+     #
+     # The Account’s identifier
+     # <b>Amazing</b>: Do use it dude.
+     #
+     id : (<a href="../account-df/#AccountID">AccountID</a>),
+}"#;
+        let fragment = Html::parse_fragment(input);
+        let got = super::read_struct(fragment.root_element())?;
+        assert_eq!(1, got.fields.len(), "There should only be one field");
+        let Some(id) = got.fields.iter().find(|field| field.name == "id") else { bail!("No ID field in {got:#?}")};
+        assert_eq!("id", id.name.as_str());
+        assert_eq!("AccountID", id.type_name.as_str());
+        assert_eq!(
+            "The Account’s identifier Amazing: Do use it dude.",
+            id.doc_string.as_str()
+        );
+        assert!(!id.is_array);
+        assert!(id.default.is_none());
+        assert!(!id.required);
+        Ok(())
     }
 }

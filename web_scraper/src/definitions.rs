@@ -249,17 +249,24 @@ fn read_enum(fragment: ElementRef) -> Result<Vec<EnumItem>> {
 /// * The definition child node is neither text nor an <a> element
 pub(crate) fn read_struct(fragment: ElementRef) -> Result<Struct> {
     // Create a selector for <a> tags
-    let a_selector = Selector::parse("a").map_err(Error::from)?;
-    let mut anchor_texts = fragment.select(&a_selector).flat_map(|a| a.text());
+    let inner_element_selector = Selector::parse("a,b").map_err(Error::from)?;
+    let mut inner_element_texts = fragment
+        .select(&inner_element_selector)
+        .flat_map(|a| a.text());
     let text = fragment
         .children()
         .map(|child| {
             if let Some(element) = child.value().as_element() {
-                if element.name() != "a" {
-                    bail!("Unexpected element in definition text: {element:#?}");
+                match element.name()  {
+                    "a" | "b" => {
+                        let Some(text) = inner_element_texts.next() else {bail!("Anchor element didn't have any text inside: {element:#?}")};
+                        Ok(text)
+                    },
+                    other => {
+                        return Err(report!("Unexpected element ({other}) in definition text: {element:#?}")
+                            .attach_printable(format!("fragment html:\n```html\n{}\n```", fragment.html())));
+                    }
                 }
-                let Some(text) = anchor_texts.next() else {bail!("Anchor element didn't have any text inside: {element:#?}")};
-                Ok(text)
             } else if let Some(text) = child.value().as_text() {
                 Ok(text as &str)
             } else {
