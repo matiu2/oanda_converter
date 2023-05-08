@@ -23,7 +23,7 @@ pub fn parse_struct(input: &str) -> Result<Struct> {
                 let inner = pair.into_inner();
                 let doc_string_lines: Vec<&str> = inner
                     .clone()
-                    .take_while(|pair| pair.as_rule() == Rule::doc_string_line)
+                    .take_while(|pair| pair.as_rule() == Rule::doc_string)
                     .map(|pair| pair.as_str())
                     .collect();
                 let doc_string = doc_string_lines.join(" ");
@@ -185,5 +185,28 @@ mod unit_tests {
         let last_transaction_id = got.fields.iter().find(|field| field.name == "lastTransactionID").ok_or_else(|| report!("No lastTransactionID field found"))?;
         assert!(!last_transaction_id.required);
         Ok(())
+    }
+
+    #[test]
+    fn test_struct_parser() {
+        let input = r#"{
+    #
+    # The Account’s identifier
+    #
+    id : (AccountID),
+
+    #
+    # The Account’s associated MT4 Account ID. This field will not be present
+    # if the Account is not an MT4 account.
+    #
+    mt4AccountID : (integer),
+
+    #
+    # The Account’s tags
+    #
+    tags : (Array[string])
+}"#;
+        let got = super::parse_struct(input).unwrap();
+        println!("{got:#?}");
     }
 }

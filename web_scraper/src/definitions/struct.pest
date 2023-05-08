@@ -2,21 +2,28 @@ WHITESPACE = _{ " " | "\t" }
 new_line   = _{ ("\n" | "\r")+ }
 
 punctuation     = _{ "‘" | "“" | "”" | "’" | "!" | "\"" | "#" | "$" | "%" | "&" | "'" | "(" | ")" | "*" | "+" | "," | "-" | "." | "/" | ":" | ";" | "<" | "=" | ">" | "?" | "@" | "[" | "\\" | "]" | "^" | "_" | "`" | "{" | "|" | "}" | "~" }
-doc_string_line =  { (ASCII_ALPHANUMERIC | punctuation)+ }
-comment_line    = _{ WHITESPACE? ~ "#" ~ doc_string_line? ~ new_line }
+
+// Comments
+doc_string      =  { doc_word ~ (doc_word | WHITESPACE)* }
+doc_word        = _{ (ASCII_ALPHANUMERIC | punctuation ) }
+comment_line    = _{ WHITESPACE* ~ "#" ~ (doc_string?) ~ new_line }
 comments        = _{ comment_line+ }
 
-word             = _{ ASCII_ALPHA+ }
+// Field
+word             = @{ ASCII_ALPHA ~ (ASCII_ALPHANUMERIC | "_")* }
 field_name       = @{ word }
 array_wrap       = _{ "Array[" ~ type_name_array ~ "]" }
 type_name_array  = @{ word }
 type_name_normal = @{ word }
 type_name        = _{ array_wrap | type_name_normal }
 default          = @{ word }
+default_def      = _{ "default=" ~ default }
+def_dep_req_definition = _{ "," ~ (default_def | deprecated | required) }
 deprecated       = @{ "deprecated" }
 required         = @{ "required" }
-type_name_wrap   = _{ "(" ~ type_name ~ (("," ~ "default=" ~ default) | ("," ~ (deprecated | required)) | "") ~ ")" }
+type_name_wrap   = _{ "(" ~ type_name ~ def_dep_req_definition* ~ ")" }
 
+// Putting it all together
 field_definition = _{ WHITESPACE* ~ field_name ~ ":" ~ type_name_wrap ~ ","? ~ new_line }
-field            =  { comments ~ field_definition }
-data             = _{ SOI ~ "{" ~ new_line ~ (field | new_line)* ~ "}" ~ new_line* ~ EOI }
+field            =  { comments ~ field_definition ~ new_line* }
+data             = _{ SOI ~ "{" ~ new_line ~ field* ~ "}" ~ new_line* ~ EOI }
