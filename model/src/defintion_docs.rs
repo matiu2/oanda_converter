@@ -18,9 +18,13 @@ pub enum EnumItem {
         value: String,
         description: String,
     },
-    Example {
+    FormattedExample {
         r#type: String,
         format: String,
+        example: String,
+    },
+    Example {
+        r#type: String,
         example: String,
     },
     Format {

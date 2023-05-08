@@ -112,11 +112,17 @@ fn read_body(div: ElementRef) -> Result<Value> {
     let enum_div = div.select(&enum_selector).next();
     let struct_div = div.select(&struct_selector).next();
     let p = div.select(&p_selector).next();
+    // We only care if the p has Implemented by: as it's first text
+    let p = match p {
+        Some(p) if p.text().next().map(str::trim) == Some("Implemented by:") => Some(p),
+        Some(_) => None,
+        None => None,
+    };
     // TODO: Read response pseudo json when inside `.endpoint_body` divs
     match (enum_div, struct_div, p) {
         (Some(enum_div), None, None) => Ok(Value::Enum(read_enum(enum_div)?)),
-        (None, Some(struct_div), None) => Ok(Value::Struct(read_struct(struct_div)?)),
-        (None, None, Some(p)) if p.text().next().map(str::trim) == Some("Implemented by:") => Ok(Value::Empty), 
+        (None, Some(struct_div), _) => Ok(Value::Struct(read_struct(struct_div)?)),
+        (None, None, Some(_)) => Ok(Value::Empty), 
         (r#enum, r#struct, p) =>  bail!("Found unexpected combination of enum / struct / p in definition body. Expected only one but got enum={} struct={} p={} in html: {}", r#enum.is_some(), r#struct.is_some(), p.is_some(), div.html()),
     }
 }
@@ -179,9 +185,15 @@ fn read_enum(fragment: ElementRef) -> Result<Vec<EnumItem>> {
                 other => bail!("Expected cells for `type` and `format`, but got the wrong amount of values {other:#?}")
             })
         },
+        ["Type", "Example"] => |cells: &[&str]| {
+            Ok(match cells {
+                [r#type, example] => Entry::EnumItem(EnumItem::Example { r#type: r#type.to_string(), example: example.to_string() }),
+                other => bail!("Expected cells for `type` and `example`, but got the wrong amount of values {other:#?}")
+            })
+        },
         ["Type", "Format", "Example"] => |cells: &[&str]| {
             Ok(match cells {
-                [r#type, format, example] => Entry::EnumItem(EnumItem::Example { r#type: r#type.to_string(), format: format.to_string(), example: example.to_string() }),
+                [r#type, format, example] => Entry::EnumItem(EnumItem::FormattedExample { r#type: r#type.to_string(), format: format.to_string(), example: example.to_string() }),
                 [key, value] => Entry::KeyValue{key: key.to_string(),value: value.to_string()},
                 other => bail!("Expected cells for `type`, `format`, and `example` but got the wrong amount of values {other:#?}")
             })
@@ -212,7 +224,7 @@ fn read_enum(fragment: ElementRef) -> Result<Vec<EnumItem>> {
             else { bail!("Expected a format row. {parsed:#?}")};
         let Some(example) = parsed.iter().flat_map(|entry| entry.value("Example")).next().map(str::to_string)
             else { bail!("Expected a format row. {parsed:#?}")};
-        Ok(vec![EnumItem::Example {
+        Ok(vec![EnumItem::FormattedExample {
             r#type,
             format,
             example,
@@ -363,7 +375,7 @@ mod test {
 </table>"#;
         let fragment = Html::parse_fragment(input);
         let got = super::read_enum(fragment.root_element())?;
-        assert_eq!(got, vec![EnumItem::Example{r#type: "string".to_string(),
+        assert_eq!(got, vec![EnumItem::FormattedExample{r#type: "string".to_string(),
             format:"“-“-delimited string with format “{siteID}-{divisionID}-{userID}-{accountNumber}”".to_string(),
             example: "001-011-5838423-001".to_string() }]);
         Ok(())
