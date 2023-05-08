@@ -46,12 +46,17 @@ pub fn parse_struct(input: &str) -> Result<Struct> {
                     .clone()
                     .find(|pair| pair.as_rule() == Rule::type_name_array)
                     .map(|pair| pair.as_str().to_string());
+                let type_name_number = rest
+                    .clone()
+                    .find(|pair| pair.as_rule() == Rule::type_name_number)
+                    .map(|pair| pair.as_str().to_string());
                 let required = rest.clone().find(|pair| pair.as_rule() == Rule::required).is_some();
-                let (type_name, is_array) = match (type_name_normal, type_name_array) {
-                    (None, None) => bail!("No type_name found in field {span} at {line}:{col} in {input}"),
-                    (None, Some(type_name)) => (type_name, true),
-                    (Some(type_name), None) => (type_name, false),
-                    (Some(_), Some(_)) => bail!("Unreachable code. Somehow a field contains both array and not array {span} at {line}:{col} in {input}"),
+                let (type_name, is_array) = match (type_name_normal, type_name_array, type_name_number) {
+                    (None, None, None) => bail!("No type_name found in field {span} at {line}:{col} in {input}"),
+                    (None, Some(type_name), None) => (type_name, true),
+                    (Some(type_name), None, None) => (type_name, false),
+                    (None, None, Some(_)) => ("Decimal".to_string(), false),
+                    other => bail!("Unreachable code. Unexpected combination of type specifiers: {other:#?} in {span} at {line}:{col} in {input}"),
                 };
                 fields.push(Field {
                     doc_string,
@@ -75,8 +80,7 @@ pub fn parse_struct(input: &str) -> Result<Struct> {
 
 #[cfg(test)]
 mod unit_tests {
-    use crate::{Error, report};
-
+    use crate::{Error, report, Result};
 
     #[test]
     fn parse_field() {
@@ -208,5 +212,23 @@ mod unit_tests {
 }"#;
         let got = super::parse_struct(input).unwrap();
         println!("{got:#?}");
+    }
+
+    #[test]
+    fn test_parse_number() -> Result<()> {
+        let input = r#"{
+    #
+    # The Price offered by the PriceBucket
+    #
+    price : (PriceValue),
+
+    #
+    # The amount of liquidity offered by the PriceBucket
+    #
+    liquidity : (integer or decimal if available)
+}"#;
+        let got = super::parse_struct(input)?;
+        println!("{got:#?}");
+        Ok(())
     }
 }

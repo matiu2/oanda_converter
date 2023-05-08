@@ -15,7 +15,8 @@ field_name       = @{ word }
 array_wrap       = _{ "Array[" ~ type_name_array ~ "]" }
 type_name_array  = @{ word }
 type_name_normal = @{ word }
-type_name        = _{ array_wrap | type_name_normal }
+type_name_number = @{ "integer or decimal if available" }
+type_name        = _{ array_wrap | type_name_number | type_name_normal }
 default          = @{ word }
 default_def      = _{ "default=" ~ default }
 def_dep_req_definition = _{ "," ~ (default_def | deprecated | required) }
