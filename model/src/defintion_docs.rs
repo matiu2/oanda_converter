@@ -31,6 +31,9 @@ pub enum EnumItem {
         r#type: String,
         format: String,
     },
+    JustType {
+        r#type: String,
+    },
 }
 
 /// A struct definition. Used to create serde types to match oanda json types
