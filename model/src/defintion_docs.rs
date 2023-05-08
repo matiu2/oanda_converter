@@ -5,10 +5,11 @@ pub struct Definition {
     pub value: Value,
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 pub enum Value {
     Enum(Vec<EnumItem>),
     Struct(Struct),
+    Empty,
 }
 
 #[derive(Debug, PartialEq, Eq)]
@@ -29,14 +30,14 @@ pub enum EnumItem {
 }
 
 /// A struct definition. Used to create serde types to match oanda json types
-#[derive(Debug, Default)]
+#[derive(Debug, Default, PartialEq, Eq)]
 pub struct Struct {
     // TODO: Maybe add a name and doc_string for the struct itself
     pub fields: Vec<Field>,
 }
 
 /// Represents a field in a struct definiton
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 pub struct Field {
     /// The field name (key in the json)
     pub name: String,

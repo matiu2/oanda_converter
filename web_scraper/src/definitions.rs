@@ -105,17 +105,19 @@ fn read_header(fragment: ElementRef) -> Result<Header> {
 ///
 /// This function will return an error if there are any issues with the
 /// css selectors or parsing the pseudo json
-fn read_body(fragment: ElementRef) -> Result<Value> {
+fn read_body(div: ElementRef) -> Result<Value> {
     let enum_selector = Selector::parse("table.parameter_table").map_err(Error::from)?;
     let struct_selector = Selector::parse("pre.json_schema").map_err(Error::from)?;
-    let enum_fragment = fragment.select(&enum_selector).next();
-    let struct_fragment = fragment.select(&struct_selector).next();
+    let p_selector = Selector::parse("div > p").map_err(Error::from)?;
+    let enum_div = div.select(&enum_selector).next();
+    let struct_div = div.select(&struct_selector).next();
+    let p = div.select(&p_selector).next();
     // TODO: Read response pseudo json when inside `.endpoint_body` divs
-    match (enum_fragment, struct_fragment) {
-        (Some(enum_fragment), Some(struct_fragment)) => bail!("Found both an enum and struct inside the same body:\nenum: {}\nstruct: {},\nbody: {}", enum_fragment.html(), struct_fragment.html(), fragment.html()),
-        (Some(enum_fragment), None) => Ok(Value::Enum(read_enum(enum_fragment)?)),
-        (None, Some(struct_fragment)) => Ok(Value::Struct(read_struct(struct_fragment)?)),
-        (None, None) => bail!("Unable to find either an enum nor a strcut definition in {} using {enum_selector:#?} and {struct_selector:#?}", fragment.html()),
+    match (enum_div, struct_div, p) {
+        (Some(enum_div), None, None) => Ok(Value::Enum(read_enum(enum_div)?)),
+        (None, Some(struct_div), None) => Ok(Value::Struct(read_struct(struct_div)?)),
+        (None, None, Some(p)) if p.text().next().map(str::trim) == Some("Implemented by:") => Ok(Value::Empty), 
+        (r#enum, r#struct, p) =>  bail!("Found unexpected combination of enum / struct / p in definition body. Expected only one but got enum={} struct={} p={} in html: {}", r#enum.is_some(), r#struct.is_some(), p.is_some(), div.html()),
     }
 }
 
@@ -364,6 +366,26 @@ mod test {
         assert_eq!(got, vec![EnumItem::Example{r#type: "string".to_string(),
             format:"“-“-delimited string with format “{siteID}-{divisionID}-{userID}-{accountNumber}”".to_string(),
             example: "001-011-5838423-001".to_string() }]);
+        Ok(())
+    }
+
+    #[test]
+    fn test_empty_body() -> Result<()> {
+        let input = r#"<div class="definition_body collapse" id="collapse_definition_11">
+  <p>Implemented by: 
+    <a href="../order-df/#MarketOrderRequest">MarketOrderRequest</a>, 
+	<a href="../order-df/#LimitOrderRequest">LimitOrderRequest</a>, 
+	<a href="../order-df/#StopOrderRequest">StopOrderRequest</a>, 
+	<a href="../order-df/#MarketIfTouchedOrderRequest">MarketIfTouchedOrderRequest</a>, 
+	<a href="../order-df/#TakeProfitOrderRequest">TakeProfitOrderRequest</a>, 
+	<a href="../order-df/#StopLossOrderRequest">StopLossOrderRequest</a>, 
+	<a href="../order-df/#GuaranteedStopLossOrderRequest">GuaranteedStopLossOrderRequest</a>, 
+	<a href="../order-df/#TrailingStopLossOrderRequest">TrailingStopLossOrderRequest</a>
+  </p>
+</div>"#;
+        let fragment = Html::parse_fragment(input);
+        let got = super::read_body(fragment.root_element())?;
+        assert_eq!(got, Value::Empty);
         Ok(())
     }
 }
