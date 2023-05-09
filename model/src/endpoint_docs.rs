@@ -1,9 +1,10 @@
 use parse_display::{Display, FromStr};
+use serde::{Deserialize, Serialize};
 
 use crate::defintion_docs::Struct;
 
 /// All the different endpoint types
-#[derive(Display, FromStr, PartialEq, Debug)]
+#[derive(Display, FromStr, PartialEq, Debug, Serialize, Deserialize)]
 #[display(style = "snake_case")]
 pub enum Endpoint {
     Account,
@@ -16,7 +17,7 @@ pub enum Endpoint {
 }
 
 /// The documentation for an API call from one of the endpoints
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct RestCall {
     pub endpoint: Endpoint,
     pub http_method: HttpMethod,
@@ -31,13 +32,13 @@ pub struct RestCall {
 /// The documentation for a possible http error response.
 /// Not an actual http error, just documention for it
 /// See here: https://developer.oanda.com/rest-live-v20/troubleshooting-errors/#400
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub enum HTTPErrorResponse {
     ErrorMessage { error_message: String },
     RejectReason { reject_reason: String },
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Response {
     pub code: u16,
     pub description: String,
@@ -45,13 +46,13 @@ pub struct Response {
     pub schema: Struct,
 }
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ResponseHeader {
     pub name: String,
     pub description: String,
 }
 
-#[derive(Display, FromStr, PartialEq, Debug)]
+#[derive(Display, FromStr, PartialEq, Debug, Serialize, Deserialize)]
 #[display(style = "UPPERCASE")]
 pub enum HttpMethod {
     Get,
@@ -61,7 +62,7 @@ pub enum HttpMethod {
 }
 
 /// How a parameter should be sent to an http request
-#[derive(Display, FromStr, PartialEq, Debug)]
+#[derive(Display, FromStr, PartialEq, Debug, Serialize, Deserialize)]
 #[display(style = "snake_case")]
 pub enum LocatedIn {
     Header,
@@ -70,7 +71,7 @@ pub enum LocatedIn {
 }
 
 /// An http request documentation body
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct RestCallParameter {
     pub name: String,
     pub located_in: LocatedIn,

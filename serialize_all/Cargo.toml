@@ -1,0 +1,13 @@
+[package]
+name = "serialize_all"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+serde_yaml = "0.9.21"
+tokio = { version = "1.28.0", features = ["macros", "rt-multi-thread", "fs"] }
+tracing = "0.1.37"
+tracing-subscriber = { version = "0.3.17", features = ["env-filter"] }
+web_scraper = { version = "0.1.0", path = "../web_scraper" }

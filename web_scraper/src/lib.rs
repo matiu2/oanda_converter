@@ -3,7 +3,8 @@ pub mod endpoint_docs;
 
 use definitions::get_definitions;
 use model::{defintion_docs::Definition, endpoint_docs::RestCall};
-use reqwest::Url;
+use serde::{Deserialize, Serialize};
+use url::Url;
 pub mod error;
 use endpoint_docs::endpoint_docs;
 pub use error::Error;
@@ -41,13 +42,13 @@ macro_rules! annotate {
 pub type Result<T> = ErrorStackResult<T, Error>;
 
 //// The content of one page of the oanda docs
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Content {
     pub urls: Vec<Url>,
     pub documentation: Documentation,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub enum Documentation {
     Endpoint(Vec<RestCall>),
     Definitions(Vec<Definition>),
