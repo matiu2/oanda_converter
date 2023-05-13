@@ -32,7 +32,7 @@
       headers:
       - name: RequestID
         description: The unique identifier generated for the request
-      schema:
+      schema: !Struct
         fields:
         - name: accounts
           type_name: AccountProperties
@@ -66,7 +66,7 @@
       headers:
       - name: RequestID
         description: The unique identifier generated for the request
-      schema:
+      schema: !Struct
         fields:
         - name: account
           type_name: Account
@@ -107,7 +107,7 @@
       headers:
       - name: RequestID
         description: The unique identifier generated for the request
-      schema:
+      schema: !Struct
         fields:
         - name: account
           type_name: AccountSummary
@@ -148,7 +148,7 @@
       headers:
       - name: RequestID
         description: The unique identifier generated for the request
-      schema:
+      schema: !Struct
         fields:
         - name: instruments
           type_name: Instrument
@@ -189,7 +189,7 @@
       headers:
       - name: RequestID
         description: The unique identifier generated for the request
-      schema:
+      schema: !Struct
         fields:
         - name: clientConfigureTransaction
           type_name: ClientConfigureTransaction
@@ -206,7 +206,7 @@
     - code: 400
       description: The configuration specification was invalid.
       headers: []
-      schema:
+      schema: !Struct
         fields:
         - name: clientConfigureRejectTransaction
           type_name: ClientConfigureRejectTransaction
@@ -235,7 +235,7 @@
     - code: 403
       description: The configuration operation was forbidden on the Account.
       headers: []
-      schema:
+      schema: !Struct
         fields:
         - name: clientConfigureRejectTransaction
           type_name: ClientConfigureRejectTransaction
@@ -292,7 +292,7 @@
       headers:
       - name: RequestID
         description: The unique identifier generated for the request
-      schema:
+      schema: !Struct
         fields:
         - name: changes
           type_name: AccountChanges
@@ -361,7 +361,7 @@
         description: A link to the Order that was just created
       - name: RequestID
         description: The unique identifier generated for the request
-      schema:
+      schema: !Struct
         fields:
         - name: orderCreateTransaction
           type_name: Transaction
@@ -408,7 +408,7 @@
     - code: 400
       description: The Order specification was invalid
       headers: []
-      schema:
+      schema: !Struct
         fields:
         - name: orderRejectTransaction
           type_name: Transaction
@@ -443,7 +443,7 @@
     - code: 404
       description: The Order or Account specified does not exist.
       headers: []
-      schema:
+      schema: !Struct
         fields:
         - name: orderRejectTransaction
           type_name: Transaction
@@ -524,7 +524,7 @@
         description: A link to the next page of results if the results were paginated
       - name: RequestID
         description: The unique identifier generated for the request
-      schema:
+      schema: !Struct
         fields:
         - name: orders
           type_name: Order
@@ -565,7 +565,7 @@
       headers:
       - name: RequestID
         description: The unique identifier generated for the request
-      schema:
+      schema: !Struct
         fields:
         - name: orders
           type_name: Order
@@ -612,7 +612,7 @@
         description: A link to the next page of results if the results were paginated
       - name: RequestID
         description: The unique identifier generated for the request
-      schema:
+      schema: !Struct
         fields:
         - name: order
           type_name: Order
@@ -663,7 +663,7 @@
         description: A link to the replacing Order
       - name: RequestID
         description: The unique identifier generated for the request
-      schema:
+      schema: !Struct
         fields:
         - name: orderCancelTransaction
           type_name: OrderCancelTransaction
@@ -716,7 +716,7 @@
     - code: 400
       description: The Order specification was invalid
       headers: []
-      schema:
+      schema: !Struct
         fields:
         - name: orderRejectTransaction
           type_name: Transaction
@@ -751,7 +751,7 @@
     - code: 404
       description: The Account or Order specified does not exist.
       headers: []
-      schema:
+      schema: !Struct
         fields:
         - name: orderCancelRejectTransaction
           type_name: Transaction
@@ -817,7 +817,7 @@
       headers:
       - name: RequestID
         description: The unique identifier generated for the request
-      schema:
+      schema: !Struct
         fields:
         - name: orderCancelTransaction
           type_name: OrderCancelTransaction
@@ -840,7 +840,7 @@
     - code: 404
       description: The Account or Order specified does not exist.
       headers: []
-      schema:
+      schema: !Struct
         fields:
         - name: orderCancelRejectTransaction
           type_name: OrderCancelRejectTransaction
@@ -902,7 +902,7 @@
       headers:
       - name: RequestID
         description: The unique identifier generated for the request
-      schema:
+      schema: !Struct
         fields:
         - name: orderClientExtensionsModifyTransaction
           type_name: OrderClientExtensionsModifyTransaction
@@ -925,7 +925,7 @@
     - code: 400
       description: The Order Client Extensions specification was invalid
       headers: []
-      schema:
+      schema: !Struct
         fields:
         - name: orderClientExtensionsModifyRejectTransaction
           type_name: OrderClientExtensionsModifyRejectTransaction
@@ -960,7 +960,7 @@
     - code: 404
       description: The Account or Order specified does not exist.
       headers: []
-      schema:
+      schema: !Struct
         fields:
         - name: orderClientExtensionsModifyRejectTransaction
           type_name: OrderClientExtensionsModifyRejectTransaction
@@ -1059,7 +1059,7 @@
         description: A link to the next page of Trades if the results were paginated
       - name: RequestID
         description: The unique identifier generated for the request
-      schema:
+      schema: !Struct
         fields:
         - name: trades
           type_name: Trade
@@ -1100,7 +1100,7 @@
       headers:
       - name: RequestID
         description: The unique identifier generated for the request
-      schema:
+      schema: !Struct
         fields:
         - name: trades
           type_name: Trade
@@ -1145,7 +1145,7 @@
       headers:
       - name: RequestID
         description: The unique identifier generated for the request
-      schema:
+      schema: !Struct
         fields:
         - name: trade
           type_name: Trade
@@ -1190,7 +1190,7 @@
       headers:
       - name: RequestID
         description: The unique identifier generated for the request
-      schema:
+      schema: !Struct
         fields:
         - name: orderCreateTransaction
           type_name: MarketOrderTransaction
@@ -1225,7 +1225,7 @@
     - code: 400
       description: The Trade cannot be closed as requested.
       headers: []
-      schema:
+      schema: !Struct
         fields:
         - name: orderRejectTransaction
           type_name: MarketOrderRejectTransaction
@@ -1248,7 +1248,7 @@
     - code: 404
       description: The Account or Trade specified does not exist.
       headers: []
-      schema:
+      schema: !Struct
         fields:
         - name: orderRejectTransaction
           type_name: MarketOrderRejectTransaction
@@ -1310,7 +1310,7 @@
       headers:
       - name: RequestID
         description: The unique identifier generated for the request
-      schema:
+      schema: !Struct
         fields:
         - name: tradeClientExtensionsModifyTransaction
           type_name: TradeClientExtensionsModifyTransaction
@@ -1333,7 +1333,7 @@
     - code: 400
       description: The Trade’s Client Extensions cannot be modified as requested.
       headers: []
-      schema:
+      schema: !Struct
         fields:
         - name: tradeClientExtensionsModifyRejectTransaction
           type_name: TradeClientExtensionsModifyRejectTransaction
@@ -1368,7 +1368,7 @@
     - code: 404
       description: The Account or Trade specified does not exist.
       headers: []
-      schema:
+      schema: !Struct
         fields:
         - name: tradeClientExtensionsModifyRejectTransaction
           type_name: TradeClientExtensionsModifyRejectTransaction
@@ -1430,7 +1430,7 @@
       headers:
       - name: RequestID
         description: The unique identifier generated for the request
-      schema:
+      schema: !Struct
         fields:
         - name: takeProfitOrderCancelTransaction
           type_name: OrderCancelTransaction
@@ -1519,7 +1519,7 @@
     - code: 400
       description: The Trade’s dependent Orders cannot be modified as requested.
       headers: []
-      schema:
+      schema: !Struct
         fields:
         - name: takeProfitOrderCancelRejectTransaction
           type_name: OrderCancelRejectTransaction
@@ -1635,7 +1635,7 @@
       headers:
       - name: RequestID
         description: The unique identifier generated for the request
-      schema:
+      schema: !Struct
         fields:
         - name: positions
           type_name: Position
@@ -1672,7 +1672,7 @@
       headers:
       - name: RequestID
         description: The unique identifier generated for the request
-      schema:
+      schema: !Struct
         fields:
         - name: positions
           type_name: Position
@@ -1713,7 +1713,7 @@
       headers:
       - name: RequestID
         description: The unique identifier generated for the request
-      schema:
+      schema: !Struct
         fields:
         - name: position
           type_name: Position
@@ -1760,7 +1760,7 @@
         description: A link to the Position that was just closed out
       - name: RequestID
         description: The unique identifier generated for the request
-      schema:
+      schema: !Struct
         fields:
         - name: longOrderCreateTransaction
           type_name: MarketOrderTransaction
@@ -1813,7 +1813,7 @@
     - code: 400
       description: The Parameters provided that describe the Position closeout are invalid.
       headers: []
-      schema:
+      schema: !Struct
         fields:
         - name: longOrderRejectTransaction
           type_name: MarketOrderRejectTransaction
@@ -1854,7 +1854,7 @@
     - code: 404
       description: The Account or one or more of the Positions specified does not exist.
       headers: []
-      schema:
+      schema: !Struct
         fields:
         - name: longOrderRejectTransaction
           type_name: MarketOrderRejectTransaction
@@ -1953,7 +1953,7 @@
       headers:
       - name: RequestID
         description: The unique identifier generated for the request
-      schema:
+      schema: !Struct
         fields:
         - name: from
           type_name: DateTime
@@ -2031,7 +2031,7 @@
       headers:
       - name: RequestID
         description: The unique identifier generated for the request
-      schema:
+      schema: !Struct
         fields:
         - name: transaction
           type_name: Transaction
@@ -2084,7 +2084,7 @@
       headers:
       - name: RequestID
         description: The unique identifier generated for the request
-      schema:
+      schema: !Struct
         fields:
         - name: transactions
           type_name: Transaction
@@ -2135,7 +2135,7 @@
       headers:
       - name: RequestID
         description: The unique identifier generated for the request
-      schema:
+      schema: !Struct
         fields:
         - name: transactions
           type_name: Transaction
@@ -2176,8 +2176,8 @@
         description: ''
       - name: TransactionHeartbeat
         description: ''
-      schema:
-        fields: []
+      schema: !Stream
+        objects: []
     other_responses:
     - 400
     - 401
@@ -2249,7 +2249,7 @@
       headers:
       - name: RequestID
         description: The unique identifier generated for the request
-      schema:
+      schema: !Struct
         fields:
         - name: latestCandles
           type_name: CandlestickResponse
@@ -2301,7 +2301,7 @@
       headers:
       - name: RequestID
         description: The unique identifier generated for the request
-      schema:
+      schema: !Struct
         fields:
         - name: prices
           type_name: ClientPrice
@@ -2367,8 +2367,8 @@
         description: ''
       - name: PricingHeartbeat
         description: ''
-      schema:
-        fields: []
+      schema: !Stream
+        objects: []
     other_responses:
     - 400
     - 401
@@ -2445,7 +2445,7 @@
       headers:
       - name: RequestID
         description: The unique identifier generated for the request
-      schema:
+      schema: !Struct
         fields:
         - name: instrument
           type_name: InstrumentName
