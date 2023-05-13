@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -38,15 +40,30 @@ pub enum EnumItem {
     },
 }
 
+#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
+pub enum Schema {
+    Struct(Struct),
+    Stream(Stream),
+}
+
 /// A struct definition. Used to create serde types to match oanda json types
-#[derive(Debug, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Default, Hash, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Struct {
-    // TODO: Maybe add a name and doc_string for the struct itself
     pub fields: Vec<Field>,
 }
 
+/// A stream definition. Similar to a Struct, but the REST response encoded
+/// will be stream of json, with a new object on each line.
+/// Each object will be *one of* the `objects`
+/// We just give the name of the objects, from that the code generator can
+/// Look them up.
+#[derive(Debug, Default, PartialEq, Eq, Serialize, Deserialize)]
+pub struct Stream {
+    pub objects: HashSet<String>,
+}
+
 /// Represents a field in a struct definiton
-#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Hash, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Field {
     /// The field name (key in the json)
     pub name: String,

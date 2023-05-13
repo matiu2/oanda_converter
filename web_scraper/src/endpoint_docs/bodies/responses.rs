@@ -1,8 +1,13 @@
 //! Parses all the possible responses for an API call
 
-use crate::{bail, definitions::read_struct, Error, Result};
+use std::collections::HashSet;
+
+use crate::{bail, definitions::read_struct, report, Error, Result};
 use error_stack::{IntoReport, ResultExt};
-use model::endpoint_docs::{Response, ResponseHeader};
+use model::{
+    defintion_docs::{Schema, Stream},
+    endpoint_docs::{Response, ResponseHeader},
+};
 use scraper::{ElementRef, Selector};
 
 /// Takes an HTML like:
@@ -57,9 +62,21 @@ fn parse_single_response_doc(panel: ElementRef) -> Result<Response> {
     // TODO: in https://developer.oanda.com/rest-live-v20/transaction-ep/ for /v3/accounts/{accountID}/transactions/stream
     // It has a stream. We need to parse this differently
     let schema = if let Some(body) = panel.select(&body_selector).next() {
-        read_struct(body)?
+        Schema::Struct(read_struct(body)?)
     } else {
-        Default::default()
+        // If we can't find a straight schema, it must be a stream
+        let stream_selector =
+            Selector::parse(".panel-body > div > ul > li > a").map_err(Error::from)?;
+        let objects = panel
+            .select(&stream_selector)
+            .map(|a| {
+                a.text()
+                    .next()
+                    .map(str::to_string)
+                    .ok_or_else(|| report!("Found empty object_name in {}", a.html()))
+            })
+            .collect::<Result<HashSet<String>>>()?;
+        Schema::Stream(Stream { objects })
     };
     Ok(Response {
         code,
@@ -110,7 +127,7 @@ pub(crate) fn parse_extra_resonses(body: &ElementRef) -> Result<Vec<u16>> {
 
 #[cfg(test)]
 mod unit_tests {
-    use model::endpoint_docs::ResponseHeader;
+    use model::{defintion_docs::Schema, endpoint_docs::ResponseHeader};
     use pretty_assertions::assert_eq;
     use scraper::Html;
 
@@ -162,7 +179,7 @@ mod unit_tests {
     }
 
     #[test]
-    fn test_parse_single_response_doc() {
+    fn test_parse_single_response_doc() -> Result<()> {
         let input = r##"
             <div class="panel panel-default">
 <div class="panel-heading" role="tab" id="heading_2_201">
@@ -237,17 +254,23 @@ mod unit_tests {
             .headers
             .iter()
             .any(|header| &header.name == "RequestID"));
-        let field = response
-            .schema
-            .fields
-            .iter()
-            .find(|field| field.name == "lastTransactionID")
-            .unwrap();
+        let field = if let Schema::Struct(s) = &response.schema {
+            s.fields
+                .iter()
+                .find(|field| field.name == "lastTransactionID")
+                .unwrap()
+        } else {
+            bail!(
+                "Expected a struct, but got a stream: {:#?}",
+                response.schema
+            )
+        };
         assert_eq!("TransactionID", field.type_name);
         assert_eq!(
             "The ID of the most recent Transaction created for the Account",
             field.doc_string
         );
+        Ok(())
     }
 
     #[test]

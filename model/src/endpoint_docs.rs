@@ -1,7 +1,7 @@
 use parse_display::{Display, FromStr};
 use serde::{Deserialize, Serialize};
 
-use crate::defintion_docs::Struct;
+use crate::defintion_docs::{Schema, Struct};
 
 /// All the different endpoint types
 #[derive(Display, FromStr, PartialEq, Debug, Serialize, Deserialize)]
@@ -38,12 +38,13 @@ pub enum HTTPErrorResponse {
     RejectReason { reject_reason: String },
 }
 
+/// Encodes the documentation for a REST response given by an HTTP call to the Oanda API
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Response {
     pub code: u16,
     pub description: String,
     pub headers: Vec<ResponseHeader>,
-    pub schema: Struct,
+    pub schema: Schema,
 }
 
 #[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]

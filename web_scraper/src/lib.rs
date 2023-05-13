@@ -170,7 +170,10 @@ mod tests {
 
     use super::get_content;
     use error_stack::ResultExt;
-    use model::endpoint_docs::{Endpoint, HttpMethod};
+    use model::{
+        defintion_docs::Schema,
+        endpoint_docs::{Endpoint, HttpMethod},
+    };
     use reqwest::Url;
 
     #[tokio::test]
@@ -224,12 +227,14 @@ mod tests {
             "The unique identifier generated for the request",
             &header.description
         );
-        let field = ok_response
-            .schema
-            .fields
-            .iter()
-            .find(|field| field.name == "candles")
-            .unwrap();
+        let field = if let Schema::Struct(s) = &ok_response.schema {
+            s.fields
+                .iter()
+                .find(|field| field.name == "candles")
+                .unwrap()
+        } else {
+            panic!("Expected struct be got stream: {:#?}", ok_response.schema)
+        };
         assert!(field.is_array);
         assert_eq!(
             "The list of candlesticks that satisfy the request.",
