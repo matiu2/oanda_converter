@@ -1,6 +1,6 @@
 use codegen::Scope;
 use error_stack::{IntoReport, Report, ResultExt};
-use model::defintion_docs::{Definition, EnumItem, Struct, Value};
+use model::defintion_docs::{Content, Definition, EnumItem, Struct, Value};
 use std::fs::File;
 use std::io::Write;
 use std::path::{Path, PathBuf};
@@ -10,56 +10,36 @@ pub use error::Error;
 
 type Result<T> = std::result::Result<T, Report<Error>>;
 
-macro_rules! annotate {
-    ($err:expr) => {
-        $err.into_report().change_context(Error::default())
-    };
-    ($err:expr, $s:literal) => {
-        $err.into_report().change_context(Error::default())
-        .attach_printable_lazy(|| format!($s))
-    };
-    ($err:expr, $s:literal, $($arg:tt)*) => {
-        $err.into_report().change_context(Error::default())
-        .attach_printable_lazy(|| format!($s, $($arg)*))
+#[macro_export]
+macro_rules! bail {
+    ($($arg:tt)*) => {
+        error_stack::bail!(Error::new(format!($($arg)*)))
     };
 }
 
-// Use this instead of annotate for any errors that can't be turned into reports
-macro_rules! steal {
-    ($err:expr) => {
-        Err(Error::new(format!("{:#?}", $err)))
-        .into_report()
-    };
-    ($err:expr, $s:literal) => {
-        Err(Error::new(format!("{:#?}", $err)))
-        .into_report()
-        .attach_printable_lazy(|| format!($s))
-    };
-    ($err:expr, $s:literal, $($arg:tt)*) => {
-        Err(Error::new(format!("{:#?}", $err)))
-        .into_report()
-        .attach_printable_lazy(|| format!($s, $($arg)*))
-    };
-}
-
-// Use this to generate a fresh error report
+#[macro_export]
 macro_rules! report {
-    () => {
-        Err(Error::default())
-        .into_report()
+    ($($arg:tt)*) => {
+        error_stack::report!(Error::new(format!($($arg)*)))
     };
-    ($s:literal) => {
-        Err(Error::new(format!($s)))
-        .into_report()
+}
+
+#[macro_export]
+macro_rules! annotate {
+    ($result:expr, $fmt:expr) => {
+        {
+            $result.into_report().change_context(Error::new(format!($fmt)))
+        }
     };
-    ($s:literal, $($arg:tt)*) => {
-        Err(Error::new(format!($s, $($arg)*)))
-        .into_report()
+   ($result:expr, $fmt:expr, $($arg:expr),*) => {
+        {
+            $result.into_report().change_context(Error::new(format!($fmt, $($arg),*)))
+        }
     };
 }
 
 /// Generate the entire code for the Oanda API client
-pub fn generate_code(path: &Path) -> Result<()> {
+pub fn generate_code(path: &Path, all_content: &[Content]) -> Result<()> {
     // Generate lib.rs
     let mut lib_fn = PathBuf::from(path);
     lib_fn.push("lib.rs");
@@ -86,7 +66,6 @@ fn definition(definition: &Definition, scope: &mut Scope) {
                     format,
                     example,
                 } => {
-                    // TODO: use format and example
                     doc_string.push(format!("Format: {format}"));
                     doc_string.push(format!("Example: {example}"));
                     assert_eq!(r#type, "string");
