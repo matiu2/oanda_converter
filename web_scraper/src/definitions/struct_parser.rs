@@ -50,7 +50,7 @@ pub fn parse_struct(input: &str) -> Result<Struct> {
                     .clone()
                     .find(|pair| pair.as_rule() == Rule::type_name_number)
                     .map(|pair| pair.as_str().to_string());
-                let required = rest.clone().find(|pair| pair.as_rule() == Rule::required).is_some();
+                let required = rest.clone().any(|pair| pair.as_rule() == Rule::required);
                 let (type_name, is_array) = match (type_name_normal, type_name_array, type_name_number) {
                     (None, None, None) => bail!("No type_name found in field {span} at {line}:{col} in {input}"),
                     (None, Some(type_name), None) => (type_name, true),

@@ -280,8 +280,8 @@ pub(crate) fn read_struct(fragment: ElementRef) -> Result<Struct> {
                         Ok(text)
                     },
                     other => {
-                        return Err(report!("Unexpected element ({other}) in definition text: {element:#?}")
-                            .attach_printable(format!("fragment html:\n```html\n{}\n```", fragment.html())));
+                         Err(report!("Unexpected element ({other}) in definition text: {element:#?}")
+                            .attach_printable(format!("fragment html:\n```html\n{}\n```", fragment.html())))
                     }
                 }
             } else if let Some(text) = child.value().as_text() {
