@@ -7,8 +7,10 @@ edition = "2021"
 
 [dependencies]
 codegen = "0.2.0"
+error-stack = "0.3.1"
 model = { version = "0.1.0", path = "../model" }
 
 [dev-dependencies]
 indoc = "2.0.1"
 serde_yaml = "0.9.21"
+tempfile = "3.5.0"
