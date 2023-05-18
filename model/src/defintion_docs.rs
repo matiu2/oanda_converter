@@ -2,6 +2,8 @@ use std::collections::HashSet;
 
 use serde::{Deserialize, Serialize};
 
+/// A definition from the Definition sections of the docs: eg. https://developer.oanda.com/rest-live-v20/account-df
+/// Could contain a struct definition or a string with a format, etc.
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Definition {
     pub name: String,
@@ -9,19 +11,23 @@ pub struct Definition {
     pub value: Value,
 }
 
+/// The actual data from a json type Definition
 #[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub enum Value {
+    // TODO: Rename Enum to Table and EnumItem to TableOption
     Enum(Vec<EnumItem>),
     Struct(Struct),
     Empty,
 }
 
+/// The docs presented us with a table, and it could be any of these formats
 #[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub enum EnumItem {
     ValueDescription {
         value: String,
         description: String,
     },
+    /// There's a type (99.9% chance it's a string) with a format and an example
     FormattedExample {
         r#type: String,
         format: String,
