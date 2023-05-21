@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 use crate::defintion_docs::Schema;
 
 /// All the different endpoint types
-#[derive(Display, FromStr, PartialEq, Debug, Serialize, Deserialize)]
+#[derive(Display, FromStr, PartialEq, Eq, Hash, Debug, Serialize, Deserialize, Clone, Copy)]
 #[display(style = "snake_case")]
 pub enum Endpoint {
     Account,
