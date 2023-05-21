@@ -1,13 +1,15 @@
 use crate::{annotate, bail, Error, Result};
+use codegen::Impl;
 use codegen::Scope;
 use convert_case::{Case, Casing};
-use error_stack::IntoReport;
-use error_stack::ResultExt;
 use model::endpoint_docs::{Endpoint, RestCall};
 use std::{
     collections::HashSet,
     path::{Path, PathBuf},
 };
+
+mod rest_call_ext;
+use rest_call_ext::RestCallExt;
 
 #[cfg(test)]
 fn print_code(code: &str) {
@@ -45,14 +47,17 @@ fn print_code(code: &str) {
 pub fn create_endpoint(dir: &Path, rest_calls: &[RestCall]) -> Result<Option<String>> {
     // All the rest_calls should have the same endpoint.
     // We're making one rust module per Oanda API endpoint.
+    let Some(first_rest_call) = rest_calls.first() else { bail!("Can't create endpoint when there are no RestCalls: {dir:#?}")};
     let endpoints = rest_calls.iter().map(|call| call.endpoint);
-    let Some(first_endpoint) = endpoints.clone().next() else { return Ok(None) };
-    if endpoints.clone().any(|endpoint| endpoint != first_endpoint) {
+    if endpoints
+        .clone()
+        .any(|endpoint| endpoint != first_rest_call.endpoint)
+    {
         let endpoints: HashSet<Endpoint> = endpoints.collect();
         bail!("We expected all the rest_calls in an endpoint to have the same endpoint. This is necessary because we create one rust module per endpoint. We found: {endpoints:#?}");
     };
 
-    let endpoint_name = first_endpoint.to_string().to_case(Case::Pascal);
+    let endpoint_name = first_rest_call.endpoint_name();
 
     // Create the scope to write the code
     let mut scope = Scope::new();
@@ -72,17 +77,17 @@ pub fn create_endpoint(dir: &Path, rest_calls: &[RestCall]) -> Result<Option<Str
         .vis("pub(crate)");
 
     // Create the implementation for the struct
-    scope.new_impl(&format!("{endpoint_name}")).generic("'a");
+    let mut r#impl = scope.new_impl(&format!("{endpoint_name}")).generic("'a");
 
-    #[cfg(test)]
-    print_code(scope.to_string().as_str());
+    // #[cfg(test)]
+    // print_code(scope.to_string().as_str());
 
     for call in rest_calls {
-        create_rest_call(&mut scope, call)?
+        create_rest_call(&mut r#impl, call)?
     }
 
     // Save the module
-    let mod_name = first_endpoint.to_string().to_case(Case::Snake);
+    let mod_name = first_rest_call.endpoint_name().to_case(Case::Snake);
     let mut file_name = PathBuf::new();
     file_name.push(dir);
     file_name.push(format!("{}.rs", mod_name));
@@ -95,14 +100,13 @@ pub fn create_endpoint(dir: &Path, rest_calls: &[RestCall]) -> Result<Option<Str
 }
 
 /// Generates the code for a single REST api call.
-pub fn create_rest_call(scope: &mut Scope, call: &RestCall) -> Result<()> {
+pub fn create_rest_call(r#impl: &mut Impl, call: &RestCall) -> Result<()> {
     todo!()
 }
 
 #[cfg(test)]
 mod test {
-    use crate::{annotate, Error, Result};
-    use error_stack::{IntoReport, ResultExt};
+    use crate::{annotate, Result};
     use indoc::indoc;
     use model::endpoint_docs::RestCall;
     use tempfile::tempdir;

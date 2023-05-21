@@ -4,9 +4,12 @@ use serde::{Deserialize, Serialize};
 use crate::defintion_docs::Schema;
 
 /// All the different endpoint types
-#[derive(Display, FromStr, PartialEq, Eq, Hash, Debug, Serialize, Deserialize, Clone, Copy)]
+#[derive(
+    Display, Default, FromStr, PartialEq, Eq, Hash, Debug, Serialize, Deserialize, Clone, Copy,
+)]
 #[display(style = "snake_case")]
 pub enum Endpoint {
+    #[default]
     Account,
     Instrument,
     Order,
@@ -17,7 +20,7 @@ pub enum Endpoint {
 }
 
 /// The documentation for an API call from one of the endpoints
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 pub struct RestCall {
     pub endpoint: Endpoint,
     pub http_method: HttpMethod,
@@ -53,9 +56,10 @@ pub struct ResponseHeader {
     pub description: String,
 }
 
-#[derive(Display, FromStr, PartialEq, Debug, Serialize, Deserialize)]
+#[derive(Display, Default, FromStr, PartialEq, Debug, Serialize, Deserialize)]
 #[display(style = "UPPERCASE")]
 pub enum HttpMethod {
+    #[default]
     Get,
     Post,
     Put,

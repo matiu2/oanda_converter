@@ -22,23 +22,34 @@ macro_rules! bail {
     };
 }
 
+pub fn report(msg: String) -> Report<Error> {
+    error_stack::report!(Error::new(msg))
+}
+
 #[macro_export]
 macro_rules! report {
     ($($arg:tt)*) => {
-        error_stack::report!(Error::new(format!($($arg)*)))
+        crate::report(format!($($arg)*))
     };
+}
+
+pub fn annotate<T, E>(result: std::result::Result<T, E>, msg: String) -> Result<T>
+where
+    error_stack::Report<E>: From<E>,
+{
+    result.into_report().change_context(Error::new(msg))
 }
 
 #[macro_export]
 macro_rules! annotate {
     ($result:expr, $fmt:expr) => {
         {
-            $result.into_report().change_context(Error::new(format!($fmt)))
+            crate::annotate($result, format!($fmt))
         }
     };
    ($result:expr, $fmt:expr, $($arg:expr),*) => {
         {
-            $result.into_report().change_context(Error::new(format!($fmt, $($arg),*)))
+            crate::annotate($result, format!($fmt, $($arg),*))
         }
     };
 }
