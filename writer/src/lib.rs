@@ -72,14 +72,14 @@ pub fn generate_code(path: &Path, all_content: &[Content]) -> Result<()> {
     let definitions_dir = add_dir(path, "definitions")?;
     // Generate the content for each entry
     for content in all_content {
-        match &content.documentation {
+        let mod_name = match &content.documentation {
             model::Documentation::Endpoint(rest_calls) => {
                 create_endpoint(&endpoints_dir, rest_calls.as_slice())?
             }
             model::Documentation::Definitions(definitions) => {
                 create_definition(&definitions_dir, definitions.as_slice())?
             }
-        }
+        };
     }
     Ok(())
 }

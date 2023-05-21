@@ -3,7 +3,8 @@ use codegen::Scope;
 use model::defintion_docs::{Definition, EnumItem, Struct, Value};
 use std::path::Path;
 
-pub fn create_definition(dir: &Path, definition: &[Definition]) -> Result<()> {
+/// Returns the module name so you can import it. For example if we're generating the code for the Account definition, it'll return `account`
+pub fn create_definition(dir: &Path, definition: &[Definition]) -> Result<Option<String>> {
     todo!()
 }
 
