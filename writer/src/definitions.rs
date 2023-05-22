@@ -38,10 +38,6 @@ fn definition(definition: &Definition, scope: &mut Scope) -> Result<()> {
                 });
             } else {
                 // Generate a struct
-                let mut doc_string = vec![definition.doc_string.clone()];
-                let s = scope
-                    .new_struct(&definition.name)
-                    .doc(&definition.doc_string);
                 for field in items {
                     match field {
                         EnumItem::FormattedExample {
@@ -50,17 +46,52 @@ fn definition(definition: &Definition, scope: &mut Scope) -> Result<()> {
                             example,
                         } => {
                             if r#type != "string" {
-                                bail!("We expected all type,formate,example inputs to be type=string: {definition:#?}");
+                                bail!("We expected all type,format,example inputs to be type=string: {definition:#?}");
                             }
-                            doc_string.push(format!("Format: {format}"));
-                            doc_string.push(format!("Example: {example}"));
-                            s.doc(&doc_string.join("\n"));
-                            s.derive("Deref");
-                            s.tuple_field("String");
+                            make_string_struct(
+                                scope,
+                                &definition.name,
+                                &definition.doc_string,
+                                Some(&format),
+                                Some(&example),
+                            )
                         }
-                        EnumItem::Example { r#type, example } => todo!(),
-                        EnumItem::Format { r#type, format } => todo!(),
-                        EnumItem::JustType { r#type } => todo!(),
+                        EnumItem::Example { r#type, example } => {
+                            if r#type != "string" {
+                                bail!("We expected all type,example inputs to be type=string: {definition:#?}");
+                            }
+                            make_string_struct(
+                                scope,
+                                &definition.name,
+                                &definition.doc_string,
+                                None,
+                                Some(&example),
+                            )
+                        }
+                        EnumItem::Format { r#type, format } => {
+                            if r#type != "string" {
+                                bail!("We expected all type,format inputs to be type=string: {definition:#?}");
+                            }
+                            make_string_struct(
+                                scope,
+                                &definition.name,
+                                &definition.doc_string,
+                                Some(&format),
+                                None,
+                            )
+                        }
+                        EnumItem::JustType { r#type } => {
+                            if r#type != "string" {
+                                bail!("We expected all type inputs to be type=string: {definition:#?}");
+                            }
+                            make_string_struct(
+                                scope,
+                                &definition.name,
+                                &definition.doc_string,
+                                None,
+                                None,
+                            )
+                        }
                         EnumItem::ValueDescription { .. } => {
                             bail!("Unexpted enum variant in struct: {definition:#?}")
                         }
@@ -79,6 +110,44 @@ fn definition(definition: &Definition, scope: &mut Scope) -> Result<()> {
         Value::Empty => {}
     }
     Ok(())
+}
+
+fn make_string_struct(
+    scope: &mut Scope,
+    name: &str,
+    doc_base: &str,
+    format: Option<&str>,
+    example: Option<&str>,
+) {
+    let mut doc_string = vec![doc_base.to_string()];
+    if let Some(format) = format {
+        doc_string.push(format!("Format: {format}"));
+    }
+    if let Some(example) = example {
+        doc_string.push(format!("Example: {example}"));
+    }
+    let doc = doc_string.join("\n");
+    let s = make_struct(scope, name, &doc, &["Deref"]);
+    s.tuple_field("String");
+}
+
+fn make_struct<'a>(
+    scope: &'a mut Scope,
+    name: &'a str,
+    doc_string: &'a str,
+    extra_derives: &'a [&'a str],
+) -> &'a mut codegen::Struct {
+    let s = scope
+        .new_struct(name)
+        .derive("Serialize")
+        .derive("Deserialize")
+        .derive("Debug");
+    s.doc(&doc_string);
+    extra_derives.into_iter().for_each(|d| {
+        s.derive(d);
+    });
+    s.tuple_field("String");
+    s
 }
 
 /// Generates code for a field in a struct
