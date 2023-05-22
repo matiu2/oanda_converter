@@ -54,6 +54,27 @@ macro_rules! annotate {
     };
 }
 
+#[cfg(test)]
+pub(crate) fn print_code(code: &str) {
+    use syntect::easy::HighlightLines;
+    use syntect::highlighting::{Style, ThemeSet};
+    use syntect::parsing::SyntaxSet;
+    use syntect::util::{as_24_bit_terminal_escaped, LinesWithEndings};
+
+    // Load these once at the start of your program
+    let ps = SyntaxSet::load_defaults_newlines();
+    let ts = ThemeSet::load_defaults();
+
+    let syntax = ps.find_syntax_by_extension("rs").unwrap();
+    let mut h = HighlightLines::new(syntax, &ts.themes["base16-ocean.dark"]);
+    for line in LinesWithEndings::from(code) {
+        // LinesWithEndings enables use of newlines mode
+        let ranges: Vec<(Style, &str)> = h.highlight_line(line, &ps).unwrap();
+        let escaped = as_24_bit_terminal_escaped(&ranges[..], true);
+        print!("{}", escaped);
+    }
+}
+
 /// Create a new directory under `path`
 fn add_dir(path: &Path, new_dir_name: &str) -> Result<PathBuf> {
     let mut new_path = PathBuf::from(path);

@@ -11,27 +11,6 @@ use std::{
 mod rest_call_ext;
 use rest_call_ext::RestCallExt;
 
-#[cfg(test)]
-fn print_code(code: &str) {
-    use syntect::easy::HighlightLines;
-    use syntect::highlighting::{Style, ThemeSet};
-    use syntect::parsing::SyntaxSet;
-    use syntect::util::{as_24_bit_terminal_escaped, LinesWithEndings};
-
-    // Load these once at the start of your program
-    let ps = SyntaxSet::load_defaults_newlines();
-    let ts = ThemeSet::load_defaults();
-
-    let syntax = ps.find_syntax_by_extension("rs").unwrap();
-    let mut h = HighlightLines::new(syntax, &ts.themes["base16-ocean.dark"]);
-    for line in LinesWithEndings::from(code) {
-        // LinesWithEndings enables use of newlines mode
-        let ranges: Vec<(Style, &str)> = h.highlight_line(line, &ps).unwrap();
-        let escaped = as_24_bit_terminal_escaped(&ranges[..], true);
-        print!("{}", escaped);
-    }
-}
-
 /// Takes an array of RestCalls and generates the rust code.
 ///
 /// They must all have the same endpoint, and they will all be in generated in the same file.
@@ -97,7 +76,7 @@ pub fn create_endpoint(dir: &Path, rest_calls: &[RestCall]) -> Result<Option<Str
     // TODO: Create the Request and Response Types for each call if any
 
     #[cfg(test)]
-    print_code(scope.to_string().as_str());
+    crate::print_code(scope.to_string().as_str());
 
     // Save the module
     let mod_name = first_rest_call.endpoint_name().to_case(Case::Snake);
@@ -115,7 +94,7 @@ pub fn create_endpoint(dir: &Path, rest_calls: &[RestCall]) -> Result<Option<Str
 /// Generates the code for a single REST api call.
 pub fn create_rest_call(r#impl: &mut Impl, call: &RestCall) -> Result<()> {
     // TODO: Figure out the return type from call.responses
-    let _fun = r#impl
+    let fun = r#impl
         .new_fn(call.method_name()?.as_str())
         .doc(&call.doc_string)
         .vis("pub");
