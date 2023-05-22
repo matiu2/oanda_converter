@@ -79,7 +79,7 @@ mod tests {
 
         let mut scope = Scope::new();
         super::definition(&definition, &mut scope);
-        println!("Code: {}", scope.to_string());
+        crate::print_code(&scope.to_string());
     }
 
     #[test]

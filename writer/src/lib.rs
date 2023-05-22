@@ -67,12 +67,15 @@ pub(crate) fn print_code(code: &str) {
 
     let syntax = ps.find_syntax_by_extension("rs").unwrap();
     let mut h = HighlightLines::new(syntax, &ts.themes["base16-ocean.dark"]);
+    println!(""); // A blank line before
     for line in LinesWithEndings::from(code) {
         // LinesWithEndings enables use of newlines mode
         let ranges: Vec<(Style, &str)> = h.highlight_line(line, &ps).unwrap();
         let escaped = as_24_bit_terminal_escaped(&ranges[..], true);
         print!("{}", escaped);
     }
+    // Reset the ansi terminal
+    println!("\x1b[0m\n");
 }
 
 /// Create a new directory under `path`
