@@ -76,15 +76,28 @@ pub fn create_endpoint(dir: &Path, rest_calls: &[RestCall]) -> Result<Option<Str
         .field("client", "&'a Client")
         .vis("pub(crate)");
 
+    // Create the parameter type imports for all the rest_calls
+    let param_imports: HashSet<&str> = rest_calls
+        .iter()
+        .flat_map(|call| call.parameters.iter())
+        .map(|param| param.type_name.as_str())
+        .collect();
+    param_imports.into_iter().for_each(|import| {
+        scope.import("crate::definitons", import);
+    });
+
     // Create the implementation for the struct
     let mut r#impl = scope.new_impl(&format!("{endpoint_name}")).generic("'a");
 
-    // #[cfg(test)]
-    // print_code(scope.to_string().as_str());
-
     for call in rest_calls {
+        // Import all the types for the rest call
         create_rest_call(&mut r#impl, call)?
     }
+
+    // TODO: Create the Request and Response Types for each call if any
+
+    #[cfg(test)]
+    print_code(scope.to_string().as_str());
 
     // Save the module
     let mod_name = first_rest_call.endpoint_name().to_case(Case::Snake);
@@ -101,7 +114,13 @@ pub fn create_endpoint(dir: &Path, rest_calls: &[RestCall]) -> Result<Option<Str
 
 /// Generates the code for a single REST api call.
 pub fn create_rest_call(r#impl: &mut Impl, call: &RestCall) -> Result<()> {
-    todo!()
+    // TODO: Figure out the return type from call.responses
+    let _fun = r#impl
+        .new_fn(call.method_name()?.as_str())
+        .doc(&call.doc_string)
+        .vis("pub");
+
+    Ok(())
 }
 
 #[cfg(test)]
