@@ -5,7 +5,21 @@ use model::defintion_docs::{Definition, EnumItem, Struct, Value};
 use std::path::Path;
 
 /// Returns the module name so you can import it
-pub fn create_definition(dir: &Path, definition: &[Definition]) -> Result<Option<String>> {
+pub fn create_definitions(dir: &Path, definition: &[Definition]) -> Result<Option<String>> {
+    let mut scope = Scope::new();
+
+    let code = scope.to_string();
+
+    //     // Save the module
+    //     let mod_name = first_rest_call.endpoint_name().to_case(Case::Snake);
+    //     let mut file_name = PathBuf::new();
+    //     file_name.push(dir);
+    //     file_name.push(format!("{}.rs", mod_name));
+    //     annotate!(
+    //         std::fs::write(file_name.as_path(), scope.to_string()),
+    //         "Writing module {file_name:#?}"
+    //     )?;
+
     todo!()
 }
 
@@ -17,7 +31,7 @@ fn definition(definition: &Definition, scope: &mut Scope) -> Result<()> {
                 EnumItem::ValueDescription { .. } => true,
                 _ => false,
             };
-            let Some(is_enum) = items.first().map(is_enum_variant) else { return Ok(()) };
+            let Some(is_enum) = items.first().map(is_enum_variant) else { bail!("Can't have an enum with no variants: {definition:#?}") };
             if is_enum {
                 // Generate an enum
                 if !items.iter().all(is_enum_variant) {
@@ -100,18 +114,23 @@ fn definition(definition: &Definition, scope: &mut Scope) -> Result<()> {
             }
         }
         Value::Struct(Struct { fields }) => {
-            let s = scope
+            let mut s = scope
                 .new_struct(&definition.name)
-                .doc(&definition.doc_string);
-            fields.iter().for_each(|field| {
-                s.new_field(&field.name, &field.type_name);
+                .doc(&definition.doc_string)
+                .derive("Serialize")
+                // TODO: Not all structs need Serialize and Deserialize
+                .derive("Deserialize")
+                .derive("Debug");
+            fields.iter().for_each(|f| {
+                field(&mut s, f);
             });
         }
         Value::Empty => {}
-    }
+    };
     Ok(())
 }
 
+/// Makes a struct that just wraps a string, eg `struct SomeValue(String)`
 fn make_string_struct(
     scope: &mut Scope,
     name: &str,
@@ -131,6 +150,7 @@ fn make_string_struct(
     s.tuple_field("String");
 }
 
+/// Only used by make_string_struct
 fn make_struct<'a>(
     scope: &'a mut Scope,
     name: &'a str,
@@ -151,7 +171,10 @@ fn make_struct<'a>(
 }
 
 /// Generates code for a field in a struct
-fn field(scope: &mut codegen::Struct, field: model::defintion_docs::Field) -> &mut codegen::Field {
+fn field<'a>(
+    scope: &'a mut codegen::Struct,
+    field: &'a model::defintion_docs::Field,
+) -> &'a mut codegen::Field {
     let basic_type_name = field.type_name.as_str();
     let type_name = match (field.is_array, field.required) {
         (true, true) => format!("Option<Vec<{basic_type_name}>>"),
@@ -159,7 +182,9 @@ fn field(scope: &mut codegen::Struct, field: model::defintion_docs::Field) -> &m
         (false, true) => format!("Option<{basic_type_name}>"),
         (false, false) => format!("{basic_type_name}"),
     };
-    scope.new_field(field.name, type_name).doc(field.doc_string)
+    scope
+        .new_field(field.name.to_case(Case::Snake), type_name)
+        .doc(&field.doc_string)
     // TODO: Work out how to deal with the field.default value. Perhaps generate a new() that handles it.
 }
 
@@ -238,7 +263,7 @@ enum GuaranteedStopLossOrderMode {
         {
             super::field(
                 r#struct,
-                model::defintion_docs::Field {
+                &model::defintion_docs::Field {
                     name: format!("{name}"),
                     type_name: "SomeType".to_string(),
                     doc_string: "Very nice docs".to_string(),
@@ -266,5 +291,57 @@ struct SomeStruct {
 }"
             )
         );
+    }
+
+    #[test]
+    fn test_struct() -> Result<()> {
+        let input = indoc!("
+    name: HomeConversionFactors
+    doc_string: A HomeConversionFactors message contains information used to convert amounts, from an Instrument’s base or quote currency, to the home currency of an Account.
+    value: !Struct
+      fields:
+      - name: gainQuoteHome
+        type_name: ConversionFactor
+        doc_string: The ConversionFactor in effect for the Account for converting any gains realized in Instrument quote units into units of the Account’s home currency.
+        is_array: false
+        default: null
+        required: false
+      - name: lossQuoteHome
+        type_name: ConversionFactor
+        doc_string: The ConversionFactor in effect for the Account for converting any losses realized in Instrument quote units into units of the Account’s home currency.
+        is_array: false
+        default: null
+        required: false
+      - name: gainBaseHome
+        type_name: ConversionFactor
+        doc_string: The ConversionFactor in effect for the Account for converting any gains realized in Instrument base units into units of the Account’s home currency.
+        is_array: false
+        default: null
+        required: false
+      - name: lossBaseHome
+        type_name: ConversionFactor
+        doc_string: The ConversionFactor in effect for the Account for converting any losses realized in Instrument base units into units of the Account’s home currency.
+        is_array: false
+        default: null
+        required: false");
+        let definition: Definition = annotate!(serde_yaml::from_str(input), "Parsing yaml")?;
+        let mut scope = Scope::new();
+        super::definition(&definition, &mut scope)?;
+        let code = scope.to_string();
+        crate::print_code(&code);
+        assert_eq!(code, indoc!("
+/// A HomeConversionFactors message contains information used to convert amounts, from an Instrument’s base or quote currency, to the home currency of an Account.
+#[derive(Serialize, Deserialize, Debug)]
+struct HomeConversionFactors {
+    /// The ConversionFactor in effect for the Account for converting any gains realized in Instrument quote units into units of the Account’s home currency.
+    gain_quote_home: ConversionFactor,
+    /// The ConversionFactor in effect for the Account for converting any losses realized in Instrument quote units into units of the Account’s home currency.
+    loss_quote_home: ConversionFactor,
+    /// The ConversionFactor in effect for the Account for converting any gains realized in Instrument base units into units of the Account’s home currency.
+    gain_base_home: ConversionFactor,
+    /// The ConversionFactor in effect for the Account for converting any losses realized in Instrument base units into units of the Account’s home currency.
+    loss_base_home: ConversionFactor,
+}"));
+        Ok(())
     }
 }
