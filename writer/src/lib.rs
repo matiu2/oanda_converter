@@ -15,11 +15,13 @@ mod endpoints;
 
 type Result<T> = std::result::Result<T, Report<Error>>;
 
+fn bail(msg: String) -> error_stack::Report<Error> {
+    error_stack::report!(Error::new(msg))
+}
+
 #[macro_export]
 macro_rules! bail {
-    ($($arg:tt)*) => {
-        error_stack::bail!(Error::new(format!($($arg)*)))
-    };
+    ($($arg:tt)*) => { return Err(bail(format!($($arg)*))) };
 }
 
 pub fn report(msg: String) -> Report<Error> {
