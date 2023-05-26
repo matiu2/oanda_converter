@@ -54,10 +54,17 @@ pub async fn get_content(url: Url) -> Result<Content> {
     // Get all the endpoint documentation
     let documentation = if url.path().ends_with("-ep/") {
         // Extract the endpoint name from the url
-        let Some(endpoint_name) = endpoint_name(&url) else { bail!("Unable to extract endpoint name from url: {url:#?}")};
-        Documentation::Endpoint(endpoint_docs(&document, endpoint_name)?)
+        let Some(name) = url_to_name(&url, "-ep") else { bail!("Unable to extract endpoint name from url: {url:#?}")};
+        Documentation::Endpoint {
+            calls: endpoint_docs(&document, name.as_str())?,
+            name,
+        }
     } else if url.path().ends_with("-df/") {
-        Documentation::Definitions(get_definitions(&document)?)
+        let Some(name) = url_to_name(&url, "-df") else { bail!("Unable to extract definition name from url: {url:#?}")};
+        Documentation::Definitions {
+            name,
+            definitions: get_definitions(&document)?,
+        }
     } else {
         bail!("Unknown url ending: {url}");
     };
@@ -68,12 +75,12 @@ pub async fn get_content(url: Url) -> Result<Content> {
 }
 
 /// Extracts the endpoint name from the url if possible
-fn endpoint_name(url: &Url) -> Option<String> {
+fn url_to_name(url: &Url, suffix: &str) -> Option<String> {
     Some(
         url.path_segments()?
             .filter(|segment| !segment.is_empty())
             .last()?
-            .strip_suffix("-ep")?
+            .strip_suffix(suffix)?
             .to_string(),
     )
 }
@@ -179,14 +186,15 @@ mod tests {
             &Url::parse("https://developer.oanda.com/rest-live-v20/instrument-df/").unwrap()
         ));
         // We're just reading the endpoint docs here:
-        let Documentation::Endpoint(endpoint_docs) = &content.documentation else { panic!("Expected endpoint docs") };
-        let first_api_call_docs = &endpoint_docs[0];
+        let Documentation::Endpoint{name, calls} = &content.documentation else { panic!("Expected endpoint docs") };
+        assert_eq!("instrument", name);
+        let first_api_call_docs = &calls[0];
         assert_eq!(first_api_call_docs.http_method, HttpMethod::Get);
         assert_eq!(
             first_api_call_docs.doc_string.as_str(),
             "Fetch candlestick data for an instrument."
         );
-        assert!(endpoint_docs
+        assert!(calls
             .iter()
             .all(|docs| docs.endpoint == Endpoint::Instrument));
         assert_eq!(
@@ -200,7 +208,8 @@ mod tests {
             "The Price component(s) to get candlestick data for. [default=M]"
         );
         // Check the endpoint doc responses
-        let candles = endpoint_docs.first().unwrap();
+        let candles = calls.first().unwrap();
+
         let ok_response = candles.responses.first().unwrap();
         assert_eq!(200, ok_response.code);
         assert_eq!(

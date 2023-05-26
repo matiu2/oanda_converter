@@ -9,7 +9,7 @@ mod bodies;
 mod headers;
 
 /// Get the documentation for the endpoint docs
-pub fn endpoint_docs(document: &Html, name: String) -> Result<Vec<RestCall>> {
+pub fn endpoint_docs(document: &Html, name: &str) -> Result<Vec<RestCall>> {
     // Get the HTTP method and path from the headers
     let headers = headers::get_rest_call_headers(document)?;
     // Get all the parameter tables

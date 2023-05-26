@@ -14,6 +14,12 @@ pub struct Content {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub enum Documentation {
-    Endpoint(Vec<RestCall>),
-    Definitions(Vec<Definition>),
+    Endpoint {
+        name: String,
+        calls: Vec<RestCall>,
+    },
+    Definitions {
+        name: String,
+        definitions: Vec<Definition>,
+    },
 }
