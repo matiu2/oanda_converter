@@ -136,6 +136,8 @@ pub async fn get_all_content() -> Result<Vec<Content>> {
         .urls
         .into_iter()
         .filter(|url| url != &instrument_url)
+        // Forex labs just says "coming soon" at the time of writing -  Sat 27 May 2023 19:02:27 AEST
+        .filter(|url| url.path() != "/rest-live-v20/forexlabs-ep/")
     {
         tasks.push(tokio::spawn(async move {
             get_content(url.clone())

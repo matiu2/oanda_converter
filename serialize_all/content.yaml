@@ -2500,27 +2500,6 @@
   - https://developer.oanda.com/rest-live-v20/pricing-df/
   - https://developer.oanda.com/rest-live-v20/pricing-common-df/
   - https://developer.oanda.com/rest-live-v20/primitives-df/
-  documentation: !Endpoint
-    name: forexlabs
-    calls: []
-- urls:
-  - https://developer.oanda.com/rest-live-v20/account-ep/
-  - https://developer.oanda.com/rest-live-v20/instrument-ep/
-  - https://developer.oanda.com/rest-live-v20/order-ep/
-  - https://developer.oanda.com/rest-live-v20/trade-ep/
-  - https://developer.oanda.com/rest-live-v20/position-ep/
-  - https://developer.oanda.com/rest-live-v20/transaction-ep/
-  - https://developer.oanda.com/rest-live-v20/pricing-ep/
-  - https://developer.oanda.com/rest-live-v20/forexlabs-ep/
-  - https://developer.oanda.com/rest-live-v20/account-df/
-  - https://developer.oanda.com/rest-live-v20/instrument-df/
-  - https://developer.oanda.com/rest-live-v20/order-df/
-  - https://developer.oanda.com/rest-live-v20/trade-df/
-  - https://developer.oanda.com/rest-live-v20/position-df/
-  - https://developer.oanda.com/rest-live-v20/transaction-df/
-  - https://developer.oanda.com/rest-live-v20/pricing-df/
-  - https://developer.oanda.com/rest-live-v20/pricing-common-df/
-  - https://developer.oanda.com/rest-live-v20/primitives-df/
   documentation: !Definitions
     name: account
     definitions:
