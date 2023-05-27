@@ -10757,28 +10757,19 @@
       doc_string: A client-provided identifier, used by clients to refer to their Orders or Trades with an identifier that they have provided.
       value: !Table
       - !Example
-        type: Type
-        example: string
-      - !Example
-        type: Example
+        type: string
         example: my_order_id
     - name: ClientTag
       doc_string: A client-provided tag that can contain any data and may be assigned to their Orders or Trades. Tags are typically used to associate groups of Trades and/or Orders together.
       value: !Table
       - !Example
-        type: Type
-        example: string
-      - !Example
-        type: Example
+        type: string
         example: client_tag_1
     - name: ClientComment
       doc_string: A client-provided comment that can contain any data and may be assigned to their Orders or Trades. Comments are typically used to provide extra context or meaning to an Order or Trade.
       value: !Table
       - !Example
-        type: Type
-        example: string
-      - !Example
-        type: Example
+        type: string
         example: This is a client comment
     - name: ClientExtensions
       doc_string: A ClientExtensions object allows a client to attach a clientID, tag and comment to Orders and Trades in their Account. Do not set, modify, or delete this field if your account is associated with MT4.
@@ -11251,10 +11242,7 @@
       doc_string: A client provided request identifier.
       value: !Table
       - !Example
-        type: Type
-        example: string
-      - !Example
-        type: Example
+        type: string
         example: my_request_id
     - name: TransactionRejectReason
       doc_string: The reason that a Transaction was rejected.
