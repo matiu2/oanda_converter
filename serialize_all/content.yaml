@@ -2505,7 +2505,7 @@
     definitions:
     - name: AccountID
       doc_string: The string representation of an Account Identifier.
-      value: !Enum
+      value: !Table
       - !FormattedExample
         type: string
         format: “-“-delimited string with format “{siteID}-{divisionID}-{userID}-{accountNumber}”
@@ -2954,7 +2954,7 @@
           required: false
     - name: GuaranteedStopLossOrderMode
       doc_string: The overall behaviour of the Account regarding guaranteed Stop Loss Orders.
-      value: !Enum
+      value: !Table
       - !ValueDescription
         value: DISABLED
         description: The Account is not permitted to create guaranteed Stop Loss Orders.
@@ -2966,7 +2966,7 @@
         description: The Account is required to have guaranteed Stop Loss Orders for all open Trades.
     - name: GuaranteedStopLossOrderMutability
       doc_string: For Accounts that support guaranteed Stop Loss Orders, describes the actions that can be be performed on guaranteed Stop Loss Orders.
-      value: !Enum
+      value: !Table
       - !ValueDescription
         value: FIXED
         description: Once a guaranteed Stop Loss Order has been created it cannot be replaced or cancelled.
@@ -3411,7 +3411,7 @@
           required: false
     - name: AccountFinancingMode
       doc_string: The financing mode of an Account
-      value: !Enum
+      value: !Table
       - !ValueDescription
         value: NO_FINANCING
         description: No financing is paid/charged for open Trades in the Account
@@ -3475,7 +3475,7 @@
           required: false
     - name: PositionAggregationMode
       doc_string: The way that position values for an Account are calculated and aggregated.
-      value: !Enum
+      value: !Table
       - !ValueDescription
         value: ABSOLUTE_SUM
         description: The Position value or margin for each side (long and short) of the Position are computed independently and added together.
@@ -3508,7 +3508,7 @@
     definitions:
     - name: CandlestickGranularity
       doc_string: The granularity of a candlestick
-      value: !Enum
+      value: !Table
       - !ValueDescription
         value: S5
         description: 5 second candlesticks, minute alignment
@@ -3574,7 +3574,7 @@
         description: 1 month candlesticks, aligned to first day of the month
     - name: WeeklyAlignment
       doc_string: The day of the week to use for candlestick granularities with weekly alignment.
-      value: !Enum
+      value: !Table
       - !ValueDescription
         value: Monday
         description: Monday
@@ -5744,14 +5744,14 @@
           required: false
     - name: OrderID
       doc_string: The Order’s identifier, unique within the Order’s Account.
-      value: !Enum
+      value: !Table
       - !FormattedExample
         type: string
         format: The string representation of the OANDA-assigned OrderID. OANDA-assigned OrderIDs are positive integers, and are derived from the TransactionID of the Transaction that created the Order.
         example: '1523'
     - name: OrderType
       doc_string: The type of the Order.
-      value: !Enum
+      value: !Table
       - !ValueDescription
         value: MARKET
         description: A Market Order
@@ -5781,7 +5781,7 @@
         description: A Fixed Price Order
     - name: CancellableOrderType
       doc_string: The type of the Order.
-      value: !Enum
+      value: !Table
       - !ValueDescription
         value: LIMIT
         description: A Limit Order
@@ -5805,7 +5805,7 @@
         description: A Trailing Stop Loss Order
     - name: OrderState
       doc_string: The current state of the Order.
-      value: !Enum
+      value: !Table
       - !ValueDescription
         value: PENDING
         description: The Order is currently pending execution
@@ -5820,7 +5820,7 @@
         description: The Order has been cancelled
     - name: OrderStateFilter
       doc_string: The state to filter the requested Orders by.
-      value: !Enum
+      value: !Table
       - !ValueDescription
         value: PENDING
         description: The Orders that are currently pending execution
@@ -5854,14 +5854,14 @@
           required: false
     - name: OrderSpecifier
       doc_string: The specification of an Order as referred to by clients
-      value: !Enum
+      value: !Table
       - !FormattedExample
         type: string
         format: Either the Order’s OANDA-assigned OrderID or the Order’s client-provided ClientID prefixed by the “@” symbol
         example: '1523'
     - name: TimeInForce
       doc_string: The time-in-force of an Order. TimeInForce describes how long an Order should remain pending before being automatically cancelled by the execution system.
-      value: !Enum
+      value: !Table
       - !ValueDescription
         value: GTC
         description: The Order is “Good unTil Cancelled”
@@ -5879,7 +5879,7 @@
         description: The Order must be “Immediately partially filled Or Cancelled”
     - name: OrderPositionFill
       doc_string: Specification of how Positions in the Account are modified when the Order is filled.
-      value: !Enum
+      value: !Table
       - !ValueDescription
         value: OPEN_ONLY
         description: When the Order is filled, only allow Positions to be opened or extended.
@@ -5897,7 +5897,7 @@
         Specification of which price component should be used when determining if an Order should be triggered and filled. This allows Orders to be triggered based on the bid, ask, mid, default (ask for buy, bid for sell) or inverse (ask for sell, bid for buy) price depending on the desired behaviour. Orders are always filled using their default price component.
         This feature is only provided through the REST API. Clients who choose to specify a non-default trigger condition will not see it reflected in any of OANDA’s proprietary or partner trading platforms, their transaction history or their account statements. OANDA platforms always assume that an Order’s trigger condition is set to the default value when indicating the distance from an Order’s trigger price, and will always provide the default trigger condition when creating or modifying an Order.
         A special restriction applies when creating a Guaranteed Stop Loss Order. In this case the TriggerCondition value must either be “DEFAULT”, or the “natural” trigger side “DEFAULT” results in. So for a Guaranteed Stop Loss Order for a long trade valid values are “DEFAULT” and “BID”, and for short trades “DEFAULT” and “ASK” are valid.
-      value: !Enum
+      value: !Table
       - !ValueDescription
         value: DEFAULT
         description: 'Trigger an Order the “natural” way: compare its price to the ask for long Orders and bid for short Orders.'
@@ -6030,14 +6030,14 @@
     definitions:
     - name: TradeID
       doc_string: The Trade’s identifier, unique within the Trade’s Account.
-      value: !Enum
+      value: !Table
       - !FormattedExample
         type: string
         format: The string representation of the OANDA-assigned TradeID. OANDA-assigned TradeIDs are positive integers, and are derived from the TransactionID of the Transaction that opened the Trade.
         example: '1523'
     - name: TradeState
       doc_string: The current state of the Trade.
-      value: !Enum
+      value: !Table
       - !ValueDescription
         value: OPEN
         description: The Trade is currently open
@@ -6049,7 +6049,7 @@
         description: The Trade will be closed as soon as the trade’s instrument becomes tradeable
     - name: TradeStateFilter
       doc_string: The state to filter the Trades by
-      value: !Enum
+      value: !Table
       - !ValueDescription
         value: OPEN
         description: The Trades that are currently open
@@ -6064,7 +6064,7 @@
         description: The Trades that are in any of the possible states listed above.
     - name: TradeSpecifier
       doc_string: The identification of a Trade as referred to by clients
-      value: !Enum
+      value: !Table
       - !FormattedExample
         type: string
         format: Either the Trade’s OANDA-assigned TradeID or the Trade’s client-provided ClientID prefixed by the “@” symbol
@@ -6347,7 +6347,7 @@
           required: false
     - name: TradePL
       doc_string: The classification of TradePLs.
-      value: !Enum
+      value: !Table
       - !ValueDescription
         value: POSITIVE
         description: An open Trade currently has a positive (profitable) unrealized P/L, or a closed Trade realized a positive amount of P/L.
@@ -10237,14 +10237,14 @@
           required: false
     - name: TransactionID
       doc_string: The unique Transaction identifier within each Account.
-      value: !Enum
+      value: !Table
       - !FormattedExample
         type: string
         format: String representation of the numerical OANDA-assigned TransactionID
         example: '1523'
     - name: TransactionType
       doc_string: The possible types of a Transaction
-      value: !Enum
+      value: !Table
       - !ValueDescription
         value: CREATE
         description: Account Create Transaction
@@ -10361,7 +10361,7 @@
         description: Reset Resettable PL Transaction
     - name: FundingReason
       doc_string: The reason that an Account is being funded.
-      value: !Enum
+      value: !Table
       - !ValueDescription
         value: CLIENT_FUNDING
         description: The client has initiated a funds transfer
@@ -10379,7 +10379,7 @@
         description: Funds are being transferred as part of an Account adjustment
     - name: MarketOrderReason
       doc_string: The reason that the Market Order was created
-      value: !Enum
+      value: !Table
       - !ValueDescription
         value: CLIENT_ORDER
         description: The Market Order was created at the request of a client
@@ -10397,7 +10397,7 @@
         description: The Market Order was created to close a trade marked for delayed closure
     - name: FixedPriceOrderReason
       doc_string: The reason that the Fixed Price Order was created
-      value: !Enum
+      value: !Table
       - !ValueDescription
         value: PLATFORM_ACCOUNT_MIGRATION
         description: The Fixed Price Order was created as part of a platform account migration
@@ -10409,7 +10409,7 @@
         description: The Fixed Price Order was created to close a Trade administratively
     - name: LimitOrderReason
       doc_string: The reason that the Limit Order was initiated
-      value: !Enum
+      value: !Table
       - !ValueDescription
         value: CLIENT_ORDER
         description: The Limit Order was initiated at the request of a client
@@ -10418,7 +10418,7 @@
         description: The Limit Order was initiated as a replacement for an existing Order
     - name: StopOrderReason
       doc_string: The reason that the Stop Order was initiated
-      value: !Enum
+      value: !Table
       - !ValueDescription
         value: CLIENT_ORDER
         description: The Stop Order was initiated at the request of a client
@@ -10427,7 +10427,7 @@
         description: The Stop Order was initiated as a replacement for an existing Order
     - name: MarketIfTouchedOrderReason
       doc_string: The reason that the Market-if-touched Order was initiated
-      value: !Enum
+      value: !Table
       - !ValueDescription
         value: CLIENT_ORDER
         description: The Market-if-touched Order was initiated at the request of a client
@@ -10436,7 +10436,7 @@
         description: The Market-if-touched Order was initiated as a replacement for an existing Order
     - name: TakeProfitOrderReason
       doc_string: The reason that the Take Profit Order was initiated
-      value: !Enum
+      value: !Table
       - !ValueDescription
         value: CLIENT_ORDER
         description: The Take Profit Order was initiated at the request of a client
@@ -10448,7 +10448,7 @@
         description: The Take Profit Order was initiated automatically when an Order was filled that opened a new Trade requiring a Take Profit Order.
     - name: StopLossOrderReason
       doc_string: The reason that the Stop Loss Order was initiated
-      value: !Enum
+      value: !Table
       - !ValueDescription
         value: CLIENT_ORDER
         description: The Stop Loss Order was initiated at the request of a client
@@ -10460,7 +10460,7 @@
         description: The Stop Loss Order was initiated automatically when an Order was filled that opened a new Trade requiring a Stop Loss Order.
     - name: GuaranteedStopLossOrderReason
       doc_string: The reason that the Guaranteed Stop Loss Order was initiated
-      value: !Enum
+      value: !Table
       - !ValueDescription
         value: CLIENT_ORDER
         description: The Guaranteed Stop Loss Order was initiated at the request of a client
@@ -10472,7 +10472,7 @@
         description: The Guaranteed Stop Loss Order was initiated automatically when an Order was filled that opened a new Trade requiring a Guaranteed Stop Loss Order.
     - name: TrailingStopLossOrderReason
       doc_string: The reason that the Trailing Stop Loss Order was initiated
-      value: !Enum
+      value: !Table
       - !ValueDescription
         value: CLIENT_ORDER
         description: The Trailing Stop Loss Order was initiated at the request of a client
@@ -10484,7 +10484,7 @@
         description: The Trailing Stop Loss Order was initiated automatically when an Order was filled that opened a new Trade requiring a Trailing Stop Loss Order.
     - name: OrderFillReason
       doc_string: The reason that an Order was filled
-      value: !Enum
+      value: !Table
       - !ValueDescription
         value: LIMIT_ORDER
         description: The Order filled was a Limit Order
@@ -10535,7 +10535,7 @@
         description: The Order filled was a Fixed Price Order created to close a Trade administratively
     - name: OrderCancelReason
       doc_string: The reason that an Order was cancelled.
-      value: !Enum
+      value: !Table
       - !ValueDescription
         value: INTERNAL_SERVER_ERROR
         description: The Order was cancelled because at the time of filling, an unexpected internal server error occurred.
@@ -10755,7 +10755,7 @@
           required: false
     - name: ClientID
       doc_string: A client-provided identifier, used by clients to refer to their Orders or Trades with an identifier that they have provided.
-      value: !Enum
+      value: !Table
       - !Example
         type: Type
         example: string
@@ -10764,7 +10764,7 @@
         example: my_order_id
     - name: ClientTag
       doc_string: A client-provided tag that can contain any data and may be assigned to their Orders or Trades. Tags are typically used to associate groups of Trades and/or Orders together.
-      value: !Enum
+      value: !Table
       - !Example
         type: Type
         example: string
@@ -10773,7 +10773,7 @@
         example: client_tag_1
     - name: ClientComment
       doc_string: A client-provided comment that can contain any data and may be assigned to their Orders or Trades. Comments are typically used to provide extra context or meaning to an Order or Trade.
-      value: !Enum
+      value: !Table
       - !Example
         type: Type
         example: string
@@ -11082,7 +11082,7 @@
           required: false
     - name: MarketOrderMarginCloseoutReason
       doc_string: The reason that the Market Order was created to perform a margin closeout
-      value: !Enum
+      value: !Table
       - !ValueDescription
         value: MARGIN_CHECK_VIOLATION
         description: Trade closures resulted from violating OANDA’s margin policy
@@ -11244,12 +11244,12 @@
           required: false
     - name: RequestID
       doc_string: The request identifier.
-      value: !Enum
+      value: !Table
       - !JustType
         type: string
     - name: ClientRequestID
       doc_string: A client provided request identifier.
-      value: !Enum
+      value: !Table
       - !Example
         type: Type
         example: string
@@ -11258,7 +11258,7 @@
         example: my_request_id
     - name: TransactionRejectReason
       doc_string: The reason that a Transaction was rejected.
-      value: !Enum
+      value: !Table
       - !ValueDescription
         value: INTERNAL_SERVER_ERROR
         description: An unexpected internal server error has occurred
@@ -11855,7 +11855,7 @@
         description: Canceling the order would cause an immediate margin closeout.
     - name: TransactionFilter
       doc_string: A filter that can be used when fetching Transactions
-      value: !Enum
+      value: !Table
       - !ValueDescription
         value: ORDER
         description: Order-related Transactions. These are the Transactions that create, cancel, fill or trigger Orders
@@ -12079,7 +12079,7 @@
           required: false
     - name: PriceStatus
       doc_string: The status of the Price.
-      value: !Enum
+      value: !Table
       - !ValueDescription
         value: tradeable
         description: The Instrument’s price is tradeable.
@@ -12151,7 +12151,7 @@
           required: false
     - name: CandleSpecification
       doc_string: An instrument name, a granularity, and a price component to get candlestick data for.
-      value: !Enum
+      value: !Table
       - !Format
         type: Type
         format: string
@@ -12181,7 +12181,7 @@
     definitions:
     - name: PriceValue
       doc_string: The string representation of a Price for a Bucket.
-      value: !Enum
+      value: !Table
       - !Format
         type: Type
         format: string
@@ -12227,7 +12227,7 @@
     definitions:
     - name: DecimalNumber
       doc_string: The string representation of a decimal number.
-      value: !Enum
+      value: !Table
       - !Format
         type: Type
         format: string
@@ -12236,7 +12236,7 @@
         format: A decimal number encoded as a string. The amount of precision provided depends on what the number represents.
     - name: AccountUnits
       doc_string: The string representation of a quantity of an Account’s home currency.
-      value: !Enum
+      value: !Table
       - !Format
         type: Type
         format: string
@@ -12245,7 +12245,7 @@
         format: A decimal number encoded as a string. The amount of precision provided depends on the Account’s home currency.
     - name: Currency
       doc_string: Currency name identifier. Used by clients to refer to currencies.
-      value: !Enum
+      value: !Table
       - !Format
         type: Type
         format: string
@@ -12270,7 +12270,7 @@
           required: false
     - name: InstrumentName
       doc_string: Instrument name identifier. Used by clients to refer to an Instrument.
-      value: !Enum
+      value: !Table
       - !Format
         type: Type
         format: string
@@ -12279,7 +12279,7 @@
         format: A string containing the base currency and quote currency delimited by a “_”.
     - name: InstrumentType
       doc_string: The type of an Instrument.
-      value: !Enum
+      value: !Table
       - !ValueDescription
         value: CURRENCY
         description: Currency
@@ -12291,7 +12291,7 @@
         description: Metal
     - name: DayOfWeek
       doc_string: The DayOfWeek provides a representation of the day of the week.
-      value: !Enum
+      value: !Table
       - !ValueDescription
         value: SUNDAY
         description: Sunday
@@ -12471,7 +12471,7 @@
           required: false
     - name: DateTime
       doc_string: A date and time value using either RFC3339 or UNIX time representation.
-      value: !Enum
+      value: !Table
       - !Format
         type: Type
         format: string
@@ -12480,7 +12480,7 @@
         format: 'The RFC 3339 representation is a string conforming to '
     - name: AcceptDatetimeFormat
       doc_string: DateTime header
-      value: !Enum
+      value: !Table
       - !ValueDescription
         value: UNIX
         description: If “UNIX” is specified DateTime fields will be specified or returned in the “12345678.000000123” format.
@@ -12511,7 +12511,7 @@
           required: false
     - name: GuaranteedStopLossOrderModeForInstrument
       doc_string: The overall behaviour of the Account regarding Guaranteed Stop Loss Orders for a specific Instrument.
-      value: !Enum
+      value: !Table
       - !ValueDescription
         value: DISABLED
         description: The Account is not permitted to create Guaranteed Stop Loss Orders for this Instrument.
@@ -12539,7 +12539,7 @@
           required: false
     - name: Direction
       doc_string: In the context of an Order or a Trade, defines whether the units are positive or negative.
-      value: !Enum
+      value: !Table
       - !ValueDescription
         value: LONG
         description: A long Order is used to to buy units of an Instrument. A Trade is long when it has bought units of an Instrument.
@@ -12548,7 +12548,7 @@
         description: A short Order is used to to sell units of an Instrument. A Trade is short when it has sold units of an Instrument.
     - name: PricingComponent
       doc_string: The Price component(s) to get candlestick data for.
-      value: !Enum
+      value: !Table
       - !Format
         type: Type
         format: string

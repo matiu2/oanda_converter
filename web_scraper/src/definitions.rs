@@ -2,7 +2,7 @@
 use error_stack::ResultExt;
 mod struct_parser;
 use crate::{bail, report, Error, Result};
-use model::defintion_docs::{Definition, EnumItem, Struct, Value};
+use model::defintion_docs::{Definition, Row, Struct, Value};
 use scraper::{ElementRef, Html, Selector};
 
 use self::struct_parser::parse_struct;
@@ -120,7 +120,7 @@ fn read_body(div: ElementRef) -> Result<Value> {
     };
     // TODO: Read response pseudo json when inside `.endpoint_body` divs
     match (enum_div, struct_div, p) {
-        (Some(enum_div), None, None) => Ok(Value::Enum(read_enum(enum_div)?)),
+        (Some(enum_div), None, None) => Ok(Value::Table(read_enum(enum_div)?)),
         (None, Some(struct_div), _) => Ok(Value::Struct(read_struct(struct_div)?)),
         (None, None, Some(_)) => Ok(Value::Empty), 
         (r#enum, r#struct, p) =>  bail!("Found unexpected combination of enum / struct / p in definition body. Expected only one but got enum={} struct={} p={} in html: {}", r#enum.is_some(), r#struct.is_some(), p.is_some(), div.html()),
@@ -143,7 +143,7 @@ fn read_body(div: ElementRef) -> Result<Value> {
 ///
 /// This function will return an error if css selectors aren't working
 /// on the given HTML block
-fn read_enum(fragment: ElementRef) -> Result<Vec<EnumItem>> {
+fn read_enum(fragment: ElementRef) -> Result<Vec<Row>> {
     let th_selector = Selector::parse("th").map_err(Error::from)?;
     let table_headers: Vec<&str> = fragment
         .select(&th_selector)
@@ -155,7 +155,7 @@ fn read_enum(fragment: ElementRef) -> Result<Vec<EnumItem>> {
     enum Entry {
         // Used for rotated tables, where the keys are in the first column of every header
         KeyValue { key: String, value: String },
-        EnumItem(EnumItem),
+        EnumItem(Row),
     }
     impl Entry {
         /// If this Entry is a key value entry, and the key matches the input_key, returns the value
@@ -175,31 +175,31 @@ fn read_enum(fragment: ElementRef) -> Result<Vec<EnumItem>> {
         },
         ["Value", "Description"] => |cells: &[&str]| {
             Ok(match cells {
-                [value, description] => Entry::EnumItem(EnumItem::ValueDescription { value: value.to_string(), description: description.to_string() }),
+                [value, description] => Entry::EnumItem(Row::ValueDescription { value: value.to_string(), description: description.to_string() }),
                 other => bail!("Expected cells for `value` and `description`, but got the wrong amount of values {other:#?}")
             })
         },
         ["Type", "Format"] => |cells: &[&str]| {
             Ok(match cells {
-                [r#type, format] => Entry::EnumItem(EnumItem::Format { r#type: r#type.to_string(), format: format.to_string() }),
+                [r#type, format] => Entry::EnumItem(Row::Format { r#type: r#type.to_string(), format: format.to_string() }),
                 other => bail!("Expected cells for `type` and `format`, but got the wrong amount of values {other:#?}")
             })
         },
         ["Type", "Example"] => |cells: &[&str]| {
             Ok(match cells {
-                [r#type, example] => Entry::EnumItem(EnumItem::Example { r#type: r#type.to_string(), example: example.to_string() }),
+                [r#type, example] => Entry::EnumItem(Row::Example { r#type: r#type.to_string(), example: example.to_string() }),
                 other => bail!("Expected cells for `type` and `example`, but got the wrong amount of values {other:#?}")
             })
         },
         ["Type"] => |cells: &[&str]| {
             Ok(match cells {
-                [_type_th, type_value] => Entry::EnumItem(EnumItem::JustType { r#type: type_value.to_string() }),
+                [_type_th, type_value] => Entry::EnumItem(Row::JustType { r#type: type_value.to_string() }),
                 other => bail!("Expected cells for `type`, but got the wrong amount of values {other:#?}")
             })
         },
         ["Type", "Format", "Example"] => |cells: &[&str]| {
             Ok(match cells {
-                [r#type, format, example] => Entry::EnumItem(EnumItem::FormattedExample { r#type: r#type.to_string(), format: format.to_string(), example: example.to_string() }),
+                [r#type, format, example] => Entry::EnumItem(Row::FormattedExample { r#type: r#type.to_string(), format: format.to_string(), example: example.to_string() }),
                 [key, value] => Entry::KeyValue{key: key.to_string(),value: value.to_string()},
                 other => bail!("Expected cells for `type`, `format`, and `example` but got the wrong amount of values {other:#?}")
             })
@@ -227,7 +227,7 @@ fn read_enum(fragment: ElementRef) -> Result<Vec<EnumItem>> {
             else { bail!("Expected a format row. {parsed:#?}")};
         let Some(example) = parsed.iter().flat_map(|entry| entry.value("Example")).next().map(str::to_string)
             else { bail!("Expected a format row. {parsed:#?}")};
-        Ok(vec![EnumItem::FormattedExample {
+        Ok(vec![Row::FormattedExample {
             r#type,
             format,
             example,
@@ -298,7 +298,7 @@ pub(crate) fn read_struct(fragment: ElementRef) -> Result<Struct> {
 mod test {
     use crate::{bail, report, Error, Result};
     use error_stack::{IntoReport, ResultExt};
-    use model::defintion_docs::{EnumItem, Value};
+    use model::defintion_docs::{Row, Value};
     use scraper::Html;
 
     #[tokio::test]
@@ -323,12 +323,12 @@ mod test {
             .ok_or_else(|| report!("No definitions"))?;
         assert_eq!(&granularity.name, "CandlestickGranularity");
         assert_eq!(&granularity.doc_string, "The granularity of a candlestick");
-        let Value::Enum(values) = &granularity.value else {bail!("bad granularity")};
+        let Value::Table(values) = &granularity.value else {bail!("bad granularity")};
         let s5 = values
             .first()
             .ok_or_else(|| report!("No entries in granularities enum"))?;
         match s5 {
-            EnumItem::ValueDescription { value, description } => {
+            Row::ValueDescription { value, description } => {
                 assert_eq!(value, "S5");
                 assert_eq!(description, "5 second candlesticks, minute alignment");
             }
@@ -338,7 +338,7 @@ mod test {
             .last()
             .ok_or_else(|| report!("Couldn't get last granularity"))?;
         match m {
-            EnumItem::ValueDescription { value, description } => {
+            Row::ValueDescription { value, description } => {
                 assert_eq!(value, "M");
                 assert_eq!(
                     description,
@@ -378,7 +378,7 @@ mod test {
 </table>"#;
         let fragment = Html::parse_fragment(input);
         let got = super::read_enum(fragment.root_element())?;
-        assert_eq!(got, vec![EnumItem::FormattedExample{r#type: "string".to_string(),
+        assert_eq!(got, vec![Row::FormattedExample{r#type: "string".to_string(),
             format:"“-“-delimited string with format “{siteID}-{divisionID}-{userID}-{accountNumber}”".to_string(),
             example: "001-011-5838423-001".to_string() }]);
         Ok(())

@@ -1,8 +1,7 @@
 use crate::{bail, Error, Result};
 use codegen::Scope;
 use convert_case::{Case, Casing};
-use model::defintion_docs::{Definition, EnumItem, Struct, Value};
-
+use model::defintion_docs::{Definition, Row, Struct, Value};
 
 /// Returns the module name so you can import it
 pub fn create_definitions(_name: &str, definitions: &[Definition]) -> Result<Scope> {
@@ -18,9 +17,9 @@ pub fn create_definitions(_name: &str, definitions: &[Definition]) -> Result<Sco
 /// Generates a rust struct or enum from a schema
 fn add_definition(definition: &Definition, scope: &mut Scope) -> Result<()> {
     match &definition.value {
-        Value::Enum(items) => {
-            let is_enum_variant = |item: &EnumItem| match item {
-                EnumItem::ValueDescription { .. } => true,
+        Value::Table(items) => {
+            let is_enum_variant = |item: &Row| match item {
+                Row::ValueDescription { .. } => true,
                 _ => false,
             };
             let Some(is_enum) = items.first().map(is_enum_variant) else { bail!("Can't have an enum with no variants: {definition:#?}") };
@@ -36,7 +35,7 @@ fn add_definition(definition: &Definition, scope: &mut Scope) -> Result<()> {
                     .derive("Deserialize")
                     .derive("Debug");
                 items.iter().for_each(|field| match field {
-                    EnumItem::ValueDescription { value, description } => {
+                    Row::ValueDescription { value, description } => {
                         e.new_variant(value.to_case(Case::Pascal))
                             .annotation(format!("/// {description}"));
                     }
@@ -46,7 +45,7 @@ fn add_definition(definition: &Definition, scope: &mut Scope) -> Result<()> {
                 // Generate a struct
                 for field in items {
                     match field {
-                        EnumItem::FormattedExample {
+                        Row::FormattedExample {
                             r#type,
                             format,
                             example,
@@ -62,7 +61,7 @@ fn add_definition(definition: &Definition, scope: &mut Scope) -> Result<()> {
                                 Some(example),
                             )
                         }
-                        EnumItem::Example { r#type, example } => {
+                        Row::Example { r#type, example } => {
                             if r#type != "string" {
                                 bail!("We expected all type,example inputs to be type=string: {definition:#?}");
                             }
@@ -74,7 +73,7 @@ fn add_definition(definition: &Definition, scope: &mut Scope) -> Result<()> {
                                 Some(example),
                             )
                         }
-                        EnumItem::Format { r#type, format } => {
+                        Row::Format { r#type, format } => {
                             if r#type != "string" {
                                 bail!("We expected all type,format inputs to be type=string: {definition:#?}");
                             }
@@ -86,7 +85,7 @@ fn add_definition(definition: &Definition, scope: &mut Scope) -> Result<()> {
                                 None,
                             )
                         }
-                        EnumItem::JustType { r#type } => {
+                        Row::JustType { r#type } => {
                             if r#type != "string" {
                                 bail!("We expected all type inputs to be type=string: {definition:#?}");
                             }
@@ -98,7 +97,7 @@ fn add_definition(definition: &Definition, scope: &mut Scope) -> Result<()> {
                                 None,
                             )
                         }
-                        EnumItem::ValueDescription { .. } => {
+                        Row::ValueDescription { .. } => {
                             bail!("Unexpted enum variant in struct: {definition:#?}")
                         }
                     }

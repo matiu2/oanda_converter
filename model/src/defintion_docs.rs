@@ -14,15 +14,14 @@ pub struct Definition {
 /// The actual data from a json type Definition
 #[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub enum Value {
-    // TODO: Rename Enum to Table and EnumItem to TableOption
-    Enum(Vec<EnumItem>),
+    Table(Vec<Row>),
     Struct(Struct),
     Empty,
 }
 
 /// The docs presented us with a table, and it could be any of these formats
 #[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
-pub enum EnumItem {
+pub enum Row {
     ValueDescription {
         value: String,
         description: String,
