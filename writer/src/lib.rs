@@ -115,8 +115,7 @@ pub fn generate_code(path: &Path, all_content: &[Content]) -> Result<()> {
                 (code, &endpoints_dir, name.to_case(Case::Snake))
             }
             model::Documentation::Definitions { name, definitions } => {
-                let code =
-                    create_definitions(&definitions_dir, name.as_str(), definitions.as_slice())?;
+                let code = create_definitions(name.as_str(), definitions.as_slice())?;
                 (code, &definitions_dir, name.to_case(Case::Snake))
             }
         };

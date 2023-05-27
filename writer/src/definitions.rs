@@ -5,16 +5,18 @@ use model::defintion_docs::{Definition, EnumItem, Struct, Value};
 use std::path::Path;
 
 /// Returns the module name so you can import it
-pub fn create_definitions(dir: &Path, name: &str, definitions: &[Definition]) -> Result<Scope> {
+pub fn create_definitions(name: &str, definitions: &[Definition]) -> Result<Scope> {
     let mut scope = Scope::new();
 
-    let code = scope.to_string();
+    for definition in definitions {
+        add_definition(&definition, &mut scope)?;
+    }
 
-    todo!()
+    Ok(scope)
 }
 
 /// Generates a rust struct or enum from a schema
-fn definition(definition: &Definition, scope: &mut Scope) -> Result<()> {
+fn add_definition(definition: &Definition, scope: &mut Scope) -> Result<()> {
     match &definition.value {
         Value::Enum(items) => {
             let is_enum_variant = |item: &EnumItem| match item {
@@ -199,7 +201,7 @@ mod tests {
         let definition: Definition = annotate!(serde_yaml::from_str(input), "Parsing yaml")?;
 
         let mut scope = Scope::new();
-        super::definition(&definition, &mut scope)?;
+        super::add_definition(&definition, &mut scope)?;
         crate::print_code(&scope.to_string());
         Ok(())
     }
@@ -222,7 +224,7 @@ mod tests {
             ");
         let definition: Definition = annotate!(serde_yaml::from_str(input), "Parsing yaml")?;
         let mut scope = Scope::new();
-        super::definition(&definition, &mut scope)?;
+        super::add_definition(&definition, &mut scope)?;
         let code = scope.to_string();
         crate::print_code(&code);
         assert_eq!(
@@ -316,7 +318,7 @@ struct SomeStruct {
         required: false");
         let definition: Definition = annotate!(serde_yaml::from_str(input), "Parsing yaml")?;
         let mut scope = Scope::new();
-        super::definition(&definition, &mut scope)?;
+        super::add_definition(&definition, &mut scope)?;
         let code = scope.to_string();
         crate::print_code(&code);
         assert_eq!(code, indoc!("
