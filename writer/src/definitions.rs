@@ -2,14 +2,14 @@ use crate::{bail, Error, Result};
 use codegen::Scope;
 use convert_case::{Case, Casing};
 use model::defintion_docs::{Definition, EnumItem, Struct, Value};
-use std::path::Path;
+
 
 /// Returns the module name so you can import it
-pub fn create_definitions(name: &str, definitions: &[Definition]) -> Result<Scope> {
+pub fn create_definitions(_name: &str, definitions: &[Definition]) -> Result<Scope> {
     let mut scope = Scope::new();
 
     for definition in definitions {
-        add_definition(&definition, &mut scope)?;
+        add_definition(definition, &mut scope)?;
     }
 
     Ok(scope)
@@ -58,8 +58,8 @@ fn add_definition(definition: &Definition, scope: &mut Scope) -> Result<()> {
                                 scope,
                                 &definition.name,
                                 &definition.doc_string,
-                                Some(&format),
-                                Some(&example),
+                                Some(format),
+                                Some(example),
                             )
                         }
                         EnumItem::Example { r#type, example } => {
@@ -71,7 +71,7 @@ fn add_definition(definition: &Definition, scope: &mut Scope) -> Result<()> {
                                 &definition.name,
                                 &definition.doc_string,
                                 None,
-                                Some(&example),
+                                Some(example),
                             )
                         }
                         EnumItem::Format { r#type, format } => {
@@ -82,7 +82,7 @@ fn add_definition(definition: &Definition, scope: &mut Scope) -> Result<()> {
                                 scope,
                                 &definition.name,
                                 &definition.doc_string,
-                                Some(&format),
+                                Some(format),
                                 None,
                             )
                         }
@@ -106,7 +106,7 @@ fn add_definition(definition: &Definition, scope: &mut Scope) -> Result<()> {
             }
         }
         Value::Struct(Struct { fields }) => {
-            let mut s = scope
+            let s = scope
                 .new_struct(&definition.name)
                 .doc(&definition.doc_string)
                 .derive("Serialize")
@@ -114,7 +114,7 @@ fn add_definition(definition: &Definition, scope: &mut Scope) -> Result<()> {
                 .derive("Deserialize")
                 .derive("Debug");
             fields.iter().for_each(|f| {
-                field(&mut s, f);
+                field(s, f);
             });
         }
         Value::Empty => {}
@@ -154,8 +154,8 @@ fn make_struct<'a>(
         .derive("Serialize")
         .derive("Deserialize")
         .derive("Debug");
-    s.doc(&doc_string);
-    extra_derives.into_iter().for_each(|d| {
+    s.doc(doc_string);
+    extra_derives.iter().for_each(|d| {
         s.derive(d);
     });
     s.tuple_field("String");
@@ -172,7 +172,7 @@ fn field<'a>(
         (true, true) => format!("Option<Vec<{basic_type_name}>>"),
         (true, false) => format!("Vec<{basic_type_name}>"),
         (false, true) => format!("Option<{basic_type_name}>"),
-        (false, false) => format!("{basic_type_name}"),
+        (false, false) => basic_type_name.to_string(),
     };
     scope
         .new_field(field.name.to_case(Case::Snake), type_name)

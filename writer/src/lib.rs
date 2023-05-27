@@ -30,7 +30,7 @@ pub fn report(msg: String) -> Report<Error> {
 #[macro_export]
 macro_rules! report {
     ($($arg:tt)*) => {
-        crate::report(format!($($arg)*))
+        $crate::report(format!($($arg)*))
     };
 }
 
@@ -45,12 +45,12 @@ where
 macro_rules! annotate {
     ($result:expr, $fmt:expr) => {
         {
-            crate::annotate($result, format!($fmt))
+            $crate::annotate($result, format!($fmt))
         }
     };
    ($result:expr, $fmt:expr, $($arg:expr),*) => {
         {
-            crate::annotate($result, format!($fmt, $($arg),*))
+            $crate::annotate($result, format!($fmt, $($arg),*))
         }
     };
 }
@@ -68,7 +68,7 @@ pub(crate) fn print_code(code: &str) {
 
     let syntax = ps.find_syntax_by_extension("rs").unwrap();
     let mut h = HighlightLines::new(syntax, &ts.themes["base16-ocean.dark"]);
-    println!(""); // A blank line before
+    println!(); // A blank line before
     for line in LinesWithEndings::from(code) {
         // LinesWithEndings enables use of newlines mode
         let ranges: Vec<(Style, &str)> = h.highlight_line(line, &ps).unwrap();

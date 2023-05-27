@@ -61,11 +61,11 @@ pub fn create_endpoint(dir: &Path, rest_calls: &[RestCall]) -> Result<Scope> {
     });
 
     // Create the implementation for the struct
-    let mut r#impl = scope.new_impl(&format!("{endpoint_name}")).generic("'a");
+    let r#impl = scope.new_impl(&endpoint_name.to_string()).generic("'a");
 
     for call in rest_calls {
         // Import all the types for the rest call
-        create_rest_call(&mut r#impl, call)?
+        create_rest_call(r#impl, call)?
     }
 
     // TODO: Create the Request and Response Types for each call if any
@@ -79,7 +79,7 @@ pub fn create_endpoint(dir: &Path, rest_calls: &[RestCall]) -> Result<Scope> {
 /// Generates the code for a single REST api call.
 pub fn create_rest_call(r#impl: &mut Impl, call: &RestCall) -> Result<()> {
     // TODO: Figure out the return type from call.responses
-    let fun = r#impl
+    let _fun = r#impl
         .new_fn(call.method_name()?.as_str())
         .doc(&call.doc_string)
         .vis("pub");
