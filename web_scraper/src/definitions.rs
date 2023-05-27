@@ -120,7 +120,7 @@ fn read_body(div: ElementRef) -> Result<Value> {
     };
     // TODO: Read response pseudo json when inside `.endpoint_body` divs
     match (enum_div, struct_div, p) {
-        (Some(enum_div), None, None) => Ok(Value::Table(read_enum(enum_div)?)),
+        (Some(enum_div), None, None) => Ok(Value::Table(read_table(enum_div)?)),
         (None, Some(struct_div), _) => Ok(Value::Struct(read_struct(struct_div)?)),
         (None, None, Some(_)) => Ok(Value::Empty), 
         (r#enum, r#struct, p) =>  bail!("Found unexpected combination of enum / struct / p in definition body. Expected only one but got enum={} struct={} p={} in html: {}", r#enum.is_some(), r#struct.is_some(), p.is_some(), div.html()),
@@ -143,7 +143,7 @@ fn read_body(div: ElementRef) -> Result<Value> {
 ///
 /// This function will return an error if css selectors aren't working
 /// on the given HTML block
-fn read_enum(fragment: ElementRef) -> Result<Vec<Row>> {
+fn read_table(fragment: ElementRef) -> Result<Vec<Row>> {
     let th_selector = Selector::parse("th").map_err(Error::from)?;
     let table_headers: Vec<&str> = fragment
         .select(&th_selector)
@@ -377,7 +377,7 @@ mod test {
 </tbody>
 </table>"#;
         let fragment = Html::parse_fragment(input);
-        let got = super::read_enum(fragment.root_element())?;
+        let got = super::read_table(fragment.root_element())?;
         assert_eq!(got, vec![Row::FormattedExample{r#type: "string".to_string(),
             format:"“-“-delimited string with format “{siteID}-{divisionID}-{userID}-{accountNumber}”".to_string(),
             example: "001-011-5838423-001".to_string() }]);
