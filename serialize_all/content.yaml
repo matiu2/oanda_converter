@@ -12141,10 +12141,7 @@
       doc_string: An instrument name, a granularity, and a price component to get candlestick data for.
       value: !Table
       - !Format
-        type: Type
-        format: string
-      - !Format
-        type: Format
+        type: string
         format: 'A string containing the following, all delimited by “:” characters: 1) InstrumentName 2) CandlestickGranularity 3) PricingComponent e.g. EUR_USD:S10:BM'
 - urls:
   - https://developer.oanda.com/rest-live-v20/account-ep/
@@ -12171,10 +12168,7 @@
       doc_string: The string representation of a Price for a Bucket.
       value: !Table
       - !Format
-        type: Type
-        format: string
-      - !Format
-        type: Format
+        type: string
         format: A decimal number encodes as a string. The amount of precision provided depends on the Instrument.
     - name: PriceBucket
       doc_string: A PriceBucket represents a price available for an amount of liquidity
@@ -12217,28 +12211,19 @@
       doc_string: The string representation of a decimal number.
       value: !Table
       - !Format
-        type: Type
-        format: string
-      - !Format
-        type: Format
+        type: string
         format: A decimal number encoded as a string. The amount of precision provided depends on what the number represents.
     - name: AccountUnits
       doc_string: The string representation of a quantity of an Account’s home currency.
       value: !Table
       - !Format
-        type: Type
-        format: string
-      - !Format
-        type: Format
+        type: string
         format: A decimal number encoded as a string. The amount of precision provided depends on the Account’s home currency.
     - name: Currency
       doc_string: Currency name identifier. Used by clients to refer to currencies.
       value: !Table
       - !Format
-        type: Type
-        format: string
-      - !Format
-        type: Format
+        type: string
         format: A string containing an ISO 4217 currency (
     - name: Tag
       doc_string: A tag associated with an entity.
@@ -12260,10 +12245,7 @@
       doc_string: Instrument name identifier. Used by clients to refer to an Instrument.
       value: !Table
       - !Format
-        type: Type
-        format: string
-      - !Format
-        type: Format
+        type: string
         format: A string containing the base currency and quote currency delimited by a “_”.
     - name: InstrumentType
       doc_string: The type of an Instrument.
@@ -12461,10 +12443,7 @@
       doc_string: A date and time value using either RFC3339 or UNIX time representation.
       value: !Table
       - !Format
-        type: Type
-        format: string
-      - !Format
-        type: Format
+        type: string
         format: 'The RFC 3339 representation is a string conforming to '
     - name: AcceptDatetimeFormat
       doc_string: DateTime header
@@ -12538,10 +12517,7 @@
       doc_string: The Price component(s) to get candlestick data for.
       value: !Table
       - !Format
-        type: Type
-        format: string
-      - !Format
-        type: Format
+        type: string
         format: Can contain any combination of the characters “M” (midpoint candles) “B” (bid candles) and “A” (ask candles).
     - name: ConversionFactor
       doc_string: A ConversionFactor contains information used to convert an amount, from an Instrument’s base or quote currency, to the home currency of an Account.

@@ -172,6 +172,13 @@ fn read_table(fragment: ElementRef) -> Result<Vec<Row>> {
                 _ => None
             }
         }
+        fn format(&self) -> Option<&str> {
+            match self {
+                Entry::Row(Row::FormattedExample { format, ..}) => Some(format),
+                Entry::Row(Row::Format{ format, .. }) => Some(format),
+                _ => None
+            }
+        }
     }
     let get_row = match table_headers.as_slice() {
         ["Type", "string"] => |cells: &[&str]| {
@@ -247,6 +254,14 @@ fn read_table(fragment: ElementRef) -> Result<Vec<Row>> {
             Ok(vec![Row::Example{
                 r#type: "string".to_string(),
                 example,
+            }])
+        }
+        Some(Entry::Row(Row::Format{r#type, format})) if r#type.as_str() == "Type" && format.as_str() == "string"=> {
+            let Some(format) = parsed.iter().skip(1).flat_map(|entry| entry.format()).next().map(str::to_string)
+                    else { bail!("Expected an format row. {parsed:#?}")};
+            Ok(vec![Row::Format{
+                r#type: "string".to_string(),
+                format,
             }])
         }
         _ => {
@@ -420,6 +435,26 @@ mod test {
         let fragment = Html::parse_fragment(input);
         let got = super::read_table(fragment.root_element())?;
         assert_eq!(vec![Row::Example{r#type: "string".to_string(), example: "my_order_id".to_string() }], got);
+        Ok(())
+    }
+
+    #[test]
+    fn test_rotated_tables3() -> Result<()> {
+        let input = r#"<table class="parameter_table">
+<tbody>
+<tr>
+<th class="pt_15">Type</th>
+<td class="pt_85">string</td>
+</tr>
+<tr>
+<th>Format</th>
+<td>A string containing the following, all delimited by “:” characters: 1) InstrumentName 2) CandlestickGranularity 3) PricingComponent e.g. EUR_USD:S10:BM</td>
+</tr>
+</tbody>
+</table>"#;
+        let fragment = Html::parse_fragment(input);
+        let got = super::read_table(fragment.root_element())?;
+        assert_eq!(vec![Row::Format{r#type: "string".to_string(), format: "A string containing the following, all delimited by “:” characters: 1) InstrumentName 2) CandlestickGranularity 3) PricingComponent e.g. EUR_USD:S10:BM".to_string() }], got);
         Ok(())
     }
 
