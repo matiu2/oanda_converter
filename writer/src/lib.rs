@@ -1,5 +1,6 @@
 use codegen::Scope;
-use definitions::create_definition;
+use convert_case::{Case, Casing};
+use definitions::create_definitions;
 use endpoints::create_endpoint;
 use error_stack::{IntoReport, Report, ResultExt};
 use model::Content;
@@ -15,13 +16,11 @@ mod endpoints;
 
 type Result<T> = std::result::Result<T, Report<Error>>;
 
-fn bail(msg: String) -> error_stack::Report<Error> {
-    error_stack::report!(Error::new(msg))
-}
-
 #[macro_export]
 macro_rules! bail {
-    ($($arg:tt)*) => { return Err(bail(format!($($arg)*))) };
+    ($($arg:tt)*) => {
+        return Err(error_stack::report!(Error::new(format!($($arg)*))))
+    };
 }
 
 pub fn report(msg: String) -> Report<Error> {
@@ -109,14 +108,27 @@ pub fn generate_code(path: &Path, all_content: &[Content]) -> Result<()> {
     let definitions_dir = add_dir(path, "definitions")?;
     // Generate the content for each entry
     for content in all_content {
-        let mod_name = match &content.documentation {
-            model::Documentation::Endpoint(rest_calls) => {
-                create_endpoint(&endpoints_dir, rest_calls.as_slice())?
+        let (code, dir, mod_name) = match &content.documentation {
+            model::Documentation::Endpoint { name, calls } => {
+                let code = create_endpoint(&endpoints_dir, calls.as_slice())
+                    .attach_printable_lazy(|| format!("endpoint name: {name}"))?;
+                (code, &endpoints_dir, name.to_case(Case::Snake))
             }
-            model::Documentation::Definitions(definitions) => {
-                create_definition(&definitions_dir, definitions.as_slice())?
+            model::Documentation::Definitions { name, definitions } => {
+                let code =
+                    create_definitions(&definitions_dir, name.as_str(), definitions.as_slice())?;
+                (code, &definitions_dir, name.to_case(Case::Snake))
             }
         };
+        // Save the module
+        let mut file_name = PathBuf::new();
+        file_name.push(dir);
+        file_name.push(format!("{}.rs", mod_name));
+        annotate!(
+            std::fs::write(file_name.as_path(), code.to_string()),
+            "Writing module {file_name:#?}"
+        )?;
+        lib_code.raw(format!("mod {mod_name};"));
     }
     Ok(())
 }
@@ -124,7 +136,6 @@ pub fn generate_code(path: &Path, all_content: &[Content]) -> Result<()> {
 #[cfg(test)]
 mod tests {
     use super::{Error, Result};
-    use error_stack::{IntoReport, ResultExt};
     use model::Content;
     use std::fs::{read_dir, read_to_string, DirEntry};
     use tempfile::tempdir;

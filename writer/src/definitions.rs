@@ -1,24 +1,14 @@
-use crate::{bail, Result};
+use crate::{bail, Error, Result};
 use codegen::Scope;
 use convert_case::{Case, Casing};
 use model::defintion_docs::{Definition, EnumItem, Struct, Value};
 use std::path::Path;
 
 /// Returns the module name so you can import it
-pub fn create_definitions(dir: &Path, definition: &[Definition]) -> Result<Option<String>> {
+pub fn create_definitions(dir: &Path, name: &str, definitions: &[Definition]) -> Result<Scope> {
     let mut scope = Scope::new();
 
     let code = scope.to_string();
-
-    //     // Save the module
-    //     let mod_name = first_rest_call.endpoint_name().to_case(Case::Snake);
-    //     let mut file_name = PathBuf::new();
-    //     file_name.push(dir);
-    //     file_name.push(format!("{}.rs", mod_name));
-    //     annotate!(
-    //         std::fs::write(file_name.as_path(), scope.to_string()),
-    //         "Writing module {file_name:#?}"
-    //     )?;
 
     todo!()
 }

@@ -1,12 +1,8 @@
-use crate::{annotate, bail, Error, Result};
+use crate::{bail, Error, Result};
 use codegen::Impl;
 use codegen::Scope;
-use convert_case::{Case, Casing};
 use model::endpoint_docs::{Endpoint, RestCall};
-use std::{
-    collections::HashSet,
-    path::{Path, PathBuf},
-};
+use std::{collections::HashSet, path::Path};
 
 mod rest_call_ext;
 use rest_call_ext::RestCallExt;
@@ -17,13 +13,12 @@ use rest_call_ext::RestCallExt;
 /// The filename is the module name in snake_case with a `.rs` extensnion.
 /// For example Endpoint::Account -> "{dir}/account.rs"
 ///
-/// Returns the name of the module so you can put in in: `mod {name}`. For the above example it'll return `account`
-///
+/// Returns the generated code
 ///
 /// # Errors
 ///
 /// This function will return an error if it can't create the files or parse or convert any of the input
-pub fn create_endpoint(dir: &Path, rest_calls: &[RestCall]) -> Result<Option<String>> {
+pub fn create_endpoint(dir: &Path, rest_calls: &[RestCall]) -> Result<Scope> {
     // All the rest_calls should have the same endpoint.
     // We're making one rust module per Oanda API endpoint.
     let Some(first_rest_call) = rest_calls.first() else { bail!("Can't create endpoint when there are no RestCalls: {dir:#?}")};
@@ -78,17 +73,7 @@ pub fn create_endpoint(dir: &Path, rest_calls: &[RestCall]) -> Result<Option<Str
     #[cfg(test)]
     crate::print_code(scope.to_string().as_str());
 
-    // Save the module
-    let mod_name = first_rest_call.endpoint_name().to_case(Case::Snake);
-    let mut file_name = PathBuf::new();
-    file_name.push(dir);
-    file_name.push(format!("{}.rs", mod_name));
-    annotate!(
-        std::fs::write(file_name.as_path(), scope.to_string()),
-        "Writing module {file_name:#?}"
-    )?;
-
-    Ok(Some(mod_name))
+    Ok(scope)
 }
 
 /// Generates the code for a single REST api call.
@@ -146,8 +131,10 @@ mod test {
     fn test_create_endpoint() -> Result<()> {
         let test_rest_call = test_rest_call()?;
         let dir = annotate!(tempdir(), "Creating temp dir")?;
-        let module_name = super::create_endpoint(dir.path(), &[test_rest_call])?;
-        assert_eq!(module_name, Some("account".to_string()));
+        let code = super::create_endpoint(dir.path(), &[test_rest_call])?;
+        let code = code.to_string();
+        println!("{code}");
+        assert!(code.contains("pub fn list_all()"));
         Ok(())
     }
 }

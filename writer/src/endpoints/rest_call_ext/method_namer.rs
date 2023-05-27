@@ -9,11 +9,15 @@ fn remove_s(input: &str) -> &str {
     input.strip_suffix('s').unwrap_or(input)
 }
 
+/// Matches certain aspects of some API call documentation
+/// and figures out what the name of the rust method should be.
+/// see [`tests::test_method_name`] for examples
 struct Matcher<'a> {
     last_segment: &'a str,
     last_segment_is_param: bool,
     num_params: usize,
     last_segment_is_plural: bool,
+    last_segment_is_verb: bool,
     last_segment_is_endpoint: bool,
 }
 
@@ -32,7 +36,9 @@ impl<'a> Matcher<'a> {
             .split('/')
             .filter(|segment| is_param(segment))
             .count();
-        let last_segment_is_plural = last_segment.ends_with('s');
+        let last_segment_is_plural = last_segment.ends_with('s') || last_segment.ends_with("ing");
+        let last_segment_is_verb =
+            ["cancel", "close"].contains(&last_segment.to_case(Case::Snake).as_str());
         let last_segment_is_endpoint = if last_segment_is_plural {
             remove_s(last_segment) == call.module_name()
         } else {
@@ -43,6 +49,7 @@ impl<'a> Matcher<'a> {
             last_segment_is_param,
             num_params,
             last_segment_is_plural,
+            last_segment_is_verb,
             last_segment_is_endpoint,
         })
     }
@@ -81,6 +88,15 @@ pub fn method_name(call: &RestCall) -> Result<String> {
             },
         ) => "list".to_string(),
         (
+            HttpMethod::Get,
+            Matcher {
+                num_params: 2,
+                last_segment_is_endpoint: false,
+                last_segment,
+                ..
+            },
+        ) => last_segment.to_case(Case::Snake),
+        (
             HttpMethod::Patch,
             Matcher {
                 num_params: 1,
@@ -95,9 +111,20 @@ pub fn method_name(call: &RestCall) -> Result<String> {
                 num_params: 1,
                 last_segment,
                 last_segment_is_param: false,
+                last_segment_is_verb: false,
                 ..
             },
-        ) => format!("set_{last_segment}"),
+        ) => format!("set_{}", last_segment.to_case(Case::Snake)),
+        (
+            HttpMethod::Patch,
+            Matcher {
+                num_params: 1,
+                last_segment,
+                last_segment_is_param: false,
+                last_segment_is_verb: true,
+                ..
+            },
+        ) => last_segment.to_case(Case::Snake),
         (
             HttpMethod::Post,
             Matcher {
@@ -129,6 +156,17 @@ pub fn method_name(call: &RestCall) -> Result<String> {
                 last_segment,
                 last_segment_is_param: false,
                 last_segment_is_endpoint: false,
+                last_segment_is_verb: false,
+                ..
+            },
+        ) => format!("set_{}", last_segment.to_case(Case::Snake)),
+        (
+            HttpMethod::Put,
+            Matcher {
+                last_segment,
+                last_segment_is_param: false,
+                last_segment_is_endpoint: false,
+                last_segment_is_verb: true,
                 ..
             },
         ) => last_segment.to_case(Case::Snake),
@@ -158,7 +196,19 @@ mod tests {
     fn test_method_name() -> Result<()> {
         // Expected rest calls and the method name that we should be generating
         let map: Vec<(RestCall, &str)> = vec![
-            // Account endpoint
+            // Pricing endpoint
+            (
+                Endpoint::Pricing,
+                HttpMethod::Get,
+                "/v3/accounts/{accountID}/pricing",
+                "list",
+            ),
+            (
+                Endpoint::Pricing,
+                HttpMethod::Get,
+                "/v3/accounts/{accountID}/instruments/{instrument}/candles",
+                "candles",
+            ),
             (
                 Endpoint::Account,
                 HttpMethod::Get,
@@ -238,7 +288,7 @@ mod tests {
                 Endpoint::Order,
                 HttpMethod::Put,
                 "/v3/accounts/{accountID}/orders/{orderSpecifier}/clientExtensions",
-                "client_extensions",
+                "set_client_extensions",
             ),
             // Trade endpoint
             (
