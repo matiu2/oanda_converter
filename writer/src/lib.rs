@@ -13,6 +13,7 @@ pub use error::Error;
 
 mod definitions;
 mod endpoints;
+pub(crate) mod shared;
 
 type Result<T> = std::result::Result<T, Report<Error>>;
 
