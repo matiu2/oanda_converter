@@ -163,8 +163,9 @@ fn make_struct<'a>(
 
 #[cfg(test)]
 mod tests {
-    use crate::{annotate, Result};
+    use crate::{annotate, Error, Result};
     use codegen::Scope;
+    use error_stack::{IntoReport, ResultExt};
     use indoc::indoc;
     use model::defintion_docs::Definition;
 

@@ -1,8 +1,6 @@
 use crate::shared::write_struct_fields;
 use crate::{bail, Error, Result};
-use codegen::Impl;
-use codegen::Module;
-use codegen::Scope;
+use codegen::{Impl, Module, Scope};
 use model::defintion_docs::Schema;
 use model::endpoint_docs::{Endpoint, RestCall};
 use std::{collections::HashSet, path::Path};
@@ -153,7 +151,8 @@ fn write_stream(code: &mut codegen::Struct, input: &model::defintion_docs::Strea
 
 #[cfg(test)]
 mod test {
-    use crate::{annotate, Result};
+    use crate::{annotate, Error, Result};
+    use error_stack::{IntoReport, ResultExt};
     use indoc::indoc;
     use model::endpoint_docs::RestCall;
     use tempfile::tempdir;
@@ -196,6 +195,114 @@ mod test {
         let test_rest_call = test_rest_call()?;
         let dir = annotate!(tempdir(), "Creating temp dir")?;
         let code = super::create_endpoint(dir.path(), &[test_rest_call])?;
+        let code = code.to_string();
+        println!("{code}");
+        assert!(code.contains("pub fn list_all()"));
+        Ok(())
+    }
+
+    #[test]
+    fn test_request_builder() -> Result<()> {
+        let input = indoc!("
+      endpoint: Pricing
+      http_method: Get
+      path: /v3/accounts/{accountID}/instruments/{instrument}/candles
+      doc_string: Fetch candlestick data for an instrument.
+      parameters:
+      - name: Authorization
+        located_in: Header
+        type_name: string
+        description: The authorization bearer token previously obtained by the client [required]
+      - name: Accept-Datetime-Format
+        located_in: Header
+        type_name: AcceptDatetimeFormat
+        description: Format of DateTime fields in the request and response.
+      - name: accountID
+        located_in: Path
+        type_name: AccountID
+        description: Account Identifier [required]
+      - name: instrument
+        located_in: Path
+        type_name: InstrumentName
+        description: Name of the Instrument [required]
+      - name: price
+        located_in: Query
+        type_name: PricingComponent
+        description: The Price component(s) to get candlestick data for. [default=M]
+      - name: granularity
+        located_in: Query
+        type_name: CandlestickGranularity
+        description: The granularity of the candlesticks to fetch [default=S5]
+      - name: count
+        located_in: Query
+        type_name: integer
+        description: The number of candlesticks to return in the response. Count should not be specified if both the start and end parameters are provided, as the time range combined with the granularity will determine the number of candlesticks to return. [default=500, maximum=5000]
+      - name: from
+        located_in: Query
+        type_name: DateTime
+        description: The start of the time range to fetch candlesticks for.
+      - name: to
+        located_in: Query
+        type_name: DateTime
+        description: The end of the time range to fetch candlesticks for.
+      - name: smooth
+        located_in: Query
+        type_name: boolean
+        description: A flag that controls whether the candlestick is “smoothed” or not. A smoothed candlestick uses the previous candle’s close price as its open price, while an unsmoothed candlestick uses the first price from its time range as its open price. [default=False]
+      - name: includeFirst
+        located_in: Query
+        type_name: boolean
+        description: A flag that controls whether the candlestick that is covered by the from time should be included in the results. This flag enables clients to use the timestamp of the last completed candlestick received to poll for future candlesticks but avoid receiving the previous candlestick repeatedly. [default=True]
+      - name: dailyAlignment
+        located_in: Query
+        type_name: integer
+        description: The hour of the day (in the specified timezone) to use for granularities that have daily alignments. [default=17, minimum=0, maximum=23]
+      - name: alignmentTimezone
+        located_in: Query
+        type_name: string
+        description: The timezone to use for the dailyAlignment parameter. Candlesticks with daily alignment will be aligned to the dailyAlignment hour within the alignmentTimezone. Note that the returned times will still be represented in UTC. [default=America/New_York]
+      - name: weeklyAlignment
+        located_in: Query
+        type_name: WeeklyAlignment
+        description: The day of the week used for granularities that have weekly alignment. [default=Friday]
+      - name: units
+        located_in: Query
+        type_name: DecimalNumber
+        description: The number of units used to calculate the volume-weighted average bid and ask prices in the returned candles. [default=1]
+      responses:
+      - code: 200
+        description: Pricing information has been successfully provided.
+        headers:
+        - name: RequestID
+          description: The unique identifier generated for the request
+        schema: !Struct
+          fields:
+          - name: instrument
+            type_name: InstrumentName
+            doc_string: The instrument whose Prices are represented by the candlesticks.
+            is_array: false
+            default: null
+            required: false
+          - name: granularity
+            type_name: CandlestickGranularity
+            doc_string: The granularity of the candlesticks provided.
+            is_array: false
+            default: null
+            required: false
+          - name: candles
+            type_name: Candlestick
+            doc_string: The list of candlesticks that satisfy the request.
+            is_array: true
+            default: null
+            required: false
+      other_responses:
+      - 400
+      - 401
+      - 404
+      - 405");
+        let input: RestCall = annotate!(serde_yaml::from_str(input), "Parsing the input yaml")?;
+        let dir = annotate!(tempdir(), "Creating temp dir")?;
+        let code = super::create_endpoint(dir.path(), &[input])?;
         let code = code.to_string();
         println!("{code}");
         assert!(code.contains("pub fn list_all()"));

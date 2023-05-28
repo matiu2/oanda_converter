@@ -35,23 +35,11 @@ macro_rules! report {
     };
 }
 
-pub fn annotate<T, E>(result: std::result::Result<T, E>, msg: String) -> Result<T>
-where
-    error_stack::Report<E>: From<E>,
-{
-    result.into_report().change_context(Error::new(msg))
-}
-
 #[macro_export]
 macro_rules! annotate {
-    ($result:expr, $fmt:expr) => {
+   ($result:expr, $($arg:expr),*) => {
         {
-            $crate::annotate($result, format!($fmt))
-        }
-    };
-   ($result:expr, $fmt:expr, $($arg:expr),*) => {
-        {
-            $crate::annotate($result, format!($fmt, $($arg),*))
+            $result.into_report().change_context(Error::new(format!($($arg),*)))
         }
     };
 }
@@ -136,6 +124,7 @@ pub fn generate_code(path: &Path, all_content: &[Content]) -> Result<()> {
 #[cfg(test)]
 mod tests {
     use super::{Error, Result};
+    use error_stack::{IntoReport, ResultExt};
     use model::Content;
     use std::fs::{read_dir, read_to_string, DirEntry};
     use tempfile::tempdir;
