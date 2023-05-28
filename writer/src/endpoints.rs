@@ -90,13 +90,22 @@ pub fn create_endpoint(dir: &Path, rest_calls: &[RestCall]) -> Result<Scope> {
 
 /// Generates the code for a single REST api call.
 pub fn create_rest_call(r#impl: &mut Impl, call: &RestCall) -> Result<()> {
-    // TODO: Figure out the return type from call.responses
-    let _fun = r#impl
+    let fun = r#impl
         .new_fn(call.method_name()?.as_str())
         .doc(&call.doc_string)
         .vis("pub")
+        // TODO: Request types
         .ret(format!("Result<responses::{}>", call.return_name()?));
-
+    fun.line(format!(r#"let url = self.client.url("{}");"#, &call.path));
+    match call.http_method {
+        model::endpoint_docs::HttpMethod::Get => {
+            fun.line("let request = self.client.start_get(&url);")
+        }
+        model::endpoint_docs::HttpMethod::Post => todo!(),
+        model::endpoint_docs::HttpMethod::Put => todo!(),
+        model::endpoint_docs::HttpMethod::Patch => todo!(),
+    };
+    fun.line("self.client.get(request).await.attach_printable_lazy(call.method_name)");
     Ok(())
 }
 
