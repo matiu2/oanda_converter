@@ -6,39 +6,23 @@ use model::{Content, Documentation};
 use url::Url;
 pub mod error;
 use endpoint_docs::endpoint_docs;
-pub use error::Error;
-use error_stack::{IntoReport, Result as ErrorStackResult, ResultExt};
+pub use error::{Error, IntoReport, Result};
+use error_stack::ResultExt;
 use scraper::Html;
 
 #[macro_export]
 macro_rules! bail {
     ($($arg:tt)*) => {
-        error_stack::bail!(Error::new(format!($($arg)*)))
+        return Err(Error::default()).into_report().attach_printable_lazy(|| (format!($($arg)*)))
     };
 }
 
 #[macro_export]
 macro_rules! report {
     ($($arg:tt)*) => {
-        error_stack::report!(Error::new(format!($($arg)*)))
+        Err(Error::default()).into_report().attach_printable_lazy(|| format!($($arg)*))
     };
 }
-
-#[macro_export]
-macro_rules! annotate {
-    ($result:expr, $fmt:expr) => {
-        {
-            $result.into_report().change_context(Error::new(format!($fmt)))
-        }
-    };
-   ($result:expr, $fmt:expr, $($arg:expr),*) => {
-        {
-            $result.into_report().change_context(Error::new(format!($fmt, $($arg),*)))
-        }
-    };
-}
-
-pub type Result<T> = ErrorStackResult<T, Error>;
 
 pub async fn get_content(url: Url) -> Result<Content> {
     let html = reqwest::get(url.clone())
@@ -95,18 +79,16 @@ fn endpoint_links(document: &Html, base_url: &Url) -> Result<Vec<Url>> {
                 .value()
                 .attr("href")
                 // If we find an ancchor element without an href, something has changed on the site and we should know about it
-                .ok_or_else(|| Error::new(format!("Found an anchor without an href: {element:#?}")))
+                .ok_or_else(|| Error::default())
                 .into_report()
+                .attach_printable_lazy(|| format!("Found an anchor without an href: {element:#?}"))
                 .and_then(|href| {
                     // If it's an abolute url, it'll parse
                     Url::parse(href).or_else(|_| {
                         // If it's not an absolute url, try and join it to our base url
-                        base_url
-                            .join(href)
-                            .into_report()
-                            .change_context(Error::new(format!(
-                                "Unable to parse url: {href} with base_url: {base_url:#?}"
-                            )))
+                        base_url.join(href).into_report().attach_printable_lazy(|| {
+                            format!("Unable to parse url: {href} with base_url: {base_url:#?}")
+                        })
                     })
                 })
         })

@@ -1,7 +1,7 @@
 //! Reads the definitions, eg: https://developer.oanda.com/rest-live-v20/instrument-df/
 use error_stack::ResultExt;
 mod struct_parser;
-use crate::{bail, report, Error, Result};
+use crate::{bail, report, Error, Result, IntoReport};
 use model::defintion_docs::{Definition, Row, Struct, Value};
 use scraper::{ElementRef, Html, Selector};
 
@@ -219,10 +219,8 @@ fn read_table(fragment: ElementRef) -> Result<Vec<Row>> {
             })
         },
         table_headers => {
-            return Err(
-                report!("Unexpected table headers for enum: got {table_headers:#?}")
-                    .attach_printable(format!("In html fragment: {}", fragment.html())),
-            )
+            return report!("Unexpected table headers for enum: got {table_headers:#?}")
+                    .attach_printable(format!("In html fragment: {}", fragment.html()))
         }
     };
     // Read in the values
@@ -313,14 +311,14 @@ pub(crate) fn read_struct(fragment: ElementRef) -> Result<Struct> {
                         Ok(text)
                     },
                     other => {
-                         Err(report!("Unexpected element ({other}) in definition text: {element:#?}")
-                            .attach_printable(format!("fragment html:\n```html\n{}\n```", fragment.html())))
+                         report!("Unexpected element ({other}) in definition text: {element:#?}")
+                            .attach_printable(format!("fragment html:\n```html\n{}\n```", fragment.html()))
                     }
                 }
             } else if let Some(text) = child.value().as_text() {
                 Ok(text as &str)
             } else {
-                bail!("Defintion child node is not text nor <a>; {child:#?}")
+                report!("Defintion child node is not text nor <a>; {child:#?}")
             }
         })
         .collect::<Result<String>>()?;
@@ -329,7 +327,7 @@ pub(crate) fn read_struct(fragment: ElementRef) -> Result<Struct> {
 
 #[cfg(test)]
 mod test {
-    use crate::{bail, report, Error, Result};
+    use crate::{bail, Error, Result};
     use error_stack::{IntoReport, ResultExt};
     use model::defintion_docs::{Row, Value};
     use scraper::Html;
@@ -354,13 +352,17 @@ mod test {
         // Check the first enum
         let granularity = definitions
             .first()
-            .ok_or_else(|| report!("No definitions"))?;
+            .ok_or_else(|| Error::default())
+            .into_report()
+            .attach_printable("No definitions")?;
         assert_eq!(&granularity.name, "CandlestickGranularity");
         assert_eq!(&granularity.doc_string, "The granularity of a candlestick");
         let Value::Table(values) = &granularity.value else {bail!("bad granularity")};
         let s5 = values
             .first()
-            .ok_or_else(|| report!("No entries in granularities enum"))?;
+            .ok_or_else(|| Error::default())
+            .into_report()
+        .attach_printable("No entries in granularities enum")?;
         match s5 {
             Row::ValueDescription { value, description } => {
                 assert_eq!(value, "S5");
@@ -370,7 +372,9 @@ mod test {
         };
         let m = values
             .last()
-            .ok_or_else(|| report!("Couldn't get last granularity"))?;
+            .ok_or_else(|| Error::default())
+            .into_report()
+            .attach_printable("Couldn't get last granularity")?;
         match m {
             Row::ValueDescription { value, description } => {
                 assert_eq!(value, "M");

@@ -2,7 +2,7 @@
 
 use std::collections::HashSet;
 
-use crate::{bail, definitions::read_struct, report, Error, Result};
+use crate::{bail, definitions::read_struct, Error, Result};
 use error_stack::{IntoReport, ResultExt};
 use model::{
     defintion_docs::{Schema, Stream},
@@ -73,7 +73,9 @@ fn parse_single_response_doc(panel: ElementRef) -> Result<Response> {
                 a.text()
                     .next()
                     .map(str::to_string)
-                    .ok_or_else(|| report!("Found empty object_name in {}", a.html()))
+                    .ok_or(Error::default())
+                    .into_report()
+                    .attach_printable_lazy(|| format!("Found empty object_name in {}", a.html()))
             })
             .collect::<Result<HashSet<String>>>()?;
         Schema::Stream(Stream { objects })
@@ -127,6 +129,7 @@ pub(crate) fn parse_extra_resonses(body: &ElementRef) -> Result<Vec<u16>> {
 
 #[cfg(test)]
 mod unit_tests {
+    use crate::{IntoReport, ResultExt};
     use model::{defintion_docs::Schema, endpoint_docs::ResponseHeader};
     use pretty_assertions::assert_eq;
     use scraper::Html;

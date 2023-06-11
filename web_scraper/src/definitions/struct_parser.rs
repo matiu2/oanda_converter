@@ -2,8 +2,8 @@ use model::defintion_docs::{Field, Struct};
 use pest::Parser;
 use pest_derive::Parser;
 
-use crate::{bail, Error, Result, annotate};
-use error_stack::{IntoReport, ResultExt};
+use crate::{bail, Error, Result, IntoReport};
+use error_stack::ResultExt;
 
 #[derive(Parser)]
 #[grammar = "src/definitions/struct.pest"]
@@ -13,7 +13,7 @@ struct FieldsParser;
 /// json from the oanda docs and gives you a nice rust representation
 pub fn parse_struct(input: &str) -> Result<Struct> {
     let mut fields = Vec::new();
-    let pairs = annotate!(FieldsParser::parse(Rule::data, input), "While parsing {input}")?;
+    let pairs = FieldsParser::parse(Rule::data, input).into_report().attach_printable_lazy(|| "While parsing {input}")?;
 
     for pair in pairs.into_iter() {
         let (line, col) = pair.line_col();
@@ -80,7 +80,9 @@ pub fn parse_struct(input: &str) -> Result<Struct> {
 
 #[cfg(test)]
 mod unit_tests {
-    use crate::{Error, report, Result};
+    use error_stack::ResultExt;
+
+    use crate::{Error, Result, IntoReport};
 
     #[test]
     fn parse_field() {
@@ -184,9 +186,9 @@ mod unit_tests {
 }"#;
         let got = super::parse_struct(input)?;
         println!("{got:#?}");
-        let error_message = got.fields.iter().find(|field| field.name == "errorMessage").ok_or_else(|| report!("No errorMessage field found"))?;
+        let error_message = got.fields.iter().find(|field| field.name == "errorMessage").ok_or_else(|| Error::default()).into_report().attach_printable("No errorMessage field found")?;
         assert!(error_message.required);
-        let last_transaction_id = got.fields.iter().find(|field| field.name == "lastTransactionID").ok_or_else(|| report!("No lastTransactionID field found"))?;
+        let last_transaction_id = got.fields.iter().find(|field| field.name == "lastTransactionID").ok_or_else(|| Error::default()).into_report().attach_printable("No lastTransactionID field found")?;
         assert!(!last_transaction_id.required);
         Ok(())
     }

@@ -1,6 +1,7 @@
 //! Parses the header part of each Rest API call documentation
 
-use crate::{bail, Error, Result};
+use crate::{bail, Error, IntoReport, Result};
+use error_stack::ResultExt;
 use scraper::{Html, Selector};
 
 #[derive(Debug)]

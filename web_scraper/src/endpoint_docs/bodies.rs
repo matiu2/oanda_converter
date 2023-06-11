@@ -82,12 +82,13 @@ pub(crate) fn get_rest_call_parameters(body: &ElementRef) -> Result<Vec<RestCall
         .select(&tr_selector)
         .map(|tr| {
             let tds = get_tds(tr);
-            let [name, located_in, type_name, description] =
-                <[String; 4]>::try_from(tds).map_err(|err| {
-                    Error::new(format!(
+            let [name, located_in, type_name, description] = <[String; 4]>::try_from(tds)
+                .map_err(|err| {
+                    Error::Message(format!(
                         "Unable to parse rest call parameter table row: {err:?}"
                     ))
-                })?;
+                })
+                .into_report()?;
             Ok(RestCallParameter {
                 name,
                 located_in: located_in
