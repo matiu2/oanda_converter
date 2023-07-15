@@ -12,5 +12,8 @@ The repo is broken up into separate crates:
 * web_scraper - Library that scrapes the OANDA api documentation and encodes it into rust structs from `model`
 * model - The model used to represent the OANDA api, closest to the web page than the generated code.
 * writer - Lib to generate the code from the model. This can be called by oanda_v2 build.rs
+* writer_no_quote - The original (abandoned) version of writer that doesn't use quote (it uses codegen).
+                    I started it because I couldn't get quote and pretty formatting working.
+                    I abandoned it because there were some limitations with codegen
 * oanda_v2 - The final generated crate; a client for the oanda rust API
 * serialize_all - App that uses the web_scraper to serialize model into a giant yaml file
