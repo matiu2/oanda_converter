@@ -6,3 +6,6 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+quote = "1.0.29"
+rust-format = { version = "0.3.4", features = ["token_stream", "prettyplease", "post_process", "pretty_please"] }
+rustfmt = "0.10.0"
