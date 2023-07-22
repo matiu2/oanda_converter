@@ -1,6 +1,6 @@
-pub mod defintion_docs;
+pub mod definition_docs;
 pub mod endpoint_docs;
-use defintion_docs::Definition;
+pub use definition_docs::Definition;
 use endpoint_docs::RestCall;
 use serde::{Deserialize, Serialize};
 use url::Url;
@@ -10,6 +10,31 @@ use url::Url;
 pub struct Content {
     pub urls: Vec<Url>,
     pub documentation: Documentation,
+}
+
+impl Content {
+    /// If this is an endpoint, returns all of its RestCalls, otherwise returns nothing
+    pub fn calls(&self) -> Option<&Vec<RestCall>> {
+        match &self.documentation {
+            Documentation::Endpoint { calls, .. } => Some(calls),
+            Documentation::Definitions { .. } => None,
+        }
+    }
+
+    /// Returns all the definitions if there are any, otherwise None
+    pub fn definitions(&self) -> Option<&Vec<Definition>> {
+        match &self.documentation {
+            Documentation::Endpoint { .. } => None,
+            Documentation::Definitions { definitions, .. } => Some(definitions),
+        }
+    }
+
+    pub fn name(&self) -> &str {
+        match &self.documentation {
+            Documentation::Endpoint { name, .. } => name,
+            Documentation::Definitions { name, .. } => name,
+        }
+    }
 }
 
 #[derive(Debug, Serialize, Deserialize)]

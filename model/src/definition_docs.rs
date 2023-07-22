@@ -2,8 +2,9 @@ use std::collections::HashSet;
 
 use serde::{Deserialize, Serialize};
 
-/// A definition from the Definition sections of the docs: eg. https://developer.oanda.com/rest-live-v20/account-df
-/// Could contain a struct definition or a string with a format, etc.
+/// A definition from the Definition sections of the docs:
+/// eg. https://developer.oanda.com/rest-live-v20/account-df Could
+/// contain a struct definition or a string with a format, etc.
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Definition {
     pub name: String,
