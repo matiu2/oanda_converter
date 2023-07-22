@@ -1,4 +1,4 @@
-use model::defintion_docs::{Field, Struct};
+use model::definition_docs::{Field, Struct};
 use pest::Parser;
 use pest_derive::Parser;
 

@@ -1,7 +1,7 @@
 use parse_display::{Display, FromStr};
 use serde::{Deserialize, Serialize};
 
-use crate::defintion_docs::Schema;
+use crate::definition_docs::Schema;
 
 /// All the different endpoint types
 #[derive(

@@ -2,7 +2,7 @@
 use error_stack::ResultExt;
 mod struct_parser;
 use crate::{bail, report, Error, Result, IntoReport};
-use model::defintion_docs::{Definition, Row, Struct, Value};
+use model::definition_docs::{Definition, Row, Struct, Value};
 use scraper::{ElementRef, Html, Selector};
 
 use self::struct_parser::parse_struct;
@@ -329,7 +329,7 @@ pub(crate) fn read_struct(fragment: ElementRef) -> Result<Struct> {
 mod test {
     use crate::{bail, Error, Result};
     use error_stack::{IntoReport, ResultExt};
-    use model::defintion_docs::{Row, Value};
+    use model::definition_docs::{Row, Value};
     use scraper::Html;
     use pretty_assertions::assert_eq;
 

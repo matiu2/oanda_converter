@@ -2,7 +2,7 @@ use convert_case::{Case, Casing};
 
 /// Given a definition_docs struct, generates the code. The actual Rust struct code should already exist;
 /// We just fill the fields in
-pub fn write_struct_fields(code: &mut codegen::Struct, input: &model::defintion_docs::Struct) {
+pub fn write_struct_fields(code: &mut codegen::Struct, input: &model::definition_docs::Struct) {
     for field in &input.fields {
         write_field(code, &field);
     }
@@ -11,7 +11,7 @@ pub fn write_struct_fields(code: &mut codegen::Struct, input: &model::defintion_
 /// Generates code for a field in a struct
 pub fn write_field<'a>(
     scope: &'a mut codegen::Struct,
-    field: &'a model::defintion_docs::Field,
+    field: &'a model::definition_docs::Field,
 ) -> &'a mut codegen::Field {
     let basic_type_name = field.type_name.as_str();
     let type_name = match (field.is_array, field.required) {
@@ -40,7 +40,7 @@ mod tests {
         {
             super::write_field(
                 r#struct,
-                &model::defintion_docs::Field {
+                &model::definition_docs::Field {
                     name: format!("{name}"),
                     type_name: "SomeType".to_string(),
                     doc_string: "Very nice docs".to_string(),

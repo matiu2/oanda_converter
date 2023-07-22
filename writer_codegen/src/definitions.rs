@@ -1,7 +1,7 @@
 use crate::{bail, shared::write_field, Error, Result};
 use codegen::Scope;
 use convert_case::{Case, Casing};
-use model::defintion_docs::{Definition, Row, Struct, Value};
+use model::definition_docs::{Definition, Row, Struct, Value};
 
 /// Returns the module name so you can import it
 pub fn create_definitions(_name: &str, definitions: &[Definition]) -> Result<Scope> {
@@ -167,7 +167,7 @@ mod tests {
     use codegen::Scope;
     use error_stack::{IntoReport, ResultExt};
     use indoc::indoc;
-    use model::defintion_docs::Definition;
+    use model::definition_docs::Definition;
 
     #[test]
     fn test_account_id() -> Result<()> {

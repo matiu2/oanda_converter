@@ -1,6 +1,4 @@
 //! Generates error.rs for oanda_v2
-use rust_format::_blank_;
-
 use quote::{__private::TokenStream, quote};
 
 pub fn gen_error() -> TokenStream {
@@ -24,7 +22,7 @@ pub fn gen_error() -> TokenStream {
             Api { status: StatusCode, error: ApiError },
         }
 
-        _blank_!(2);
+        _blank_!();
         #[derive(Display, Deserialize, Debug)]
         #[display(
             r#"error_codes: {error_codes:#?}
@@ -35,6 +33,8 @@ pub fn gen_error() -> TokenStream {
         error: {error}
         correlation_id: {correlation_id}"#
         )]
+
+        _blank_!();
         pub struct ApiError {
             pub error_codes: Vec<usize>,
             pub error_uri: String,

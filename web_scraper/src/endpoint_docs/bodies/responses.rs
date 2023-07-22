@@ -5,7 +5,7 @@ use std::collections::HashSet;
 use crate::{bail, definitions::read_struct, Error, Result};
 use error_stack::{IntoReport, ResultExt};
 use model::{
-    defintion_docs::{Schema, Stream},
+    definition_docs::{Schema, Stream},
     endpoint_docs::{Response, ResponseHeader},
 };
 use scraper::{ElementRef, Selector};
@@ -130,7 +130,7 @@ pub(crate) fn parse_extra_resonses(body: &ElementRef) -> Result<Vec<u16>> {
 #[cfg(test)]
 mod unit_tests {
     use crate::{IntoReport, ResultExt};
-    use model::{defintion_docs::Schema, endpoint_docs::ResponseHeader};
+    use model::{definition_docs::Schema, endpoint_docs::ResponseHeader};
     use pretty_assertions::assert_eq;
     use scraper::Html;
 

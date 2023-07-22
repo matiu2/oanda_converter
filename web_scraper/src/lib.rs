@@ -148,7 +148,7 @@ mod tests {
     use super::get_content;
     use error_stack::ResultExt;
     use model::{
-        defintion_docs::Schema,
+        definition_docs::Schema,
         endpoint_docs::{Endpoint, HttpMethod},
     };
     use reqwest::Url;

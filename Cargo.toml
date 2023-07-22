@@ -1,2 +1,4 @@
 [workspace]
-members = ["web_scraper", "model", "writer", "writer_codegen", "oanda_v2", "serialize_all"]
+members = ["web_scraper", "model", "writer", "oanda_v2", "serialize_all"]
+exclude = ["writer_codegen"]
+

@@ -1,7 +1,7 @@
 use crate::shared::write_struct_fields;
 use crate::{bail, Error, Result};
 use codegen::{Impl, Module, Scope};
-use model::defintion_docs::Schema;
+use model::definition_docs::Schema;
 use model::endpoint_docs::{Endpoint, RestCall};
 use std::{collections::HashSet, path::Path};
 
@@ -145,7 +145,7 @@ fn create_response_types(mut module: &mut Module, rest_calls: &[RestCall]) -> Re
 }
 
 /// Given Stream from a model, generates the definition code
-fn write_stream(code: &mut codegen::Struct, input: &model::defintion_docs::Stream) -> Result<()> {
+fn write_stream(code: &mut codegen::Struct, input: &model::definition_docs::Stream) -> Result<()> {
     todo!()
 }
 

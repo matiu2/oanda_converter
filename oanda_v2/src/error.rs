@@ -15,7 +15,6 @@ pub enum Error {
     Api { status: StatusCode, error: ApiError },
 }
 
-
 #[derive(Display, Deserialize, Debug)]
 #[display(
     r#"error_codes: {error_codes:#?}
@@ -26,6 +25,7 @@ pub enum Error {
         error: {error}
         correlation_id: {correlation_id}"#
 )]
+
 pub struct ApiError {
     pub error_codes: Vec<usize>,
     pub error_uri: String,
