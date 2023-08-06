@@ -48,3 +48,8 @@ pub enum Documentation {
         definitions: Vec<Definition>,
     },
 }
+
+#[macro_export]
+macro_rules! bail {
+    ($($arg:tt)*) => { return error_stack::IntoReport::into_report(Err(Error::Message(format!(($arg)*)))) };
+}

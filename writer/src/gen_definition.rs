@@ -1,9 +1,9 @@
 //! Generates error.rs for oanda_v2
-use crate::{error::Result, pretty_doc_string};
+use crate::error::Result;
 use model::{definition_docs::Value, Definition};
 use proc_macro2::TokenStream;
-use quote::quote;
-use syn::Ident;
+
+use self::row::gen_single_row;
 
 mod row;
 
@@ -14,15 +14,24 @@ pub fn gen_definition(
         value,
     }: &Definition,
 ) -> Result<TokenStream> {
-    let name = Ident::new(name, proc_macro2::Span::call_site());
-    let doc_string = pretty_doc_string(doc_string)?;
-    Ok(quote! {
+    match value {
+        Value::Table(rows) => match rows.as_slice() {
+            [row] => gen_single_row(row, name, doc_string),
+            rows => todo!("gen_rows()"),
+        },
+        Value::Struct(_) => todo!(),
+        Value::Empty => todo!(),
+    }
+    // let name = Ident::new(name, proc_macro2::Span::call_site());
+    // let doc_string = pretty_doc_string(doc_string)?;
 
-        #(#doc_string)*
-        struct #name {
-        }
+    // Ok(quote! {
 
-    })
+    //     #(#doc_string)*
+    //     struct #name {
+    //     }
+
+    // })
     // match definition.value {
     //     Value::Table(rows) => {
     //         for row in rows {
@@ -42,18 +51,6 @@ pub fn gen_definition(
     //     Value::Struct(s) => todo!(),
     //     Value::Empty => todo!(),
     // }
-}
-
-///
-fn gen_value(value: &Value) -> Result<Vec<TokenStream>> {
-    match value {
-        Value::Table(rows) => rows
-            .into_iter()
-            .map(row::gen_row)
-            .collect::<Result<Vec<TokenStream>>>(),
-        Value::Struct(s) => todo!(),
-        Value::Empty => todo!(),
-    }
 }
 
 #[cfg(test)]

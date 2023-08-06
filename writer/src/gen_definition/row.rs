@@ -5,74 +5,63 @@ use proc_macro2::TokenStream;
 use quote::quote;
 use syn::Ident;
 
-pub trait EasyRow {
-    /// Returns the doc_string part if there is one
-    fn doc_string(&self) -> Result<Option<Vec<TokenStream>>>;
-}
-
-impl EasyRow for Row {
-    /// Returns a doc_string if there is one
-    fn doc_string(&self) -> Result<Option<Vec<TokenStream>>> {
-        #[allow(unused_assignments)]
-        let mut s = String::new();
-        let doc_string = match self {
-            Row::ValueDescription { description, .. } => description,
-            Row::FormattedExample {
-                format: fmt,
-                example,
-                ..
-            } => {
-                s = format!("Format: {fmt}\n\nExample: {example}");
-                &s
-            }
-            Row::Example { example, .. } => example,
-            Row::Format { format, .. } => format,
-            Row::JustType { .. } => return Ok(None),
-        };
-        Ok(Some(pretty_doc_string(doc_string)?))
-    }
-}
-
-pub fn gen_row(row: &Row) -> Result<TokenStream> {
+/// Returns a doc_string if there is one
+fn doc_string(row: &Row) -> String {
     match row {
-        Row::ValueDescription { value, description } => Ok({
-            let value = Ident::new(value, proc_macro2::Span::call_site());
-            let doc_string = pretty_doc_string(description)?;
-            quote! {
-                #(#doc_string)*
-                #value: String,
-            }
-        }),
+        Row::ValueDescription { description, .. } => description.to_string(),
         Row::FormattedExample {
-            r#type,
-            format,
+            format: fmt,
             example,
-        } => todo!(),
-        Row::Example { r#type, example } => todo!(),
-        Row::Format { r#type, format } => todo!(),
-        Row::JustType { r#type } => todo!(),
+            ..
+        } => format!("Format: {fmt}\n\nExample: {example}"),
+        Row::Example { example, .. } => example.to_string(),
+        Row::Format { format, .. } => format.to_string(),
+        Row::JustType { .. } => String::default(),
     }
+}
+
+/// Returns the type name of the field to be generate by this row (that
+/// comes from the HTML table in the Oanda documentation)
+fn type_name(row: &Row) -> Ident {
+    let type_name = match row {
+        Row::ValueDescription { .. } => "string",
+        Row::FormattedExample { r#type, .. } => r#type,
+        Row::Example { r#type, .. } => r#type,
+        Row::Format { r#type, .. } => r#type,
+        Row::JustType { r#type } => r#type,
+    };
+    let type_name = change_case::pascal_case(type_name);
+    Ident::new(&type_name, proc_macro2::Span::call_site())
+}
+
+/// Generates the rust code for a table row from the documentation
+/// Where there is only one row in the documentation table
+pub fn gen_single_row(row: &Row, name: &str, struct_doc_string: &str) -> Result<TokenStream> {
+    let struct_name = Ident::new(name, proc_macro2::Span::call_site());
+    let field_doc_string = doc_string(row);
+    let type_name = type_name(row);
+    let doc_string = format!("{struct_doc_string}\n\n{field_doc_string}");
+    let doc_string = pretty_doc_string(&doc_string)?;
+    Ok(quote! {
+        #(#doc_string)*
+        struct #struct_name(#type_name);
+    })
 }
 
 #[cfg(test)]
 mod test {
     use model::definition_docs::Row;
-    use quote::quote;
 
     #[test]
-    fn test_gen_row() -> crate::error::Result<()> {
+    fn test_gen_single_row() -> crate::error::Result<()> {
         let input = Row::ValueDescription {
             value: "some_field".to_string(),
             description: "this is a very important field".to_string(),
         };
-        let tokens = super::gen_row(&input)?;
-        let surround = quote! {
-            struct TestStruct {
-                #tokens
-            }
-        };
-        let code = crate::stream_to_string(surround)?;
+        let tokens = super::gen_single_row(&input, "SuperStruct", "This is a fine struct")?;
+        let code = crate::stream_to_string(tokens)?;
         println!("{code}");
+        assert!(code.contains("SuperStruct"));
         Ok(())
     }
 }
