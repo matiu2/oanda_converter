@@ -79,7 +79,7 @@ fn endpoint_links(document: &Html, base_url: &Url) -> Result<Vec<Url>> {
                 .value()
                 .attr("href")
                 // If we find an ancchor element without an href, something has changed on the site and we should know about it
-                .ok_or_else(|| Error::default())
+                .ok_or_else(Error::default)
                 .into_report()
                 .attach_printable_lazy(|| format!("Found an anchor without an href: {element:#?}"))
                 .and_then(|href| {

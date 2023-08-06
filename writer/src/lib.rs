@@ -17,27 +17,32 @@ use model::Content;
 
 /// Writes a token_stream out to a file
 fn stream_to_file(stream: TokenStream, path: &str) -> error::Result<()> {
-    let config = Config::new_str().post_proc(rust_format::PostProcess::ReplaceMarkersAndDocBlocks);
-    let formatted_code = PrettyPlease::from_config(config)
-        .format_tokens(stream.clone())
-        .annotate_lazy(|| format!("Formatting code for {path}: {stream:#?}"))?;
-    fs::write(path, formatted_code).annotate("Unable to write file")?;
+    let formatted_code = stream_to_string(stream)?;
+    fs::write(path, formatted_code).annotate_lazy(|| format!("Unable to write file: {path}"))?;
     Ok(())
+}
+
+/// Writes a token_stream out to a file
+fn stream_to_string(stream: TokenStream) -> error::Result<String> {
+    let config = Config::new_str().post_proc(rust_format::PostProcess::ReplaceMarkersAndDocBlocks);
+    PrettyPlease::from_config(config)
+        .format_tokens(stream.clone())
+        .annotate_lazy(|| format!("Formatting code to string {stream:#?}"))
 }
 
 /// Generate all the source code
 pub fn generate_source(base_path: &str, contents: &[Content]) -> Result<()> {
     let mut mods = Vec::new();
-    let mut endpoints = Vec::new();
+    // let mut endpoints = Vec::new();
     // Generate the error.rs
     mods.push("error");
     stream_to_file(gen_error(), &format!("{base_path}/error.rs"))
         .attach_printable("Writing error.rs")?;
     mods.push("client");
     // Generate all the definitions we need
-    for content in contents {
-        if let Some(definitions) = content.definitions() {}
-    }
+    // for content in contents {
+    //     if let Some(definitions) = content.definitions() {}
+    // }
     // Generate each of the endpoints
     // for endpoint in contents {
     //     stream_to_file(

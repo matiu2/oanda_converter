@@ -8,6 +8,7 @@ edition = "2021"
 [dependencies]
 error-stack = "0.3.1"
 model = { version = "0.1.0", path = "../model" }
+proc-macro2 = { version = "1.0.66", features = ["span-locations"] }
 quote = "1.0.29"
 rust-format = { version = "0.3.4", features = ["token_stream", "prettyplease", "post_process", "pretty_please"] }
 rustfmt = "0.10.0"
