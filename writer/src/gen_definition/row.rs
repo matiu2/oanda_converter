@@ -1,5 +1,5 @@
 //! Generates error.rs for oanda_v2
-use crate::{error::Result, pretty_doc_string};
+use crate::{bail, error::Result, pretty_doc_string};
 use model::definition_docs::Row;
 use proc_macro2::TokenStream;
 use quote::quote;
@@ -48,6 +48,34 @@ pub fn gen_single_row(row: &Row, name: &str, struct_doc_string: &str) -> Result<
     })
 }
 
+/// Generates an enum from an HTML table that has more than one row
+pub fn gen_rows(rows: &[Row], enum_name: &str, enum_doc_string: &str) -> Result<TokenStream> {
+    let enum_name = Ident::new(enum_name, proc_macro2::Span::call_site());
+    let doc_string = pretty_doc_string(enum_doc_string)?;
+    let enum_variants = rows
+        .iter()
+        .map(|row: &Row| match row {
+            Row::ValueDescription { value, description } => Ok({
+                let field_name = Ident::new(value, proc_macro2::Span::call_site());
+                let doc_string = pretty_doc_string(description)?;
+                quote! {
+                    #(#doc_string)*
+                    #field_name,
+                }
+            }),
+            _ => bail!("Unexpected row type in multi-row table: {row:#?}"),
+        })
+        .collect::<Result<Vec<TokenStream>>>()?;
+    Ok(quote! {
+
+        #(#doc_string)*
+        pub enum #enum_name {
+            #(#enum_variants)*
+        }
+
+    })
+}
+
 #[cfg(test)]
 mod test {
     use model::definition_docs::Row;
@@ -62,6 +90,45 @@ mod test {
         let code = crate::stream_to_string(tokens)?;
         println!("{code}");
         assert!(code.contains("SuperStruct"));
+        Ok(())
+    }
+
+    #[test]
+    fn test_gen_rows() -> crate::error::Result<()> {
+        let input = vec![
+            Row::ValueDescription {
+                value: "Monday".to_string(),
+                description: "Monday".to_string(),
+            },
+            Row::ValueDescription {
+                value: "Tuesday".to_string(),
+                description: "Tuesday".to_string(),
+            },
+            Row::ValueDescription {
+                value: "Wednesday".to_string(),
+                description: "Wednesday".to_string(),
+            },
+            Row::ValueDescription {
+                value: "Thursday".to_string(),
+                description: "Thursday".to_string(),
+            },
+            Row::ValueDescription {
+                value: "Friday".to_string(),
+                description: "Friday".to_string(),
+            },
+            Row::ValueDescription {
+                value: "Saturday".to_string(),
+                description: "Saturday".to_string(),
+            },
+            Row::ValueDescription {
+                value: "Sunday".to_string(),
+                description: "Sunday".to_string(),
+            },
+        ];
+        let tokens = super::gen_rows(input.as_slice(), "SuperEnum", "This is a fine Enum")?;
+        let code = crate::stream_to_string(tokens)?;
+        println!("{code}");
+        assert!(code.contains("SuperEnum"));
         Ok(())
     }
 }

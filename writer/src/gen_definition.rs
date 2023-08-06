@@ -3,7 +3,7 @@ use crate::error::Result;
 use model::{definition_docs::Value, Definition};
 use proc_macro2::TokenStream;
 
-use self::row::gen_single_row;
+use self::row::{gen_rows, gen_single_row};
 
 mod row;
 
@@ -17,7 +17,7 @@ pub fn gen_definition(
     match value {
         Value::Table(rows) => match rows.as_slice() {
             [row] => gen_single_row(row, name, doc_string),
-            rows => todo!("gen_rows()"),
+            rows => gen_rows(rows, name, doc_string),
         },
         Value::Struct(_) => todo!(),
         Value::Empty => todo!(),

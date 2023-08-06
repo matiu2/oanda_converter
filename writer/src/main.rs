@@ -21,9 +21,9 @@ fn stream_to_file(stream: TokenStream, path: &str) -> error::Result<()> {
 }
 
 fn main() -> Result<()> {
-    let mut mods = Vec::new();
+    // List of rust modules to declare
+    let mut mods = vec!["error"];
     // Generate the error.rs
-    mods.push("error");
     stream_to_file(gen_error(), "error.rs").attach_printable("Writing error.rs")?;
     stream_to_file(gen_lib(mods.as_slice()), "lib.rs").attach_printable("Generating lib.rs")?;
     Ok(())

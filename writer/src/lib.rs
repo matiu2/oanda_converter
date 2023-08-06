@@ -27,7 +27,7 @@ fn stream_to_string(stream: TokenStream) -> Result<String> {
     let config = Config::new_str().post_proc(rust_format::PostProcess::ReplaceMarkersAndDocBlocks);
     PrettyPlease::from_config(config)
         .format_tokens(stream.clone())
-        .annotate_lazy(|| format!("Formatting code to string {stream:#?}"))
+        .annotate_lazy(|| format!("Converting code to string {stream:#?}"))
 }
 
 /// Takes a raw doc string and returns a pretty token_stream
@@ -72,4 +72,9 @@ pub fn generate_source(base_path: &str, contents: &[Content]) -> Result<()> {
     stream_to_file(gen_lib(mods.as_slice()), &format!("{base_path}/lib.rs"))
         .attach_printable("Generating lib.rs")?;
     Ok(())
+}
+
+#[macro_export]
+macro_rules! bail {
+    ($($arg:tt)*) => { return error_stack::IntoReport::into_report(Err($crate::error::Error::Message(format!($($arg),*)))) };
 }
