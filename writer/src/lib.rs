@@ -1,4 +1,4 @@
-use error::{IntoReport, Result};
+use error::{Error, IntoReport, Result};
 use error_stack::ResultExt;
 use quote::__private::TokenStream;
 use rust_format::{Config, Formatter, PrettyPlease};
@@ -16,18 +16,32 @@ use gen_lib::gen_lib;
 use model::Content;
 
 /// Writes a token_stream out to a file
-fn stream_to_file(stream: TokenStream, path: &str) -> error::Result<()> {
+fn stream_to_file(stream: TokenStream, path: &str) -> Result<()> {
     let formatted_code = stream_to_string(stream)?;
     fs::write(path, formatted_code).annotate_lazy(|| format!("Unable to write file: {path}"))?;
     Ok(())
 }
 
 /// Writes a token_stream out to a file
-fn stream_to_string(stream: TokenStream) -> error::Result<String> {
+fn stream_to_string(stream: TokenStream) -> Result<String> {
     let config = Config::new_str().post_proc(rust_format::PostProcess::ReplaceMarkersAndDocBlocks);
     PrettyPlease::from_config(config)
         .format_tokens(stream.clone())
         .annotate_lazy(|| format!("Formatting code to string {stream:#?}"))
+}
+
+/// Takes a raw doc string and returns a pretty token_stream
+/// Example usage: `#(#doc_string)*`
+fn pretty_doc_string(input: &str) -> Result<Vec<TokenStream>> {
+    input
+        .lines()
+        .map(|line| {
+            let line = format!("/// {line}");
+            line.parse()
+                .map_err(|err| Error::Message(format!("{err:#?}")))
+                .annotate_lazy(|| "While quoting docstring line: {line}")
+        })
+        .collect::<Result<Vec<proc_macro2::TokenStream>>>()
 }
 
 /// Generate all the source code

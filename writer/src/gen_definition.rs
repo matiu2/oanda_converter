@@ -1,10 +1,8 @@
 //! Generates error.rs for oanda_v2
-use crate::error::{Error, Result};
+use crate::{error::Result, pretty_doc_string};
 use model::Definition;
 use quote::{__private::TokenStream, quote};
 use syn::Ident;
-
-use crate::error::IntoReport;
 
 pub fn gen_definition(
     Definition {
@@ -12,15 +10,7 @@ pub fn gen_definition(
     }: &Definition,
 ) -> Result<TokenStream> {
     let name = Ident::new(name, proc_macro2::Span::call_site());
-    let doc_string = doc_string
-        .lines()
-        .map(|line| {
-            let line = format!("/// {line}");
-            line.parse()
-                .map_err(|err| Error::Message(format!("{err:#?}")))
-                .annotate_lazy(|| "While quoting docstring line: {line}")
-        })
-        .collect::<Result<Vec<proc_macro2::TokenStream>>>()?;
+    let doc_string = pretty_doc_string(doc_string)?;
     Ok(quote! {
 
         #(#doc_string)*
