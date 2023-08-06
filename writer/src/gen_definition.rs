@@ -1,12 +1,17 @@
 //! Generates error.rs for oanda_v2
 use crate::{error::Result, pretty_doc_string};
-use model::Definition;
-use quote::{__private::TokenStream, quote};
+use model::{definition_docs::Value, Definition};
+use proc_macro2::TokenStream;
+use quote::quote;
 use syn::Ident;
+
+mod row;
 
 pub fn gen_definition(
     Definition {
-        name, doc_string, ..
+        name,
+        doc_string,
+        value,
     }: &Definition,
 ) -> Result<TokenStream> {
     let name = Ident::new(name, proc_macro2::Span::call_site());
@@ -37,6 +42,18 @@ pub fn gen_definition(
     //     Value::Struct(s) => todo!(),
     //     Value::Empty => todo!(),
     // }
+}
+
+///
+fn gen_value(value: &Value) -> Result<Vec<TokenStream>> {
+    match value {
+        Value::Table(rows) => rows
+            .into_iter()
+            .map(row::gen_row)
+            .collect::<Result<Vec<TokenStream>>>(),
+        Value::Struct(s) => todo!(),
+        Value::Empty => todo!(),
+    }
 }
 
 #[cfg(test)]
