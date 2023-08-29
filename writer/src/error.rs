@@ -1,9 +1,8 @@
+use error_stack::{IntoReport as ESIntoReport, ResultExt};
 use std::{
     fmt::{Debug, Display},
     marker::{Send, Sync},
 };
-
-use error_stack::{IntoReport as ESIntoReport, ResultExt};
 
 /// An Empty error. It just represents that it's an error from
 /// the medication_knowledge_client library
@@ -16,6 +15,9 @@ pub enum Error {
     Message(String),
 }
 
+impl std::error::Error for Error {}
+pub type Result<T> = error_stack::Result<T, Error>;
+
 impl std::fmt::Display for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
@@ -24,9 +26,6 @@ impl std::fmt::Display for Error {
         }
     }
 }
-
-impl std::error::Error for Error {}
-pub type Result<T> = error_stack::Result<T, Error>;
 
 pub trait IntoReport<T> {
     /// Similar to [`error_stack::into_report`] but also changes the context of the error stack to our Error class
@@ -40,6 +39,11 @@ pub trait IntoReport<T> {
     where
         F: Fn() -> D,
         D: Display + Debug + Send + Sync + 'static;
+}
+
+pub trait Tracer {
+    /// Just add a trace line
+    fn trace(self) -> Self;
 }
 
 impl<T, E> IntoReport<T> for std::result::Result<T, E>
@@ -67,5 +71,17 @@ where
         ESIntoReport::into_report(self)
             .change_context(Error::General)
             .attach_printable_lazy(f)
+    }
+}
+
+impl<T> Tracer for Result<T> {
+    #[track_caller]
+    fn trace(self) -> Self {
+        use std::panic::Location;
+        let location = Location::caller();
+        let file_name = location.file();
+        let line_number = location.line();
+        let column_number = location.column();
+        self.attach_printable_lazy(|| format!("{file_name}: {line_number}:{column_number}"))
     }
 }
