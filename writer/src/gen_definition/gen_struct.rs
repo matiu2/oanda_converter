@@ -136,45 +136,6 @@ mod test {
         Ok(())
     }
 
-    #[test]
-    fn test_gen_fields() {
-        let fields = vec![
-            Field {
-                name: "field1".to_string(),
-                type_name: "String".to_string(),
-                doc_string: "Field 1".to_string(),
-                is_array: false,
-                default: None,
-                required: true,
-            },
-            Field {
-                name: "field2".to_string(),
-                type_name: "u32".to_string(),
-                doc_string: "Field 2".to_string(),
-                is_array: true,
-                default: None,
-                required: false,
-            },
-        ];
-        let result = gen_fields(&fields).unwrap();
-        assert_eq!(
-            result[0].to_string(),
-            quote! {
-                /// Field 1
-                field1: String,
-            }
-            .to_string()
-        );
-        assert_eq!(
-            result[1].to_string(),
-            quote! {
-                /// Field 2
-                field2: Vec<u32>,
-            }
-            .to_string()
-        );
-    }
-
     fn make_field_code(field: Field) -> Result<String> {
         let tokens = gen_field(&field)?;
         // We have to wrap it with a struct so we can produce formatted code
@@ -299,6 +260,30 @@ mod test {
                     /// You don't really need a name
                     #[serde(default = "Master Blaster")]
                     optional_name: String,
+                }
+            "#}
+        );
+        Ok(())
+    }
+
+    #[test]
+    /// `required` should have no effect if `default` is true
+    fn test_gen_field_optional_array() -> Result<()> {
+        let field = Field {
+            name: "optional_array".to_string(),
+            type_name: "String".to_string(),
+            doc_string: "Should be an empty array probably 🤷".to_string(),
+            is_array: true,
+            default: None,
+            required: false,
+        };
+        let code = make_field_code(field).trace()?;
+        assert_eq!(
+            code,
+            indoc! {r#"
+                struct Tmp {
+                    /// Should be an empty array probably 🤷
+                    optional_array: Vec<String>,
                 }
             "#}
         );
