@@ -45,6 +45,16 @@ pub fn gen_single_row(row: &Row, name: &str, struct_doc_string: &str) -> Result<
     Ok(quote! {
         #(#doc_string)*
         struct #struct_name(#type_name);
+
+        _blank_!();
+        impl std::ops::Deref for #struct_name {
+            type Target = &str;
+
+            _blank_!();
+            fn deref(&self) -> &Self::Target {
+                self.0
+            }
+        }
     })
 }
 
@@ -87,7 +97,7 @@ mod test {
             description: "this is a very important field".to_string(),
         };
         let tokens = super::gen_single_row(&input, "SuperStruct", "This is a fine struct")?;
-        let code = crate::stream_to_string(tokens)?;
+        let code = crate::stream_to_string(&tokens)?;
         println!("{code}");
         assert!(code.contains("SuperStruct"));
         Ok(())
@@ -126,7 +136,7 @@ mod test {
             },
         ];
         let tokens = super::gen_rows(input.as_slice(), "SuperEnum", "This is a fine Enum")?;
-        let code = crate::stream_to_string(tokens)?;
+        let code = crate::stream_to_string(&tokens)?;
         println!("{code}");
         assert!(code.contains("SuperEnum"));
         Ok(())

@@ -14,3 +14,7 @@ quote = "1.0.29"
 rust-format = { version = "0.3.4", features = ["token_stream", "prettyplease", "post_process", "pretty_please"] }
 rustfmt = "0.10.0"
 syn = "2.0.26"
+
+[dev-dependencies]
+indoc = "2.0.3"
+pretty_assertions = "1.4.0"

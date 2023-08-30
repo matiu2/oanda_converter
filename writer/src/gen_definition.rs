@@ -3,9 +3,10 @@ use crate::error::Result;
 use model::{definition_docs::Value, Definition};
 use proc_macro2::TokenStream;
 
-use self::row::{gen_rows, gen_single_row};
+use self::gen_row::{gen_rows, gen_single_row};
 
-mod row;
+mod gen_row;
+mod gen_struct;
 
 pub fn gen_definition(
     Definition {
@@ -66,7 +67,7 @@ mod test {
             value: Value::Empty,
         };
         let tokens = super::gen_definition(&input)?;
-        let code = crate::stream_to_string(tokens)?;
+        let code = crate::stream_to_string(&tokens)?;
         println!("{code}");
         Ok(())
     }

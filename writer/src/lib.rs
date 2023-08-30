@@ -17,13 +17,13 @@ use model::Content;
 
 /// Writes a token_stream out to a file
 fn stream_to_file(stream: TokenStream, path: &str) -> Result<()> {
-    let formatted_code = stream_to_string(stream)?;
+    let formatted_code = stream_to_string(&stream)?;
     fs::write(path, formatted_code).annotate_lazy(|| format!("Unable to write file: {path}"))?;
     Ok(())
 }
 
 /// Writes a token_stream out to a file
-fn stream_to_string(stream: TokenStream) -> Result<String> {
+fn stream_to_string(stream: &TokenStream) -> Result<String> {
     let config = Config::new_str().post_proc(rust_format::PostProcess::ReplaceMarkersAndDocBlocks);
     PrettyPlease::from_config(config)
         .format_tokens(stream.clone())

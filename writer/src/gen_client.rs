@@ -1,4 +1,5 @@
-use quote::{__private::TokenStream, quote};
+use proc_macro2::TokenStream;
+use quote::quote;
 
 pub fn gen_client() -> TokenStream {
     quote!(
