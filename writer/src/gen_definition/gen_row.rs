@@ -1,5 +1,5 @@
 //! Generates error.rs for oanda_v2
-use crate::{bail, error::Result, pretty_doc_string};
+use crate::{bail, error::Result, util::pretty_doc_string};
 use model::definition_docs::Row;
 use proc_macro2::TokenStream;
 use quote::quote;
@@ -97,7 +97,7 @@ mod test {
             description: "this is a very important field".to_string(),
         };
         let tokens = super::gen_single_row(&input, "SuperStruct", "This is a fine struct")?;
-        let code = crate::stream_to_string(&tokens)?;
+        let code = crate::util::stream_to_string(&tokens)?;
         println!("{code}");
         assert!(code.contains("SuperStruct"));
         Ok(())
@@ -136,7 +136,7 @@ mod test {
             },
         ];
         let tokens = super::gen_rows(input.as_slice(), "SuperEnum", "This is a fine Enum")?;
-        let code = crate::stream_to_string(&tokens)?;
+        let code = crate::util::stream_to_string(&tokens)?;
         println!("{code}");
         assert!(code.contains("SuperEnum"));
         Ok(())

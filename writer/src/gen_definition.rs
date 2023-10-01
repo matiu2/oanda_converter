@@ -41,7 +41,7 @@ mod test {
             value: Value::Empty,
         };
         let tokens = super::gen_definition(&input)?;
-        let code = crate::stream_to_string(&tokens)?;
+        let code = crate::util::stream_to_string(&tokens)?;
         println!("{code}");
         Ok(())
     }

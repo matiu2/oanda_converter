@@ -1,7 +1,7 @@
 //! Generates error.rs for oanda_v2
 use crate::{
     error::{Result, Tracer},
-    pretty_doc_string,
+    util::pretty_doc_string,
 };
 use error_stack::ResultExt;
 use model::definition_docs::{Field, Struct};
@@ -110,7 +110,7 @@ mod test {
         let s = Struct { fields };
         let name = "TestStruct";
         let tokens = gen_struct(&s, name).trace()?;
-        let code = crate::stream_to_string(&tokens).trace()?;
+        let code = crate::util::stream_to_string(&tokens).trace()?;
         println!("{code}");
         assert_eq!(
             code.to_string(),
@@ -145,7 +145,7 @@ mod test {
             }
         };
         println!("{}", &tokens);
-        crate::stream_to_string(&tokens).trace()
+        crate::util::stream_to_string(&tokens).trace()
     }
 
     #[test]
