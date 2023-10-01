@@ -1,3 +1,5 @@
+use std::path::Path;
+
 use crate::error::{EasyError, Error, Result};
 use crate::gen_definition::gen_definition;
 use error_stack::ResultExt;
@@ -10,11 +12,18 @@ use model::Content;
 
 /// Writes a token_stream out to a file
 pub fn stream_to_file(stream: TokenStream, path: &str) -> Result<()> {
+    // Create the dir if it doesn't already exist
+    let path = Path::new("oanda_v2/src").join(path);
+    if let Some(dir) = path.parent() {
+        std::fs::create_dir_all(dir)
+            .annotate_lazy(|| format!("Unable to create directory \"{dir:#?}\""))?;
+    }
+
     let formatted_code = PrettyPlease::default()
         .format_tokens(stream)
-        .annotate_lazy(|| format!("Formatting code for {path}"))?;
-    std::fs::write(path, formatted_code)
-        .annotate_lazy(|| format!("Unable to write to \"{path}\""))?;
+        .annotate_lazy(|| format!("Formatting code for {path:#?}"))?;
+    std::fs::write(&path, formatted_code)
+        .annotate_lazy(|| format!("Unable to write to \"{path:#?}\""))?;
     Ok(())
 }
 
