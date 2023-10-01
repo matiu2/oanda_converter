@@ -1,30 +1,31 @@
-use error::{IntoReport, Result};
-use error_stack::ResultExt;
-use quote::__private::TokenStream;
+use model::Content;
+use proc_macro2::TokenStream;
 use rust_format::{Formatter, PrettyPlease};
-use std::fs;
 
-pub mod error;
+use crate::error::{EasyError, Result};
+mod error;
 mod gen_error;
 mod gen_lib;
 
-use gen_error::gen_error;
-use gen_lib::gen_lib;
-
 /// Writes a token_stream out to a file
-fn stream_to_file(stream: TokenStream, path: &str) -> error::Result<()> {
+fn stream_to_file(stream: TokenStream, path: &str) -> Result<()> {
     let formatted_code = PrettyPlease::default()
         .format_tokens(stream)
         .annotate_lazy(|| format!("Formatting code for {path}"))?;
-    fs::write(path, formatted_code).annotate("Unable to write file")?;
+    std::fs::write(path, formatted_code)
+        .annotate_lazy(|| format!("Unable to write to \"{path}\""))?;
     Ok(())
 }
 
 fn main() -> Result<()> {
+    tracing_subscriber::fmt::init();
     // List of rust modules to declare
     let mut mods = vec!["error"];
-    // Generate the error.rs
-    stream_to_file(gen_error(), "error.rs").attach_printable("Writing error.rs")?;
-    stream_to_file(gen_lib(mods.as_slice()), "lib.rs").attach_printable("Generating lib.rs")?;
+    let base_path = "oanda_v2";
+    // You will have already run 'serialize_all' and generated a content.yaml. Now we'll read it in
+    let yaml = std::fs::read_to_string("content.yaml").annotate("Opening content.yaml")?;
+    let content: Content = serde_yaml::from_str(&yaml).annotate("Reading in content.yaml")?;
+
+    // generate_source(base_path, )
     Ok(())
 }

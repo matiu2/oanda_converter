@@ -1,17 +1,14 @@
-use error_stack::{IntoReport as ESIntoReport, ResultExt};
+use error_stack::{Report, ResultExt};
 use std::{
-    fmt::{Debug, Display},
+    fmt::Debug,
     marker::{Send, Sync},
 };
 
 /// An Empty error. It just represents that it's an error from
 /// the medication_knowledge_client library
 /// Further error message can be gotten from the error_stack library
-#[derive(Debug, Default)]
+#[derive(Debug)]
 pub enum Error {
-    /// Most errors come from this category
-    #[default]
-    General,
     Message(String),
 }
 
@@ -21,24 +18,20 @@ pub type Result<T> = error_stack::Result<T, Error>;
 impl std::fmt::Display for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Error::General => write!(f, "General"),
-            Error::Message(message) => write!(f, "Message: {message}"),
+            Error::Message(message) => write!(f, "{message}"),
         }
     }
 }
 
-pub trait IntoReport<T> {
-    /// Similar to [`error_stack::into_report`] but also changes the context of the error stack to our Error class
-    fn into_report(self) -> Result<T>;
+pub trait EasyError<T> {
     /// Similar to [`error_stack::into_report`] but also changes the context of the error stack to our Error class
     /// and adds a attach_printable
-    fn annotate(self, msg: impl Display + Debug + Send + Sync + 'static) -> Result<T>;
+    fn annotate(self, msg: impl ToString) -> Result<T>;
     /// Similar to [`error_stack::into_report`] but also changes the context of the error stack to our Error class
     /// and adds a attach_printable_lazy
-    fn annotate_lazy<F, D>(self, f: F) -> Result<T>
+    fn annotate_lazy<F>(self, f: F) -> Result<T>
     where
-        F: Fn() -> D,
-        D: Display + Debug + Send + Sync + 'static;
+        F: Fn() -> String;
 }
 
 pub trait Tracer {
@@ -46,31 +39,23 @@ pub trait Tracer {
     fn trace(self) -> Self;
 }
 
-impl<T, E> IntoReport<T> for std::result::Result<T, E>
+impl<T, E> EasyError<T> for std::result::Result<T, E>
 where
-    std::result::Result<T, E>: ESIntoReport<Ok = T, Err = E>,
+    E: std::error::Error + Into<Report<E>> + std::marker::Send + Send + Sync + 'static,
 {
     #[track_caller]
-    fn into_report(self) -> Result<T> {
-        ESIntoReport::into_report(self).change_context(Error::General)
+    fn annotate(self, msg: impl ToString) -> Result<T> {
+        self.map_err(Report::from)
+            .change_context(Error::Message(msg.to_string()))
     }
 
     #[track_caller]
-    fn annotate(self, msg: impl Display + Debug + Send + Sync + 'static) -> Result<T> {
-        ESIntoReport::into_report(self)
-            .change_context(Error::General)
-            .attach_printable(msg)
-    }
-
-    #[track_caller]
-    fn annotate_lazy<F, D>(self, f: F) -> Result<T>
+    fn annotate_lazy<F>(self, f: F) -> Result<T>
     where
-        F: Fn() -> D,
-        D: Display + Debug + Send + Sync + 'static,
+        F: Fn() -> String,
     {
-        ESIntoReport::into_report(self)
-            .change_context(Error::General)
-            .attach_printable_lazy(f)
+        self.map_err(Report::from)
+            .change_context(Error::Message(f()))
     }
 }
 

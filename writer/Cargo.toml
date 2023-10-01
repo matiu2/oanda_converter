@@ -13,7 +13,10 @@ proc-macro2 = { version = "1.0.66", features = ["span-locations"] }
 quote = "1.0.29"
 rust-format = { version = "0.3.4", features = ["token_stream", "prettyplease", "post_process", "pretty_please"] }
 rustfmt = "0.10.0"
+serde_yaml = "0.9.25"
 syn = "2.0.26"
+tracing = "0.1.37"
+tracing-subscriber = "0.3.17"
 
 [dev-dependencies]
 indoc = "2.0.3"
