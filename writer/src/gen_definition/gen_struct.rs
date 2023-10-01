@@ -24,6 +24,23 @@ pub fn gen_struct(s: &Struct, name: &str) -> Result<TokenStream> {
     })
 }
 
+/// Generates a with a single string inside
+pub fn gen_typed_string(name: &str) -> Result<TokenStream> {
+    let name = Ident::new(name, proc_macro2::Span::call_site());
+    Ok(quote! {
+        use serde::{Serialize, Deserialize};
+        _blank_!();
+        #[derive(Serialize, Deserialize, Deref)]
+        struct #name (String);
+
+        impl ToString for #name {
+            fn to_string(self) -> String {
+                self.0
+            }
+        }
+    })
+}
+
 fn gen_fields(fields: &[Field]) -> Result<Vec<TokenStream>> {
     fields.iter().map(gen_field).collect()
 }

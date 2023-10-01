@@ -1,4 +1,5 @@
 use crate::error::{EasyError, Error, Result};
+use crate::gen_definition::gen_definition;
 use error_stack::ResultExt;
 use quote::__private::TokenStream;
 use rust_format::{Config, Formatter, PrettyPlease};
@@ -49,10 +50,21 @@ pub fn generate_source(base_path: &str, contents: &[Content]) -> Result<()> {
         .attach_printable("Writing error.rs")?;
     mods.push("client");
     // Generate all the definitions we need
-    // for content in contents {
-    //     if let Some(definitions) = content.definitions() {}
-    // }
+    for definition in contents.iter().flat_map(Content::definitions).flatten() {
+        let tokens = gen_definition(definition)
+            .attach_printable_lazy(|| format!("Generating definition for {}", definition.name))?;
+        let filename = format!("definitions/{}.rs", definition.name);
+        stream_to_file(tokens, &filename)
+            .attach_printable_lazy(|| format!("Saving definition to {filename}"))?;
+    }
     // Generate each of the endpoints
+    // for endpoint in contents.iter().flat_map(Content::endpoints).flatten() {
+    //     let tokens = gen_endpoint(endpoint)
+    //         .attach_printable_lazy(|| format!("Generating endpoint for {}", endpoint.name))?;
+    //     let filename = format!("endpoints/{}.rs", endpoint.name);
+    //     stream_to_file(tokens, &filename)
+    //         .attach_printable_lazy(|| format!("Saving endpoint to {filename}"))?;
+    // }
     // for endpoint in contents {
     //     stream_to_file(
     //         gen_endpoint::gen_endpoint(&endpoint),

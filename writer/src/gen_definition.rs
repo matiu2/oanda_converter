@@ -5,7 +5,7 @@ use proc_macro2::TokenStream;
 
 use self::{
     gen_row::{gen_rows, gen_single_row},
-    gen_struct::gen_struct,
+    gen_struct::{gen_struct, gen_typed_string},
 };
 
 mod gen_row;
@@ -24,7 +24,7 @@ pub fn gen_definition(
             rows => gen_rows(rows, name, doc_string),
         },
         Value::Struct(s) => gen_struct(s, name),
-        Value::Empty => todo!(),
+        Value::Empty => gen_typed_string(name),
     }
 }
 
