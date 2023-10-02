@@ -13,15 +13,22 @@ use model::Content;
 /// Writes a token_stream out to a file
 pub fn stream_to_file(stream: TokenStream, path: &str) -> Result<()> {
     // Create the dir if it doesn't already exist
-    let path = Path::new("oanda_v2/src").join(path);
+    let path = Path::new(path);
     if let Some(dir) = path.parent() {
         std::fs::create_dir_all(dir)
             .annotate_lazy(|| format!("Unable to create directory \"{dir:#?}\""))?;
     }
 
-    let formatted_code = PrettyPlease::default()
-        .format_tokens(stream)
-        .annotate_lazy(|| format!("Formatting code for {path:#?}"))?;
+    let formatting_result = PrettyPlease::default()
+        .format_tokens(stream.clone())
+        .annotate_lazy(|| format!("Formatting code for {path:#?}"));
+    let formatted_code = match formatting_result {
+        Ok(code) => code,
+        Err(err) => {
+            tracing::error!("Unable to render token stream for {path:#?}. It has been rendered unformatted so you can inspect it: {err:#?}");
+            format!("{stream}")
+        }
+    };
     std::fs::write(&path, formatted_code)
         .annotate_lazy(|| format!("Unable to write to \"{path:#?}\""))?;
     Ok(())
@@ -47,6 +54,7 @@ pub fn pretty_doc_string(input: &str) -> Result<Vec<TokenStream>> {
                 .annotate_lazy(|| format!("While quoting docstring line: {line}"))
         })
         .collect::<Result<Vec<proc_macro2::TokenStream>>>()
+        .attach_printable_lazy(|| format!("Trying to prettyize: {input}"))
 }
 
 /// Generate all the source code
@@ -62,7 +70,7 @@ pub fn generate_source(base_path: &str, contents: &[Content]) -> Result<()> {
     for definition in contents.iter().flat_map(Content::definitions).flatten() {
         let tokens = gen_definition(definition)
             .attach_printable_lazy(|| format!("Generating definition for {}", definition.name))?;
-        let filename = format!("definitions/{}.rs", definition.name);
+        let filename = format!("{base_path}/definitions/{}.rs", definition.name);
         stream_to_file(tokens, &filename)
             .attach_printable_lazy(|| format!("Saving definition to {filename}"))?;
     }
@@ -92,5 +100,5 @@ pub fn generate_source(base_path: &str, contents: &[Content]) -> Result<()> {
 
 #[macro_export]
 macro_rules! bail {
-    ($($arg:tt)*) => { return error_stack::IntoReport::into_report(Err($crate::error::Error::Message(format!($($arg),*)))) };
+    ($($arg:tt)*) => { return Err(error_stack::Report::new($crate::error::Error::Message(format!($($arg),*)))) };
 }

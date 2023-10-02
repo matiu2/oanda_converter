@@ -1,0 +1,12 @@
+/// A client-provided tag that can contain any data and may be assigned to their Orders or Trades. Tags are typically used to associate groups of Trades and/or Orders together.
+///
+/// client_tag_1
+struct ClientTag(String);
+_blank_!();
+impl std::ops::Deref for ClientTag {
+    type Target = &str;
+    _blank_!();
+    fn deref(&self) -> &Self::Target {
+        self.0
+    }
+}
