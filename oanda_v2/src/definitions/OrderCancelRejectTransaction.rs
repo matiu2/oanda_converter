@@ -1,1 +1,26 @@
-use serde :: { Serialize , Deserialize } ; _blank_ ! () ; # [derive (Serialize , Deserialize)] struct OrderCancelRejectTransaction { # [doc = " The Transaction’s Identifier."] id : Option < TransactionID > , # [doc = " The date/time when the Transaction was created."] time : Option < DateTime > , # [doc = " The ID of the user that initiated the creation of the Transaction."] userID : Option < integer > , # [doc = " The ID of the Account the Transaction was created for."] accountID : Option < AccountID > , # [doc = " The ID of the “batch” that the Transaction belongs to. Transactions in the same batch are applied to the Account simultaneously."] batchID : Option < TransactionID > , # [doc = " The Request ID of the request which generated the transaction."] requestID : Option < RequestID > , # [doc = " The Type of the Transaction. Always set to “ORDER_CANCEL_REJECT” for an OrderCancelRejectTransaction."] # [serde (default = "ORDER_CANCEL_REJECT")] type : TransactionType , # [doc = " The ID of the Order intended to be cancelled"] orderID : Option < OrderID > , # [doc = " The client ID of the Order intended to be cancelled (only provided if the Order has a client Order ID)."] clientOrderID : Option < OrderID > , # [doc = " The reason that the Reject Transaction was created"] rejectReason : Option < TransactionRejectReason > , }
+use serde::{Serialize, Deserialize};
+_blank_!();
+#[derive(Serialize, Deserialize)]
+struct OrderCancelRejectTransaction {
+    /// The Transaction’s Identifier.
+    id: Option<TransactionID>,
+    /// The date/time when the Transaction was created.
+    time: Option<DateTime>,
+    /// The ID of the user that initiated the creation of the Transaction.
+    user_id: Option<integer>,
+    /// The ID of the Account the Transaction was created for.
+    account_id: Option<AccountID>,
+    /// The ID of the “batch” that the Transaction belongs to. Transactions in the same batch are applied to the Account simultaneously.
+    batch_id: Option<TransactionID>,
+    /// The Request ID of the request which generated the transaction.
+    request_id: Option<RequestID>,
+    /// The Type of the Transaction. Always set to “ORDER_CANCEL_REJECT” for an OrderCancelRejectTransaction.
+    #[serde(default = "ORDER_CANCEL_REJECT")]
+    r#type: TransactionType,
+    /// The ID of the Order intended to be cancelled
+    order_id: Option<OrderID>,
+    /// The client ID of the Order intended to be cancelled (only provided if the Order has a client Order ID).
+    client_order_id: Option<OrderID>,
+    /// The reason that the Reject Transaction was created
+    reject_reason: Option<TransactionRejectReason>,
+}

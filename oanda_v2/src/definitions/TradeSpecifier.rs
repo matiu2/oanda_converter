@@ -3,11 +3,9 @@
 /// Format: Either the Trade’s OANDA-assigned TradeID or the Trade’s client-provided ClientID prefixed by the “@” symbol
 ///
 /// Example: @my_trade_id
-struct TradeSpecifier(String);
-_blank_!();
-impl std::ops::Deref for TradeSpecifier {
+struct trade_specifier(String);
+impl std::ops::Deref for trade_specifier {
     type Target = &str;
-    _blank_!();
     fn deref(&self) -> &Self::Target {
         self.0
     }

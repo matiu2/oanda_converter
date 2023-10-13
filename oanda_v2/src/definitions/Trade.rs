@@ -9,37 +9,37 @@ struct Trade {
     /// The execution price of the Trade.
     price: Option<PriceValue>,
     /// The date/time when the Trade was opened.
-    openTime: Option<DateTime>,
+    open_time: Option<DateTime>,
     /// The current state of the Trade.
     state: Option<TradeState>,
     /// The initial size of the Trade. Negative values indicate a short Trade, and positive values indicate a long Trade.
-    initialUnits: Option<DecimalNumber>,
+    initial_units: Option<DecimalNumber>,
     /// The margin required at the time the Trade was created. Note, this is the ‘pure’ margin required, it is not the ‘effective’ margin used that factors in the trade risk if a GSLO is attached to the trade.
-    initialMarginRequired: Option<AccountUnits>,
+    initial_margin_required: Option<AccountUnits>,
     /// The number of units currently open for the Trade. This value is reduced to 0.0 as the Trade is closed.
-    currentUnits: Option<DecimalNumber>,
+    current_units: Option<DecimalNumber>,
     /// The total profit/loss realized on the closed portion of the Trade.
-    realizedPL: Option<AccountUnits>,
+    realized_pl: Option<AccountUnits>,
     /// The unrealized profit/loss on the open portion of the Trade.
-    unrealizedPL: Option<AccountUnits>,
+    unrealized_pl: Option<AccountUnits>,
     /// Margin currently used by the Trade.
-    marginUsed: Option<AccountUnits>,
+    margin_used: Option<AccountUnits>,
     /// The average closing price of the Trade. Only present if the Trade has been closed or reduced at least once.
-    averageClosePrice: Option<PriceValue>,
+    average_close_price: Option<PriceValue>,
     /// The IDs of the Transactions that have closed portions of this Trade.
-    closingTransactionIDs: Vec<TransactionID>,
+    closing_transaction_i_ds: Vec<TransactionID>,
     /// The financing paid/collected for this Trade.
     financing: Option<AccountUnits>,
     /// The dividend adjustment paid for this Trade.
-    dividendAdjustment: Option<AccountUnits>,
+    dividend_adjustment: Option<AccountUnits>,
     /// The date/time when the Trade was fully closed. Only provided for Trades whose state is CLOSED.
-    closeTime: Option<DateTime>,
+    close_time: Option<DateTime>,
     /// The client extensions of the Trade.
-    clientExtensions: Option<ClientExtensions>,
+    client_extensions: Option<ClientExtensions>,
     /// Full representation of the Trade’s Take Profit Order, only provided if such an Order exists.
-    takeProfitOrder: Option<TakeProfitOrder>,
+    take_profit_order: Option<TakeProfitOrder>,
     /// Full representation of the Trade’s Stop Loss Order, only provided if such an Order exists.
-    stopLossOrder: Option<StopLossOrder>,
+    stop_loss_order: Option<StopLossOrder>,
     /// Full representation of the Trade’s Trailing Stop Loss Order, only provided if such an Order exists.
-    trailingStopLossOrder: Option<TrailingStopLossOrder>,
+    trailing_stop_loss_order: Option<TrailingStopLossOrder>,
 }

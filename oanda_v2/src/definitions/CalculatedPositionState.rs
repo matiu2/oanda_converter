@@ -5,11 +5,11 @@ struct CalculatedPositionState {
     /// The Position’s Instrument.
     instrument: Option<InstrumentName>,
     /// The Position’s net unrealized profit/loss
-    netUnrealizedPL: Option<AccountUnits>,
+    net_unrealized_pl: Option<AccountUnits>,
     /// The unrealized profit/loss of the Position’s long open Trades
-    longUnrealizedPL: Option<AccountUnits>,
+    long_unrealized_pl: Option<AccountUnits>,
     /// The unrealized profit/loss of the Position’s short open Trades
-    shortUnrealizedPL: Option<AccountUnits>,
+    short_unrealized_pl: Option<AccountUnits>,
     /// Margin currently used by the Position.
-    marginUsed: Option<AccountUnits>,
+    margin_used: Option<AccountUnits>,
 }

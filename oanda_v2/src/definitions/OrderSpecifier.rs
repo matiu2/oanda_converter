@@ -3,11 +3,9 @@
 /// Format: Either the Order’s OANDA-assigned OrderID or the Order’s client-provided ClientID prefixed by the “@” symbol
 ///
 /// Example: 1523
-struct OrderSpecifier(String);
-_blank_!();
-impl std::ops::Deref for OrderSpecifier {
+struct order_specifier(String);
+impl std::ops::Deref for order_specifier {
     type Target = &str;
-    _blank_!();
     fn deref(&self) -> &Self::Target {
         self.0
     }

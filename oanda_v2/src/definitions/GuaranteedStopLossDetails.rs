@@ -8,9 +8,9 @@ struct GuaranteedStopLossDetails {
     distance: Option<DecimalNumber>,
     /// The time in force for the created Guaranteed Stop Loss Order. This may only be GTC, GTD or GFD.
     #[serde(default = "GTC")]
-    timeInForce: TimeInForce,
+    time_in_force: TimeInForce,
     /// The date when the Guaranteed Stop Loss Order will be cancelled on if timeInForce is GTD.
-    gtdTime: Option<DateTime>,
+    gtd_time: Option<DateTime>,
     /// The Client Extensions to add to the Guaranteed Stop Loss Order when created.
-    clientExtensions: Option<ClientExtensions>,
+    client_extensions: Option<ClientExtensions>,
 }

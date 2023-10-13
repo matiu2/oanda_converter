@@ -1,1 +1,12 @@
-use serde :: { Serialize , Deserialize } ; _blank_ ! () ; # [derive (Serialize , Deserialize)] struct TransactionHeartbeat { # [doc = " The string “HEARTBEAT”"] # [serde (default = "HEARTBEAT")] type : string , # [doc = " The ID of the most recent Transaction created for the Account"] lastTransactionID : Option < TransactionID > , # [doc = " The date/time when the TransactionHeartbeat was created."] time : Option < DateTime > , }
+use serde::{Serialize, Deserialize};
+_blank_!();
+#[derive(Serialize, Deserialize)]
+struct TransactionHeartbeat {
+    /// The string “HEARTBEAT”
+    #[serde(default = "HEARTBEAT")]
+    r#type: string,
+    /// The ID of the most recent Transaction created for the Account
+    last_transaction_id: Option<TransactionID>,
+    /// The date/time when the TransactionHeartbeat was created.
+    time: Option<DateTime>,
+}

@@ -6,9 +6,9 @@ struct TakeProfitDetails {
     price: Option<PriceValue>,
     /// The time in force for the created Take Profit Order. This may only be GTC, GTD or GFD.
     #[serde(default = "GTC")]
-    timeInForce: TimeInForce,
+    time_in_force: TimeInForce,
     /// The date when the Take Profit Order will be cancelled on if timeInForce is GTD.
-    gtdTime: Option<DateTime>,
+    gtd_time: Option<DateTime>,
     /// The Client Extensions to add to the Take Profit Order when created.
-    clientExtensions: Option<ClientExtensions>,
+    client_extensions: Option<ClientExtensions>,
 }

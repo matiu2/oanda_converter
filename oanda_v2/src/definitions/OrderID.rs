@@ -3,11 +3,9 @@
 /// Format: The string representation of the OANDA-assigned OrderID. OANDA-assigned OrderIDs are positive integers, and are derived from the TransactionID of the Transaction that created the Order.
 ///
 /// Example: 1523
-struct OrderID(String);
-_blank_!();
-impl std::ops::Deref for OrderID {
+struct order_id(String);
+impl std::ops::Deref for order_id {
     type Target = &str;
-    _blank_!();
     fn deref(&self) -> &Self::Target {
         self.0
     }

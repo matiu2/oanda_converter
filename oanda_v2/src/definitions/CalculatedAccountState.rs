@@ -3,29 +3,29 @@ _blank_!();
 #[derive(Serialize, Deserialize)]
 struct CalculatedAccountState {
     /// The total unrealized profit/loss for all Trades currently open in the Account.
-    unrealizedPL: Option<AccountUnits>,
+    unrealized_pl: Option<AccountUnits>,
     /// The net asset value of the Account. Equal to Account balance + unrealizedPL.
-    NAV: Option<AccountUnits>,
+    nav: Option<AccountUnits>,
     /// Margin currently used for the Account.
-    marginUsed: Option<AccountUnits>,
+    margin_used: Option<AccountUnits>,
     /// Margin available for Account currency.
-    marginAvailable: Option<AccountUnits>,
+    margin_available: Option<AccountUnits>,
     /// The value of the Account’s open positions represented in the Account’s home currency.
-    positionValue: Option<AccountUnits>,
+    position_value: Option<AccountUnits>,
     /// The Account’s margin closeout unrealized PL.
-    marginCloseoutUnrealizedPL: Option<AccountUnits>,
+    margin_closeout_unrealized_pl: Option<AccountUnits>,
     /// The Account’s margin closeout NAV.
-    marginCloseoutNAV: Option<AccountUnits>,
+    margin_closeout_nav: Option<AccountUnits>,
     /// The Account’s margin closeout margin used.
-    marginCloseoutMarginUsed: Option<AccountUnits>,
+    margin_closeout_margin_used: Option<AccountUnits>,
     /// The Account’s margin closeout percentage. When this value is 1.0 or above the Account is in a margin closeout situation.
-    marginCloseoutPercent: Option<DecimalNumber>,
+    margin_closeout_percent: Option<DecimalNumber>,
     /// The value of the Account’s open positions as used for margin closeout calculations represented in the Account’s home currency.
-    marginCloseoutPositionValue: Option<DecimalNumber>,
+    margin_closeout_position_value: Option<DecimalNumber>,
     /// The current WithdrawalLimit for the account which will be zero or a positive value indicating how much can be withdrawn from the account.
-    withdrawalLimit: Option<AccountUnits>,
+    withdrawal_limit: Option<AccountUnits>,
     /// The Account’s margin call margin used.
-    marginCallMarginUsed: Option<AccountUnits>,
+    margin_call_margin_used: Option<AccountUnits>,
     /// The Account’s margin call percentage. When this value is 1.0 or above the Account is in a margin call situation.
-    marginCallPercent: Option<DecimalNumber>,
+    margin_call_percent: Option<DecimalNumber>,
 }

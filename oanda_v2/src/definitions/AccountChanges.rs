@@ -3,19 +3,19 @@ _blank_!();
 #[derive(Serialize, Deserialize)]
 struct AccountChanges {
     /// The Orders created. These Orders may have been filled, cancelled or triggered in the same period.
-    ordersCreated: Vec<Order>,
+    orders_created: Vec<Order>,
     /// The Orders cancelled.
-    ordersCancelled: Vec<Order>,
+    orders_cancelled: Vec<Order>,
     /// The Orders filled.
-    ordersFilled: Vec<Order>,
+    orders_filled: Vec<Order>,
     /// The Orders triggered.
-    ordersTriggered: Vec<Order>,
+    orders_triggered: Vec<Order>,
     /// The Trades opened.
-    tradesOpened: Vec<TradeSummary>,
+    trades_opened: Vec<TradeSummary>,
     /// The Trades reduced.
-    tradesReduced: Vec<TradeSummary>,
+    trades_reduced: Vec<TradeSummary>,
     /// The Trades closed.
-    tradesClosed: Vec<TradeSummary>,
+    trades_closed: Vec<TradeSummary>,
     /// The Positions changed.
     positions: Vec<Position>,
     /// The Transactions that have been generated.

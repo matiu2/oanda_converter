@@ -7,11 +7,11 @@ struct Transaction {
     /// The date/time when the Transaction was created.
     time: Option<DateTime>,
     /// The ID of the user that initiated the creation of the Transaction.
-    userID: Option<integer>,
+    user_id: Option<integer>,
     /// The ID of the Account the Transaction was created for.
-    accountID: Option<AccountID>,
+    account_id: Option<AccountID>,
     /// The ID of the “batch” that the Transaction belongs to. Transactions in the same batch are applied to the Account simultaneously.
-    batchID: Option<TransactionID>,
+    batch_id: Option<TransactionID>,
     /// The Request ID of the request which generated the transaction.
-    requestID: Option<RequestID>,
+    request_id: Option<RequestID>,
 }

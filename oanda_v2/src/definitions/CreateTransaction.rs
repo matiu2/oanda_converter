@@ -1,1 +1,30 @@
-use serde :: { Serialize , Deserialize } ; _blank_ ! () ; # [derive (Serialize , Deserialize)] struct CreateTransaction { # [doc = " The Transaction’s Identifier."] id : Option < TransactionID > , # [doc = " The date/time when the Transaction was created."] time : Option < DateTime > , # [doc = " The ID of the user that initiated the creation of the Transaction."] userID : Option < integer > , # [doc = " The ID of the Account the Transaction was created for."] accountID : Option < AccountID > , # [doc = " The ID of the “batch” that the Transaction belongs to. Transactions in the same batch are applied to the Account simultaneously."] batchID : Option < TransactionID > , # [doc = " The Request ID of the request which generated the transaction."] requestID : Option < RequestID > , # [doc = " The Type of the Transaction. Always set to “CREATE” in a CreateTransaction."] # [serde (default = "CREATE")] type : TransactionType , # [doc = " The ID of the Division that the Account is in"] divisionID : Option < integer > , # [doc = " The ID of the Site that the Account was created at"] siteID : Option < integer > , # [doc = " The ID of the user that the Account was created for"] accountUserID : Option < integer > , # [doc = " The number of the Account within the site/division/user"] accountNumber : Option < integer > , # [doc = " The home currency of the Account"] homeCurrency : Option < Currency > , }
+use serde::{Serialize, Deserialize};
+_blank_!();
+#[derive(Serialize, Deserialize)]
+struct CreateTransaction {
+    /// The Transaction’s Identifier.
+    id: Option<TransactionID>,
+    /// The date/time when the Transaction was created.
+    time: Option<DateTime>,
+    /// The ID of the user that initiated the creation of the Transaction.
+    user_id: Option<integer>,
+    /// The ID of the Account the Transaction was created for.
+    account_id: Option<AccountID>,
+    /// The ID of the “batch” that the Transaction belongs to. Transactions in the same batch are applied to the Account simultaneously.
+    batch_id: Option<TransactionID>,
+    /// The Request ID of the request which generated the transaction.
+    request_id: Option<RequestID>,
+    /// The Type of the Transaction. Always set to “CREATE” in a CreateTransaction.
+    #[serde(default = "CREATE")]
+    r#type: TransactionType,
+    /// The ID of the Division that the Account is in
+    division_id: Option<integer>,
+    /// The ID of the Site that the Account was created at
+    site_id: Option<integer>,
+    /// The ID of the user that the Account was created for
+    account_user_id: Option<integer>,
+    /// The number of the Account within the site/division/user
+    account_number: Option<integer>,
+    /// The home currency of the Account
+    home_currency: Option<Currency>,
+}

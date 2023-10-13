@@ -3,7 +3,7 @@ _blank_!();
 #[derive(Serialize, Deserialize)]
 struct UserAttributes {
     /// The user’s OANDA-assigned user ID.
-    userID: Option<integer>,
+    user_id: Option<integer>,
     /// The user-provided username.
     username: Option<string>,
     /// The user’s title.
@@ -13,9 +13,9 @@ struct UserAttributes {
     /// The user’s email address.
     email: Option<string>,
     /// The OANDA division the user belongs to.
-    divisionAbbreviation: Option<string>,
+    division_abbreviation: Option<string>,
     /// The user’s preferred language.
-    languageAbbreviation: Option<string>,
+    language_abbreviation: Option<string>,
     /// The home currency of the Account.
-    homeCurrency: Option<Currency>,
+    home_currency: Option<Currency>,
 }

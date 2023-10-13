@@ -7,13 +7,13 @@ struct PositionFinancing {
     /// The amount of financing paid/collected for the Position.
     financing: Option<AccountUnits>,
     /// The amount of base financing paid/collected for the Position.
-    baseFinancing: Option<DecimalNumber>,
+    base_financing: Option<DecimalNumber>,
     /// The amount of quote financing paid/collected for the Position.
-    quoteFinancing: Option<DecimalNumber>,
+    quote_financing: Option<DecimalNumber>,
     /// The HomeConversionFactors in effect for the Position’s Instrument at the time of the DailyFinancing.
-    homeConversionFactors: Option<HomeConversionFactors>,
+    home_conversion_factors: Option<HomeConversionFactors>,
     /// The financing paid/collected for each open Trade within the Position.
-    openTradeFinancings: Vec<OpenTradeFinancing>,
+    open_trade_financings: Vec<OpenTradeFinancing>,
     /// The account financing mode at the time of the daily financing.
-    accountFinancingMode: Option<AccountFinancingMode>,
+    account_financing_mode: Option<AccountFinancingMode>,
 }

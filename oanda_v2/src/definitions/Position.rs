@@ -7,19 +7,19 @@ struct Position {
     /// Profit/loss realized by the Position over the lifetime of the Account.
     pl: Option<AccountUnits>,
     /// The unrealized profit/loss of all open Trades that contribute to this Position.
-    unrealizedPL: Option<AccountUnits>,
+    unrealized_pl: Option<AccountUnits>,
     /// Margin currently used by the Position.
-    marginUsed: Option<AccountUnits>,
+    margin_used: Option<AccountUnits>,
     /// Profit/loss realized by the Position since the Account’s resettablePL was last reset by the client.
-    resettablePL: Option<AccountUnits>,
+    resettable_pl: Option<AccountUnits>,
     /// The total amount of financing paid/collected for this instrument over the lifetime of the Account.
     financing: Option<AccountUnits>,
     /// The total amount of commission paid for this instrument over the lifetime of the Account.
     commission: Option<AccountUnits>,
     /// The total amount of dividend adjustment paid for this instrument over the lifetime of the Account.
-    dividendAdjustment: Option<AccountUnits>,
+    dividend_adjustment: Option<AccountUnits>,
     /// The total amount of fees charged over the lifetime of the Account for the execution of guaranteed Stop Loss Orders for this instrument.
-    guaranteedExecutionFees: Option<AccountUnits>,
+    guaranteed_execution_fees: Option<AccountUnits>,
     /// The details of the long side of the Position.
     long: Option<PositionSide>,
     /// The details of the short side of the Position.
