@@ -1,5 +1,4 @@
 use serde::{Serialize, Deserialize};
-_blank_!();
 #[derive(Serialize, Deserialize)]
 struct CloseTransaction {
     /// The Transaction’s Identifier.

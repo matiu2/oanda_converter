@@ -1,5 +1,4 @@
 use serde::{Serialize, Deserialize};
-_blank_!();
 #[derive(Serialize, Deserialize)]
 struct MarketIfTouchedOrderRequest {
     /// The type of the Order to Create. Must be set to “MARKET_IF_TOUCHED” when creating a Market If Touched Order.

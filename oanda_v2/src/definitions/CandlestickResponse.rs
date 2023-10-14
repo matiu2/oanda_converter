@@ -1,5 +1,4 @@
 use serde::{Serialize, Deserialize};
-_blank_!();
 #[derive(Serialize, Deserialize)]
 struct CandlestickResponse {
     /// The instrument whose Prices are represented by the candlesticks.

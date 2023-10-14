@@ -1,5 +1,4 @@
 use serde::{Serialize, Deserialize};
-_blank_!();
 #[derive(Serialize, Deserialize)]
 struct LimitOrder {
     /// The Order’s identifier, unique within the Order’s Account.

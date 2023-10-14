@@ -1,5 +1,4 @@
 use serde::{Serialize, Deserialize};
-_blank_!();
 #[derive(Serialize, Deserialize)]
 struct OpenTradeDividendAdjustment {
     /// The ID of the Trade for which the dividend adjustment is to be paid or collected.

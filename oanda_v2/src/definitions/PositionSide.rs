@@ -1,5 +1,4 @@
 use serde::{Serialize, Deserialize};
-_blank_!();
 #[derive(Serialize, Deserialize)]
 struct PositionSide {
     /// Number of units in the position (negative value indicates short position, positive indicates long position).

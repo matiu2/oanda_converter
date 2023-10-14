@@ -1,5 +1,4 @@
 use serde::{Serialize, Deserialize};
-_blank_!();
 #[derive(Serialize, Deserialize)]
 struct PositionBookBucket {
     /// The lowest price (inclusive) covered by the bucket. The bucket covers the price range from the price to price + the position book’s bucketWidth.

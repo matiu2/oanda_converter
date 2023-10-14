@@ -1,5 +1,4 @@
 use serde::{Serialize, Deserialize};
-_blank_!();
 #[derive(Serialize, Deserialize)]
 struct CandlestickData {
     /// The first (open) price in the time-range represented by the candlestick.

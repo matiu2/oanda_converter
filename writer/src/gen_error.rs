@@ -9,7 +9,6 @@ pub fn gen_error() -> TokenStream {
         use reqwest::StatusCode;
         use serde::Deserialize;
 
-        _blank_!();
         #[derive(Display, Debug, Default)]
         #[display(style = "snake_case")]
         pub enum Error {
@@ -22,7 +21,6 @@ pub fn gen_error() -> TokenStream {
             Api { status: StatusCode, error: ApiError },
         }
 
-        _blank_!();
         #[derive(Display, Deserialize, Debug)]
         #[display(
             r#"error_codes: {error_codes:#?}
@@ -34,7 +32,6 @@ pub fn gen_error() -> TokenStream {
         correlation_id: {correlation_id}"#
         )]
 
-        _blank_!();
         pub struct ApiError {
             pub error_codes: Vec<usize>,
             pub error_uri: String,
@@ -45,16 +42,13 @@ pub fn gen_error() -> TokenStream {
             pub correlation_id: String,
         }
 
-        _blank_!();
         impl std::error::Error for Error {}
         pub type Result<T> = error_stack::Result<T, Error>;
 
-        _blank_!();
         pub trait IntoReport<T> {
             fn into_report(self) -> Result<T>;
         }
 
-        _blank_!();
         impl<T, E> IntoReport<T> for std::result::Result<T, E>
         where
             std::result::Result<T, E>: ESIntoReport<Ok = T, Err = E>,

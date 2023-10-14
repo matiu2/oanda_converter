@@ -1,5 +1,4 @@
 use serde::{Serialize, Deserialize};
-_blank_!();
 #[derive(Serialize, Deserialize)]
 struct TrailingStopLossOrderRequest {
     /// The type of the Order to Create. Must be set to “TRAILING_STOP_LOSS” when creating a Trailing Stop Loss Order.

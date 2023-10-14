@@ -1,5 +1,4 @@
 use serde::{Serialize, Deserialize};
-_blank_!();
 #[derive(Serialize, Deserialize)]
 struct DailyFinancingTransaction {
     /// The Transaction’s Identifier.

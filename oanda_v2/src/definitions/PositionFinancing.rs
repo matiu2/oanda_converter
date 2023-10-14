@@ -1,5 +1,4 @@
 use serde::{Serialize, Deserialize};
-_blank_!();
 #[derive(Serialize, Deserialize)]
 struct PositionFinancing {
     /// The instrument of the Position that financing is being paid/collected for.

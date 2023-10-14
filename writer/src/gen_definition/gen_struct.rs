@@ -16,7 +16,7 @@ pub fn gen_struct(s: &Struct, name: &str) -> Result<TokenStream> {
     let name = Ident::new(name, proc_macro2::Span::call_site());
     Ok(quote! {
         use serde::{Serialize, Deserialize};
-        _blank_!();
+
         #[derive(Serialize, Deserialize)]
         struct #name {
             #(#fields)*
@@ -29,7 +29,7 @@ pub fn gen_typed_string(name: &str) -> Result<TokenStream> {
     let name = Ident::new(name, proc_macro2::Span::call_site());
     Ok(quote! {
         use serde::{Serialize, Deserialize};
-        _blank_!();
+
         #[derive(Serialize, Deserialize, Deref)]
         struct #name (String);
 

@@ -1,5 +1,4 @@
 use serde::{Serialize, Deserialize};
-_blank_!();
 #[derive(Serialize, Deserialize)]
 struct ClientPrice {
     /// The string “PRICE”. Used to identify the a Price object when found in a stream.

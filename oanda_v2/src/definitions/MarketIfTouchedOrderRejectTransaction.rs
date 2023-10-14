@@ -1,5 +1,4 @@
 use serde::{Serialize, Deserialize};
-_blank_!();
 #[derive(Serialize, Deserialize)]
 struct MarketIfTouchedOrderRejectTransaction {
     /// The Transaction’s Identifier.

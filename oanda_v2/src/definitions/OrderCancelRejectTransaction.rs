@@ -1,5 +1,4 @@
 use serde::{Serialize, Deserialize};
-_blank_!();
 #[derive(Serialize, Deserialize)]
 struct OrderCancelRejectTransaction {
     /// The Transaction’s Identifier.

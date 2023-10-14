@@ -1,5 +1,4 @@
 use serde::{Serialize, Deserialize};
-_blank_!();
 #[derive(Serialize, Deserialize)]
 struct UserAttributes {
     /// The user’s OANDA-assigned user ID.

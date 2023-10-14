@@ -1,5 +1,4 @@
 use serde::{Serialize, Deserialize};
-_blank_!();
 #[derive(Serialize, Deserialize)]
 struct TrailingStopLossDetails {
     /// The distance (in price units) from the Trade’s fill price that the Trailing Stop Loss Order will be triggered at.

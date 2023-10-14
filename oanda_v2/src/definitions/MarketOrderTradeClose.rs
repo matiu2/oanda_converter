@@ -1,5 +1,4 @@
 use serde::{Serialize, Deserialize};
-_blank_!();
 #[derive(Serialize, Deserialize)]
 struct MarketOrderTradeClose {
     /// The ID of the Trade requested to be closed

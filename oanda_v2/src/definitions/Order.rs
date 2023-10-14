@@ -1,5 +1,4 @@
 use serde::{Serialize, Deserialize};
-_blank_!();
 #[derive(Serialize, Deserialize)]
 struct Order {
     /// The Order’s identifier, unique within the Order’s Account.

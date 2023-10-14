@@ -1,5 +1,4 @@
 use serde::{Serialize, Deserialize};
-_blank_!();
 #[derive(Serialize, Deserialize)]
 struct OpenTradeFinancing {
     /// The ID of the Trade that financing is being paid/collected for.

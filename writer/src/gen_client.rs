@@ -13,7 +13,6 @@ pub fn gen_client() -> TokenStream {
         // use self::order::Order;
         // use self::trade::Trade;
 
-        _blank_!();
         #[derive(Debug, Clone)]
         pub struct Client {
             token: String,
@@ -21,9 +20,7 @@ pub fn gen_client() -> TokenStream {
             rest_client: reqwest::Client,
         }
 
-        _blank_!();
         impl Client {
-            _blank_!();
             /// Creates a new [`Client`].
             ///
             /// `token` is your API Token
@@ -42,12 +39,12 @@ pub fn gen_client() -> TokenStream {
                     rest_client,
                 }
             }
-            _blank_!();
+
             /// Given a URL path, inserts the part before it
             pub fn url(&self, path: &str) -> String {
                 self.host.rest_url(path)
             }
-            _blank_!();
+
             /// Given a URL path, creates a Get request builder with the correct
             /// host and authentication token
             pub fn start_get(&self, url: &str) -> RequestBuilder {
@@ -57,7 +54,7 @@ pub fn gen_client() -> TokenStream {
                     .header(AUTHORIZATION, format!("Bearer {}", &self.token))
                     .header(ACCEPT, "application/json")
             }
-            _blank_!();
+
             /// Makes an authenticated get request to a path in the rest api
             pub async fn get<T: DeserializeOwned>(
                 &self,
@@ -105,13 +102,13 @@ pub fn gen_client() -> TokenStream {
                 }
             }
 
-            // _blank_!();
+
             // /// Rest API for anything account related
             // pub fn accounts(&self) -> Accounts {
             //     Accounts { client: self }
             // }
 
-        //     _blank_!();
+
         //     /// Rest API for anything instrument related
         //     pub fn instrument(&self, instrument: impl ToString) -> Instrument {
         //         Instrument {
@@ -120,20 +117,20 @@ pub fn gen_client() -> TokenStream {
         //         }
         //     }
 
-        //     _blank_!();
+
         //     /// Rest API for anything trade related including closing an existing Trade
         //     pub fn trade(&self, account_id: impl ToString) -> Trade {
         //         Trade::new(self, account_id.to_string())
         //     }
 
-        //     _blank_!();
+
         //     // Rest API for anything order related including openning a new position
         //     pub fn order(&self, account_id: impl ToString) -> Order {
         //         Order::new(self, account_id.to_string())
         //     }
         }
 
-        _blank_!();
+
         #[cfg(test)]
         mod test_utils {
             use crate::{Client, Error};
@@ -141,12 +138,12 @@ pub fn gen_client() -> TokenStream {
             use lazy_static::lazy_static;
             use std::sync::Mutex;
 
-            _blank_!();
+
             lazy_static! {
                 static ref ACCOUNT_ID: Mutex<Option<String>> = Mutex::new(None);
             }
 
-            _blank_!();
+
             pub async fn get_account_id(client: &Client) -> Result<String, Error> {
                 let mut account_id = ACCOUNT_ID.lock().unwrap();
                 if let Some(account_id) = account_id.as_ref() {

@@ -1,5 +1,4 @@
 use serde::{Serialize, Deserialize};
-_blank_!();
 #[derive(Serialize, Deserialize)]
 struct StopOrderRequest {
     /// The type of the Order to Create. Must be set to “STOP” when creating a Stop Order.

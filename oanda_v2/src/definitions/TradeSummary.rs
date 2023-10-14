@@ -1,5 +1,4 @@
 use serde::{Serialize, Deserialize};
-_blank_!();
 #[derive(Serialize, Deserialize)]
 struct TradeSummary {
     /// The Trade’s identifier, unique within the Trade’s Account.

@@ -1,5 +1,4 @@
 use serde::{Serialize, Deserialize};
-_blank_!();
 #[derive(Serialize, Deserialize)]
 struct UnitsAvailable {
     /// The number of units that are available to be traded using an Order with a positionFill option of “DEFAULT”. For an Account with hedging enabled, this value will be the same as the “OPEN_ONLY” value. For an Account without hedging enabled, this value will be the same as the “REDUCE_FIRST” value.

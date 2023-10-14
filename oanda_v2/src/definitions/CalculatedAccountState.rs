@@ -1,5 +1,4 @@
 use serde::{Serialize, Deserialize};
-_blank_!();
 #[derive(Serialize, Deserialize)]
 struct CalculatedAccountState {
     /// The total unrealized profit/loss for all Trades currently open in the Account.

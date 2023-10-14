@@ -1,5 +1,4 @@
 use serde::{Serialize, Deserialize};
-_blank_!();
 #[derive(Serialize, Deserialize)]
 struct LimitOrderRequest {
     /// The type of the Order to Create. Must be set to “LIMIT” when creating a Market Order.
