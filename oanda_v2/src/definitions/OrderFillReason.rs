@@ -1,35 +1,37 @@
 /// The reason that an Order was filled
+#[derive(Deserialize, Serialize)]
+#[rename_all("SCREAMING_SNAKE_CASE")]
 pub enum OrderFillReason {
     /// The Order filled was a Limit Order
-    LIMIT_ORDER,
+    LimitOrder,
     /// The Order filled was a Stop Order
-    STOP_ORDER,
+    StopOrder,
     /// The Order filled was a Market-if-touched Order
-    MARKET_IF_TOUCHED_ORDER,
+    MarketIfTouchedOrder,
     /// The Order filled was a Take Profit Order
-    TAKE_PROFIT_ORDER,
+    TakeProfitOrder,
     /// The Order filled was a Stop Loss Order
-    STOP_LOSS_ORDER,
+    StopLossOrder,
     /// The Order filled was a Guaranteed Stop Loss Order
-    GUARANTEED_STOP_LOSS_ORDER,
+    GuaranteedStopLossOrder,
     /// The Order filled was a Trailing Stop Loss Order
-    TRAILING_STOP_LOSS_ORDER,
+    TrailingStopLossOrder,
     /// The Order filled was a Market Order
-    MARKET_ORDER,
+    MarketOrder,
     /// The Order filled was a Market Order used to explicitly close a Trade
-    MARKET_ORDER_TRADE_CLOSE,
+    MarketOrderTradeClose,
     /// The Order filled was a Market Order used to explicitly close a Position
-    MARKET_ORDER_POSITION_CLOSEOUT,
+    MarketOrderPositionCloseout,
     /// The Order filled was a Market Order used for a Margin Closeout
-    MARKET_ORDER_MARGIN_CLOSEOUT,
+    MarketOrderMarginCloseout,
     /// The Order filled was a Market Order used for a delayed Trade close
-    MARKET_ORDER_DELAYED_TRADE_CLOSE,
+    MarketOrderDelayedTradeClose,
     /// The Order filled was a Fixed Price Order
-    FIXED_PRICE_ORDER,
+    FixedPriceOrder,
     /// The Order filled was a Fixed Price Order created as part of a platform account migration
-    FIXED_PRICE_ORDER_PLATFORM_ACCOUNT_MIGRATION,
+    FixedPriceOrderPlatformAccountMigration,
     /// The Order filled was a Fixed Price Order created to close a Trade as part of division account migration
-    FIXED_PRICE_ORDER_DIVISION_ACCOUNT_MIGRATION,
+    FixedPriceOrderDivisionAccountMigration,
     /// The Order filled was a Fixed Price Order created to close a Trade administratively
-    FIXED_PRICE_ORDER_ADMINISTRATIVE_ACTION,
+    FixedPriceOrderAdministrativeAction,
 }

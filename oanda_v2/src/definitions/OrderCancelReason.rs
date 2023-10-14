@@ -1,133 +1,135 @@
 /// The reason that an Order was cancelled.
+#[derive(Deserialize, Serialize)]
+#[rename_all("SCREAMING_SNAKE_CASE")]
 pub enum OrderCancelReason {
     /// The Order was cancelled because at the time of filling, an unexpected internal server error occurred.
-    INTERNAL_SERVER_ERROR,
+    InternalServerError,
     /// The Order was cancelled because at the time of filling the account was locked.
-    ACCOUNT_LOCKED,
+    AccountLocked,
     /// The order was to be filled, however the account is configured to not allow new positions to be created.
-    ACCOUNT_NEW_POSITIONS_LOCKED,
+    AccountNewPositionsLocked,
     /// Filling the Order wasn’t possible because it required the creation of a dependent Order and the Account is locked for Order creation.
-    ACCOUNT_ORDER_CREATION_LOCKED,
+    AccountOrderCreationLocked,
     /// Filling the Order was not possible because the Account is locked for filling Orders.
-    ACCOUNT_ORDER_FILL_LOCKED,
+    AccountOrderFillLocked,
     /// The Order was cancelled explicitly at the request of the client.
-    CLIENT_REQUEST,
+    ClientRequest,
     /// The Order cancelled because it is being migrated to another account.
-    MIGRATION,
+    Migration,
     /// Filling the Order wasn’t possible because the Order’s instrument was halted.
-    MARKET_HALTED,
+    MarketHalted,
     /// The Order is linked to an open Trade that was closed.
-    LINKED_TRADE_CLOSED,
+    LinkedTradeClosed,
     /// The time in force specified for this order has passed.
-    TIME_IN_FORCE_EXPIRED,
+    TimeInForceExpired,
     /// Filling the Order wasn’t possible because the Account had insufficient margin.
-    INSUFFICIENT_MARGIN,
+    InsufficientMargin,
     /// Filling the Order would have resulted in a a FIFO violation.
-    FIFO_VIOLATION,
+    FifoViolation,
     /// Filling the Order would have violated the Order’s price bound.
-    BOUNDS_VIOLATION,
+    BoundsViolation,
     /// The Order was cancelled for replacement at the request of the client.
-    CLIENT_REQUEST_REPLACED,
+    ClientRequestReplaced,
     /// The Order was cancelled for replacement with an adjusted fillPrice to accommodate for the price movement caused by a dividendAdjustment.
-    DIVIDEND_ADJUSTMENT_REPLACED,
+    DividendAdjustmentReplaced,
     /// Filling the Order wasn’t possible because enough liquidity available.
-    INSUFFICIENT_LIQUIDITY,
+    InsufficientLiquidity,
     /// Filling the Order would have resulted in the creation of a Take Profit Order with a GTD time in the past.
-    TAKE_PROFIT_ON_FILL_GTD_TIMESTAMP_IN_PAST,
+    TakeProfitOnFillGtdTimestampInPast,
     /// Filling the Order would result in the creation of a Take Profit Order that would have been filled immediately, closing the new Trade at a loss.
-    TAKE_PROFIT_ON_FILL_LOSS,
+    TakeProfitOnFillLoss,
     /// Filling the Order would result in the creation of a Take Profit Loss Order that would close the new Trade at a loss when filled.
-    LOSING_TAKE_PROFIT,
+    LosingTakeProfit,
     /// Filling the Order would have resulted in the creation of a Stop Loss Order with a GTD time in the past.
-    STOP_LOSS_ON_FILL_GTD_TIMESTAMP_IN_PAST,
+    StopLossOnFillGtdTimestampInPast,
     /// Filling the Order would result in the creation of a Stop Loss Order that would have been filled immediately, closing the new Trade at a loss.
-    STOP_LOSS_ON_FILL_LOSS,
+    StopLossOnFillLoss,
     /// Filling the Order would result in the creation of a Stop Loss Order whose price would be zero or negative due to the specified distance.
-    STOP_LOSS_ON_FILL_PRICE_DISTANCE_MAXIMUM_EXCEEDED,
+    StopLossOnFillPriceDistanceMaximumExceeded,
     /// Filling the Order would not result in the creation of Stop Loss Order, however the Account’s configuration requires that all Trades have a Stop Loss Order attached to them.
-    STOP_LOSS_ON_FILL_REQUIRED,
+    StopLossOnFillRequired,
     /// Filling the Order would not result in the creation of a guaranteed Stop Loss Order, however the Account’s configuration requires that all Trades have a guaranteed Stop Loss Order attached to them.
-    STOP_LOSS_ON_FILL_GUARANTEED_REQUIRED,
+    StopLossOnFillGuaranteedRequired,
     /// Filling the Order would result in the creation of a guaranteed Stop Loss Order, however the Account’s configuration does not allow guaranteed Stop Loss Orders.
-    STOP_LOSS_ON_FILL_GUARANTEED_NOT_ALLOWED,
+    StopLossOnFillGuaranteedNotAllowed,
     /// Filling the Order would result in the creation of a guaranteed Stop Loss Order with a distance smaller than the configured minimum distance.
-    STOP_LOSS_ON_FILL_GUARANTEED_MINIMUM_DISTANCE_NOT_MET,
+    StopLossOnFillGuaranteedMinimumDistanceNotMet,
     /// Filling the Order would result in the creation of a guaranteed Stop Loss Order with trigger price and number of units that that violates the account’s guaranteed Stop Loss Order level restriction.
-    STOP_LOSS_ON_FILL_GUARANTEED_LEVEL_RESTRICTION_EXCEEDED,
+    StopLossOnFillGuaranteedLevelRestrictionExceeded,
     /// Filling the Order would result in the creation of a guaranteed Stop Loss Order for a hedged Trade, however the Account’s configuration does not allow guaranteed Stop Loss Orders for hedged Trades/Positions.
-    STOP_LOSS_ON_FILL_GUARANTEED_HEDGING_NOT_ALLOWED,
+    StopLossOnFillGuaranteedHedgingNotAllowed,
     /// Filling the Order would result in the creation of a Stop Loss Order whose TimeInForce value is invalid. A likely cause would be if the Account requires guaranteed stop loss orders and the TimeInForce value were not GTC.
-    STOP_LOSS_ON_FILL_TIME_IN_FORCE_INVALID,
+    StopLossOnFillTimeInForceInvalid,
     /// Filling the Order would result in the creation of a Stop Loss Order whose TriggerCondition value is invalid. A likely cause would be if the stop loss order is guaranteed and the TimeInForce is not TRIGGER_DEFAULT or TRIGGER_BID for a long trade, or not TRIGGER_DEFAULT or TRIGGER_ASK for a short trade.
-    STOP_LOSS_ON_FILL_TRIGGER_CONDITION_INVALID,
+    StopLossOnFillTriggerConditionInvalid,
     /// Filling the Order would have resulted in the creation of a Guaranteed Stop Loss Order with a GTD time in the past.
-    GUARANTEED_STOP_LOSS_ON_FILL_GTD_TIMESTAMP_IN_PAST,
+    GuaranteedStopLossOnFillGtdTimestampInPast,
     /// Filling the Order would result in the creation of a Guaranteed Stop Loss Order that would have been filled immediately, closing the new Trade at a loss.
-    GUARANTEED_STOP_LOSS_ON_FILL_LOSS,
+    GuaranteedStopLossOnFillLoss,
     /// Filling the Order would result in the creation of a Guaranteed Stop Loss Order whose price would be zero or negative due to the specified distance.
-    GUARANTEED_STOP_LOSS_ON_FILL_PRICE_DISTANCE_MAXIMUM_EXCEEDED,
+    GuaranteedStopLossOnFillPriceDistanceMaximumExceeded,
     /// Filling the Order would not result in the creation of a Guaranteed Stop Loss Order, however the Account’s configuration requires that all Trades have a Guaranteed Stop Loss Order attached to them.
-    GUARANTEED_STOP_LOSS_ON_FILL_REQUIRED,
+    GuaranteedStopLossOnFillRequired,
     /// Filling the Order would result in the creation of a Guaranteed Stop Loss Order, however the Account’s configuration does not allow Guaranteed Stop Loss Orders.
-    GUARANTEED_STOP_LOSS_ON_FILL_NOT_ALLOWED,
+    GuaranteedStopLossOnFillNotAllowed,
     /// Filling the Order would result in the creation of a Guaranteed Stop Loss Order with a distance smaller than the configured minimum distance.
-    GUARANTEED_STOP_LOSS_ON_FILL_MINIMUM_DISTANCE_NOT_MET,
+    GuaranteedStopLossOnFillMinimumDistanceNotMet,
     /// Filling the Order would result in the creation of a Guaranteed Stop Loss Order with trigger number of units that violates the account’s Guaranteed Stop Loss Order level restriction volume.
-    GUARANTEED_STOP_LOSS_ON_FILL_LEVEL_RESTRICTION_VOLUME_EXCEEDED,
+    GuaranteedStopLossOnFillLevelRestrictionVolumeExceeded,
     /// Filling the Order would result in the creation of a Guaranteed Stop Loss Order with trigger price that violates the account’s Guaranteed Stop Loss Order level restriction price range.
-    GUARANTEED_STOP_LOSS_ON_FILL_LEVEL_RESTRICTION_PRICE_RANGE_EXCEEDED,
+    GuaranteedStopLossOnFillLevelRestrictionPriceRangeExceeded,
     /// Filling the Order would result in the creation of a Guaranteed Stop Loss Order for a hedged Trade, however the Account’s configuration does not allow Guaranteed Stop Loss Orders for hedged Trades/Positions.
-    GUARANTEED_STOP_LOSS_ON_FILL_HEDGING_NOT_ALLOWED,
+    GuaranteedStopLossOnFillHedgingNotAllowed,
     /// Filling the Order would result in the creation of a Guaranteed Stop Loss Order whose TimeInForce value is invalid. A likely cause would be if the Account requires guaranteed stop loss orders and the TimeInForce value were not GTC.
-    GUARANTEED_STOP_LOSS_ON_FILL_TIME_IN_FORCE_INVALID,
+    GuaranteedStopLossOnFillTimeInForceInvalid,
     /// Filling the Order would result in the creation of a Guaranteed Stop Loss Order whose TriggerCondition value is invalid. A likely cause would be the TimeInForce is not TRIGGER_DEFAULT or TRIGGER_BID for a long trade, or not TRIGGER_DEFAULT or TRIGGER_ASK for a short trade.
-    GUARANTEED_STOP_LOSS_ON_FILL_TRIGGER_CONDITION_INVALID,
+    GuaranteedStopLossOnFillTriggerConditionInvalid,
     /// Filling the Order would result in the creation of a Take Profit Order whose price would be zero or negative due to the specified distance.
-    TAKE_PROFIT_ON_FILL_PRICE_DISTANCE_MAXIMUM_EXCEEDED,
+    TakeProfitOnFillPriceDistanceMaximumExceeded,
     /// Filling the Order would have resulted in the creation of a Trailing Stop Loss Order with a GTD time in the past.
-    TRAILING_STOP_LOSS_ON_FILL_GTD_TIMESTAMP_IN_PAST,
+    TrailingStopLossOnFillGtdTimestampInPast,
     /// Filling the Order would result in the creation of a new Open Trade with a client Trade ID already in use.
-    CLIENT_TRADE_ID_ALREADY_EXISTS,
+    ClientTradeIdAlreadyExists,
     /// Closing out a position wasn’t fully possible.
-    POSITION_CLOSEOUT_FAILED,
+    PositionCloseoutFailed,
     /// Filling the Order would cause the maximum open trades allowed for the Account to be exceeded.
-    OPEN_TRADES_ALLOWED_EXCEEDED,
+    OpenTradesAllowedExceeded,
     /// Filling the Order would have resulted in exceeding the number of pending Orders allowed for the Account.
-    PENDING_ORDERS_ALLOWED_EXCEEDED,
+    PendingOrdersAllowedExceeded,
     /// Filling the Order would have resulted in the creation of a Take Profit Order with a client Order ID that is already in use.
-    TAKE_PROFIT_ON_FILL_CLIENT_ORDER_ID_ALREADY_EXISTS,
+    TakeProfitOnFillClientOrderIdAlreadyExists,
     /// Filling the Order would have resulted in the creation of a Stop Loss Order with a client Order ID that is already in use.
-    STOP_LOSS_ON_FILL_CLIENT_ORDER_ID_ALREADY_EXISTS,
+    StopLossOnFillClientOrderIdAlreadyExists,
     /// Filling the Order would have resulted in the creation of a Guaranteed Stop Loss Order with a client Order ID that is already in use.
-    GUARANTEED_STOP_LOSS_ON_FILL_CLIENT_ORDER_ID_ALREADY_EXISTS,
+    GuaranteedStopLossOnFillClientOrderIdAlreadyExists,
     /// Filling the Order would have resulted in the creation of a Trailing Stop Loss Order with a client Order ID that is already in use.
-    TRAILING_STOP_LOSS_ON_FILL_CLIENT_ORDER_ID_ALREADY_EXISTS,
+    TrailingStopLossOnFillClientOrderIdAlreadyExists,
     /// Filling the Order would have resulted in the Account’s maximum position size limit being exceeded for the Order’s instrument.
-    POSITION_SIZE_EXCEEDED,
+    PositionSizeExceeded,
     /// Filling the Order would result in the creation of a Trade, however there already exists an opposing (hedged) Trade that has a guaranteed Stop Loss Order attached to it. Guaranteed Stop Loss Orders cannot be combined with hedged positions.
-    HEDGING_GSLO_VIOLATION,
+    HedgingGsloViolation,
     /// Filling the order would cause the maximum position value allowed for the account to be exceeded. The Order has been cancelled as a result.
-    ACCOUNT_POSITION_VALUE_LIMIT_EXCEEDED,
+    AccountPositionValueLimitExceeded,
     /// Filling the order would require the creation of a short trade, however the instrument is configured such that orders being filled using bid prices can only reduce existing positions. New short positions cannot be created, but existing long positions may be reduced or closed.
-    INSTRUMENT_BID_REDUCE_ONLY,
+    InstrumentBidReduceOnly,
     /// Filling the order would require the creation of a long trade, however the instrument is configured such that orders being filled using ask prices can only reduce existing positions. New long positions cannot be created, but existing short positions may be reduced or closed.
-    INSTRUMENT_ASK_REDUCE_ONLY,
+    InstrumentAskReduceOnly,
     /// Filling the order would require using the bid, however the instrument is configured such that the bids are halted, and so no short orders may be filled.
-    INSTRUMENT_BID_HALTED,
+    InstrumentBidHalted,
     /// Filling the order would require using the ask, however the instrument is configured such that the asks are halted, and so no long orders may be filled.
-    INSTRUMENT_ASK_HALTED,
+    InstrumentAskHalted,
     /// Filling the Order would result in the creation of a Guaranteed Stop Loss Order (GSLO). Since the trade is long the GSLO would be short, however the bid side is currently halted. GSLOs cannot be created in this situation.
-    STOP_LOSS_ON_FILL_GUARANTEED_BID_HALTED,
+    StopLossOnFillGuaranteedBidHalted,
     /// Filling the Order would result in the creation of a Guaranteed Stop Loss Order (GSLO). Since the trade is short the GSLO would be long, however the ask side is currently halted. GSLOs cannot be created in this situation.
-    STOP_LOSS_ON_FILL_GUARANTEED_ASK_HALTED,
+    StopLossOnFillGuaranteedAskHalted,
     /// Filling the Order would result in the creation of a Guaranteed Stop Loss Order (GSLO). Since the trade is long the GSLO would be short, however the bid side is currently halted. GSLOs cannot be created in this situation.
-    GUARANTEED_STOP_LOSS_ON_FILL_BID_HALTED,
+    GuaranteedStopLossOnFillBidHalted,
     /// Filling the Order would result in the creation of a Guaranteed Stop Loss Order (GSLO). Since the trade is short the GSLO would be long, however the ask side is currently halted. GSLOs cannot be created in this situation.
-    GUARANTEED_STOP_LOSS_ON_FILL_ASK_HALTED,
+    GuaranteedStopLossOnFillAskHalted,
     /// Filling the Order would have resulted in a new Trade that violates the FIFO violation safeguard constraints.
-    FIFO_VIOLATION_SAFEGUARD_VIOLATION,
+    FifoViolationSafeguardViolation,
     /// Filling the Order would have reduced an existing Trade such that the reduced Trade violates the FIFO violation safeguard constraints.
-    FIFO_VIOLATION_SAFEGUARD_PARTIAL_CLOSE_VIOLATION,
+    FifoViolationSafeguardPartialCloseViolation,
     /// The Orders on fill would be in violation of the risk management Order mutual exclusivity configuration specifying that only one risk management Order can be attached to a Trade.
-    ORDERS_ON_FILL_RMO_MUTUAL_EXCLUSIVITY_MUTUALLY_EXCLUSIVE_VIOLATION,
+    OrdersOnFillRmoMutualExclusivityMutuallyExclusiveViolation,
 }

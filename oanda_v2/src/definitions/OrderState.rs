@@ -1,11 +1,13 @@
 /// The current state of the Order.
+#[derive(Deserialize, Serialize)]
+#[rename_all("SCREAMING_SNAKE_CASE")]
 pub enum OrderState {
     /// The Order is currently pending execution
-    PENDING,
+    Pending,
     /// The Order has been filled
-    FILLED,
+    Filled,
     /// The Order has been triggered
-    TRIGGERED,
+    Triggered,
     /// The Order has been cancelled
-    CANCELLED,
+    Cancelled,
 }

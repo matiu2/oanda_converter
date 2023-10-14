@@ -1,399 +1,401 @@
 /// The reason that a Transaction was rejected.
+#[derive(Deserialize, Serialize)]
+#[rename_all("SCREAMING_SNAKE_CASE")]
 pub enum TransactionRejectReason {
     /// An unexpected internal server error has occurred
-    INTERNAL_SERVER_ERROR,
+    InternalServerError,
     /// The system was unable to determine the current price for the Order’s instrument
-    INSTRUMENT_PRICE_UNKNOWN,
+    InstrumentPriceUnknown,
     /// The Account is not active
-    ACCOUNT_NOT_ACTIVE,
+    AccountNotActive,
     /// The Account is locked
-    ACCOUNT_LOCKED,
+    AccountLocked,
     /// The Account is locked for Order creation
-    ACCOUNT_ORDER_CREATION_LOCKED,
+    AccountOrderCreationLocked,
     /// The Account is locked for configuration
-    ACCOUNT_CONFIGURATION_LOCKED,
+    AccountConfigurationLocked,
     /// The Account is locked for deposits
-    ACCOUNT_DEPOSIT_LOCKED,
+    AccountDepositLocked,
     /// The Account is locked for withdrawals
-    ACCOUNT_WITHDRAWAL_LOCKED,
+    AccountWithdrawalLocked,
     /// The Account is locked for Order cancellation
-    ACCOUNT_ORDER_CANCEL_LOCKED,
+    AccountOrderCancelLocked,
     /// The instrument specified is not tradeable by the Account
-    INSTRUMENT_NOT_TRADEABLE,
+    InstrumentNotTradeable,
     /// Creating the Order would result in the maximum number of allowed pending Orders being exceeded
-    PENDING_ORDERS_ALLOWED_EXCEEDED,
+    PendingOrdersAllowedExceeded,
     /// Neither the Order ID nor client Order ID are specified
-    ORDER_ID_UNSPECIFIED,
+    OrderIdUnspecified,
     /// The Order specified does not exist
-    ORDER_DOESNT_EXIST,
+    OrderDoesntExist,
     /// The Order ID and client Order ID specified do not identify the same Order
-    ORDER_IDENTIFIER_INCONSISTENCY,
+    OrderIdentifierInconsistency,
     /// Neither the Trade ID nor client Trade ID are specified
-    TRADE_ID_UNSPECIFIED,
+    TradeIdUnspecified,
     /// The Trade specified does not exist
-    TRADE_DOESNT_EXIST,
+    TradeDoesntExist,
     /// The Trade ID and client Trade ID specified do not identify the same Trade
-    TRADE_IDENTIFIER_INCONSISTENCY,
+    TradeIdentifierInconsistency,
     /// The Account had insufficient margin to perform the action specified. One possible reason for this is due to the creation or modification of a guaranteed StopLoss Order.
-    INSUFFICIENT_MARGIN,
+    InsufficientMargin,
     /// Order instrument has not been specified
-    INSTRUMENT_MISSING,
+    InstrumentMissing,
     /// The instrument specified is unknown
-    INSTRUMENT_UNKNOWN,
+    InstrumentUnknown,
     /// Order units have not been not specified
-    UNITS_MISSING,
+    UnitsMissing,
     /// Order units specified are invalid
-    UNITS_INVALID,
+    UnitsInvalid,
     /// The units specified contain more precision than is allowed for the Order’s instrument
-    UNITS_PRECISION_EXCEEDED,
+    UnitsPrecisionExceeded,
     /// The units specified exceeds the maximum number of units allowed
-    UNITS_LIMIT_EXCEEDED,
+    UnitsLimitExceeded,
     /// The units specified is less than the minimum number of units required
-    UNITS_MINIMUM_NOT_MET,
+    UnitsMinimumNotMet,
     /// The price has not been specified
-    PRICE_MISSING,
+    PriceMissing,
     /// The price specified is invalid
-    PRICE_INVALID,
+    PriceInvalid,
     /// The price specified contains more precision than is allowed for the instrument
-    PRICE_PRECISION_EXCEEDED,
+    PricePrecisionExceeded,
     /// The price distance has not been specified
-    PRICE_DISTANCE_MISSING,
+    PriceDistanceMissing,
     /// The price distance specified is invalid
-    PRICE_DISTANCE_INVALID,
+    PriceDistanceInvalid,
     /// The price distance specified contains more precision than is allowed for the instrument
-    PRICE_DISTANCE_PRECISION_EXCEEDED,
+    PriceDistancePrecisionExceeded,
     /// The price distance exceeds that maximum allowed amount
-    PRICE_DISTANCE_MAXIMUM_EXCEEDED,
+    PriceDistanceMaximumExceeded,
     /// The price distance does not meet the minimum allowed amount
-    PRICE_DISTANCE_MINIMUM_NOT_MET,
+    PriceDistanceMinimumNotMet,
     /// The TimeInForce field has not been specified
-    TIME_IN_FORCE_MISSING,
+    TimeInForceMissing,
     /// The TimeInForce specified is invalid
-    TIME_IN_FORCE_INVALID,
+    TimeInForceInvalid,
     /// The TimeInForce is GTD but no GTD timestamp is provided
-    TIME_IN_FORCE_GTD_TIMESTAMP_MISSING,
+    TimeInForceGtdTimestampMissing,
     /// The TimeInForce is GTD but the GTD timestamp is in the past
-    TIME_IN_FORCE_GTD_TIMESTAMP_IN_PAST,
+    TimeInForceGtdTimestampInPast,
     /// The price bound specified is invalid
-    PRICE_BOUND_INVALID,
+    PriceBoundInvalid,
     /// The price bound specified contains more precision than is allowed for the Order’s instrument
-    PRICE_BOUND_PRECISION_EXCEEDED,
+    PriceBoundPrecisionExceeded,
     /// Multiple Orders on fill share the same client Order ID
-    ORDERS_ON_FILL_DUPLICATE_CLIENT_ORDER_IDS,
+    OrdersOnFillDuplicateClientOrderIds,
     /// The Order does not support Trade on fill client extensions because it cannot create a new Trade
-    TRADE_ON_FILL_CLIENT_EXTENSIONS_NOT_SUPPORTED,
+    TradeOnFillClientExtensionsNotSupported,
     /// The client Order ID specified is invalid
-    CLIENT_ORDER_ID_INVALID,
+    ClientOrderIdInvalid,
     /// The client Order ID specified is already assigned to another pending Order
-    CLIENT_ORDER_ID_ALREADY_EXISTS,
+    ClientOrderIdAlreadyExists,
     /// The client Order tag specified is invalid
-    CLIENT_ORDER_TAG_INVALID,
+    ClientOrderTagInvalid,
     /// The client Order comment specified is invalid
-    CLIENT_ORDER_COMMENT_INVALID,
+    ClientOrderCommentInvalid,
     /// The client Trade ID specified is invalid
-    CLIENT_TRADE_ID_INVALID,
+    ClientTradeIdInvalid,
     /// The client Trade ID specified is already assigned to another open Trade
-    CLIENT_TRADE_ID_ALREADY_EXISTS,
+    ClientTradeIdAlreadyExists,
     /// The client Trade tag specified is invalid
-    CLIENT_TRADE_TAG_INVALID,
+    ClientTradeTagInvalid,
     /// The client Trade comment is invalid
-    CLIENT_TRADE_COMMENT_INVALID,
+    ClientTradeCommentInvalid,
     /// The OrderFillPositionAction field has not been specified
-    ORDER_FILL_POSITION_ACTION_MISSING,
+    OrderFillPositionActionMissing,
     /// The OrderFillPositionAction specified is invalid
-    ORDER_FILL_POSITION_ACTION_INVALID,
+    OrderFillPositionActionInvalid,
     /// The TriggerCondition field has not been specified
-    TRIGGER_CONDITION_MISSING,
+    TriggerConditionMissing,
     /// The TriggerCondition specified is invalid
-    TRIGGER_CONDITION_INVALID,
+    TriggerConditionInvalid,
     /// The OrderFillPositionAction field has not been specified
-    ORDER_PARTIAL_FILL_OPTION_MISSING,
+    OrderPartialFillOptionMissing,
     /// The OrderFillPositionAction specified is invalid.
-    ORDER_PARTIAL_FILL_OPTION_INVALID,
+    OrderPartialFillOptionInvalid,
     /// When attempting to reissue an order (currently only a MarketIfTouched) that was immediately partially filled, it is not possible to create a correct pending Order.
-    INVALID_REISSUE_IMMEDIATE_PARTIAL_FILL,
+    InvalidReissueImmediatePartialFill,
     /// The Orders on fill would be in violation of the risk management Order mutual exclusivity configuration specifying that only one risk management Order can be attached to a Trade.
-    ORDERS_ON_FILL_RMO_MUTUAL_EXCLUSIVITY_MUTUALLY_EXCLUSIVE_VIOLATION,
+    OrdersOnFillRmoMutualExclusivityMutuallyExclusiveViolation,
     /// The Orders on fill would be in violation of the risk management Order mutual exclusivity configuration specifying that if a GSLO is already attached to a Trade, no other risk management Order can be attached to a Trade.
-    ORDERS_ON_FILL_RMO_MUTUAL_EXCLUSIVITY_GSLO_EXCLUDES_OTHERS_VIOLATION,
+    OrdersOnFillRmoMutualExclusivityGsloExcludesOthersViolation,
     /// A Take Profit Order for the specified Trade already exists
-    TAKE_PROFIT_ORDER_ALREADY_EXISTS,
+    TakeProfitOrderAlreadyExists,
     /// The Take Profit Order would cause the associated Trade to be in violation of the FIFO violation safeguard constraints.
-    TAKE_PROFIT_ORDER_WOULD_VIOLATE_FIFO_VIOLATION_SAFEGUARD,
+    TakeProfitOrderWouldViolateFifoViolationSafeguard,
     /// The Take Profit on fill specified does not provide a price
-    TAKE_PROFIT_ON_FILL_PRICE_MISSING,
+    TakeProfitOnFillPriceMissing,
     /// The Take Profit on fill specified contains an invalid price
-    TAKE_PROFIT_ON_FILL_PRICE_INVALID,
+    TakeProfitOnFillPriceInvalid,
     /// The Take Profit on fill specified contains a price with more precision than is allowed by the Order’s instrument
-    TAKE_PROFIT_ON_FILL_PRICE_PRECISION_EXCEEDED,
+    TakeProfitOnFillPricePrecisionExceeded,
     /// The Take Profit on fill specified does not provide a TimeInForce
-    TAKE_PROFIT_ON_FILL_TIME_IN_FORCE_MISSING,
+    TakeProfitOnFillTimeInForceMissing,
     /// The Take Profit on fill specifies an invalid TimeInForce
-    TAKE_PROFIT_ON_FILL_TIME_IN_FORCE_INVALID,
+    TakeProfitOnFillTimeInForceInvalid,
     /// The Take Profit on fill specifies a GTD TimeInForce but does not provide a GTD timestamp
-    TAKE_PROFIT_ON_FILL_GTD_TIMESTAMP_MISSING,
+    TakeProfitOnFillGtdTimestampMissing,
     /// The Take Profit on fill specifies a GTD timestamp that is in the past
-    TAKE_PROFIT_ON_FILL_GTD_TIMESTAMP_IN_PAST,
+    TakeProfitOnFillGtdTimestampInPast,
     /// The Take Profit on fill client Order ID specified is invalid
-    TAKE_PROFIT_ON_FILL_CLIENT_ORDER_ID_INVALID,
+    TakeProfitOnFillClientOrderIdInvalid,
     /// The Take Profit on fill client Order tag specified is invalid
-    TAKE_PROFIT_ON_FILL_CLIENT_ORDER_TAG_INVALID,
+    TakeProfitOnFillClientOrderTagInvalid,
     /// The Take Profit on fill client Order comment specified is invalid
-    TAKE_PROFIT_ON_FILL_CLIENT_ORDER_COMMENT_INVALID,
+    TakeProfitOnFillClientOrderCommentInvalid,
     /// The Take Profit on fill specified does not provide a TriggerCondition
-    TAKE_PROFIT_ON_FILL_TRIGGER_CONDITION_MISSING,
+    TakeProfitOnFillTriggerConditionMissing,
     /// The Take Profit on fill specifies an invalid TriggerCondition
-    TAKE_PROFIT_ON_FILL_TRIGGER_CONDITION_INVALID,
+    TakeProfitOnFillTriggerConditionInvalid,
     /// A Stop Loss Order for the specified Trade already exists
-    STOP_LOSS_ORDER_ALREADY_EXISTS,
+    StopLossOrderAlreadyExists,
     /// An attempt was made to to create a non-guaranteed stop loss order in an account that requires all stop loss orders to be guaranteed.
-    STOP_LOSS_ORDER_GUARANTEED_REQUIRED,
+    StopLossOrderGuaranteedRequired,
     /// An attempt to create a guaranteed stop loss order with a price that is within the current tradeable spread.
-    STOP_LOSS_ORDER_GUARANTEED_PRICE_WITHIN_SPREAD,
+    StopLossOrderGuaranteedPriceWithinSpread,
     /// An attempt was made to create a guaranteed Stop Loss Order, however the Account’s configuration does not allow guaranteed Stop Loss Orders.
-    STOP_LOSS_ORDER_GUARANTEED_NOT_ALLOWED,
+    StopLossOrderGuaranteedNotAllowed,
     /// An attempt was made to create a guaranteed Stop Loss Order when the market was halted.
-    STOP_LOSS_ORDER_GUARANTEED_HALTED_CREATE_VIOLATION,
+    StopLossOrderGuaranteedHaltedCreateViolation,
     /// An attempt was made to re-create a guaranteed Stop Loss Order with a tighter fill price when the market was halted.
-    STOP_LOSS_ORDER_GUARANTEED_HALTED_TIGHTEN_VIOLATION,
+    StopLossOrderGuaranteedHaltedTightenViolation,
     /// An attempt was made to create a guaranteed Stop Loss Order on a hedged Trade (ie there is an existing open Trade in the opposing direction), however the Account’s configuration does not allow guaranteed Stop Loss Orders for hedged Trades/Positions.
-    STOP_LOSS_ORDER_GUARANTEED_HEDGING_NOT_ALLOWED,
+    StopLossOrderGuaranteedHedgingNotAllowed,
     /// An attempt was made to create a guaranteed Stop Loss Order, however the distance between the current price and the trigger price does not meet the Account’s configured minimum Guaranteed Stop Loss distance.
-    STOP_LOSS_ORDER_GUARANTEED_MINIMUM_DISTANCE_NOT_MET,
+    StopLossOrderGuaranteedMinimumDistanceNotMet,
     /// An attempt was made to cancel a Stop Loss Order, however the Account’s configuration requires every Trade have an associated Stop Loss Order.
-    STOP_LOSS_ORDER_NOT_CANCELABLE,
+    StopLossOrderNotCancelable,
     /// An attempt was made to cancel and replace a Stop Loss Order, however the Account’s configuration prevents the modification of Stop Loss Orders.
-    STOP_LOSS_ORDER_NOT_REPLACEABLE,
+    StopLossOrderNotReplaceable,
     /// An attempt was made to create a guaranteed Stop Loss Order, however doing so would exceed the Account’s configured guaranteed StopLoss Order level restriction volume.
-    STOP_LOSS_ORDER_GUARANTEED_LEVEL_RESTRICTION_EXCEEDED,
+    StopLossOrderGuaranteedLevelRestrictionExceeded,
     /// The Stop Loss Order request contains both the price and distance fields.
-    STOP_LOSS_ORDER_PRICE_AND_DISTANCE_BOTH_SPECIFIED,
+    StopLossOrderPriceAndDistanceBothSpecified,
     /// The Stop Loss Order request contains neither the price nor distance fields.
-    STOP_LOSS_ORDER_PRICE_AND_DISTANCE_BOTH_MISSING,
+    StopLossOrderPriceAndDistanceBothMissing,
     /// The Stop Loss Order would cause the associated Trade to be in violation of the FIFO violation safeguard constraints
-    STOP_LOSS_ORDER_WOULD_VIOLATE_FIFO_VIOLATION_SAFEGUARD,
+    StopLossOrderWouldViolateFifoViolationSafeguard,
     /// The Stop Loss Order would be in violation of the risk management Order mutual exclusivity configuration specifying that only one risk management order can be attached to a Trade.
-    STOP_LOSS_ORDER_RMO_MUTUAL_EXCLUSIVITY_MUTUALLY_EXCLUSIVE_VIOLATION,
+    StopLossOrderRmoMutualExclusivityMutuallyExclusiveViolation,
     /// The Stop Loss Order would be in violation of the risk management Order mutual exclusivity configuration specifying that if a GSLO is already attached to a Trade, no other risk management Order can be attached to the same Trade.
-    STOP_LOSS_ORDER_RMO_MUTUAL_EXCLUSIVITY_GSLO_EXCLUDES_OTHERS_VIOLATION,
+    StopLossOrderRmoMutualExclusivityGsloExcludesOthersViolation,
     /// An attempt to create a pending Order was made with no Stop Loss Order on fill specified and the Account’s configuration requires that every Trade have an associated Stop Loss Order.
-    STOP_LOSS_ON_FILL_REQUIRED_FOR_PENDING_ORDER,
+    StopLossOnFillRequiredForPendingOrder,
     /// An attempt to create a pending Order was made with a Stop Loss Order on fill that was explicitly configured to be guaranteed, however the Account’s configuration does not allow guaranteed Stop Loss Orders.
-    STOP_LOSS_ON_FILL_GUARANTEED_NOT_ALLOWED,
+    StopLossOnFillGuaranteedNotAllowed,
     /// An attempt to create a pending Order was made with a Stop Loss Order on fill that was explicitly configured to be not guaranteed, however the Account’s configuration requires guaranteed Stop Loss Orders.
-    STOP_LOSS_ON_FILL_GUARANTEED_REQUIRED,
+    StopLossOnFillGuaranteedRequired,
     /// The Stop Loss on fill specified does not provide a price
-    STOP_LOSS_ON_FILL_PRICE_MISSING,
+    StopLossOnFillPriceMissing,
     /// The Stop Loss on fill specifies an invalid price
-    STOP_LOSS_ON_FILL_PRICE_INVALID,
+    StopLossOnFillPriceInvalid,
     /// The Stop Loss on fill specifies a price with more precision than is allowed by the Order’s instrument
-    STOP_LOSS_ON_FILL_PRICE_PRECISION_EXCEEDED,
+    StopLossOnFillPricePrecisionExceeded,
     /// An attempt to create a pending Order was made with the distance between the guaranteed Stop Loss Order on fill’s price and the pending Order’s price is less than the Account’s configured minimum guaranteed stop loss distance.
-    STOP_LOSS_ON_FILL_GUARANTEED_MINIMUM_DISTANCE_NOT_MET,
+    StopLossOnFillGuaranteedMinimumDistanceNotMet,
     /// An attempt to create a pending Order was made with a guaranteed Stop Loss Order on fill configured, and the Order’s units exceed the Account’s configured guaranteed StopLoss Order level restriction volume.
-    STOP_LOSS_ON_FILL_GUARANTEED_LEVEL_RESTRICTION_EXCEEDED,
+    StopLossOnFillGuaranteedLevelRestrictionExceeded,
     /// The Stop Loss on fill distance is invalid
-    STOP_LOSS_ON_FILL_DISTANCE_INVALID,
+    StopLossOnFillDistanceInvalid,
     /// The Stop Loss on fill price distance exceeds the maximum allowed amount
-    STOP_LOSS_ON_FILL_PRICE_DISTANCE_MAXIMUM_EXCEEDED,
+    StopLossOnFillPriceDistanceMaximumExceeded,
     /// The Stop Loss on fill distance contains more precision than is allowed by the instrument
-    STOP_LOSS_ON_FILL_DISTANCE_PRECISION_EXCEEDED,
+    StopLossOnFillDistancePrecisionExceeded,
     /// The Stop Loss on fill contains both the price and distance fields.
-    STOP_LOSS_ON_FILL_PRICE_AND_DISTANCE_BOTH_SPECIFIED,
+    StopLossOnFillPriceAndDistanceBothSpecified,
     /// The Stop Loss on fill contains neither the price nor distance fields.
-    STOP_LOSS_ON_FILL_PRICE_AND_DISTANCE_BOTH_MISSING,
+    StopLossOnFillPriceAndDistanceBothMissing,
     /// The Stop Loss on fill specified does not provide a TimeInForce
-    STOP_LOSS_ON_FILL_TIME_IN_FORCE_MISSING,
+    StopLossOnFillTimeInForceMissing,
     /// The Stop Loss on fill specifies an invalid TimeInForce
-    STOP_LOSS_ON_FILL_TIME_IN_FORCE_INVALID,
+    StopLossOnFillTimeInForceInvalid,
     /// The Stop Loss on fill specifies a GTD TimeInForce but does not provide a GTD timestamp
-    STOP_LOSS_ON_FILL_GTD_TIMESTAMP_MISSING,
+    StopLossOnFillGtdTimestampMissing,
     /// The Stop Loss on fill specifies a GTD timestamp that is in the past
-    STOP_LOSS_ON_FILL_GTD_TIMESTAMP_IN_PAST,
+    StopLossOnFillGtdTimestampInPast,
     /// The Stop Loss on fill client Order ID specified is invalid
-    STOP_LOSS_ON_FILL_CLIENT_ORDER_ID_INVALID,
+    StopLossOnFillClientOrderIdInvalid,
     /// The Stop Loss on fill client Order tag specified is invalid
-    STOP_LOSS_ON_FILL_CLIENT_ORDER_TAG_INVALID,
+    StopLossOnFillClientOrderTagInvalid,
     /// The Stop Loss on fill client Order comment specified is invalid
-    STOP_LOSS_ON_FILL_CLIENT_ORDER_COMMENT_INVALID,
+    StopLossOnFillClientOrderCommentInvalid,
     /// The Stop Loss on fill specified does not provide a TriggerCondition
-    STOP_LOSS_ON_FILL_TRIGGER_CONDITION_MISSING,
+    StopLossOnFillTriggerConditionMissing,
     /// The Stop Loss on fill specifies an invalid TriggerCondition
-    STOP_LOSS_ON_FILL_TRIGGER_CONDITION_INVALID,
+    StopLossOnFillTriggerConditionInvalid,
     /// A Guaranteed Stop Loss Order for the specified Trade already exists
-    GUARANTEED_STOP_LOSS_ORDER_ALREADY_EXISTS,
+    GuaranteedStopLossOrderAlreadyExists,
     /// An attempt was made to to create a non-guaranteed stop loss order in an account that requires all stop loss orders to be guaranteed.
-    GUARANTEED_STOP_LOSS_ORDER_REQUIRED,
+    GuaranteedStopLossOrderRequired,
     /// An attempt to create a guaranteed stop loss order with a price that is within the current tradeable spread.
-    GUARANTEED_STOP_LOSS_ORDER_PRICE_WITHIN_SPREAD,
+    GuaranteedStopLossOrderPriceWithinSpread,
     /// An attempt was made to create a Guaranteed Stop Loss Order, however the Account’s configuration does not allow Guaranteed Stop Loss Orders.
-    GUARANTEED_STOP_LOSS_ORDER_NOT_ALLOWED,
+    GuaranteedStopLossOrderNotAllowed,
     /// An attempt was made to create a Guaranteed Stop Loss Order when the market was halted.
-    GUARANTEED_STOP_LOSS_ORDER_HALTED_CREATE_VIOLATION,
+    GuaranteedStopLossOrderHaltedCreateViolation,
     /// An attempt was made to create a Guaranteed Stop Loss Order when the market was open.
-    GUARANTEED_STOP_LOSS_ORDER_CREATE_VIOLATION,
+    GuaranteedStopLossOrderCreateViolation,
     /// An attempt was made to re-create a Guaranteed Stop Loss Order with a tighter fill price when the market was halted.
-    GUARANTEED_STOP_LOSS_ORDER_HALTED_TIGHTEN_VIOLATION,
+    GuaranteedStopLossOrderHaltedTightenViolation,
     /// An attempt was made to re-create a Guaranteed Stop Loss Order with a tighter fill price when the market was open.
-    GUARANTEED_STOP_LOSS_ORDER_TIGHTEN_VIOLATION,
+    GuaranteedStopLossOrderTightenViolation,
     /// An attempt was made to create a Guaranteed Stop Loss Order on a hedged Trade (ie there is an existing open Trade in the opposing direction), however the Account’s configuration does not allow Guaranteed Stop Loss Orders for hedged Trades/Positions.
-    GUARANTEED_STOP_LOSS_ORDER_HEDGING_NOT_ALLOWED,
+    GuaranteedStopLossOrderHedgingNotAllowed,
     /// An attempt was made to create a Guaranteed Stop Loss Order, however the distance between the current price and the trigger price does not meet the Account’s configured minimum Guaranteed Stop Loss distance.
-    GUARANTEED_STOP_LOSS_ORDER_MINIMUM_DISTANCE_NOT_MET,
+    GuaranteedStopLossOrderMinimumDistanceNotMet,
     /// An attempt was made to cancel a Guaranteed Stop Loss Order when the market is open, however the Account’s configuration requires every Trade have an associated Guaranteed Stop Loss Order.
-    GUARANTEED_STOP_LOSS_ORDER_NOT_CANCELABLE,
+    GuaranteedStopLossOrderNotCancelable,
     /// An attempt was made to cancel a Guaranteed Stop Loss Order when the market is halted, however the Account’s configuration requires every Trade have an associated Guaranteed Stop Loss Order.
-    GUARANTEED_STOP_LOSS_ORDER_HALTED_NOT_CANCELABLE,
+    GuaranteedStopLossOrderHaltedNotCancelable,
     /// An attempt was made to cancel and replace a Guaranteed Stop Loss Order when the market is open, however the Account’s configuration prevents the modification of Guaranteed Stop Loss Orders.
-    GUARANTEED_STOP_LOSS_ORDER_NOT_REPLACEABLE,
+    GuaranteedStopLossOrderNotReplaceable,
     /// An attempt was made to cancel and replace a Guaranteed Stop Loss Order when the market is halted, however the Account’s configuration prevents the modification of Guaranteed Stop Loss Orders.
-    GUARANTEED_STOP_LOSS_ORDER_HALTED_NOT_REPLACEABLE,
+    GuaranteedStopLossOrderHaltedNotReplaceable,
     /// An attempt was made to create a Guaranteed Stop Loss Order, however doing so would exceed the Account’s configured guaranteed StopLoss Order level restriction volume.
-    GUARANTEED_STOP_LOSS_ORDER_LEVEL_RESTRICTION_VOLUME_EXCEEDED,
+    GuaranteedStopLossOrderLevelRestrictionVolumeExceeded,
     /// An attempt was made to create a Guaranteed Stop Loss Order, however doing so would exceed the Account’s configured guaranteed StopLoss Order level restriction price range.
-    GUARANTEED_STOP_LOSS_ORDER_LEVEL_RESTRICTION_PRICE_RANGE_EXCEEDED,
+    GuaranteedStopLossOrderLevelRestrictionPriceRangeExceeded,
     /// The Guaranteed Stop Loss Order request contains both the price and distance fields.
-    GUARANTEED_STOP_LOSS_ORDER_PRICE_AND_DISTANCE_BOTH_SPECIFIED,
+    GuaranteedStopLossOrderPriceAndDistanceBothSpecified,
     /// The Guaranteed Stop Loss Order request contains neither the price nor distance fields.
-    GUARANTEED_STOP_LOSS_ORDER_PRICE_AND_DISTANCE_BOTH_MISSING,
+    GuaranteedStopLossOrderPriceAndDistanceBothMissing,
     /// The Guaranteed Stop Loss Order would cause the associated Trade to be in violation of the FIFO violation safeguard constraints
-    GUARANTEED_STOP_LOSS_ORDER_WOULD_VIOLATE_FIFO_VIOLATION_SAFEGUARD,
+    GuaranteedStopLossOrderWouldViolateFifoViolationSafeguard,
     /// The Guaranteed Stop Loss Order would be in violation of the risk management Order mutual exclusivity configuration specifying that only one risk management order can be attached to a Trade.
-    GUARANTEED_STOP_LOSS_ORDER_RMO_MUTUAL_EXCLUSIVITY_MUTUALLY_EXCLUSIVE_VIOLATION,
+    GuaranteedStopLossOrderRmoMutualExclusivityMutuallyExclusiveViolation,
     /// The Guaranteed Stop Loss Order would be in violation of the risk management Order mutual exclusivity configuration specifying that if a GSLO is already attached to a Trade, no other risk management Order can be attached to the same Trade.
-    GUARANTEED_STOP_LOSS_ORDER_RMO_MUTUAL_EXCLUSIVITY_GSLO_EXCLUDES_OTHERS_VIOLATION,
+    GuaranteedStopLossOrderRmoMutualExclusivityGsloExcludesOthersViolation,
     /// An attempt to create a pending Order was made with no Guaranteed Stop Loss Order on fill specified and the Account’s configuration requires that every Trade have an associated Guaranteed Stop Loss Order.
-    GUARANTEED_STOP_LOSS_ON_FILL_REQUIRED_FOR_PENDING_ORDER,
+    GuaranteedStopLossOnFillRequiredForPendingOrder,
     /// An attempt to create a pending Order was made with a Guaranteed Stop Loss Order on fill that was explicitly configured to be guaranteed, however the Account’s configuration does not allow guaranteed Stop Loss Orders.
-    GUARANTEED_STOP_LOSS_ON_FILL_NOT_ALLOWED,
+    GuaranteedStopLossOnFillNotAllowed,
     /// An attempt to create a pending Order was made with a Guaranteed Stop Loss Order on fill that was explicitly configured to be not guaranteed, however the Account’s configuration requires Guaranteed Stop Loss Orders.
-    GUARANTEED_STOP_LOSS_ON_FILL_REQUIRED,
+    GuaranteedStopLossOnFillRequired,
     /// The Guaranteed Stop Loss on fill specified does not provide a price
-    GUARANTEED_STOP_LOSS_ON_FILL_PRICE_MISSING,
+    GuaranteedStopLossOnFillPriceMissing,
     /// The Guaranteed Stop Loss on fill specifies an invalid price
-    GUARANTEED_STOP_LOSS_ON_FILL_PRICE_INVALID,
+    GuaranteedStopLossOnFillPriceInvalid,
     /// The Guaranteed Stop Loss on fill specifies a price with more precision than is allowed by the Order’s instrument
-    GUARANTEED_STOP_LOSS_ON_FILL_PRICE_PRECISION_EXCEEDED,
+    GuaranteedStopLossOnFillPricePrecisionExceeded,
     /// An attempt to create a pending Order was made with the distance between the Guaranteed Stop Loss Order on fill’s price and the pending Order’s price is less than the Account’s configured minimum guaranteed stop loss distance.
-    GUARANTEED_STOP_LOSS_ON_FILL_MINIMUM_DISTANCE_NOT_MET,
+    GuaranteedStopLossOnFillMinimumDistanceNotMet,
     /// Filling the Order would result in the creation of a Guaranteed Stop Loss Order with trigger number of units that violates the account’s Guaranteed Stop Loss Order level restriction volume.
-    GUARANTEED_STOP_LOSS_ON_FILL_LEVEL_RESTRICTION_VOLUME_EXCEEDED,
+    GuaranteedStopLossOnFillLevelRestrictionVolumeExceeded,
     /// Filling the Order would result in the creation of a Guaranteed Stop Loss Order with trigger price that violates the account’s Guaranteed Stop Loss Order level restriction price range.
-    GUARANTEED_STOP_LOSS_ON_FILL_LEVEL_RESTRICTION_PRICE_RANGE_EXCEEDED,
+    GuaranteedStopLossOnFillLevelRestrictionPriceRangeExceeded,
     /// The Guaranteed Stop Loss on fill distance is invalid
-    GUARANTEED_STOP_LOSS_ON_FILL_DISTANCE_INVALID,
+    GuaranteedStopLossOnFillDistanceInvalid,
     /// The Guaranteed Stop Loss on fill price distance exceeds the maximum allowed amount.
-    GUARANTEED_STOP_LOSS_ON_FILL_PRICE_DISTANCE_MAXIMUM_EXCEEDED,
+    GuaranteedStopLossOnFillPriceDistanceMaximumExceeded,
     /// The Guaranteed Stop Loss on fill distance contains more precision than is allowed by the instrument
-    GUARANTEED_STOP_LOSS_ON_FILL_DISTANCE_PRECISION_EXCEEDED,
+    GuaranteedStopLossOnFillDistancePrecisionExceeded,
     /// The Guaranteed Stop Loss on fill contains both the price and distance fields.
-    GUARANTEED_STOP_LOSS_ON_FILL_PRICE_AND_DISTANCE_BOTH_SPECIFIED,
+    GuaranteedStopLossOnFillPriceAndDistanceBothSpecified,
     /// The Guaranteed Stop Loss on fill contains neither the price nor distance fields.
-    GUARANTEED_STOP_LOSS_ON_FILL_PRICE_AND_DISTANCE_BOTH_MISSING,
+    GuaranteedStopLossOnFillPriceAndDistanceBothMissing,
     /// The Guaranteed Stop Loss on fill specified does not provide a TimeInForce
-    GUARANTEED_STOP_LOSS_ON_FILL_TIME_IN_FORCE_MISSING,
+    GuaranteedStopLossOnFillTimeInForceMissing,
     /// The Guaranteed Stop Loss on fill specifies an invalid TimeInForce
-    GUARANTEED_STOP_LOSS_ON_FILL_TIME_IN_FORCE_INVALID,
+    GuaranteedStopLossOnFillTimeInForceInvalid,
     /// The Guaranteed Stop Loss on fill specifies a GTD TimeInForce but does not provide a GTD timestamp
-    GUARANTEED_STOP_LOSS_ON_FILL_GTD_TIMESTAMP_MISSING,
+    GuaranteedStopLossOnFillGtdTimestampMissing,
     /// The Guaranteed Stop Loss on fill specifies a GTD timestamp that is in the past.
-    GUARANTEED_STOP_LOSS_ON_FILL_GTD_TIMESTAMP_IN_PAST,
+    GuaranteedStopLossOnFillGtdTimestampInPast,
     /// The Guaranteed Stop Loss on fill client Order ID specified is invalid
-    GUARANTEED_STOP_LOSS_ON_FILL_CLIENT_ORDER_ID_INVALID,
+    GuaranteedStopLossOnFillClientOrderIdInvalid,
     /// The Guaranteed Stop Loss on fill client Order tag specified is invalid
-    GUARANTEED_STOP_LOSS_ON_FILL_CLIENT_ORDER_TAG_INVALID,
+    GuaranteedStopLossOnFillClientOrderTagInvalid,
     /// The Guaranteed Stop Loss on fill client Order comment specified is invalid.
-    GUARANTEED_STOP_LOSS_ON_FILL_CLIENT_ORDER_COMMENT_INVALID,
+    GuaranteedStopLossOnFillClientOrderCommentInvalid,
     /// The Guaranteed Stop Loss on fill specified does not provide a TriggerCondition.
-    GUARANTEED_STOP_LOSS_ON_FILL_TRIGGER_CONDITION_MISSING,
+    GuaranteedStopLossOnFillTriggerConditionMissing,
     /// The Guaranteed Stop Loss on fill specifies an invalid TriggerCondition.
-    GUARANTEED_STOP_LOSS_ON_FILL_TRIGGER_CONDITION_INVALID,
+    GuaranteedStopLossOnFillTriggerConditionInvalid,
     /// A Trailing Stop Loss Order for the specified Trade already exists
-    TRAILING_STOP_LOSS_ORDER_ALREADY_EXISTS,
+    TrailingStopLossOrderAlreadyExists,
     /// The Trailing Stop Loss Order would cause the associated Trade to be in violation of the FIFO violation safeguard constraints
-    TRAILING_STOP_LOSS_ORDER_WOULD_VIOLATE_FIFO_VIOLATION_SAFEGUARD,
+    TrailingStopLossOrderWouldViolateFifoViolationSafeguard,
     /// The Trailing Stop Loss Order would be in violation of the risk management Order mutual exclusivity configuration specifying that only one risk management order can be attached to a Trade.
-    TRAILING_STOP_LOSS_ORDER_RMO_MUTUAL_EXCLUSIVITY_MUTUALLY_EXCLUSIVE_VIOLATION,
+    TrailingStopLossOrderRmoMutualExclusivityMutuallyExclusiveViolation,
     /// The Trailing Stop Loss Order would be in violation of the risk management Order mutual exclusivity configuration specifying that if a GSLO is already attached to a Trade, no other risk management Order can be attached to the same Trade.
-    TRAILING_STOP_LOSS_ORDER_RMO_MUTUAL_EXCLUSIVITY_GSLO_EXCLUDES_OTHERS_VIOLATION,
+    TrailingStopLossOrderRmoMutualExclusivityGsloExcludesOthersViolation,
     /// The Trailing Stop Loss on fill specified does not provide a distance
-    TRAILING_STOP_LOSS_ON_FILL_PRICE_DISTANCE_MISSING,
+    TrailingStopLossOnFillPriceDistanceMissing,
     /// The Trailing Stop Loss on fill distance is invalid
-    TRAILING_STOP_LOSS_ON_FILL_PRICE_DISTANCE_INVALID,
+    TrailingStopLossOnFillPriceDistanceInvalid,
     /// The Trailing Stop Loss on fill distance contains more precision than is allowed by the instrument
-    TRAILING_STOP_LOSS_ON_FILL_PRICE_DISTANCE_PRECISION_EXCEEDED,
+    TrailingStopLossOnFillPriceDistancePrecisionExceeded,
     /// The Trailing Stop Loss on fill price distance exceeds the maximum allowed amount
-    TRAILING_STOP_LOSS_ON_FILL_PRICE_DISTANCE_MAXIMUM_EXCEEDED,
+    TrailingStopLossOnFillPriceDistanceMaximumExceeded,
     /// The Trailing Stop Loss on fill price distance does not meet the minimum allowed amount
-    TRAILING_STOP_LOSS_ON_FILL_PRICE_DISTANCE_MINIMUM_NOT_MET,
+    TrailingStopLossOnFillPriceDistanceMinimumNotMet,
     /// The Trailing Stop Loss on fill specified does not provide a TimeInForce
-    TRAILING_STOP_LOSS_ON_FILL_TIME_IN_FORCE_MISSING,
+    TrailingStopLossOnFillTimeInForceMissing,
     /// The Trailing Stop Loss on fill specifies an invalid TimeInForce
-    TRAILING_STOP_LOSS_ON_FILL_TIME_IN_FORCE_INVALID,
+    TrailingStopLossOnFillTimeInForceInvalid,
     /// The Trailing Stop Loss on fill TimeInForce is specified as GTD but no GTD timestamp is provided
-    TRAILING_STOP_LOSS_ON_FILL_GTD_TIMESTAMP_MISSING,
+    TrailingStopLossOnFillGtdTimestampMissing,
     /// The Trailing Stop Loss on fill GTD timestamp is in the past
-    TRAILING_STOP_LOSS_ON_FILL_GTD_TIMESTAMP_IN_PAST,
+    TrailingStopLossOnFillGtdTimestampInPast,
     /// The Trailing Stop Loss on fill client Order ID specified is invalid
-    TRAILING_STOP_LOSS_ON_FILL_CLIENT_ORDER_ID_INVALID,
+    TrailingStopLossOnFillClientOrderIdInvalid,
     /// The Trailing Stop Loss on fill client Order tag specified is invalid
-    TRAILING_STOP_LOSS_ON_FILL_CLIENT_ORDER_TAG_INVALID,
+    TrailingStopLossOnFillClientOrderTagInvalid,
     /// The Trailing Stop Loss on fill client Order comment specified is invalid
-    TRAILING_STOP_LOSS_ON_FILL_CLIENT_ORDER_COMMENT_INVALID,
+    TrailingStopLossOnFillClientOrderCommentInvalid,
     /// A client attempted to create either a Trailing Stop Loss order or an order with a Trailing Stop Loss On Fill specified, which may not yet be supported.
-    TRAILING_STOP_LOSS_ORDERS_NOT_SUPPORTED,
+    TrailingStopLossOrdersNotSupported,
     /// The Trailing Stop Loss on fill specified does not provide a TriggerCondition
-    TRAILING_STOP_LOSS_ON_FILL_TRIGGER_CONDITION_MISSING,
+    TrailingStopLossOnFillTriggerConditionMissing,
     /// The Tailing Stop Loss on fill specifies an invalid TriggerCondition
-    TRAILING_STOP_LOSS_ON_FILL_TRIGGER_CONDITION_INVALID,
+    TrailingStopLossOnFillTriggerConditionInvalid,
     /// The request to close a Trade does not specify a full or partial close
-    CLOSE_TRADE_TYPE_MISSING,
+    CloseTradeTypeMissing,
     /// The request to close a Trade partially did not specify the number of units to close
-    CLOSE_TRADE_PARTIAL_UNITS_MISSING,
+    CloseTradePartialUnitsMissing,
     /// The request to partially close a Trade specifies a number of units that exceeds the current size of the given Trade
-    CLOSE_TRADE_UNITS_EXCEED_TRADE_SIZE,
+    CloseTradeUnitsExceedTradeSize,
     /// The Position requested to be closed out does not exist
-    CLOSEOUT_POSITION_DOESNT_EXIST,
+    CloseoutPositionDoesntExist,
     /// The request to closeout a Position was specified incompletely
-    CLOSEOUT_POSITION_INCOMPLETE_SPECIFICATION,
+    CloseoutPositionIncompleteSpecification,
     /// A partial Position closeout request specifies a number of units that exceeds the current Position
-    CLOSEOUT_POSITION_UNITS_EXCEED_POSITION_SIZE,
+    CloseoutPositionUnitsExceedPositionSize,
     /// The request to closeout a Position could not be fully satisfied
-    CLOSEOUT_POSITION_REJECT,
+    CloseoutPositionReject,
     /// The request to partially closeout a Position did not specify the number of units to close.
-    CLOSEOUT_POSITION_PARTIAL_UNITS_MISSING,
+    CloseoutPositionPartialUnitsMissing,
     /// The markup group ID provided is invalid
-    MARKUP_GROUP_ID_INVALID,
+    MarkupGroupIdInvalid,
     /// The PositionAggregationMode provided is not supported/valid.
-    POSITION_AGGREGATION_MODE_INVALID,
+    PositionAggregationModeInvalid,
     /// No configuration parameters provided
-    ADMIN_CONFIGURE_DATA_MISSING,
+    AdminConfigureDataMissing,
     /// The margin rate provided is invalid
-    MARGIN_RATE_INVALID,
+    MarginRateInvalid,
     /// The margin rate provided would cause an immediate margin closeout
-    MARGIN_RATE_WOULD_TRIGGER_CLOSEOUT,
+    MarginRateWouldTriggerCloseout,
     /// The account alias string provided is invalid
-    ALIAS_INVALID,
+    AliasInvalid,
     /// No configuration parameters provided
-    CLIENT_CONFIGURE_DATA_MISSING,
+    ClientConfigureDataMissing,
     /// The margin rate provided would cause the Account to enter a margin call state.
-    MARGIN_RATE_WOULD_TRIGGER_MARGIN_CALL,
+    MarginRateWouldTriggerMarginCall,
     /// Funding is not possible because the requested transfer amount is invalid
-    AMOUNT_INVALID,
+    AmountInvalid,
     /// The Account does not have sufficient balance to complete the funding request
-    INSUFFICIENT_FUNDS,
+    InsufficientFunds,
     /// Funding amount has not been specified
-    AMOUNT_MISSING,
+    AmountMissing,
     /// Funding reason has not been specified
-    FUNDING_REASON_MISSING,
+    FundingReasonMissing,
     /// The list of Order Identifiers provided for a One Cancels All Order contains an Order Identifier that refers to a Stop Loss Order. OCA groups cannot contain Stop Loss Orders.
-    OCA_ORDER_IDS_STOP_LOSS_NOT_ALLOWED,
+    OcaOrderIdsStopLossNotAllowed,
     /// Neither Order nor Trade on Fill client extensions were provided for modification
-    CLIENT_EXTENSIONS_DATA_MISSING,
+    ClientExtensionsDataMissing,
     /// The Order to be replaced has a different type than the replacing Order.
-    REPLACING_ORDER_INVALID,
+    ReplacingOrderInvalid,
     /// The replacing Order refers to a different Trade than the Order that is being replaced.
-    REPLACING_TRADE_ID_INVALID,
+    ReplacingTradeIdInvalid,
     /// Canceling the order would cause an immediate margin closeout.
-    ORDER_CANCEL_WOULD_TRIGGER_CLOSEOUT,
+    OrderCancelWouldTriggerCloseout,
 }

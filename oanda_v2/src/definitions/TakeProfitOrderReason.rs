@@ -1,9 +1,11 @@
 /// The reason that the Take Profit Order was initiated
+#[derive(Deserialize, Serialize)]
+#[rename_all("SCREAMING_SNAKE_CASE")]
 pub enum TakeProfitOrderReason {
     /// The Take Profit Order was initiated at the request of a client
-    CLIENT_ORDER,
+    ClientOrder,
     /// The Take Profit Order was initiated as a replacement for an existing Order
-    REPLACEMENT,
+    Replacement,
     /// The Take Profit Order was initiated automatically when an Order was filled that opened a new Trade requiring a Take Profit Order.
-    ON_FILL,
+    OnFill,
 }

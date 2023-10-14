@@ -3,7 +3,9 @@ use std::path::Path;
 use crate::error::{EasyError, Error, Result};
 use crate::gen_definition::gen_definition;
 use error_stack::ResultExt;
+use proc_macro2::Ident;
 use quote::__private::TokenStream;
+use quote::format_ident;
 use rust_format::{Config, Formatter, PrettyPlease};
 
 use crate::gen_error::gen_error;
@@ -29,7 +31,7 @@ pub fn stream_to_file(stream: TokenStream, path: &str) -> Result<()> {
             format!("{stream}")
         }
     };
-    std::fs::write(&path, formatted_code)
+    std::fs::write(path, formatted_code)
         .annotate_lazy(|| format!("Unable to write to \"{path:#?}\""))?;
     Ok(())
 }
@@ -101,4 +103,18 @@ pub fn generate_source(base_path: &str, contents: &[Content]) -> Result<()> {
 #[macro_export]
 macro_rules! bail {
     ($($arg:tt)*) => { return Err(error_stack::Report::new($crate::error::Error::Message(format!($($arg),*)))) };
+}
+
+/// Takes a name from the yaml and turns it into a nice field name
+pub fn field_name(name: &str) -> TokenStream {
+    use quote::quote;
+    if name == "type" {
+        let name = format_ident! { "r#type" };
+        quote! { #name }
+    } else {
+        let name = name.replace('-', "_");
+        let name = change_case::snake_case(&name);
+        let name = Ident::new(&name, proc_macro2::Span::call_site());
+        quote! { #name }
+    }
 }

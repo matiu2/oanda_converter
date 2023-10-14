@@ -1,87 +1,89 @@
 /// A filter that can be used when fetching Transactions
+#[derive(Deserialize, Serialize)]
+#[rename_all("SCREAMING_SNAKE_CASE")]
 pub enum TransactionFilter {
     /// Order-related Transactions. These are the Transactions that create, cancel, fill or trigger Orders
-    ORDER,
+    Order,
     /// Funding-related Transactions
-    FUNDING,
+    Funding,
     /// Administrative Transactions
-    ADMIN,
+    Admin,
     /// Account Create Transaction
-    CREATE,
+    Create,
     /// Account Close Transaction
-    CLOSE,
+    Close,
     /// Account Reopen Transaction
-    REOPEN,
+    Reopen,
     /// Client Configuration Transaction
-    CLIENT_CONFIGURE,
+    ClientConfigure,
     /// Client Configuration Reject Transaction
-    CLIENT_CONFIGURE_REJECT,
+    ClientConfigureReject,
     /// Transfer Funds Transaction
-    TRANSFER_FUNDS,
+    TransferFunds,
     /// Transfer Funds Reject Transaction
-    TRANSFER_FUNDS_REJECT,
+    TransferFundsReject,
     /// Market Order Transaction
-    MARKET_ORDER,
+    MarketOrder,
     /// Market Order Reject Transaction
-    MARKET_ORDER_REJECT,
+    MarketOrderReject,
     /// Limit Order Transaction
-    LIMIT_ORDER,
+    LimitOrder,
     /// Limit Order Reject Transaction
-    LIMIT_ORDER_REJECT,
+    LimitOrderReject,
     /// Stop Order Transaction
-    STOP_ORDER,
+    StopOrder,
     /// Stop Order Reject Transaction
-    STOP_ORDER_REJECT,
+    StopOrderReject,
     /// Market if Touched Order Transaction
-    MARKET_IF_TOUCHED_ORDER,
+    MarketIfTouchedOrder,
     /// Market if Touched Order Reject Transaction
-    MARKET_IF_TOUCHED_ORDER_REJECT,
+    MarketIfTouchedOrderReject,
     /// Take Profit Order Transaction
-    TAKE_PROFIT_ORDER,
+    TakeProfitOrder,
     /// Take Profit Order Reject Transaction
-    TAKE_PROFIT_ORDER_REJECT,
+    TakeProfitOrderReject,
     /// Stop Loss Order Transaction
-    STOP_LOSS_ORDER,
+    StopLossOrder,
     /// Stop Loss Order Reject Transaction
-    STOP_LOSS_ORDER_REJECT,
+    StopLossOrderReject,
     /// Guaranteed Stop Loss Order Transaction
-    GUARANTEED_STOP_LOSS_ORDER,
+    GuaranteedStopLossOrder,
     /// Guaranteed Stop Loss Order Reject Transaction
-    GUARANTEED_STOP_LOSS_ORDER_REJECT,
+    GuaranteedStopLossOrderReject,
     /// Trailing Stop Loss Order Transaction
-    TRAILING_STOP_LOSS_ORDER,
+    TrailingStopLossOrder,
     /// Trailing Stop Loss Order Reject Transaction
-    TRAILING_STOP_LOSS_ORDER_REJECT,
+    TrailingStopLossOrderReject,
     /// One Cancels All Order Transaction
-    ONE_CANCELS_ALL_ORDER,
+    OneCancelsAllOrder,
     /// One Cancels All Order Reject Transaction
-    ONE_CANCELS_ALL_ORDER_REJECT,
+    OneCancelsAllOrderReject,
     /// One Cancels All Order Trigger Transaction
-    ONE_CANCELS_ALL_ORDER_TRIGGERED,
+    OneCancelsAllOrderTriggered,
     /// Order Fill Transaction
-    ORDER_FILL,
+    OrderFill,
     /// Order Cancel Transaction
-    ORDER_CANCEL,
+    OrderCancel,
     /// Order Cancel Reject Transaction
-    ORDER_CANCEL_REJECT,
+    OrderCancelReject,
     /// Order Client Extensions Modify Transaction
-    ORDER_CLIENT_EXTENSIONS_MODIFY,
+    OrderClientExtensionsModify,
     /// Order Client Extensions Modify Reject Transaction
-    ORDER_CLIENT_EXTENSIONS_MODIFY_REJECT,
+    OrderClientExtensionsModifyReject,
     /// Trade Client Extensions Modify Transaction
-    TRADE_CLIENT_EXTENSIONS_MODIFY,
+    TradeClientExtensionsModify,
     /// Trade Client Extensions Modify Reject Transaction
-    TRADE_CLIENT_EXTENSIONS_MODIFY_REJECT,
+    TradeClientExtensionsModifyReject,
     /// Margin Call Enter Transaction
-    MARGIN_CALL_ENTER,
+    MarginCallEnter,
     /// Margin Call Extend Transaction
-    MARGIN_CALL_EXTEND,
+    MarginCallExtend,
     /// Margin Call Exit Transaction
-    MARGIN_CALL_EXIT,
+    MarginCallExit,
     /// Delayed Trade Closure Transaction
-    DELAYED_TRADE_CLOSURE,
+    DelayedTradeClosure,
     /// Daily Financing Transaction
-    DAILY_FINANCING,
+    DailyFinancing,
     /// Reset Resettable PL Transaction
-    RESET_RESETTABLE_PL,
+    ResetResettablePl,
 }

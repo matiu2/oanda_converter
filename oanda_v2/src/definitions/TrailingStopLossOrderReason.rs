@@ -1,9 +1,11 @@
 /// The reason that the Trailing Stop Loss Order was initiated
+#[derive(Deserialize, Serialize)]
+#[rename_all("SCREAMING_SNAKE_CASE")]
 pub enum TrailingStopLossOrderReason {
     /// The Trailing Stop Loss Order was initiated at the request of a client
-    CLIENT_ORDER,
+    ClientOrder,
     /// The Trailing Stop Loss Order was initiated as a replacement for an existing Order
-    REPLACEMENT,
+    Replacement,
     /// The Trailing Stop Loss Order was initiated automatically when an Order was filled that opened a new Trade requiring a Trailing Stop Loss Order.
-    ON_FILL,
+    OnFill,
 }

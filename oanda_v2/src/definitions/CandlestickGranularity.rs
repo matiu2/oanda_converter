@@ -1,4 +1,6 @@
 /// The granularity of a candlestick
+#[derive(Deserialize, Serialize)]
+#[rename_all("SCREAMING_SNAKE_CASE")]
 pub enum CandlestickGranularity {
     /// 5 second candlesticks, minute alignment
     S5,

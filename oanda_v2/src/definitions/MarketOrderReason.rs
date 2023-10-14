@@ -1,13 +1,15 @@
 /// The reason that the Market Order was created
+#[derive(Deserialize, Serialize)]
+#[rename_all("SCREAMING_SNAKE_CASE")]
 pub enum MarketOrderReason {
     /// The Market Order was created at the request of a client
-    CLIENT_ORDER,
+    ClientOrder,
     /// The Market Order was created to close a Trade at the request of a client
-    TRADE_CLOSE,
+    TradeClose,
     /// The Market Order was created to close a Position at the request of a client
-    POSITION_CLOSEOUT,
+    PositionCloseout,
     /// The Market Order was created as part of a Margin Closeout
-    MARGIN_CLOSEOUT,
+    MarginCloseout,
     /// The Market Order was created to close a trade marked for delayed closure
-    DELAYED_TRADE_CLOSE,
+    DelayedTradeClose,
 }

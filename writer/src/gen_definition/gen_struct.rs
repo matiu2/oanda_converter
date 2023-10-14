@@ -1,7 +1,7 @@
 //! Generates error.rs for oanda_v2
 use crate::{
     error::{Result, Tracer},
-    util::pretty_doc_string,
+    util::{field_name, pretty_doc_string},
 };
 use error_stack::ResultExt;
 use model::definition_docs::{Field, Struct};
@@ -55,7 +55,7 @@ fn gen_field(
         required,
     }: &Field,
 ) -> Result<TokenStream> {
-    let name = Ident::new(name, proc_macro2::Span::call_site());
+    let name = field_name(name);
     let type_name = Ident::new(type_name, proc_macro2::Span::call_site());
     let doc_string = pretty_doc_string(doc_string)
         .trace()

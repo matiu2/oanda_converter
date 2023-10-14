@@ -46,11 +46,9 @@ pub fn gen_single_row(row: &Row, name: &str, struct_doc_string: &str) -> Result<
         #(#doc_string)*
         struct #struct_name(#type_name);
 
-        _blank_!();
         impl std::ops::Deref for #struct_name {
             type Target = &str;
 
-            _blank_!();
             fn deref(&self) -> &Self::Target {
                 self.0
             }
@@ -66,11 +64,12 @@ pub fn gen_rows(rows: &[Row], enum_name: &str, enum_doc_string: &str) -> Result<
         .iter()
         .map(|row: &Row| match row {
             Row::ValueDescription { value, description } => Ok({
-                let field_name = Ident::new(value, proc_macro2::Span::call_site());
+                let value = change_case::pascal_case(value);
+                let variant_name = Ident::new(&value, proc_macro2::Span::call_site());
                 let doc_string = pretty_doc_string(description)?;
                 quote! {
                     #(#doc_string)*
-                    #field_name,
+                    #variant_name,
                 }
             }),
             _ => bail!("Unexpected row type in multi-row table: {row:#?}"),
@@ -79,6 +78,8 @@ pub fn gen_rows(rows: &[Row], enum_name: &str, enum_doc_string: &str) -> Result<
     Ok(quote! {
 
         #(#doc_string)*
+        #[derive(Deserialize, Serialize)]
+        #[rename_all("SCREAMING_SNAKE_CASE")]
         pub enum #enum_name {
             #(#enum_variants)*
         }

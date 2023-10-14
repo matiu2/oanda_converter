@@ -1,13 +1,15 @@
 /// The state to filter the requested Orders by.
+#[derive(Deserialize, Serialize)]
+#[rename_all("SCREAMING_SNAKE_CASE")]
 pub enum OrderStateFilter {
     /// The Orders that are currently pending execution
-    PENDING,
+    Pending,
     /// The Orders that have been filled
-    FILLED,
+    Filled,
     /// The Orders that have been triggered
-    TRIGGERED,
+    Triggered,
     /// The Orders that have been cancelled
-    CANCELLED,
+    Cancelled,
     /// The Orders that are in any of the possible states listed above
-    ALL,
+    All,
 }

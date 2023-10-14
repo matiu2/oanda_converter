@@ -1,12 +1,12 @@
-use std::borrow::ToOwned;
-use error_stack::{report, IntoReport, ResultExt};
-use reqwest::RequestBuilder;
-use serde::de::DeserializeOwned;
-use crate::{error::Error, host::Host};
 use self::account::Accounts;
 use self::instrument::Instrument;
 use self::order::Order;
 use self::trade::Trade;
+use crate::{error::Error, host::Host};
+use error_stack::{report, IntoReport, ResultExt};
+use reqwest::RequestBuilder;
+use serde::de::DeserializeOwned;
+use std::borrow::ToOwned;
 
 #[derive(Debug, Clone)]
 pub struct Client {
@@ -16,7 +16,6 @@ pub struct Client {
 }
 
 impl Client {
-
     /// Creates a new [`Client`].
     ///
     /// `token` is your API Token
@@ -29,7 +28,11 @@ impl Client {
             .build()
             .into_report()
             .unwrap();
-        Client { token, host, rest_client }
+        Client {
+            token,
+            host,
+            rest_client,
+        }
     }
 
     /// Given a URL path, inserts the part before it
@@ -43,7 +46,7 @@ impl Client {
         use reqwest::header::{ACCEPT, AUTHORIZATION};
         self.rest_client
             .get(url)
-            .header(AUTHORIZATION, format!("Bearer {}", & self.token))
+            .header(AUTHORIZATION, format!("Bearer {}", &self.token))
             .header(ACCEPT, "application/json")
     }
 
@@ -79,17 +82,14 @@ impl Client {
                 .attach_printable_lazy(|| format!("url: {url}"))
         } else {
             let body = response.text().await.map_err(Error::from);
-            let mut err = report!(Error::Status(status))
-                .attach_printable(format!("URL: {url}"));
-            Err(
-                match body {
-                    Ok(body) => err.attach_printable(format!("Body: {body}")),
-                    Err(body_err) => {
-                        err.extend_one(report!(body_err));
-                        err
-                    }
-                },
-            )
+            let mut err = report!(Error::Status(status)).attach_printable(format!("URL: {url}"));
+            Err(match body {
+                Ok(body) => err.attach_printable(format!("Body: {body}")),
+                Err(body_err) => {
+                    err.extend_one(report!(body_err));
+                    err
+                }
+            })
         }
     }
 
@@ -124,7 +124,7 @@ mod test_utils {
     use std::sync::Mutex;
 
     lazy_static! {
-        static ref ACCOUNT_ID : Mutex < Option < String >> = Mutex::new(None);
+        static ref ACCOUNT_ID: Mutex<Option<String>> = Mutex::new(None);
     }
 
     pub async fn get_account_id(client: &Client) -> Result<String, Error> {

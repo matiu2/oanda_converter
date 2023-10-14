@@ -1,17 +1,19 @@
 /// The type of the Order.
+#[derive(Deserialize, Serialize)]
+#[rename_all("SCREAMING_SNAKE_CASE")]
 pub enum CancellableOrderType {
     /// A Limit Order
-    LIMIT,
+    Limit,
     /// A Stop Order
-    STOP,
+    Stop,
     /// A Market-if-touched Order
-    MARKET_IF_TOUCHED,
+    MarketIfTouched,
     /// A Take Profit Order
-    TAKE_PROFIT,
+    TakeProfit,
     /// A Stop Loss Order
-    STOP_LOSS,
+    StopLoss,
     /// A Guaranteed Stop Loss Order
-    GUARANTEED_STOP_LOSS,
+    GuaranteedStopLoss,
     /// A Trailing Stop Loss Order
-    TRAILING_STOP_LOSS,
+    TrailingStopLoss,
 }
