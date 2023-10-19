@@ -9,8 +9,13 @@ use quote::quote;
 ///
 /// * `mods` - List of mod lines to create
 pub fn gen_lib(mods: &[&str]) -> TokenStream {
-    mods.iter()
+    let generated: TokenStream = mods
+        .iter()
         .map(|module| syn::Ident::new(module, Span::call_site()))
         .map(|module| quote!(pub mod #module;))
-        .collect()
+        .collect();
+    quote! {
+        pub mod host;
+        #generated
+    }
 }

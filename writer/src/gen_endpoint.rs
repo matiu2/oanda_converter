@@ -82,14 +82,20 @@ pub fn gen_endpoint(name: String, calls: &[RestCall]) -> Result<TokenStream> {
     let struct_name = pascal_case(&name);
     let struct_ident = Ident::new(&struct_name, proc_macro2::Span::call_site());
     // Make the Response type for each call
+    let calls = calls
+        .iter()
+        .map(|call| {
+            let method_name = call.method_name();
+            quote!(
+                pub async fn #method_name(&self) -> Result<()> {
+                    todo!()
+                }
+            )
+        })
+        .collect::<Vec<TokenStream>>();
 
-    for rest_call in calls {
-        let method_name = rest_call.method_name();
-        quote!(
-            pub async fn #method_name(&self) -> Result<>
-        )
-    }
     Ok(quote!(
+
         use crate::client::Client;
 
         struct #struct_ident<'a> {
@@ -97,7 +103,7 @@ pub fn gen_endpoint(name: String, calls: &[RestCall]) -> Result<TokenStream> {
         }
 
         impl<'a> #struct_ident<'a> {
-
+            #(#calls)*
         }
     ))
 }
