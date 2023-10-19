@@ -1,5 +1,6 @@
 //! Generates error.rs for oanda_v2
-use quote::{__private::TokenStream, quote};
+use proc_macro2::TokenStream;
+use quote::quote;
 
 pub fn gen_error() -> TokenStream {
     quote!(

@@ -12,6 +12,12 @@ pub enum Error {
     Message(String),
 }
 
+impl Error {
+    pub fn new(msg: impl ToString) -> Error {
+        Error::Message(msg.to_string())
+    }
+}
+
 impl std::error::Error for Error {}
 pub type Result<T> = error_stack::Result<T, Error>;
 

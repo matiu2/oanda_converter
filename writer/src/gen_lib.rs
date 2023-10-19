@@ -1,9 +1,7 @@
 //! Generate the lib.rs in `oanda_v2`
 
-use quote::{
-    __private::{Span, TokenStream},
-    quote,
-};
+use proc_macro2::{Span, TokenStream};
+use quote::quote;
 
 /// Generates the lib.rs in our output
 ///

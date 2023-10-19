@@ -5,7 +5,7 @@ use endpoint_docs::RestCall;
 use serde::{Deserialize, Serialize};
 use url::Url;
 
-//// The content of one page of the oanda docs
+/// The content of one page of the oanda docs
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Content {
     pub urls: Vec<Url>,

@@ -3,8 +3,7 @@ use std::path::Path;
 use crate::error::{EasyError, Error, Result};
 use crate::gen_definition::gen_definition;
 use error_stack::ResultExt;
-use proc_macro2::Ident;
-use quote::__private::TokenStream;
+use proc_macro2::{Ident, TokenStream};
 use quote::format_ident;
 use rust_format::{Config, Formatter, PrettyPlease};
 
