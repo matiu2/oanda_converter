@@ -8,7 +8,7 @@ use crate::definition_docs::Schema;
     Display, Default, FromStr, PartialEq, Eq, Hash, Debug, Serialize, Deserialize, Clone, Copy,
 )]
 #[display(style = "snake_case")]
-pub enum Endpoint {
+pub enum Endpoints {
     #[default]
     Account,
     Instrument,
@@ -22,7 +22,7 @@ pub enum Endpoint {
 /// The documentation for an API call from one of the endpoints
 #[derive(Debug, Serialize, Deserialize, Default)]
 pub struct RestCall {
-    pub endpoint: Endpoint,
+    pub endpoint: Endpoints,
     pub http_method: HttpMethod,
     pub path: String,
     pub doc_string: String,

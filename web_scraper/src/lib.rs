@@ -2,13 +2,13 @@ pub mod definitions;
 pub mod endpoint_docs;
 
 use definitions::get_definitions;
-use model::{Content, Documentation};
+use model::{Content, Documentation, Endpoint, ErrorDefinition, Everything};
 use url::Url;
 pub mod error;
 use endpoint_docs::endpoint_docs;
 pub use error::{Error, IntoReport, Result};
 use error_stack::ResultExt;
-use scraper::Html;
+use scraper::{Html, Selector};
 
 #[macro_export]
 macro_rules! bail {
@@ -38,13 +38,17 @@ pub async fn get_content(url: Url) -> Result<Content> {
     // Get all the endpoint documentation
     let documentation = if url.path().ends_with("-ep/") {
         // Extract the endpoint name from the url
-        let Some(name) = url_to_name(&url, "-ep") else { bail!("Unable to extract endpoint name from url: {url:#?}")};
-        Documentation::Endpoint {
+        let Some(name) = url_to_name(&url, "-ep") else {
+            bail!("Unable to extract endpoint name from url: {url:#?}")
+        };
+        Documentation::Endpoint(Endpoint {
             calls: endpoint_docs(&document, name.as_str())?,
             name,
-        }
+        })
     } else if url.path().ends_with("-df/") {
-        let Some(name) = url_to_name(&url, "-df") else { bail!("Unable to extract definition name from url: {url:#?}")};
+        let Some(name) = url_to_name(&url, "-df") else {
+            bail!("Unable to extract definition name from url: {url:#?}")
+        };
         Documentation::Definitions {
             name,
             definitions: get_definitions(&document)?,
@@ -104,7 +108,7 @@ fn endpoint_links(document: &Html, base_url: &Url) -> Result<Vec<Url>> {
 /// # Errors
 ///
 /// This function will return an error if .
-pub async fn get_all_content() -> Result<Vec<Content>> {
+pub async fn get_all_content() -> Result<Everything> {
     let instrument_url =
         reqwest::Url::parse("https://developer.oanda.com/rest-live-v20/instrument-ep/").unwrap();
 
@@ -128,17 +132,58 @@ pub async fn get_all_content() -> Result<Vec<Content>> {
         }));
     }
 
-    let mut all_content = Vec::new();
+    let mut content = Vec::new();
 
     for result in futures::future::join_all(tasks).await {
         match result {
-            Ok(Ok(contents)) => all_content.push(contents),
+            Ok(Ok(contents)) => content.push(contents),
             Ok(Err(err)) => bail!("While getting content: {err:#?}"),
             Err(err) => bail!("Error while waiting for get_content: {err:#?}"),
         }
     }
 
-    Ok(all_content)
+    // Scrape the errors
+    let errors = scrape_error_page().await?;
+
+    Ok(Everything { content, errors })
+}
+
+async fn scrape_error_page() -> Result<Vec<ErrorDefinition>> {
+    let html = reqwest::get("https://developer.oanda.com/rest-live-v20/troubleshooting-errors/")
+        .await
+        .into_report()
+        .change_context(Error::default())?
+        .text()
+        .await
+        .into_report()
+        .change_context(Error::default())?;
+    parse_error_page(&html)
+}
+
+fn parse_error_page(html: &str) -> Result<Vec<ErrorDefinition>> {
+    let document = Html::parse_document(html);
+    let selector = Selector::parse("#single-column *").map_err(Error::from)?;
+    // First skip until the second <h4> tag
+    let nodes: Vec<_> = document
+        .select(&selector)
+        .skip_while(|e| e.value().name() != "h4")
+        // Skip over the actual <h4>table of contents</h4>
+        .skip(1)
+        .skip_while(|e| e.value().name() != "h4")
+        .inspect(|e| println!("e: {} {}", e.value().name(), e.text().collect::<String>()))
+        .collect();
+    // Grab a section of text
+    let text: String = nodes
+        .iter()
+        .take_while(|e| e.value().name() != "h4")
+        .map(|e| e.text().collect::<String>())
+        .collect();
+    println!("text: {text}");
+    // let mut sections = Vec::new();
+    for (i, element) in nodes.iter().enumerate() {
+        println!("Element {i}: {:#?}", element.value());
+    }
+    todo!()
 }
 
 #[cfg(test)]
@@ -149,7 +194,8 @@ mod tests {
     use error_stack::ResultExt;
     use model::{
         definition_docs::Schema,
-        endpoint_docs::{Endpoint, HttpMethod},
+        endpoint_docs::{Endpoints, HttpMethod},
+        Endpoint,
     };
     use reqwest::Url;
 
@@ -170,7 +216,9 @@ mod tests {
             &Url::parse("https://developer.oanda.com/rest-live-v20/instrument-df/").unwrap()
         ));
         // We're just reading the endpoint docs here:
-        let Documentation::Endpoint{name, calls} = &content.documentation else { panic!("Expected endpoint docs") };
+        let Documentation::Endpoint(Endpoint { name, calls }) = &content.documentation else {
+            panic!("Expected endpoint docs")
+        };
         assert_eq!("instrument", name);
         let first_api_call_docs = &calls[0];
         assert_eq!(first_api_call_docs.http_method, HttpMethod::Get);
@@ -180,7 +228,7 @@ mod tests {
         );
         assert!(calls
             .iter()
-            .all(|docs| docs.endpoint == Endpoint::Instrument));
+            .all(|docs| docs.endpoint == Endpoints::Instrument));
         assert_eq!(
             first_api_call_docs.path.as_str(),
             "/v3/instruments/{instrument}/candles"
@@ -233,5 +281,11 @@ mod tests {
         let all_content = super::get_all_content().await?;
         println!("{all_content:#?}");
         Ok(())
+    }
+
+    #[test]
+    fn test_parse_error_page() {
+        let input = include_str!("../test_content/errors.html");
+        super::parse_error_page(input).unwrap();
     }
 }
