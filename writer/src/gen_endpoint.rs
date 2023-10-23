@@ -4,7 +4,7 @@ use change_case::{lower_case, pascal_case, snake_case};
 use error_stack::ResultExt;
 use model::{
     definition_docs::{Schema, Stream, Struct},
-    endpoint_docs::{HttpMethod, Response, RestCall},
+    endpoint_docs::{HttpMethod, LocatedIn, Response, RestCall, RestCallParameter},
     Endpoint,
 };
 use proc_macro2::{Ident, TokenStream};
@@ -43,6 +43,32 @@ impl CallName for RestCall {
         };
         Ok(snake_case(s.as_str()))
     }
+}
+
+fn gen_params(call: &RestCall) -> Result<TokenStream> {
+    call.parameters.iter().map(gen_param).collect()
+}
+
+fn gen_param(param: &RestCallParameter) -> Result<TokenStream> {
+    match param.located_in {
+        LocatedIn::Header => gen_header_param(&param.name, &param.description),
+        // TODO: write these
+        LocatedIn::Path => Ok(quote! {}),
+        LocatedIn::Query => Ok(quote! {}),
+    }
+}
+
+fn gen_header_param(header_name: &str, description: &str) -> Result<TokenStream> {
+    let comment: TokenStream = format!("// {description}")
+        .parse()
+        .map_err(|err| Error::new(format!("Couldn't turn this comment into tokens: Error '{err:#?}' -- comment contents: {description}")))?;
+    let value = Ident::new(&snake_case(header_name), proc_macro2::Span::call_site());
+    Ok(quote! {
+        #comment
+        .header(
+        #header_name,
+        #value
+    )})
 }
 
 fn gen_responses(struct_name: &str, call: &RestCall) -> Result<TokenStream> {
@@ -101,11 +127,13 @@ fn gen_call(call: &RestCall, endpoint_name: &str) -> Result<TokenStream> {
         HttpMethod::Put => quote! { self.client.put(url) },
         HttpMethod::Patch => quote! { self.client.patch(url) },
     };
+    let params = gen_params(call)?;
     Ok(quote!(
         #(#doc_string)*
         pub async fn #method_name(&self) -> Result<()> {
             let url = self.client.url(#path);
-            #http_method;
+            #http_method
+            #params;
         }
     ))
 }

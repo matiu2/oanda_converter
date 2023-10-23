@@ -6,12 +6,18 @@ impl<'a> Pricing<'a> {
     /// Get dancing bears and most recently completed candles within an Account for specified combinations of instrument, granularity, and price component.
     pub async fn latest(&self) -> Result<()> {
         let url = self.client.url("/v3/accounts/{accountID}/candles/latest");
-        self.client.get(url);
+        self.client
+            .get(url)
+            .header("Authorization", authorization)
+            .header("Accept-Datetime-Format", accept_datetime_format);
     }
     /// Get pricing information for a specified list of Instruments within an Account.
     pub async fn pricing(&self) -> Result<()> {
         let url = self.client.url("/v3/accounts/{accountID}/pricing");
-        self.client.get(url);
+        self.client
+            .get(url)
+            .header("Authorization", authorization)
+            .header("Accept-Datetime-Format", accept_datetime_format);
     }
     /// Get a stream of Account Prices starting from when the request is made.
     /// This pricing stream does not include every single price created for the Account, but instead will provide at most 4 prices per second (every 250 milliseconds) for each instrument being requested.
@@ -19,13 +25,19 @@ impl<'a> Pricing<'a> {
     /// Pricing windows for different connections to the price stream are not all aligned in the same way (i.e. they are not all aligned to the top of the second). This means that during periods of rapid price movement, different subscribers may observe different prices depending on their alignment.
     pub async fn stream(&self) -> Result<()> {
         let url = self.client.url("/v3/accounts/{accountID}/pricing/stream");
-        self.client.get(url);
+        self.client
+            .get(url)
+            .header("Authorization", authorization)
+            .header("Accept-Datetime-Format", accept_datetime_format);
     }
     /// Fetch candlestick data for an instrument.
     pub async fn candles(&self) -> Result<()> {
         let url = self
             .client
             .url("/v3/accounts/{accountID}/instruments/{instrument}/candles");
-        self.client.get(url);
+        self.client
+            .get(url)
+            .header("Authorization", authorization)
+            .header("Accept-Datetime-Format", accept_datetime_format);
     }
 }
