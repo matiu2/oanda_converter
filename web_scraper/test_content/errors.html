@@ -1,0 +1,876 @@
+<html lang="en" style="height: 100%;"><head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Troubleshooting &amp; Errors</title>
+<link rel="stylesheet" href="/css/site.css">
+<link rel="icon" href="/images/favicon.ico" type="image/ico" sizes="16x16">
+<script src="https://script.crazyegg.com/pages/scripts/0028/8860.js?471619" async="" type="text/javascript"></script><script async="" src="//www.google-analytics.com/analytics.js"></script><script type="text/javascript">
+    if(location.hostname !== "developer.oanda.com") {
+    	var script = document.createElement("script");
+    	script.type = "text/javascript";
+    	script.src = "//localhost:35729/livereload.js";
+    	document.getElementsByTagName("head")[0].appendChild(script);
+    
+    }
+    </script>
+<script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="/js/libs/bootstrap.js"></script>
+<script src="/js/main.min.js"></script>
+<meta name="google-translate-customization" content="613de8f134fa1dd4-d28c93d267de3976-g4696095b5a32dcda-13">
+<script type="text/javascript" src="//js.maxmind.com/js/apis/geoip2/v2.1/geoip2.js"></script>
+<script type="text/javascript">
+    var onSuccess = function(location){
+    
+                var countries = ["BE","BF","BG","BA","WF", "BL","BH","BJ","BV","WS",  "BQ","JE","BY", "RU", "RW" ,"TL", "RE" ,"TM", "TJ" ,"RO","GW", "GS", "GR" ,"GQ", "GG", "GF","GE", "GD" ,"GB", "GA", "GN" ,"GM", "GL", "GI", "OM", "IL","JO", "HR", "HU" ,"PW", "PT", "SJ", "PN", "PL","PM", "ZM", "EH", "EE", "EG","ZA" ,"IT", "SA" ,"ES" ,"ER", "ME", "MD" ,"MG", "MA" ,"MC", "UZ", "ML" , "MH" ,"MK", "MU", "MT", "MW" ,"MQ" ,"MS" ,"MR", "IM", "UG","AT" ,"FR", "IO", "SH", "FI","FK","FM", "FO",  "NL", "NO", "NA", "NC", "NE" ,"NR", "NU", "XK", "CI","CH", "CM","LB","CZ", "CY", "CV","SZ","KG" ,"KE", "SR" ,"KI","KM", "ST" ,"SK", "SI", "KW", "SN","SM" ,"SC" ,"KZ", "SE", "DJ", "DK" ,"DE" ,"DZ", "YT" ,"TZ", "LA" ,"LI", "LV","LT","LU", "LR", "LS",  "TF","TG", "VA", "VC", "AE", "AD",  "AI", "IS",  "AM", "AL", "AO", "AQ" , "AX", "AZ","IE", "UA","QA", "MZ"];
+    	 var loc = location.country.iso_code;
+               if(countries.indexOf(loc) > -1)
+                {
+                  $('.oeldisclaimer').show();
+                }
+    };
+    var onError = function(error){
+     console.log('error ',e)
+    };
+    geoip2.country(onSuccess, onError);
+    </script>
+<style>
+    .header {margin: 0 auto;padding: 5px 5px;}
+    .sticky {position: fixed; top: 0; left: 0; width: 100%; margin: 0; padding: 5px; background-color: #F2F2F2;; color: black; z-index: 900; font:14px;font-family:"helvetica neue,Helvetica,Arial,sans-serif";}</style>
+<link type="text/css" rel="stylesheet" charset="UTF-8" href="https://www.gstatic.com/_/translate_http/_/ss/k=translate_http.tr.TpYxICw8iG4.L.F4.O/d=0/rs=AN8SPfrtPftKEg7PtUwWauRCo_c976LPSg/m=el_main_css"><script type="text/javascript" charset="UTF-8" src="https://translate.googleapis.com/_/translate_http/_/js/k=translate_http.tr.en_GB.3V4VmIm-Lp8.O/d=1/exm=el_conf/ed=1/rs=AN8SPfo5PiSiZkANzOQd6Ph1pNBb-GT7HA/m=el_main"></script><link href="data:text/css,%3Ais(%5Bid*%3D'google_ads_iframe'%5D%2C%5Bid*%3D'taboola-'%5D%2C.taboolaHeight%2C.taboola-placeholder%2C%23credential_picker_container%2C%23credentials-picker-container%2C%23credential_picker_iframe%2C%5Bid*%3D'google-one-tap-iframe'%5D%2C%23google-one-tap-popup-container%2C.google-one-tap-modal-div%2C%23amp_floatingAdDiv%2C%23ez-content-blocker-container%2C%23notify-adblock)%20%7Bdisplay%3Anone!important%3Bmin-height%3A0!important%3Bheight%3A0!important%3B%7D" rel="stylesheet" type="text/css"><style id="cultivate-overlay-button">.cultivate-overlay-button-container {
+  all: revert;
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  width: 1px;
+  z-index: 10000;
+  pointer-events: none;
+}
+
+.cultivate-overlay-button {
+  all: revert;
+  position: absolute;
+  background-color: #4286F5;
+  color: white;
+  top: 10px;
+  right: 0px;
+  width: 52px;
+  height: 52px;
+  border-radius: 8px 0 0 8px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  cursor: pointer;
+  pointer-events: all;
+  overflow: hidden
+}
+
+.cultivate-overlay-button-img-wrapper {
+  all: revert;
+  width: 100%;
+  height: 100%;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center
+}
+
+.cultivate-overlay-button-img-wrapper img {
+  width: 42px;
+  height: auto;
+}
+
+.cultivate-overlay-button-grab {
+  all: revert;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 14px;
+}
+
+.cultivate-overlay-button-grab:hover {
+  cursor: move;
+}
+
+.cultivate-overlay-button-arrow {
+  all: revert;
+  position: absolute;
+  opacity: 0.7;
+  line-height: 0;
+}
+
+.cultivate-overlay-button-arrow:hover {
+  opacity: 1;
+}
+
+.cultivate-overlay-button-arrow svg {
+  all: revert;
+  display: inline-block;
+}
+
+.cultivate-overlay-button-up {
+  top: 2px;
+  right: 2px;
+  padding: 2px 2px 4px 4px;
+}
+
+.cultivate-overlay-button-down {
+  bottom: 2px;
+  right: 2px;
+  padding: 4px 2px 2px 4px;
+}
+
+</style><script src="moz-extension://e1ef0f7f-318d-41b2-9077-a0f3bb084931/assets/prompt.js"></script></head><body id="api" style="position: relative; min-height: 100%; top: 0px;"><div class="oeldisclaimer" id="myHeader" hidden="true">
+<div style="background-color:#F2F2F2;font:8px;font-family:helvetica neue,Helvetica,Arial,sans-serif;">
+<span style="display: block; text-align: center;"><span class="white-links"> CFDs are complex instruments and come with a high risk of losing money rapidly due to leverage.
+<br> <strong> 76.6% of retail investor accounts lose money when trading CFDs with this provider.</strong>
+<br> You should consider whether you understand how CFDs work and whether you can afford to take the high risk of losing your money.</span></span></div></div>
+<script>
+    window.onscroll = function() {myFunction()};
+    
+    var header = document.getElementById("myHeader");
+    var sticky = header.offsetTop;
+    function myFunction() { if (window.pageYOffset > sticky) {header.classList.add("sticky"); } else {header.classList.remove("sticky");}}
+    </script>
+<style>
+table.parameter_table {
+    margin: 0px !important;
+    table-layout: fixed;
+    width: 100%;
+}
+table.parameter_table td,th {
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+}
+
+table.parameter_table .pt_small {
+    width: 15% !important;
+}
+
+table.parameter_table .pt_medium {
+    width: 30% !important;
+}
+
+table.parameter_table .pt_15 {
+    width: 15% !important;
+}
+
+table.parameter_table .pt_25 {
+    width: 25% !important;
+}
+
+table.parameter_table .pt_75 {
+    width: 75% !important;
+}
+
+table.parameter_table .pt_85 {
+    width: 85% !important;
+}
+
+div.endpoint_header {
+    background: #edf5d6;
+    border-left: 3px solid black;
+    border-top: 1px solid #A6CE39;
+    border-bottom: 1px solid #A6CE39;
+    border-right: 1px solid #A6CE39;
+    padding: 0px;
+}
+
+
+div.method_get {
+    background: #cfebf0;
+}
+
+div.method_post {
+    background: #cbecd8;
+}
+
+div.method_put {
+    background: #efdfc8;
+}
+
+div.method_patch {
+    background: #f0e0d8;
+}
+
+div.method_delete {
+    background: #;
+}
+
+div.endpoint_header span {
+    font-size: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+div.endpoint_header a {
+    display: block;
+    color: black;
+    text-decoration: none
+}
+
+div.endpoint_header span.method {
+    width: 100px;
+    text-align: center;
+    padding-left: 14px;
+    padding-right: 14px;
+    font-weight: bold;
+    background: #A6CE39;
+    color: black;
+}
+
+div.method_post {
+    border-top: 1px solid #10a54a;
+    border-bottom: 1px solid #10a54a;
+    border-right: 1px solid #10a54a;
+}
+
+div.method_post span.method {
+    background: #10a54a;
+    color: white;
+}
+
+div.method_patch {
+    border-top: 1px solid #a54010;
+    border-bottom: 1px solid #a54010;
+    border-right: 1px solid #a54010;
+}
+
+div.method_patch span.method {
+    background: #a54010;
+    color: white;
+}
+
+div.method_get {
+    border-top: 1px solid #0f6ab4;
+    border-bottom: 1px solid #0f6ab4;
+    border-right: 1px solid #0f6ab4;
+}
+
+div.method_get span.method {
+    background: #0f6ab4;
+    color: white;
+}
+
+div.method_put {
+    border-top: 1px solid #c5862b;
+    border-bottom: 1px solid #c5862b;
+    border-right: 1px solid #c5862b;
+}
+
+div.method_put span.method {
+    background: #c5862b;
+    color: white;
+}
+
+div.method_delete {
+    border-top: 1px solid #a41e22;
+    border-bottom: 1px solid #a41e22;
+    border-right: 1px solid #a41e22;
+}
+
+div.method_delete span.method {
+    background: #a41e22;
+    color: white;
+}
+
+div.endpoint_header span.definition {
+    padding-left: 14px;
+    padding-right: 14px;
+    font-size: 14px;
+}
+
+div.endpoint_header span.path {
+    padding-left: 14px;
+}
+
+div.endpoint_header span.path p {
+    font-size: 12px;
+    margin-bottom: 0px;
+}
+
+div.endpoint_body {
+    margin-bottom: 20px;
+}
+
+div.definition_body {
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+
+div.body_schema {
+    padding: 10px;
+}
+
+button.config {
+    float: right;
+    margin-left: 5px;
+}
+
+button.clip {
+    float: right;
+}
+
+pre.snippet {
+    clear: both;
+}
+
+pre.code {
+    margin-top: 10px;
+}
+
+</style>
+<script src="/js/libs/clipboard.min.js"></script>
+
+
+<div id="wrap">
+<div id="main">
+<nav id="navigation" class="navbar navbar-default" role="navigation">
+<div class="container">
+
+<div style="margin-top:4px;background-color:white;width:100%;float:right;" id="google_translate_element"><div class="skiptranslate goog-te-gadget" dir="ltr" style=""><div id=":0.targetLanguage" style="white-space: nowrap;" class="goog-te-gadget-simple"><img src="https://www.google.com/images/cleardot.gif" class="goog-te-gadget-icon" alt="" style="background-image: url(&quot;https://translate.googleapis.com/translate_static/img/te_ctrl3.gif&quot;); background-position: -65px 0px;"><span style="vertical-align: middle;"><a aria-haspopup="true" class="VIpgJd-ZVi9od-xl07Ob-lTBxed" href="#"><span>Select Language</span><img src="https://www.google.com/images/cleardot.gif" alt="" width="1" height="1"><span style="border-left: 1px solid rgb(187, 187, 187);">​</span><img src="https://www.google.com/images/cleardot.gif" alt="" width="1" height="1"><span style="color: rgb(118, 118, 118);" aria-hidden="true">▼</span></a></span></div></div></div>
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+<span class="sr-only">Toggle navigation</span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+</button>
+<a class="navbar-brand" href="/"><img src="/images/logo.png"></a>
+</div>
+
+<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+<form id="cse-search" action="http://google.com/cse">
+<div class="navbar-form navbar-right search-box">
+<input type="hidden" name="cx" value="012645304776227016943:krqdhx97yts">
+<input type="hidden" name="ie" value="UTF-8">
+<i class="icon-search i-search" style="opacity: 1;"></i>
+<i class="icon-cancel i-close" style="display: none;"></i>
+<input type="text" name="q" class="form-control" placeholder="Search" data-toggle="modal" data-target="#search-modal" style="width: 45px; padding-left: 31px; cursor: pointer;">
+</div>
+</form>
+<ul class="nav navbar-nav navbar-right">
+<li class="active"><a href="/rest-live-v20/introduction/" class="uc">REST-V20</a></li>
+<li class=""><a href="/fix-live/introduction/" class="uc">fix</a></li>
+<li class=""><a href="/mt4-live/introduction/" class="uc">mt4</a></li>
+</ul>
+</div>
+</div>
+</nav>
+<div class="container" id="api-body">
+<div class="row">
+<div class="col-lg-3 col-sm-4 col-xs-12" id="side-menu-api-section">
+<div id="main-api-menu">
+<ul class="nav">
+<li><a href="/rest-live-v20/introduction/"><i class="icon icon-introduction"></i>Introduction</a></li>
+<li><a href="/rest-live-v20/development-guide/"><i class="icon icon-development-guide"></i>Development Guide</a></li>
+<li><a href="/rest-live-v20/best-practices/"><i class="icon icon-best-practices"></i>Best Practices</a></li>
+<li><a href="/rest-live-v20/authentication/"><i class="icon icon-authentication"></i>Authentication</a></li>
+<li class="active"><a href="/rest-live-v20/troubleshooting-errors/"><i class="icon icon-troubleshooting-errors"></i>Troubleshooting &amp; Errors</a></li>
+<li><a href="/rest-live-v20/sample-code/"><i class="icon icon-sample-code"></i>Sample Code</a></li>
+<li><a href="/rest-live-v20/release-notes/"><i class="icon icon-release-notes"></i>Release Notes</a></li>
+<li><a href="/rest-live-v20/api-comparison/"><i class="icon icon-api-comparison"></i>API Comparison</a></li>
+</ul>
+</div>
+<hr>
+<div id="resources-api-menu">
+<h4>Endpoints</h4>
+<div class="panel-group" id="accordion">
+<div class="panel">
+<div class="subMenu_item">
+<a href="/rest-live-v20/account-ep/">Account</a>
+</div>
+<div class="subMenu_item">
+<a href="/rest-live-v20/instrument-ep/">Instrument</a>
+</div>
+<div class="subMenu_item">
+<a href="/rest-live-v20/order-ep/">Order</a>
+</div>
+<div class="subMenu_item">
+<a href="/rest-live-v20/trade-ep/">Trade</a>
+</div>
+<div class="subMenu_item">
+<a href="/rest-live-v20/position-ep/">Position</a>
+</div>
+<div class="subMenu_item">
+<a href="/rest-live-v20/transaction-ep/">Transaction</a>
+</div>
+<div class="subMenu_item">
+<a href="/rest-live-v20/pricing-ep/">Pricing</a>
+</div>
+<div class="subMenu_item">
+<a href="/rest-live-v20/forexlabs-ep/">Forex Labs</a>
+</div>
+</div>
+</div>
+<h4>Definitions</h4>
+<div class="panel-group" id="accordion">
+<div class="panel">
+<div class="subMenu_item">
+<a href="/rest-live-v20/account-df/">Account</a>
+<br>
+</div>
+<div class="subMenu_item">
+<a href="/rest-live-v20/instrument-df/">Instrument</a>
+<br>
+</div>
+<div class="subMenu_item">
+<a href="/rest-live-v20/order-df/">Order</a>
+<br>
+</div>
+<div class="subMenu_item">
+<a href="/rest-live-v20/trade-df/">Trade</a>
+<br>
+</div>
+<div class="subMenu_item">
+<a href="/rest-live-v20/position-df/">Position</a>
+<br>
+</div>
+<div class="subMenu_item">
+<a href="/rest-live-v20/transaction-df/">Transaction</a>
+<br>
+</div>
+<div class="subMenu_item">
+<a href="/rest-live-v20/pricing-df/">Pricing</a>
+<br>
+</div>
+<div class="subMenu_item">
+<a href="/rest-live-v20/pricing-common-df/">Pricing Common</a>
+<br>
+</div>
+<div class="subMenu_item">
+<a href="/rest-live-v20/primitives-df/">Primitives</a>
+<br>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="col-lg-9 col-sm-8 col-xs-12" id="main-api-section">
+<div class="row" id="big-notice-section">
+</div>
+<div id="api-head-section" class="row">
+<h1>Troubleshooting &amp; Errors</h1>
+</div>
+<div id="content-api-section" class="row">
+<div id="single-column" class="col-xs-12 subsection">
+<hr>
+<p></p><div id="single-column" class="col-xs-12 subsection"><p></p>
+<h4 id="table-of-contents">Table of Contents</h4>
+<ul>
+<li><a href="#Insufficient Authorization"><strong>Insufficient Authorization</strong></a></li>
+<li><a href="#Malformed Request"><strong>Malformed Request</strong></a></li>
+<li><a href="#Invalid Instrument"><strong>Invalid Instrument</strong></a></li>
+<li><a href="#PRECISION_EXCEEDED"><strong>Precision_Exceeded</strong></a></li>
+<li><a href="#Invalid AccountID"><strong>Invalid AccountID</strong></a></li>
+<li><a href="#Account Not Tradable"><strong>Account Not Tradable</strong></a></li>
+<li><a href="#NO_SUCH_TRADE"><strong>No_Such_Trade</strong></a></li>
+<li><a href="#NO_SUCH_TRANSACTION"><strong>No_Such_Transaction</strong></a></li>
+<li><a href="#NO_SUCH_ORDER"><strong>No_Such_Order</strong></a></li>
+</ul>
+
+<h3 id="common-http-error-responses">Common HTTP Error Responses</h3>
+<p>Following are common HTTP Error Responses that may be returned from the v20 REST API when an error occurs.</p>
+<p><a name="400"></a></p>
+<h4 id="400-bad-request">400 Bad Request</h4>
+<p>A “400 Bad Request” reponse may be returned from the v20 REST API when the client has provided invalid data to be processed.</p>
+<h5 id="-a-name-malformed-request-a-malformed-request"><a name="Malformed Request"></a> Malformed Request</h5>
+<p>If an incorrect request is submitted the following error will be returned to the user.</p>
+<pre><code>"errorMessage" : "The request was missing required data"
+</code></pre><p><b>Reason:</b> One or more required parameters for the request is missing or is invalid.</p>
+<h5 id="-a-name-invalid-instrument-a-invalid-instrument"><a name="Invalid Instrument"></a> Invalid Instrument</h5>
+<p>If an incorrect currency is submitted the following error will be returned to the user.</p>
+<pre><code>"errorMessage":"Invalid value specified for 'instrument'"
+</code></pre><p><b>Reason:</b> The Currency provided is invalid. Confirm the structure of currency is correct.</p>
+<h5 id="-a-name-precision_exceeded-a-precision_exceeded"><a name="PRECISION_EXCEEDED"></a> PRECISION_EXCEEDED</h5>
+<p>If an incorrect value is submitted the following error will be returned to the user.</p>
+<pre><code>"rejectReason":" STOP_LOSS_ON_FILL_PRICE_PRECISION_EXCEEDED"
+</code></pre><p><b>Reason:</b> The error message “STOP_LOSS_ON_FILL_PRICE_PRECISION_EXCEEDED” means that The Stop Loss on fill specifies a price with more precision than is allowed by the Order’s instrument. Confirm the value provided for price is a string.</p>
+<p><a name="401"></a></p>
+<h4 id="401-unauthorized">401 Unauthorized</h4>
+<p>A “401 Unauthorized” reponse may be returned from the v20 REST API when the endpoint being accessed requires the client to be authenticated however the authentication token is invalid or has not been provided.</p>
+<h5 id="-a-name-invalid-accountid-a-invalid-accountid"><a name="Invalid AccountID"></a> Invalid AccountID</h5>
+<p>If an incorrect accountID is submitted the following error will be returned to the user.</p>
+<pre><code>"errorMessage":"The provided request was forbidden."
+</code></pre><p><b>Reason:</b> The given accountID is invalid. Confirm the accountID is correct.</p>
+<h5 id="-a-name-insufficient-authorization-a-insufficient-authorization"><a name="Insufficient Authorization"></a> Insufficient Authorization</h5>
+<p>If an incorrect request is submitted the following error will be returned to the user.</p>
+<pre><code>"errorMessage":"Insufficient authorization to perform request."
+</code></pre><p><b>Reason:</b> The endpoint being accessed requires the client to be authenticated. The following information needs to be verified:</p>
+<p>1.The <em>URL</em> provided to the curl command is correct. <a href="/rest-live-v20/development-guide/">Click here</a> to learn how to configure curl examples that can be copied without further modification.</p>
+<p>2.The authentication <em>token</em> is valid and has been added as a Bearer token in the HTTP Authorization header.</p>
+<p><a name="403"></a></p>
+<h4 id="403-forbidden">403 Forbidden</h4>
+<p>A “403 Forbidden” response may be returned from the v20 REST API when the client has provided a token that does not authorize them to perform the action implemented by the API endpoint.</p>
+<h5 id="-a-name-account-not-tradable-a-account-not-tradable"><a name="Account Not Tradable"></a> Account Not Tradable</h5>
+<p>If an incorrect request is submitted the following error will be returned to the user.</p>
+<pre><code>"errorMessage":"Insufficient authorization to perform request."
+</code></pre><p><b>Reason:</b> The account specified can not be used for trading. Please contact OANDA support for more details</p>
+<p><a name="404"></a></p>
+<h4 id="404-not-found">404 Not Found</h4>
+<p>A “404 Not Found” response may be returned from the v20 REST API when the client is attempting to refer to an entity (Account, Trade, Order, Position, etc.) that does not exist.</p>
+<h5 id="-a-name-no_such_trade-a-no_such_trade"><a name="NO_SUCH_TRADE"></a> NO_SUCH_TRADE</h5>
+<p>If an incorrect trade ID is submitted the following error will be returned to the user.</p>
+<pre><code>"errorMessage":"The trade ID specified does not exist"
+</code></pre><p><b>Reason:</b> The trade id specified is not valid. The /trade returns recent trade and it is possible that the trade being referenced is no longer in the recent trade list.</p>
+<h5 id="-a-name-no_such_transaction-a-no_such_transaction"><a name="NO_SUCH_TRANSACTION"></a> NO_SUCH_TRANSACTION</h5>
+<p>If an incorrect transaction ID is submitted the following error will be returned to the user.</p>
+<pre><code>"errorMessage":"The transaction ID specified does not exist"
+</code></pre><p><b>Reason:</b> The transaction id specified is not valid. The /transactions returns recent transactions and it is possible that the transaction being referenced is no longer in the recent transactions list.</p>
+<h5 id="-a-name-no_such_order-a-no_such_order"><a name="NO_SUCH_ORDER"></a> NO_SUCH_ORDER</h5>
+<p>If an incorrect order ID is submitted the following error will be returned to the user.</p>
+<pre><code>"errorMessage":"The order ID specified does not exist"
+</code></pre><p><b>Reason:</b> The order id specified is not valid. The /orders returns recent transactions and it is possible that the order being referenced is no longer in the recent order list.</p>
+<p><a name="405"></a></p>
+<h4 id="405-method-not-allowed">405 Method Not Allowed</h4>
+<p>The “405 Method Not Allowed” response may be returned from the v20 REST API when the client is accessing an endpoint using an incorrect
+HTTP method – for example, using GET on an endpoint that requires POST.</p>
+<p></p></div><p></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="modal" id="apiConfigModal" tabindex="-1" role="dialog">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">×</span>
+</button>
+<h4 class="modal-title" id="apiConfigModalLabel">Configure Examples</h4>
+</div>
+<div class="modal-body">
+<div class="alert alert-success" id="apiConfigReset" style="display: none;">
+<span>Configuration has been reset</span>
+</div>
+<div class="alert alert-success" id="apiConfigSaved" style="display: none;">
+<span>Configuration has been saved</span>
+</div>
+<p>Setting the following values will modify all examples to use the
+provided configuration. This may help to generate examples that
+can be copied and without further modification.</p>
+<form class="form-horizontal">
+<div class="form-group">
+<label for="inputURL" class="col-sm-2 control-label">URL</label>
+<div class="col-sm-10">
+<select class="form-control" id="inputURL"><option value="https://api-fxtrade.oanda.com">https://api-fxtrade.oanda.com</option><option value="https://api-fxpractice.oanda.com">https://api-fxpractice.oanda.com</option></select>
+</div>
+</div>
+<div class="form-group">
+<label for="inputUsername" class="col-sm-2 control-label">Username</label>
+<div class="col-sm-10">
+<input type="text" class="form-control" id="inputUsername">
+</div>
+</div>
+<div class="form-group">
+<label for="inputAccount" class="col-sm-2 control-label">Account</label>
+<div class="col-sm-10">
+<input type="text" class="form-control" id="inputAccount">
+</div>
+</div>
+<div class="form-group">
+<label for="inputToken" class="col-sm-2 control-label">Token</label>
+<div class="col-sm-10">
+<input type="text" class="form-control" id="inputToken">
+</div>
+</div>
+</form>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-default" data-dismiss="modal" id="apiClose">Close</button>
+<button type="button" class="btn btn-primary" id="apiReset">Reset</button>
+<button type="button" class="btn btn-primary" id="apiSave">Save</button>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-links" class="container">
+<div class="row">
+<div class="left-links col-xs-12 col-md-8">
+<span class="copyright">Copyright OANDA 2014</span>
+<a href="http://www.oanda.com/site/terms-of-use" class="main-link">TERMS OF USE</a>
+<a href="http://www.oanda.com/site/privacy/" class="main-link">PRIVACY POLICY</a>
+<a href="http://www.oanda.com/corp/contact/" class="main-link">CONTACT US</a>
+<a href="/about" class="main-link">ABOUT US</a>
+</div>
+<div class="right-links col-xs-12 col-md-4">
+<a href="https://www.facebook.com/OANDAfx"><i class="icon-facebook"></i></a>
+<a href="http://www.youtube.com/user/oanda"><i class="icon-youtube"></i></a>
+<a href="https://twitter.com/OANDA"><i class="icon-twitter"></i></a>
+<a href="https://plus.google.com/+oanda/posts"><i class="icon-gplus"></i></a>
+<a href="http://www.linkedin.com/company/oanda"><i class="icon-linkedin-1"></i></a>
+<a href="https://github.com/oanda"><i class="icon-github-squared"></i></a>
+</div>
+</div>
+</div>
+<div class="wide-separator"></div>
+<div id="footer-text" class="container">
+<div id="global-disclaimer">
+<p>© 1996 - 2019 OANDA Corporation. All rights reserved. "OANDA", "fxTrade" and OANDA's "fx" family of trademarks are owned by OANDA Corporation. All other trademarks appearing on this Website are the property of their respective owners.</p>
+<p>Leveraged trading in foreign currency contracts or other off-exchange products on margin carries a high level of risk and may not be suitable for everyone. We advise you to carefully consider whether trading is appropriate for you in light of your personal circumstances. You may lose more than you invest (except for OANDA Europe Ltd customers who have negative balance protection). Information on this website is general in nature. We recommend that you seek independent financial advice and ensure you fully understand the risks involved before trading. Trading through an online platform carries additional risks. <a href="https://www1.oanda.com/resources/legal/">Refer to our legal section here</a>.</p>
+</div>
+<p><strong>OANDA Corporation</strong> is a registered Futures Commission Merchant and Retail Foreign Exchange Dealer with the <a href="http://www.cftc.gov/index.htm" rel="nofollow">Commodity Futures Trading Commission</a> and is a member of the <a href="https://www.nfa.futures.org/" rel="nofollow">National Futures Association</a>. No: 0325821. Please refer to the <a class="external-link" href="http://www.nfa.futures.org/NFA-investor-information/investor-alerts/forex-investor-alert-february2007.HTML" rel="nofollow">NFA's FOREX INVESTOR ALERT</a> where appropriate.</p>
+<p><strong>OANDA (Canada) Corporation ULC</strong> accounts are available to anyone with a Canadian bank account. OANDA (Canada) Corporation ULC is regulated by the <a href="http://www.iiroc.ca/Pages/default.aspx" rel="nofollow">Investment Industry Regulatory Organization of Canada </a> (IIROC), which includes IIROC's online advisor check database (<a href="http://www.iiroc.ca/investors/knowyouradvisor/Pages/default.aspx" rel="nofollow">IIROC AdvisorReport</a>), and customer accounts are protected by the Canadian Investor Protection Fund within specified limits. A brochure describing the nature and limits of coverage is available upon request or at <a href="http://www.cipf.ca/Public/CIPFCoverage/CoveragePolicy.aspx" rel="nofollow">www.cipf.ca</a>.</p>
+<p><strong>OANDA Europe Limited</strong> is a company registered in England number 7110087, and has its registered office at Floor 9a, Tower 42, 25 Old Broad St, London EC2N 1HQ. It is authorised and regulated by the&nbsp;<a href="http://www.fca.org.uk/" rel="nofollow">Financial Conduct Authority</a>, No: 542574.</p>
+<p><strong>OANDA Asia Pacific Pte Ltd</strong> (Co. Reg. No 200704926K) holds a Capital Markets Services Licence issued by the <a href="http://www.mas.gov.sg/" rel="nofollow">Monetary Authority of Singapore</a>.</p>
+<p><strong>OANDA Australia Pty Ltd</strong>&nbsp;is regulated by the Australian Securities and Investments Commission ASIC (ABN 26 152 088 349, AFSL No. 412981) and is the issuer of the products and/or services on this website. It's important for you to consider the current <a href="/register/docs/divisions/oau/financial_services_guide.pdf">Financial Service Guide (FSG)</a>, <a href="/register/docs/divisions/oau/product_disclosure_statement.pdf">Product Disclosure Statement ('PDS')</a>, Account Terms and any other relevant OANDA documents before making any financial investment decisions. These documents can be found <a href="/resources/legal/australia/">here</a>.</p>
+<p><strong>OANDA Japan Co., Ltd.</strong> First Type I Financial Instruments Business Director of the Kanto Local Financial Bureau (Kin-sho) No. 2137 Institute Financial Futures Association subscriber number 1571.</p> <br><br><br>
+<script type="text/javascript" src="//js.maxmind.com/js/apis/geoip2/v2.1/geoip2.js"></script>
+<script type="text/javascript"> 
+    
+    var onSuccess = function(location){
+              var countries =["HK","SG"];
+     var oaucountries = ["BD","BM","BN","BO","BT","JM","BR","BZ","TK","GT","GP","GY","SV","HT","HN","HM","VE","PY","PA","PF","PG","PE","PH","EC","VN","SB","MF","MO","MN","MV","MY","MX","FJ","NI","NF","NP","CK","CO","CL","CC","CX","CR","CW","SX","KN","KY","DO","DM","VG","UY","LC","TV","TW","TO","TH","TC","AG","AR","AU","VU","AW","ID"];
+              var loc = location.country.iso_code;
+        	     if(countries.indexOf(loc) > -1)
+                  {
+                  $('.oapdisclaimer').show();
+                  }
+          	     else if(oaucountries.indexOf(loc) > -1)
+        	      {
+                   $('.oaudisclaimer').show();
+                 }
+    };
+    
+    var onError = function(error){console.log('error ',e)};
+    geoip2.country(onSuccess, onError);
+    </script>
+<div class="oapdisclaimer" id="fixed-risk-warning" hidden="true">
+<div style="position: fixed; bottom: 0; left: 0; width: 100%; margin: 0 auto; padding: 5px; background-color: #000; color: #fff; z-index: 900;"><span style="display: block; text-align: center;"><span class="white-links">Leverage trading is high risk. Losses can exceed investments.This advertisement has not been reviewed by the Monetary Authority of Singapore.</span></span></div></div>
+<div class="oaudisclaimer" id="fixed-risk-warning" hidden="true">
+<div style="position: fixed; bottom: 0; left: 0; width: 100%; margin: 0 auto; padding: 5px; background-color: #000; ;font:6px;font-family:helvetica neue,Helvetica,Arial,sans-serif;color: #fff; z-index: 500;"><span style="display: block; text-align: center;"><span class="white-links"> CFDs are complex financial products and come with a high risk of losing money.
+<br> <strong> 76.8% of retail client accounts lose money when trading CFDs with this provider.</strong>
+<br> You should consider whether you can afford to take the high risk of losing your money.</span></span></div></div>
+<script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    
+      ga('create', 'UA-47661500-1', 'auto');
+      ga('send', 'pageview');
+    
+    </script>
+<script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'de,es,fr,it,ja,ko,pt,ru,vi,zh-CN,zh-TW', layout: google.translate.TranslateElement.InlineLayout.SIMPLE, gaTrack: true, gaId: 'UA-47661500-1'}, 'google_translate_element');
+    }
+    </script><script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<script type="text/javascript">
+    setTimeout(function(){var a=document.createElement("script");
+    var b=document.getElementsByTagName("script")[0];
+    a.src=document.location.protocol+"//script.crazyegg.com/pages/scripts/0028/8860.js?"+Math.floor(new Date().getTime()/3600000);
+    a.async=true;a.type="text/javascript";b.parentNode.insertBefore(a,b)}, 1);
+    </script>
+<style>
+    * {
+      box-sizing: border-box;
+    }
+    .column {
+       float: left;
+      width: 15%;
+      padding: 25px;
+      font-size:8px;
+      
+    }
+    </style>
+</div>
+<script>
+    var clipboardSnippets = new Clipboard(
+        '[data-clipboard-snippet]',
+        { target: function(trigger){ return trigger.nextElementSibling; } }
+    );
+
+    clipboardSnippets.on('success', function(e) { e.clearSelection(); });
+
+    function APIDetails() {
+        this.urls = [
+            "https://api-fxtrade.oanda.com",
+            "https://api-fxpractice.oanda.com"
+        ];
+
+        this.stream_urls = [
+            "https://stream-fxtrade.oanda.com",
+            "https://stream-fxpractice.oanda.com"
+        ];
+
+        this.reset();
+
+        this.load();
+
+        this.cache_examples();
+    }
+      
+
+    APIDetails.prototype.reset = function() {
+        this.url = this.urls[0];
+        this.stream_url = this.stream_urls[0];
+        this.token = "<AUTHENTICATION TOKEN>";
+        this.account = "<ACCOUNT>";
+        this.userid = "<USERID>";
+        this.username = "<USERNAME>";
+    }
+
+    APIDetails.prototype.load = function() {
+        if (typeof(Storage) === "undefined") { return; }
+
+        this.url = localStorage.getItem("api_url") || this.url;
+        this.token = localStorage.getItem("api_token") || this.token;
+        this.account = localStorage.getItem("api_account") || this.account;
+        this.userid = localStorage.getItem("api_userid") || this.userid;
+        this.username = localStorage.getItem("api_username") || this.username;
+    }
+
+    APIDetails.prototype.save = function(tokens) {
+        if (typeof(Storage) === "undefined") { return; }
+
+        localStorage.setItem("api_url", this.url);
+        localStorage.setItem("api_stream_url", this.stream_url);
+        localStorage.setItem("api_token", this.token);
+        localStorage.setItem("api_account", this.account);
+        localStorage.setItem("api_userid", this.userid);
+        localStorage.setItem("api_username", this.username);
+    }
+
+    APIDetails.prototype.cache_examples = function() {
+        this.example_cache = {};
+
+        $("[tokenized-example]").each(function(i, v) {
+            this.example_cache[i] = $(v).text();
+        }.bind(this));
+    }
+
+    APIDetails.prototype.update_page = function () {
+        $("#inputURL").find('option').remove();
+
+        this.urls.forEach(function(url) {
+            $("#inputURL").append($('<option>', {
+                value: url,
+                text: url
+            }));
+        });
+
+
+        //$("#inputStreamURL").val(this.stream_url);
+        $("#inputToken").val(this.token);
+        $("#inputAccount").val(this.account);
+        $("#inputUsername").val(this.username);
+
+        $("[tokenized-example]").each(function(i, v) {
+            var text = this.example_cache[i];
+            
+            $("#inputURL").find('option').remove();
+
+            //var urls = this.urls;
+            if (text.search("<STREAM_URL>") >= 0 ) {
+                this.stream_urls.forEach(function(url) {
+                   $("#inputURL").append($('<option>', {
+                       value: url,
+                       text: url
+                   }));
+
+
+                });
+                $("#inputURL").val(this.stream_url);
+            }
+            else {
+                this.urls.forEach(function(url) {
+                   $("#inputURL").append($('<option>', {
+                       value: url,
+                       text: url
+                   }));
+
+
+                });
+                $("#inputURL").val(this.url);
+            }
+               
+
+
+            text = text.replace(
+                new RegExp("<URL>", 'g'), this.url
+            );
+            text = text.replace(
+                new RegExp("<STREAM_URL>", 'g'), this.stream_url
+            );
+            text = text.replace(
+                new RegExp("<TOKEN>", 'g'), this.token
+            );
+            text = text.replace(
+                new RegExp("<ACCOUNT>", 'g'), this.account
+            );
+            text = text.replace(
+                new RegExp("<USERID>", 'g'), this.userid
+            );
+            text = text.replace(
+                new RegExp("<USERNAME>", 'g'), this.username
+            );
+
+            $(v).text(text);
+        }.bind(this));
+    }
+
+    APIDetails.prototype.get_input = function() {
+        var url = $("#inputURL").val();
+        var token = $("#inputToken").val();
+        var account = $("#inputAccount").val();
+        var username = $("#inputUsername").val();
+
+
+        var account_tokens = account.split("-");
+
+        if (account_tokens.length == 4)
+        {
+            this.userid = account_tokens[2];
+        }
+
+        this.url = url;
+        this.token = token;
+        this.account = account;
+        this.username = username;
+    }
+
+    var apiDetails = new APIDetails();
+
+    apiDetails.update_page();
+
+    $('#apiConfigReset').hide();
+    $('#apiConfigSaved').hide();
+
+    $('#apiClose').click(function() {
+        $('#apiConfigReset').hide();
+        $('#apiConfigSaved').hide();
+    });
+
+    $('#apiSave').click(function() {
+        apiDetails.get_input();
+        apiDetails.save();
+        apiDetails.update_page();
+        $('#apiConfigReset').hide();
+        $('#apiConfigSaved').show();
+    });
+
+    $('#apiReset').click(function() {
+        apiDetails.reset();
+        apiDetails.save();
+        apiDetails.update_page();
+        $('#apiConfigReset').show();
+        $('#apiConfigSaved').hide();
+    });
+
+    </script>
+<script>(function(){var js = "window['__CF$cv$params']={r:'8193b8b14b0832a0',t:'MTY5NzgzMDcxMC4yOTkwMDA='};_cpo=document.createElement('script');_cpo.nonce='',_cpo.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js',document.getElementsByTagName('head')[0].appendChild(_cpo);";var _0xh = document.createElement('iframe');_0xh.height = 1;_0xh.width = 1;_0xh.style.position = 'absolute';_0xh.style.top = 0;_0xh.style.left = 0;_0xh.style.border = 'none';_0xh.style.visibility = 'hidden';document.body.appendChild(_0xh);function handler() {var _0xi = _0xh.contentDocument || _0xh.contentWindow.document;if (_0xi) {var _0xj = _0xi.createElement('script');_0xj.innerHTML = js;_0xi.getElementsByTagName('head')[0].appendChild(_0xj);}}if (document.readyState !== 'loading') {handler();} else if (window.addEventListener) {document.addEventListener('DOMContentLoaded', handler);} else {var prev = document.onreadystatechange || function () {};document.onreadystatechange = function (e) {prev(e);if (document.readyState !== 'loading') {document.onreadystatechange = prev;handler();}};}})();</script>
+
+</div><div id="goog-gt-tt" class="VIpgJd-yAWNEb-L7lbkb skiptranslate" style="border-radius: 12px; margin: 0 0 0 -23px; padding: 0; font-family: 'Google Sans', Arial, sans-serif;" data-id=""><div id="goog-gt-vt" class="VIpgJd-yAWNEb-hvhgNd"><div class=" VIpgJd-yAWNEb-hvhgNd-l4eHX-i3jM8c"><img src="https://fonts.gstatic.com/s/i/productlogos/translate/v14/24px.svg" width="24" height="24" alt=""></div><div class=" VIpgJd-yAWNEb-hvhgNd-k77Iif-i3jM8c"><div class="VIpgJd-yAWNEb-hvhgNd-IuizWc" dir="ltr">Original text</div><div id="goog-gt-original-text" class="VIpgJd-yAWNEb-nVMfcd-fmcmS VIpgJd-yAWNEb-hvhgNd-axAV1"></div></div><div class="VIpgJd-yAWNEb-hvhgNd-N7Eqid ltr"><div class="VIpgJd-yAWNEb-hvhgNd-N7Eqid-B7I4Od ltr" dir="ltr"><div class="VIpgJd-yAWNEb-hvhgNd-UTujCb">Rate this translation</div><div class="VIpgJd-yAWNEb-hvhgNd-eO9mKe">Your feedback will be used to help improve Google Translate</div></div><div class="VIpgJd-yAWNEb-hvhgNd-xgov5 ltr"><button id="goog-gt-thumbUpButton" type="button" class="VIpgJd-yAWNEb-hvhgNd-bgm6sf" title="Good translation" aria-label="Good translation" aria-pressed="false"><span id="goog-gt-thumbUpIcon"><svg width="24" height="24" viewBox="0 0 24 24" focusable="false" class="VIpgJd-yAWNEb-hvhgNd-THI6Vb NMm5M"><path d="M21 7h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 0S7.08 6.85 7 7H2v13h16c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73V9c0-1.1-.9-2-2-2zM7 18H4V9h3v9zm14-7l-3 7H9V8l4.34-4.34L12 9h9v2z"></path></svg></span><span id="goog-gt-thumbUpIconFilled"><svg width="24" height="24" viewBox="0 0 24 24" focusable="false" class="VIpgJd-yAWNEb-hvhgNd-THI6Vb NMm5M"><path d="M21 7h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 0S7.08 6.85 7 7v13h11c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73V9c0-1.1-.9-2-2-2zM5 7H1v13h4V7z"></path></svg></span></button><button id="goog-gt-thumbDownButton" type="button" class="VIpgJd-yAWNEb-hvhgNd-bgm6sf" title="Poor translation" aria-label="Poor translation" aria-pressed="false"><span id="goog-gt-thumbDownIcon"><svg width="24" height="24" viewBox="0 0 24 24" focusable="false" class="VIpgJd-yAWNEb-hvhgNd-THI6Vb NMm5M"><path d="M3 17h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 24s7.09-6.85 7.17-7h5V4H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2zM17 6h3v9h-3V6zM3 13l3-7h9v10l-4.34 4.34L12 15H3v-2z"></path></svg></span><span id="goog-gt-thumbDownIconFilled"><svg width="24" height="24" viewBox="0 0 24 24" focusable="false" class="VIpgJd-yAWNEb-hvhgNd-THI6Vb NMm5M"><path d="M3 17h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 24s7.09-6.85 7.17-7V4H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2zm16 0h4V4h-4v13z"></path></svg></span></button></div></div><div id="goog-gt-votingHiddenPane" class="VIpgJd-yAWNEb-hvhgNd-aXYTce"><form id="goog-gt-votingForm" action="//translate.googleapis.com/translate_voting?client=te" method="post" target="votingFrame" class="VIpgJd-yAWNEb-hvhgNd-aXYTce"><input type="text" name="sl" id="goog-gt-votingInputSrcLang"><input type="text" name="tl" id="goog-gt-votingInputTrgLang"><input type="text" name="query" id="goog-gt-votingInputSrcText"><input type="text" name="gtrans" id="goog-gt-votingInputTrgText"><input type="text" name="vote" id="goog-gt-votingInputVote"></form><iframe name="votingFrame" frameborder="0"></iframe></div></div></div><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: medium; visibility: hidden;"></iframe><div class="VIpgJd-ZVi9od-aZ2wEe-wOHMyf"><div class="VIpgJd-ZVi9od-aZ2wEe-OiiCO"><svg xmlns="http://www.w3.org/2000/svg" class="VIpgJd-ZVi9od-aZ2wEe" width="96px" height="96px" viewBox="0 0 66 66"><circle class="VIpgJd-ZVi9od-aZ2wEe-Jt5cK" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle></svg></div></div><iframe frameborder="0" class="VIpgJd-ZVi9od-xl07Ob-OEVmcd skiptranslate" title="Language Translate Widget" style="visibility: visible; box-sizing: content-box; width: 244px; height: 269px; display: none;"></iframe></body></html>
