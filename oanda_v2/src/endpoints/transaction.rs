@@ -3,19 +3,24 @@ struct Transaction<'a> {
     client: &'a Client,
 }
 impl<'a> Transaction<'a> {
-    pub async fn Transactions(&self) -> Result<()> {
+    /// Get a list of Transactions pages that satisfy a time-based Transaction query.
+    pub async fn transactions(&self) -> Result<()> {
         todo!()
     }
-    pub async fn Get(&self) -> Result<()> {
+    /// Get the details of a single Account Transaction.
+    pub async fn get(&self) -> Result<()> {
         todo!()
     }
-    pub async fn Idrange(&self) -> Result<()> {
+    /// Get a range of Transactions for an Account based on the Transaction IDs.
+    pub async fn idrange(&self) -> Result<()> {
         todo!()
     }
-    pub async fn Sinceid(&self) -> Result<()> {
+    /// Get a range of Transactions for an Account starting at (but not including) a provided Transaction ID.
+    pub async fn sinceid(&self) -> Result<()> {
         todo!()
     }
-    pub async fn Stream(&self) -> Result<()> {
+    /// Get a stream of Transactions for an Account starting from when the request is made.
+    pub async fn stream(&self) -> Result<()> {
         todo!()
     }
 }

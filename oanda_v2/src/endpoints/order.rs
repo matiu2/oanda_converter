@@ -3,25 +3,32 @@ struct Order<'a> {
     client: &'a Client,
 }
 impl<'a> Order<'a> {
-    pub async fn Orders(&self) -> Result<()> {
+    /// Create an Order for an Account
+    pub async fn orders(&self) -> Result<()> {
         todo!()
     }
-    pub async fn Orders(&self) -> Result<()> {
+    /// Get a list of Orders for an Account
+    pub async fn orders(&self) -> Result<()> {
         todo!()
     }
-    pub async fn PendingOrders(&self) -> Result<()> {
+    /// List all pending Orders in an Account
+    pub async fn pending_orders(&self) -> Result<()> {
         todo!()
     }
-    pub async fn Get(&self) -> Result<()> {
+    /// Get details for a single Order in an Account
+    pub async fn get(&self) -> Result<()> {
         todo!()
     }
-    pub async fn Put(&self) -> Result<()> {
+    /// Replace an Order in an Account by simultaneously cancelling it and creating a replacement Order
+    pub async fn put(&self) -> Result<()> {
         todo!()
     }
-    pub async fn Cancel(&self) -> Result<()> {
+    /// Cancel a pending Order in an Account
+    pub async fn cancel(&self) -> Result<()> {
         todo!()
     }
-    pub async fn ClientExtensions(&self) -> Result<()> {
+    /// Update the Client Extensions for an Order in an Account. Do not set, modify, or delete clientExtensions if your account is associated with MT4.
+    pub async fn client_extensions(&self) -> Result<()> {
         todo!()
     }
 }

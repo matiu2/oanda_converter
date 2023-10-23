@@ -1,6 +1,6 @@
 //! Generates all the code for a single endpoint
 use crate::{util::pretty_doc_string, Error, Result};
-use change_case::{lower_case, pascal_case};
+use change_case::{lower_case, pascal_case, snake_case};
 use error_stack::ResultExt;
 use model::{
     definition_docs::{Schema, Stream, Struct},
@@ -36,7 +36,7 @@ impl CallName for RestCall {
             last_segment.to_string()
         };
         Ok(Ident::new(
-            &pascal_case(s.as_str()),
+            &snake_case(s.as_str()),
             proc_macro2::Span::call_site(),
         ))
     }
@@ -85,6 +85,21 @@ fn gen_response_struct(r#struct: &Struct) -> Result<TokenStream> {
     todo!()
 }
 
+/// Generates a single method that performs a Rest API call for a certain endpoint
+fn gen_call(call: &RestCall, endpoint_name: &str) -> Result<TokenStream> {
+    let method_name = call
+        .method_name()
+        .attach_printable_lazy(|| format!("for endpoint {endpoint_name}"))?;
+    let doc_string = pretty_doc_string(&call.doc_string)?;
+    Ok(quote!(
+
+        #(#doc_string)*
+        pub async fn #method_name(&self) -> Result<()> {
+            todo!()
+        }
+    ))
+}
+
 pub fn gen_endpoint(endpoint: &Endpoint) -> Result<TokenStream> {
     let Endpoint { name, calls } = endpoint;
     let struct_name = pascal_case(name);
@@ -92,16 +107,7 @@ pub fn gen_endpoint(endpoint: &Endpoint) -> Result<TokenStream> {
     // Make the Response type for each call
     let calls = calls
         .iter()
-        .map(|call| {
-            let method_name = call
-                .method_name()
-                .attach_printable_lazy(|| format!("for endpoint {name}"))?;
-            Ok(quote!(
-                pub async fn #method_name(&self) -> Result<()> {
-                    todo!()
-                }
-            ))
-        })
+        .map(|call| gen_call(call, name))
         .collect::<Result<Vec<TokenStream>>>()?;
 
     Ok(quote!(
