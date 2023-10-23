@@ -4,25 +4,31 @@ use change_case::{lower_case, pascal_case, snake_case};
 use error_stack::ResultExt;
 use model::{
     definition_docs::{Schema, Stream, Struct},
-    endpoint_docs::{Response, RestCall},
+    endpoint_docs::{HttpMethod, Response, RestCall},
     Endpoint,
 };
 use proc_macro2::{Ident, TokenStream};
 use quote::quote;
 
 pub trait CallName {
+    /// Basic method name - don't convert it to an Ident
+    fn method_name_as_string(&self) -> Result<String>;
     /// Given self as a RestCall returns the method_name you should use
-    fn method_name(&self) -> Result<Ident>;
+    fn method_name(&self) -> Result<Ident> {
+        self.method_name_as_string()
+            .map(|basic| Ident::new(basic.as_str(), proc_macro2::Span::call_site()))
+    }
 }
 
 impl CallName for RestCall {
+    /// Returns the method_name without converting it to an Ident
     /// Generates a rust name for the method to trigger the Rest api call.
     ///
     /// Takes the path for the rest call. eg. `/v3/accounts/{accountID}/transactions`
     /// In most cases, just returns the last segment. eg. `transactions`
     /// In cases where the last segment is a variable. eg. `/v3/accounts/{accountid}/transactions/{transactionid}`
     /// The method name becomes the HTTP verb, eg `GET` or `POST`
-    fn method_name(&self) -> Result<Ident> {
+    fn method_name_as_string(&self) -> Result<String> {
         // Get the last path part
         let (_, last_segment) = self.path.rsplit_once('/').ok_or_else(|| {
             Error::new(format!(
@@ -35,10 +41,7 @@ impl CallName for RestCall {
         } else {
             last_segment.to_string()
         };
-        Ok(Ident::new(
-            &snake_case(s.as_str()),
-            proc_macro2::Span::call_site(),
-        ))
+        Ok(snake_case(s.as_str()))
     }
 }
 
@@ -87,15 +90,22 @@ fn gen_response_struct(r#struct: &Struct) -> Result<TokenStream> {
 
 /// Generates a single method that performs a Rest API call for a certain endpoint
 fn gen_call(call: &RestCall, endpoint_name: &str) -> Result<TokenStream> {
+    let RestCall { path, .. } = call;
     let method_name = call
         .method_name()
         .attach_printable_lazy(|| format!("for endpoint {endpoint_name}"))?;
     let doc_string = pretty_doc_string(&call.doc_string)?;
+    let http_method = match call.http_method {
+        HttpMethod::Get => quote! { self.client.get(url) },
+        HttpMethod::Post => quote! { self.client.post(url) },
+        HttpMethod::Put => quote! { self.client.put(url) },
+        HttpMethod::Patch => quote! { self.client.patch(url) },
+    };
     Ok(quote!(
-
         #(#doc_string)*
         pub async fn #method_name(&self) -> Result<()> {
-            todo!()
+            let url = self.client.url(#path);
+            #http_method;
         }
     ))
 }
