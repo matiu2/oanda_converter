@@ -7,7 +7,7 @@ use model::{
     endpoint_docs::{HttpMethod, LocatedIn, Response, RestCall, RestCallParameter},
     Endpoint,
 };
-use proc_macro2::{Ident, TokenStream};
+use proc_macro2::{Ident, Span, TokenStream};
 use quote::quote;
 
 pub trait CallName {
@@ -16,7 +16,7 @@ pub trait CallName {
     /// Given self as a RestCall returns the method_name you should use
     fn method_name(&self) -> Result<Ident> {
         self.method_name_as_string()
-            .map(|basic| Ident::new(basic.as_str(), proc_macro2::Span::call_site()))
+            .map(|basic| Ident::new(basic.as_str(), Span::call_site()))
     }
 }
 
@@ -45,16 +45,17 @@ impl CallName for RestCall {
     }
 }
 
-fn gen_params(call: &RestCall) -> Result<TokenStream> {
-    call.parameters.iter().map(gen_param).collect()
+/// Generate the code where we're passing parameter to the rest API
+fn gen_param_passings(call: &RestCall) -> Result<TokenStream> {
+    call.parameters.iter().map(gen_param_pass).collect()
 }
 
-fn gen_param(param: &RestCallParameter) -> Result<TokenStream> {
+/// Generate the code that passes a parameter to the rest call
+fn gen_param_pass(param: &RestCallParameter) -> Result<TokenStream> {
     match param.located_in {
         LocatedIn::Header => gen_header_param(&param.name, &param.description),
-        // TODO: write these
-        LocatedIn::Path => Ok(quote! {}),
-        LocatedIn::Query => Ok(quote! {}),
+        LocatedIn::Path => todo!(),
+        LocatedIn::Query => todo!(),
     }
 }
 
@@ -62,7 +63,7 @@ fn gen_header_param(header_name: &str, description: &str) -> Result<TokenStream>
     let comment: TokenStream = format!("// {description}")
         .parse()
         .map_err(|err| Error::new(format!("Couldn't turn this comment into tokens: Error '{err:#?}' -- comment contents: {description}")))?;
-    let value = Ident::new(&snake_case(header_name), proc_macro2::Span::call_site());
+    let value = Ident::new(&snake_case(header_name), Span::call_site());
     Ok(quote! {
         #comment
         .header(
@@ -74,7 +75,7 @@ fn gen_header_param(header_name: &str, description: &str) -> Result<TokenStream>
 fn gen_responses(struct_name: &str, call: &RestCall) -> Result<TokenStream> {
     let method_name = call.method_name()?;
     let enum_name = format!("{struct_name}{method_name}Response");
-    let enum_ident = Ident::new(&enum_name, proc_macro2::Span::call_site());
+    let enum_ident = Ident::new(&enum_name, Span::call_site());
     let responses = call
         .responses
         .iter()
@@ -87,11 +88,13 @@ fn gen_responses(struct_name: &str, call: &RestCall) -> Result<TokenStream> {
     })
 }
 
+/// Generates the type that A
 fn gen_response(response: &Response) -> Result<TokenStream> {
     let name = format!("Code{}", response.code);
-    let ident = Ident::new(&name, proc_macro2::Span::call_site());
+    let ident = Ident::new(&name, Span::call_site());
     let doc_string = pretty_doc_string(&response.description)?;
     let schema = gen_response_schema(&response.schema);
+    // Make xd
     Ok(quote! {
         #(#doc_string)*
         #ident
@@ -128,20 +131,35 @@ fn gen_call(call: &RestCall, endpoint_name: &str) -> Result<TokenStream> {
         HttpMethod::Patch => quote! { self.client.patch(url) },
     };
     let params = gen_params(call)?;
+    let param_usage = gen_param_passings(call)?;
     Ok(quote!(
         #(#doc_string)*
-        pub async fn #method_name(&self) -> Result<()> {
+        pub async fn #method_name(&self, #params) -> Result<()> {
             let url = self.client.url(#path);
             #http_method
-            #params;
+            #param_usage;
         }
     ))
+}
+
+/// Just a comma delimited list of params
+fn gen_params(call: &RestCall) -> Result<TokenStream> {
+    let params: Vec<TokenStream> = call
+        .parameters
+        .iter()
+        .map(|p| {
+            let name = Ident::new(&snake_case(&p.name), Span::call_site());
+            let type_name = Ident::new(&pascal_case(&p.type_name), Span::call_site());
+            quote! { #name: #type_name }
+        })
+        .collect();
+    Ok(quote! {#(#params),*})
 }
 
 pub fn gen_endpoint(endpoint: &Endpoint) -> Result<TokenStream> {
     let Endpoint { name, calls } = endpoint;
     let struct_name = pascal_case(name);
-    let struct_ident = Ident::new(&struct_name, proc_macro2::Span::call_site());
+    let struct_ident = Ident::new(&struct_name, Span::call_site());
     // Make the Response type for each call
     let calls = calls
         .iter()

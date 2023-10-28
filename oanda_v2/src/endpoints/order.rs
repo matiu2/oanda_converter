@@ -4,7 +4,12 @@ struct Order<'a> {
 }
 impl<'a> Order<'a> {
     /// Create an Order for an Account
-    pub async fn orders(&self) -> Result<()> {
+    pub async fn orders(
+        &self,
+        authorization: String,
+        accept_datetime_format: AcceptDatetimeFormat,
+        account_id: AccountId,
+    ) -> Result<()> {
         let url = self.client.url("/v3/accounts/{accountID}/orders");
         self.client
             .post(url)
@@ -12,7 +17,17 @@ impl<'a> Order<'a> {
             .header("Accept-Datetime-Format", accept_datetime_format);
     }
     /// Get a list of Orders for an Account
-    pub async fn orders(&self) -> Result<()> {
+    pub async fn orders(
+        &self,
+        authorization: String,
+        accept_datetime_format: AcceptDatetimeFormat,
+        account_id: AccountId,
+        ids: ListOf,
+        state: OrderStateFilter,
+        instrument: InstrumentName,
+        count: Integer,
+        before_id: OrderId,
+    ) -> Result<()> {
         let url = self.client.url("/v3/accounts/{accountID}/orders");
         self.client
             .get(url)
@@ -20,7 +35,12 @@ impl<'a> Order<'a> {
             .header("Accept-Datetime-Format", accept_datetime_format);
     }
     /// List all pending Orders in an Account
-    pub async fn pending_orders(&self) -> Result<()> {
+    pub async fn pending_orders(
+        &self,
+        authorization: String,
+        accept_datetime_format: AcceptDatetimeFormat,
+        account_id: AccountId,
+    ) -> Result<()> {
         let url = self.client.url("/v3/accounts/{accountID}/pendingOrders");
         self.client
             .get(url)
@@ -28,7 +48,13 @@ impl<'a> Order<'a> {
             .header("Accept-Datetime-Format", accept_datetime_format);
     }
     /// Get details for a single Order in an Account
-    pub async fn get(&self) -> Result<()> {
+    pub async fn get(
+        &self,
+        authorization: String,
+        accept_datetime_format: AcceptDatetimeFormat,
+        account_id: AccountId,
+        order_specifier: OrderSpecifier,
+    ) -> Result<()> {
         let url = self.client.url("/v3/accounts/{accountID}/orders/{orderSpecifier}");
         self.client
             .get(url)
@@ -36,7 +62,14 @@ impl<'a> Order<'a> {
             .header("Accept-Datetime-Format", accept_datetime_format);
     }
     /// Replace an Order in an Account by simultaneously cancelling it and creating a replacement Order
-    pub async fn put(&self) -> Result<()> {
+    pub async fn put(
+        &self,
+        authorization: String,
+        accept_datetime_format: AcceptDatetimeFormat,
+        client_request_id: ClientRequestId,
+        account_id: AccountId,
+        order_specifier: OrderSpecifier,
+    ) -> Result<()> {
         let url = self.client.url("/v3/accounts/{accountID}/orders/{orderSpecifier}");
         self.client
             .put(url)
@@ -45,7 +78,14 @@ impl<'a> Order<'a> {
             .header("ClientRequestID", client_request_id);
     }
     /// Cancel a pending Order in an Account
-    pub async fn cancel(&self) -> Result<()> {
+    pub async fn cancel(
+        &self,
+        authorization: String,
+        accept_datetime_format: AcceptDatetimeFormat,
+        client_request_id: ClientRequestId,
+        account_id: AccountId,
+        order_specifier: OrderSpecifier,
+    ) -> Result<()> {
         let url = self
             .client
             .url("/v3/accounts/{accountID}/orders/{orderSpecifier}/cancel");
@@ -56,7 +96,13 @@ impl<'a> Order<'a> {
             .header("ClientRequestID", client_request_id);
     }
     /// Update the Client Extensions for an Order in an Account. Do not set, modify, or delete clientExtensions if your account is associated with MT4.
-    pub async fn client_extensions(&self) -> Result<()> {
+    pub async fn client_extensions(
+        &self,
+        authorization: String,
+        accept_datetime_format: AcceptDatetimeFormat,
+        account_id: AccountId,
+        order_specifier: OrderSpecifier,
+    ) -> Result<()> {
         let url = self
             .client
             .url("/v3/accounts/{accountID}/orders/{orderSpecifier}/clientExtensions");
