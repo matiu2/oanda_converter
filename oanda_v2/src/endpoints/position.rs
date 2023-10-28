@@ -12,7 +12,8 @@ impl<'a> Position<'a> {
         let url = "/v3/accounts/{accountID}/positions";
         let url = url.replace("{" + "accountID" + "}");
         let url = self.client.url(url);
-        self.client.get(url).header("Authorization", authorization);
+        let query = [];
+        self.client.get(url).header("Authorization", authorization).query(&query);
     }
     /// List all open Positions for an Account. An open Position is a Position in an Account that currently has a Trade opened for it.
     pub async fn open_positions(
@@ -23,7 +24,8 @@ impl<'a> Position<'a> {
         let url = "/v3/accounts/{accountID}/openPositions";
         let url = url.replace("{" + "accountID" + "}");
         let url = self.client.url(url);
-        self.client.get(url).header("Authorization", authorization);
+        let query = [];
+        self.client.get(url).header("Authorization", authorization).query(&query);
     }
     /// Get the details of a single Instrument’s Position in an Account. The Position may by open or not.
     pub async fn get(
@@ -36,7 +38,8 @@ impl<'a> Position<'a> {
         let url = url.replace("{" + "accountID" + "}");
         let url = url.replace("{" + "instrument" + "}");
         let url = self.client.url(url);
-        self.client.get(url).header("Authorization", authorization);
+        let query = [];
+        self.client.get(url).header("Authorization", authorization).query(&query);
     }
     /// Closeout the open Position for a specific instrument in an Account.
     pub async fn close(
@@ -50,9 +53,11 @@ impl<'a> Position<'a> {
         let url = url.replace("{" + "accountID" + "}");
         let url = url.replace("{" + "instrument" + "}");
         let url = self.client.url(url);
+        let query = [];
         self.client
             .put(url)
             .header("Authorization", authorization)
-            .header("Accept-Datetime-Format", accept_datetime_format);
+            .header("Accept-Datetime-Format", accept_datetime_format)
+            .query(&query);
     }
 }

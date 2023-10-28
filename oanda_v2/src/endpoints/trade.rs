@@ -18,10 +18,18 @@ impl<'a> Trade<'a> {
         let url = "/v3/accounts/{accountID}/trades";
         let url = url.replace("{" + "accountID" + "}");
         let url = self.client.url(url);
+        let query = [
+            ("ids", ids),
+            ("state", state),
+            ("instrument", instrument),
+            ("count", count),
+            ("beforeID", before_id),
+        ];
         self.client
             .get(url)
             .header("Authorization", authorization)
-            .header("Accept-Datetime-Format", accept_datetime_format);
+            .header("Accept-Datetime-Format", accept_datetime_format)
+            .query(&query);
     }
     /// Get the list of open Trades for an Account
     pub async fn open_trades(
@@ -33,10 +41,12 @@ impl<'a> Trade<'a> {
         let url = "/v3/accounts/{accountID}/openTrades";
         let url = url.replace("{" + "accountID" + "}");
         let url = self.client.url(url);
+        let query = [];
         self.client
             .get(url)
             .header("Authorization", authorization)
-            .header("Accept-Datetime-Format", accept_datetime_format);
+            .header("Accept-Datetime-Format", accept_datetime_format)
+            .query(&query);
     }
     /// Get the details of a specific Trade in an Account
     pub async fn get(
@@ -50,10 +60,12 @@ impl<'a> Trade<'a> {
         let url = url.replace("{" + "accountID" + "}");
         let url = url.replace("{" + "tradeSpecifier" + "}");
         let url = self.client.url(url);
+        let query = [];
         self.client
             .get(url)
             .header("Authorization", authorization)
-            .header("Accept-Datetime-Format", accept_datetime_format);
+            .header("Accept-Datetime-Format", accept_datetime_format)
+            .query(&query);
     }
     /// Close (partially or fully) a specific open Trade in an Account
     pub async fn close(
@@ -67,10 +79,12 @@ impl<'a> Trade<'a> {
         let url = url.replace("{" + "accountID" + "}");
         let url = url.replace("{" + "tradeSpecifier" + "}");
         let url = self.client.url(url);
+        let query = [];
         self.client
             .put(url)
             .header("Authorization", authorization)
-            .header("Accept-Datetime-Format", accept_datetime_format);
+            .header("Accept-Datetime-Format", accept_datetime_format)
+            .query(&query);
     }
     /// Update the Client Extensions for a Trade. Do not add, update, or delete the Client Extensions if your account is associated with MT4.
     pub async fn client_extensions(
@@ -84,10 +98,12 @@ impl<'a> Trade<'a> {
         let url = url.replace("{" + "accountID" + "}");
         let url = url.replace("{" + "tradeSpecifier" + "}");
         let url = self.client.url(url);
+        let query = [];
         self.client
             .put(url)
             .header("Authorization", authorization)
-            .header("Accept-Datetime-Format", accept_datetime_format);
+            .header("Accept-Datetime-Format", accept_datetime_format)
+            .query(&query);
     }
     /// Create, replace and cancel a Trade’s dependent Orders (Take Profit, Stop Loss and Trailing Stop Loss) through the Trade itself
     pub async fn orders(
@@ -101,9 +117,11 @@ impl<'a> Trade<'a> {
         let url = url.replace("{" + "accountID" + "}");
         let url = url.replace("{" + "tradeSpecifier" + "}");
         let url = self.client.url(url);
+        let query = [];
         self.client
             .put(url)
             .header("Authorization", authorization)
-            .header("Accept-Datetime-Format", accept_datetime_format);
+            .header("Accept-Datetime-Format", accept_datetime_format)
+            .query(&query);
     }
 }

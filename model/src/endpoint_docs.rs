@@ -76,9 +76,17 @@ pub enum LocatedIn {
 }
 
 impl LocatedIn {
+    /// Returns true, only for header params
+    pub fn is_header(&self) -> bool {
+        matches!(self, LocatedIn::Header)
+    }
     /// Returns true, only for path params
-    pub fn in_path(&self) -> bool {
+    pub fn is_path(&self) -> bool {
         matches!(self, LocatedIn::Path)
+    }
+    /// Returns true, only for query params
+    pub fn is_query(&self) -> bool {
+        matches!(self, LocatedIn::Query)
     }
 }
 

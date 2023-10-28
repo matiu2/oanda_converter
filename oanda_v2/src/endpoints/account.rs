@@ -7,7 +7,8 @@ impl<'a> Account<'a> {
     pub async fn accounts(&self, authorization: String) -> Result<()> {
         let url = "/v3/accounts";
         let url = self.client.url(url);
-        self.client.get(url).header("Authorization", authorization);
+        let query = [];
+        self.client.get(url).header("Authorization", authorization).query(&query);
     }
     /// Get the full details for a single Account that a client has access to. Full pending Order, open Trade and open Position representations are provided.
     pub async fn get(
@@ -19,10 +20,12 @@ impl<'a> Account<'a> {
         let url = "/v3/accounts/{accountID}";
         let url = url.replace("{" + "accountID" + "}");
         let url = self.client.url(url);
+        let query = [];
         self.client
             .get(url)
             .header("Authorization", authorization)
-            .header("Accept-Datetime-Format", accept_datetime_format);
+            .header("Accept-Datetime-Format", accept_datetime_format)
+            .query(&query);
     }
     /// Get a summary for a single Account that a client has access to.
     pub async fn summary(
@@ -34,10 +37,12 @@ impl<'a> Account<'a> {
         let url = "/v3/accounts/{accountID}/summary";
         let url = url.replace("{" + "accountID" + "}");
         let url = self.client.url(url);
+        let query = [];
         self.client
             .get(url)
             .header("Authorization", authorization)
-            .header("Accept-Datetime-Format", accept_datetime_format);
+            .header("Accept-Datetime-Format", accept_datetime_format)
+            .query(&query);
     }
     /// Get the list of tradeable instruments for the given Account. The list of tradeable instruments is dependent on the regulatory division that the Account is located in, thus should be the same for all Accounts owned by a single user.
     pub async fn instruments(
@@ -49,7 +54,8 @@ impl<'a> Account<'a> {
         let url = "/v3/accounts/{accountID}/instruments";
         let url = url.replace("{" + "accountID" + "}");
         let url = self.client.url(url);
-        self.client.get(url).header("Authorization", authorization);
+        let query = [("instruments", instruments)];
+        self.client.get(url).header("Authorization", authorization).query(&query);
     }
     /// Set the client-configurable portions of an Account.
     pub async fn configuration(
@@ -61,10 +67,12 @@ impl<'a> Account<'a> {
         let url = "/v3/accounts/{accountID}/configuration";
         let url = url.replace("{" + "accountID" + "}");
         let url = self.client.url(url);
+        let query = [];
         self.client
             .patch(url)
             .header("Authorization", authorization)
-            .header("Accept-Datetime-Format", accept_datetime_format);
+            .header("Accept-Datetime-Format", accept_datetime_format)
+            .query(&query);
     }
     /// Endpoint used to poll an Account for its current state and changes since a specified TransactionID.
     pub async fn changes(
@@ -77,9 +85,11 @@ impl<'a> Account<'a> {
         let url = "/v3/accounts/{accountID}/changes";
         let url = url.replace("{" + "accountID" + "}");
         let url = self.client.url(url);
+        let query = [("sinceTransactionID", since_transaction_id)];
         self.client
             .get(url)
             .header("Authorization", authorization)
-            .header("Accept-Datetime-Format", accept_datetime_format);
+            .header("Accept-Datetime-Format", accept_datetime_format)
+            .query(&query);
     }
 }

@@ -19,10 +19,19 @@ impl<'a> Pricing<'a> {
         let url = "/v3/accounts/{accountID}/candles/latest";
         let url = url.replace("{" + "accountID" + "}");
         let url = self.client.url(url);
+        let query = [
+            ("candleSpecifications", candle_specifications),
+            ("units", units),
+            ("smooth", smooth),
+            ("dailyAlignment", daily_alignment),
+            ("alignmentTimezone", alignment_timezone),
+            ("weeklyAlignment", weekly_alignment),
+        ];
         self.client
             .get(url)
             .header("Authorization", authorization)
-            .header("Accept-Datetime-Format", accept_datetime_format);
+            .header("Accept-Datetime-Format", accept_datetime_format)
+            .query(&query);
     }
     /// Get pricing information for a specified list of Instruments within an Account.
     pub async fn pricing(
@@ -38,10 +47,17 @@ impl<'a> Pricing<'a> {
         let url = "/v3/accounts/{accountID}/pricing";
         let url = url.replace("{" + "accountID" + "}");
         let url = self.client.url(url);
+        let query = [
+            ("instruments", instruments),
+            ("since", since),
+            ("includeUnitsAvailable", include_units_available),
+            ("includeHomeConversions", include_home_conversions),
+        ];
         self.client
             .get(url)
             .header("Authorization", authorization)
-            .header("Accept-Datetime-Format", accept_datetime_format);
+            .header("Accept-Datetime-Format", accept_datetime_format)
+            .query(&query);
     }
     /// Get a stream of Account Prices starting from when the request is made.
     /// This pricing stream does not include every single price created for the Account, but instead will provide at most 4 prices per second (every 250 milliseconds) for each instrument being requested.
@@ -59,10 +75,16 @@ impl<'a> Pricing<'a> {
         let url = "/v3/accounts/{accountID}/pricing/stream";
         let url = url.replace("{" + "accountID" + "}");
         let url = self.client.url(url);
+        let query = [
+            ("instruments", instruments),
+            ("snapshot", snapshot),
+            ("includeHomeConversions", include_home_conversions),
+        ];
         self.client
             .get(url)
             .header("Authorization", authorization)
-            .header("Accept-Datetime-Format", accept_datetime_format);
+            .header("Accept-Datetime-Format", accept_datetime_format)
+            .query(&query);
     }
     /// Fetch candlestick data for an instrument.
     pub async fn candles(
@@ -87,9 +109,23 @@ impl<'a> Pricing<'a> {
         let url = url.replace("{" + "accountID" + "}");
         let url = url.replace("{" + "instrument" + "}");
         let url = self.client.url(url);
+        let query = [
+            ("price", price),
+            ("granularity", granularity),
+            ("count", count),
+            ("from", from),
+            ("to", to),
+            ("smooth", smooth),
+            ("includeFirst", include_first),
+            ("dailyAlignment", daily_alignment),
+            ("alignmentTimezone", alignment_timezone),
+            ("weeklyAlignment", weekly_alignment),
+            ("units", units),
+        ];
         self.client
             .get(url)
             .header("Authorization", authorization)
-            .header("Accept-Datetime-Format", accept_datetime_format);
+            .header("Accept-Datetime-Format", accept_datetime_format)
+            .query(&query);
     }
 }

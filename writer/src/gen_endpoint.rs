@@ -4,7 +4,7 @@ use change_case::{lower_case, pascal_case, snake_case};
 use error_stack::ResultExt;
 use model::{
     definition_docs::{Schema, Stream, Struct},
-    endpoint_docs::{HttpMethod, LocatedIn, Response, RestCall, RestCallParameter},
+    endpoint_docs::{HttpMethod, Response, RestCall},
     Endpoint,
 };
 use proc_macro2::{Ident, Span, TokenStream};
@@ -46,30 +46,38 @@ impl CallName for RestCall {
 }
 
 /// Generate the code where we're inserting parameters into the url
-fn gen_path_param_passings(call: &RestCall) -> Result<TokenStream> {
+fn gen_path_params(call: &RestCall) -> TokenStream {
     call.parameters
         .iter()
-        .filter(|p| p.located_in.in_path())
-        .map(gen_param_pass)
+        .filter(|p| p.located_in.is_path())
+        .map(|p| gen_path_param(&p.name))
         .collect()
 }
 
 /// Generate the code where we're passing parameter to the rest API
-fn gen_param_passings(call: &RestCall) -> Result<TokenStream> {
+fn gen_header_params(call: &RestCall) -> Result<TokenStream> {
     call.parameters
         .iter()
-        .filter(|p| !p.located_in.in_path())
-        .map(gen_param_pass)
+        .filter(|p| p.located_in.is_header())
+        .map(|p| gen_header_param(&p.name, &p.description))
         .collect()
 }
 
-/// Generate the code that passes a parameter to the rest call
-fn gen_param_pass(param: &RestCallParameter) -> Result<TokenStream> {
-    match param.located_in {
-        LocatedIn::Header => gen_header_param(&param.name, &param.description),
-        LocatedIn::Path => Ok(gen_path_param(&param.name)),
-        LocatedIn::Query => Ok(quote! {/* TODO: gen_query_param! */}),
-    }
+/// Generate the code where we're passing parameter to the rest API
+fn gen_query_params(call: &RestCall) -> Result<TokenStream> {
+    let params = call
+        .parameters
+        .iter()
+        .filter(|p| p.located_in.is_query())
+        .map(|p| gen_query_param(&p.name))
+        .collect::<Result<Vec<TokenStream>>>()?;
+    Ok(quote! { [#(#params),*] })
+}
+
+/// Generates code that passes a parameter via an http get param
+fn gen_query_param(name: &str) -> Result<TokenStream> {
+    let value = Ident::new(&snake_case(name), Span::call_site());
+    Ok(quote! { (#name, #value) })
 }
 
 /// Generates code that passes a parameter in the path through reqwest
@@ -151,17 +159,20 @@ fn gen_call(call: &RestCall, endpoint_name: &str) -> Result<TokenStream> {
         HttpMethod::Put => quote! { self.client.put(url) },
         HttpMethod::Patch => quote! { self.client.patch(url) },
     };
-    let params = gen_params(call)?;
-    let path_params = gen_path_param_passings(call)?;
-    let param_usage = gen_param_passings(call)?;
+    let param_inputs = gen_params(call)?;
+    let path_params = gen_path_params(call);
+    let query_params = gen_query_params(call)?;
+    let header_params = gen_header_params(call)?;
     Ok(quote!(
         #(#doc_string)*
-        pub async fn #method_name(&self, #params) -> Result<()> {
+        pub async fn #method_name(&self, #param_inputs) -> Result<()> {
             let url = #path;
             #path_params
             let url = self.client.url(url);
+            let query = #query_params;
             #http_method
-            #param_usage;
+            #header_params
+            .query(&query);
         }
     ))
 }

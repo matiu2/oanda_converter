@@ -13,10 +13,12 @@ impl<'a> Order<'a> {
         let url = "/v3/accounts/{accountID}/orders";
         let url = url.replace("{" + "accountID" + "}");
         let url = self.client.url(url);
+        let query = [];
         self.client
             .post(url)
             .header("Authorization", authorization)
-            .header("Accept-Datetime-Format", accept_datetime_format);
+            .header("Accept-Datetime-Format", accept_datetime_format)
+            .query(&query);
     }
     /// Get a list of Orders for an Account
     pub async fn orders(
@@ -33,10 +35,18 @@ impl<'a> Order<'a> {
         let url = "/v3/accounts/{accountID}/orders";
         let url = url.replace("{" + "accountID" + "}");
         let url = self.client.url(url);
+        let query = [
+            ("ids", ids),
+            ("state", state),
+            ("instrument", instrument),
+            ("count", count),
+            ("beforeID", before_id),
+        ];
         self.client
             .get(url)
             .header("Authorization", authorization)
-            .header("Accept-Datetime-Format", accept_datetime_format);
+            .header("Accept-Datetime-Format", accept_datetime_format)
+            .query(&query);
     }
     /// List all pending Orders in an Account
     pub async fn pending_orders(
@@ -48,10 +58,12 @@ impl<'a> Order<'a> {
         let url = "/v3/accounts/{accountID}/pendingOrders";
         let url = url.replace("{" + "accountID" + "}");
         let url = self.client.url(url);
+        let query = [];
         self.client
             .get(url)
             .header("Authorization", authorization)
-            .header("Accept-Datetime-Format", accept_datetime_format);
+            .header("Accept-Datetime-Format", accept_datetime_format)
+            .query(&query);
     }
     /// Get details for a single Order in an Account
     pub async fn get(
@@ -65,10 +77,12 @@ impl<'a> Order<'a> {
         let url = url.replace("{" + "accountID" + "}");
         let url = url.replace("{" + "orderSpecifier" + "}");
         let url = self.client.url(url);
+        let query = [];
         self.client
             .get(url)
             .header("Authorization", authorization)
-            .header("Accept-Datetime-Format", accept_datetime_format);
+            .header("Accept-Datetime-Format", accept_datetime_format)
+            .query(&query);
     }
     /// Replace an Order in an Account by simultaneously cancelling it and creating a replacement Order
     pub async fn put(
@@ -83,11 +97,13 @@ impl<'a> Order<'a> {
         let url = url.replace("{" + "accountID" + "}");
         let url = url.replace("{" + "orderSpecifier" + "}");
         let url = self.client.url(url);
+        let query = [];
         self.client
             .put(url)
             .header("Authorization", authorization)
             .header("Accept-Datetime-Format", accept_datetime_format)
-            .header("ClientRequestID", client_request_id);
+            .header("ClientRequestID", client_request_id)
+            .query(&query);
     }
     /// Cancel a pending Order in an Account
     pub async fn cancel(
@@ -102,11 +118,13 @@ impl<'a> Order<'a> {
         let url = url.replace("{" + "accountID" + "}");
         let url = url.replace("{" + "orderSpecifier" + "}");
         let url = self.client.url(url);
+        let query = [];
         self.client
             .put(url)
             .header("Authorization", authorization)
             .header("Accept-Datetime-Format", accept_datetime_format)
-            .header("ClientRequestID", client_request_id);
+            .header("ClientRequestID", client_request_id)
+            .query(&query);
     }
     /// Update the Client Extensions for an Order in an Account. Do not set, modify, or delete clientExtensions if your account is associated with MT4.
     pub async fn client_extensions(
@@ -120,9 +138,11 @@ impl<'a> Order<'a> {
         let url = url.replace("{" + "accountID" + "}");
         let url = url.replace("{" + "orderSpecifier" + "}");
         let url = self.client.url(url);
+        let query = [];
         self.client
             .put(url)
             .header("Authorization", authorization)
-            .header("Accept-Datetime-Format", accept_datetime_format);
+            .header("Accept-Datetime-Format", accept_datetime_format)
+            .query(&query);
     }
 }
