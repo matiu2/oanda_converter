@@ -75,6 +75,13 @@ pub enum LocatedIn {
     Query,
 }
 
+impl LocatedIn {
+    /// Returns true, only for path params
+    pub fn in_path(&self) -> bool {
+        matches!(self, LocatedIn::Path)
+    }
+}
+
 /// An http request documentation body
 #[derive(Debug, Serialize, Deserialize)]
 pub struct RestCallParameter {

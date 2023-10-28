@@ -45,17 +45,38 @@ impl CallName for RestCall {
     }
 }
 
+/// Generate the code where we're inserting parameters into the url
+fn gen_path_param_passings(call: &RestCall) -> Result<TokenStream> {
+    call.parameters
+        .iter()
+        .filter(|p| p.located_in.in_path())
+        .map(gen_param_pass)
+        .collect()
+}
+
 /// Generate the code where we're passing parameter to the rest API
 fn gen_param_passings(call: &RestCall) -> Result<TokenStream> {
-    call.parameters.iter().map(gen_param_pass).collect()
+    call.parameters
+        .iter()
+        .filter(|p| !p.located_in.in_path())
+        .map(gen_param_pass)
+        .collect()
 }
 
 /// Generate the code that passes a parameter to the rest call
 fn gen_param_pass(param: &RestCallParameter) -> Result<TokenStream> {
     match param.located_in {
         LocatedIn::Header => gen_header_param(&param.name, &param.description),
-        LocatedIn::Path => todo!(),
-        LocatedIn::Query => todo!(),
+        LocatedIn::Path => Ok(gen_path_param(&param.name)),
+        LocatedIn::Query => Ok(quote! {/* TODO: gen_query_param! */}),
+    }
+}
+
+/// Generates code that passes a parameter in the path through reqwest
+fn gen_path_param(name: &str) -> TokenStream {
+    let to_replace = quote! {"{" + #name + "}"};
+    quote! {
+        let url = url.replace(#to_replace);
     }
 }
 
@@ -131,11 +152,14 @@ fn gen_call(call: &RestCall, endpoint_name: &str) -> Result<TokenStream> {
         HttpMethod::Patch => quote! { self.client.patch(url) },
     };
     let params = gen_params(call)?;
+    let path_params = gen_path_param_passings(call)?;
     let param_usage = gen_param_passings(call)?;
     Ok(quote!(
         #(#doc_string)*
         pub async fn #method_name(&self, #params) -> Result<()> {
-            let url = self.client.url(#path);
+            let url = #path;
+            #path_params
+            let url = self.client.url(url);
             #http_method
             #param_usage;
         }

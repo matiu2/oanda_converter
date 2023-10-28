@@ -16,7 +16,9 @@ impl<'a> Pricing<'a> {
         alignment_timezone: String,
         weekly_alignment: WeeklyAlignment,
     ) -> Result<()> {
-        let url = self.client.url("/v3/accounts/{accountID}/candles/latest");
+        let url = "/v3/accounts/{accountID}/candles/latest";
+        let url = url.replace("{" + "accountID" + "}");
+        let url = self.client.url(url);
         self.client
             .get(url)
             .header("Authorization", authorization)
@@ -33,7 +35,9 @@ impl<'a> Pricing<'a> {
         include_units_available: Boolean,
         include_home_conversions: Boolean,
     ) -> Result<()> {
-        let url = self.client.url("/v3/accounts/{accountID}/pricing");
+        let url = "/v3/accounts/{accountID}/pricing";
+        let url = url.replace("{" + "accountID" + "}");
+        let url = self.client.url(url);
         self.client
             .get(url)
             .header("Authorization", authorization)
@@ -52,7 +56,9 @@ impl<'a> Pricing<'a> {
         snapshot: Boolean,
         include_home_conversions: Boolean,
     ) -> Result<()> {
-        let url = self.client.url("/v3/accounts/{accountID}/pricing/stream");
+        let url = "/v3/accounts/{accountID}/pricing/stream";
+        let url = url.replace("{" + "accountID" + "}");
+        let url = self.client.url(url);
         self.client
             .get(url)
             .header("Authorization", authorization)
@@ -77,9 +83,10 @@ impl<'a> Pricing<'a> {
         weekly_alignment: WeeklyAlignment,
         units: DecimalNumber,
     ) -> Result<()> {
-        let url = self
-            .client
-            .url("/v3/accounts/{accountID}/instruments/{instrument}/candles");
+        let url = "/v3/accounts/{accountID}/instruments/{instrument}/candles";
+        let url = url.replace("{" + "accountID" + "}");
+        let url = url.replace("{" + "instrument" + "}");
+        let url = self.client.url(url);
         self.client
             .get(url)
             .header("Authorization", authorization)

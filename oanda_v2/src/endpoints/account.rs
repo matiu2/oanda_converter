@@ -5,7 +5,8 @@ struct Account<'a> {
 impl<'a> Account<'a> {
     /// Get a list of all Accounts authorized for the provided token.
     pub async fn accounts(&self, authorization: String) -> Result<()> {
-        let url = self.client.url("/v3/accounts");
+        let url = "/v3/accounts";
+        let url = self.client.url(url);
         self.client.get(url).header("Authorization", authorization);
     }
     /// Get the full details for a single Account that a client has access to. Full pending Order, open Trade and open Position representations are provided.
@@ -15,7 +16,9 @@ impl<'a> Account<'a> {
         accept_datetime_format: AcceptDatetimeFormat,
         account_id: AccountId,
     ) -> Result<()> {
-        let url = self.client.url("/v3/accounts/{accountID}");
+        let url = "/v3/accounts/{accountID}";
+        let url = url.replace("{" + "accountID" + "}");
+        let url = self.client.url(url);
         self.client
             .get(url)
             .header("Authorization", authorization)
@@ -28,7 +31,9 @@ impl<'a> Account<'a> {
         accept_datetime_format: AcceptDatetimeFormat,
         account_id: AccountId,
     ) -> Result<()> {
-        let url = self.client.url("/v3/accounts/{accountID}/summary");
+        let url = "/v3/accounts/{accountID}/summary";
+        let url = url.replace("{" + "accountID" + "}");
+        let url = self.client.url(url);
         self.client
             .get(url)
             .header("Authorization", authorization)
@@ -41,7 +46,9 @@ impl<'a> Account<'a> {
         account_id: AccountId,
         instruments: ListOf,
     ) -> Result<()> {
-        let url = self.client.url("/v3/accounts/{accountID}/instruments");
+        let url = "/v3/accounts/{accountID}/instruments";
+        let url = url.replace("{" + "accountID" + "}");
+        let url = self.client.url(url);
         self.client.get(url).header("Authorization", authorization);
     }
     /// Set the client-configurable portions of an Account.
@@ -51,7 +58,9 @@ impl<'a> Account<'a> {
         accept_datetime_format: AcceptDatetimeFormat,
         account_id: AccountId,
     ) -> Result<()> {
-        let url = self.client.url("/v3/accounts/{accountID}/configuration");
+        let url = "/v3/accounts/{accountID}/configuration";
+        let url = url.replace("{" + "accountID" + "}");
+        let url = self.client.url(url);
         self.client
             .patch(url)
             .header("Authorization", authorization)
@@ -65,7 +74,9 @@ impl<'a> Account<'a> {
         account_id: AccountId,
         since_transaction_id: TransactionId,
     ) -> Result<()> {
-        let url = self.client.url("/v3/accounts/{accountID}/changes");
+        let url = "/v3/accounts/{accountID}/changes";
+        let url = url.replace("{" + "accountID" + "}");
+        let url = self.client.url(url);
         self.client
             .get(url)
             .header("Authorization", authorization)

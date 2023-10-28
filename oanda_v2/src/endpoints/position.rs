@@ -9,7 +9,9 @@ impl<'a> Position<'a> {
         authorization: String,
         account_id: AccountId,
     ) -> Result<()> {
-        let url = self.client.url("/v3/accounts/{accountID}/positions");
+        let url = "/v3/accounts/{accountID}/positions";
+        let url = url.replace("{" + "accountID" + "}");
+        let url = self.client.url(url);
         self.client.get(url).header("Authorization", authorization);
     }
     /// List all open Positions for an Account. An open Position is a Position in an Account that currently has a Trade opened for it.
@@ -18,7 +20,9 @@ impl<'a> Position<'a> {
         authorization: String,
         account_id: AccountId,
     ) -> Result<()> {
-        let url = self.client.url("/v3/accounts/{accountID}/openPositions");
+        let url = "/v3/accounts/{accountID}/openPositions";
+        let url = url.replace("{" + "accountID" + "}");
+        let url = self.client.url(url);
         self.client.get(url).header("Authorization", authorization);
     }
     /// Get the details of a single Instrument’s Position in an Account. The Position may by open or not.
@@ -28,7 +32,10 @@ impl<'a> Position<'a> {
         account_id: AccountId,
         instrument: InstrumentName,
     ) -> Result<()> {
-        let url = self.client.url("/v3/accounts/{accountID}/positions/{instrument}");
+        let url = "/v3/accounts/{accountID}/positions/{instrument}";
+        let url = url.replace("{" + "accountID" + "}");
+        let url = url.replace("{" + "instrument" + "}");
+        let url = self.client.url(url);
         self.client.get(url).header("Authorization", authorization);
     }
     /// Closeout the open Position for a specific instrument in an Account.
@@ -39,9 +46,10 @@ impl<'a> Position<'a> {
         account_id: AccountId,
         instrument: InstrumentName,
     ) -> Result<()> {
-        let url = self
-            .client
-            .url("/v3/accounts/{accountID}/positions/{instrument}/close");
+        let url = "/v3/accounts/{accountID}/positions/{instrument}/close";
+        let url = url.replace("{" + "accountID" + "}");
+        let url = url.replace("{" + "instrument" + "}");
+        let url = self.client.url(url);
         self.client
             .put(url)
             .header("Authorization", authorization)

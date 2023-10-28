@@ -10,7 +10,9 @@ impl<'a> Order<'a> {
         accept_datetime_format: AcceptDatetimeFormat,
         account_id: AccountId,
     ) -> Result<()> {
-        let url = self.client.url("/v3/accounts/{accountID}/orders");
+        let url = "/v3/accounts/{accountID}/orders";
+        let url = url.replace("{" + "accountID" + "}");
+        let url = self.client.url(url);
         self.client
             .post(url)
             .header("Authorization", authorization)
@@ -28,7 +30,9 @@ impl<'a> Order<'a> {
         count: Integer,
         before_id: OrderId,
     ) -> Result<()> {
-        let url = self.client.url("/v3/accounts/{accountID}/orders");
+        let url = "/v3/accounts/{accountID}/orders";
+        let url = url.replace("{" + "accountID" + "}");
+        let url = self.client.url(url);
         self.client
             .get(url)
             .header("Authorization", authorization)
@@ -41,7 +45,9 @@ impl<'a> Order<'a> {
         accept_datetime_format: AcceptDatetimeFormat,
         account_id: AccountId,
     ) -> Result<()> {
-        let url = self.client.url("/v3/accounts/{accountID}/pendingOrders");
+        let url = "/v3/accounts/{accountID}/pendingOrders";
+        let url = url.replace("{" + "accountID" + "}");
+        let url = self.client.url(url);
         self.client
             .get(url)
             .header("Authorization", authorization)
@@ -55,7 +61,10 @@ impl<'a> Order<'a> {
         account_id: AccountId,
         order_specifier: OrderSpecifier,
     ) -> Result<()> {
-        let url = self.client.url("/v3/accounts/{accountID}/orders/{orderSpecifier}");
+        let url = "/v3/accounts/{accountID}/orders/{orderSpecifier}";
+        let url = url.replace("{" + "accountID" + "}");
+        let url = url.replace("{" + "orderSpecifier" + "}");
+        let url = self.client.url(url);
         self.client
             .get(url)
             .header("Authorization", authorization)
@@ -70,7 +79,10 @@ impl<'a> Order<'a> {
         account_id: AccountId,
         order_specifier: OrderSpecifier,
     ) -> Result<()> {
-        let url = self.client.url("/v3/accounts/{accountID}/orders/{orderSpecifier}");
+        let url = "/v3/accounts/{accountID}/orders/{orderSpecifier}";
+        let url = url.replace("{" + "accountID" + "}");
+        let url = url.replace("{" + "orderSpecifier" + "}");
+        let url = self.client.url(url);
         self.client
             .put(url)
             .header("Authorization", authorization)
@@ -86,9 +98,10 @@ impl<'a> Order<'a> {
         account_id: AccountId,
         order_specifier: OrderSpecifier,
     ) -> Result<()> {
-        let url = self
-            .client
-            .url("/v3/accounts/{accountID}/orders/{orderSpecifier}/cancel");
+        let url = "/v3/accounts/{accountID}/orders/{orderSpecifier}/cancel";
+        let url = url.replace("{" + "accountID" + "}");
+        let url = url.replace("{" + "orderSpecifier" + "}");
+        let url = self.client.url(url);
         self.client
             .put(url)
             .header("Authorization", authorization)
@@ -103,9 +116,10 @@ impl<'a> Order<'a> {
         account_id: AccountId,
         order_specifier: OrderSpecifier,
     ) -> Result<()> {
-        let url = self
-            .client
-            .url("/v3/accounts/{accountID}/orders/{orderSpecifier}/clientExtensions");
+        let url = "/v3/accounts/{accountID}/orders/{orderSpecifier}/clientExtensions";
+        let url = url.replace("{" + "accountID" + "}");
+        let url = url.replace("{" + "orderSpecifier" + "}");
+        let url = self.client.url(url);
         self.client
             .put(url)
             .header("Authorization", authorization)

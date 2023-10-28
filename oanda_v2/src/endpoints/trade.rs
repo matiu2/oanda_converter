@@ -15,7 +15,9 @@ impl<'a> Trade<'a> {
         count: Integer,
         before_id: TradeId,
     ) -> Result<()> {
-        let url = self.client.url("/v3/accounts/{accountID}/trades");
+        let url = "/v3/accounts/{accountID}/trades";
+        let url = url.replace("{" + "accountID" + "}");
+        let url = self.client.url(url);
         self.client
             .get(url)
             .header("Authorization", authorization)
@@ -28,7 +30,9 @@ impl<'a> Trade<'a> {
         accept_datetime_format: AcceptDatetimeFormat,
         account_id: AccountId,
     ) -> Result<()> {
-        let url = self.client.url("/v3/accounts/{accountID}/openTrades");
+        let url = "/v3/accounts/{accountID}/openTrades";
+        let url = url.replace("{" + "accountID" + "}");
+        let url = self.client.url(url);
         self.client
             .get(url)
             .header("Authorization", authorization)
@@ -42,7 +46,10 @@ impl<'a> Trade<'a> {
         account_id: AccountId,
         trade_specifier: TradeSpecifier,
     ) -> Result<()> {
-        let url = self.client.url("/v3/accounts/{accountID}/trades/{tradeSpecifier}");
+        let url = "/v3/accounts/{accountID}/trades/{tradeSpecifier}";
+        let url = url.replace("{" + "accountID" + "}");
+        let url = url.replace("{" + "tradeSpecifier" + "}");
+        let url = self.client.url(url);
         self.client
             .get(url)
             .header("Authorization", authorization)
@@ -56,9 +63,10 @@ impl<'a> Trade<'a> {
         account_id: AccountId,
         trade_specifier: TradeSpecifier,
     ) -> Result<()> {
-        let url = self
-            .client
-            .url("/v3/accounts/{accountID}/trades/{tradeSpecifier}/close");
+        let url = "/v3/accounts/{accountID}/trades/{tradeSpecifier}/close";
+        let url = url.replace("{" + "accountID" + "}");
+        let url = url.replace("{" + "tradeSpecifier" + "}");
+        let url = self.client.url(url);
         self.client
             .put(url)
             .header("Authorization", authorization)
@@ -72,9 +80,10 @@ impl<'a> Trade<'a> {
         account_id: AccountId,
         trade_specifier: TradeSpecifier,
     ) -> Result<()> {
-        let url = self
-            .client
-            .url("/v3/accounts/{accountID}/trades/{tradeSpecifier}/clientExtensions");
+        let url = "/v3/accounts/{accountID}/trades/{tradeSpecifier}/clientExtensions";
+        let url = url.replace("{" + "accountID" + "}");
+        let url = url.replace("{" + "tradeSpecifier" + "}");
+        let url = self.client.url(url);
         self.client
             .put(url)
             .header("Authorization", authorization)
@@ -88,9 +97,10 @@ impl<'a> Trade<'a> {
         account_id: AccountId,
         trade_specifier: TradeSpecifier,
     ) -> Result<()> {
-        let url = self
-            .client
-            .url("/v3/accounts/{accountID}/trades/{tradeSpecifier}/orders");
+        let url = "/v3/accounts/{accountID}/trades/{tradeSpecifier}/orders";
+        let url = url.replace("{" + "accountID" + "}");
+        let url = url.replace("{" + "tradeSpecifier" + "}");
+        let url = self.client.url(url);
         self.client
             .put(url)
             .header("Authorization", authorization)
