@@ -1,5 +1,6 @@
 /// The request identifier.
 ///
+///
 struct RequestID(String);
 impl std::ops::Deref for RequestID {
     type Target = &str;

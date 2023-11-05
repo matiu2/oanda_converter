@@ -1,6 +1,7 @@
 /// The unique Transaction identifier within each Account.
 ///
-/// Format: String representation of the numerical OANDA-assigned TransactionID
+/// Format: String representation of the numerical OANDA-
+/// assigned TransactionID
 ///
 /// Example: 1523
 struct TransactionID(String);

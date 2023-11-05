@@ -1,7 +1,8 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 struct AccountChanges {
-    /// The Orders created. These Orders may have been filled, cancelled or triggered in the same period.
+    /// The Orders created. These Orders may have been filled,
+    /// cancelled or triggered in the same period.
     orders_created: Vec<Order>,
     /// The Orders cancelled.
     orders_cancelled: Vec<Order>,

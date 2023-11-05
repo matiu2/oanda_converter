@@ -67,7 +67,8 @@ impl<'a> Trade<'a> {
             .header("Accept-Datetime-Format", accept_datetime_format)
             .query(&query);
     }
-    /// Close (partially or fully) a specific open Trade in an Account
+    /// Close (partially or fully) a specific open Trade in an
+    /// Account
     pub async fn close(
         &self,
         authorization: String,
@@ -86,7 +87,9 @@ impl<'a> Trade<'a> {
             .header("Accept-Datetime-Format", accept_datetime_format)
             .query(&query);
     }
-    /// Update the Client Extensions for a Trade. Do not add, update, or delete the Client Extensions if your account is associated with MT4.
+    /// Update the Client Extensions for a Trade. Do not add,
+    /// update, or delete the Client Extensions if your account is
+    /// associated with MT4.
     pub async fn client_extensions(
         &self,
         authorization: String,
@@ -105,7 +108,9 @@ impl<'a> Trade<'a> {
             .header("Accept-Datetime-Format", accept_datetime_format)
             .query(&query);
     }
-    /// Create, replace and cancel a Trade’s dependent Orders (Take Profit, Stop Loss and Trailing Stop Loss) through the Trade itself
+    /// Create, replace and cancel a Trade’s dependent Orders (Take
+    /// Profit, Stop Loss and Trailing Stop Loss) through the Trade
+    /// itself
     pub async fn orders(
         &self,
         authorization: String,

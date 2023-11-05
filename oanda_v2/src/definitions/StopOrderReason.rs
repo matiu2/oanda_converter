@@ -4,6 +4,7 @@
 pub enum StopOrderReason {
     /// The Stop Order was initiated at the request of a client
     ClientOrder,
-    /// The Stop Order was initiated as a replacement for an existing Order
+    /// The Stop Order was initiated as a replacement for an
+    /// existing Order
     Replacement,
 }

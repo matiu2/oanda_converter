@@ -2,7 +2,8 @@
 #[derive(Deserialize, Serialize)]
 #[rename_all("SCREAMING_SNAKE_CASE")]
 pub enum TransactionFilter {
-    /// Order-related Transactions. These are the Transactions that create, cancel, fill or trigger Orders
+    /// Order-related Transactions. These are the Transactions that
+    /// create, cancel, fill or trigger Orders
     Order,
     /// Funding-related Transactions
     Funding,

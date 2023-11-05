@@ -10,6 +10,7 @@ pub enum OrderStateFilter {
     Triggered,
     /// The Orders that have been cancelled
     Cancelled,
-    /// The Orders that are in any of the possible states listed above
+    /// The Orders that are in any of the possible states listed
+    /// above
     All,
 }

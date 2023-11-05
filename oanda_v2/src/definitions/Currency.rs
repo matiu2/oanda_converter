@@ -1,4 +1,5 @@
-/// Currency name identifier. Used by clients to refer to currencies.
+/// Currency name identifier. Used by clients to refer to
+/// currencies.
 ///
 /// A string containing an ISO 4217 currency (
 struct Currency(String);

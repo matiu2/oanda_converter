@@ -6,8 +6,10 @@ pub enum TradeStateFilter {
     Open,
     /// The Trades that have been fully closed
     Closed,
-    /// The Trades that will be closed as soon as the trades’ instrument becomes tradeable
+    /// The Trades that will be closed as soon as the trades’
+    /// instrument becomes tradeable
     CloseWhenTradeable,
-    /// The Trades that are in any of the possible states listed above.
+    /// The Trades that are in any of the possible states listed
+    /// above.
     All,
 }

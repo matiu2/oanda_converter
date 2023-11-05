@@ -6,6 +6,7 @@ pub enum TradeState {
     Open,
     /// The Trade has been fully closed
     Closed,
-    /// The Trade will be closed as soon as the trade’s instrument becomes tradeable
+    /// The Trade will be closed as soon as the trade’s instrument
+    /// becomes tradeable
     CloseWhenTradeable,
 }

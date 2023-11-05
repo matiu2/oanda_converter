@@ -15,6 +15,7 @@ rust-format = { version = "0.3.4", features = ["token_stream", "prettyplease", "
 rustfmt = "0.10.0"
 serde_yaml = "0.9.25"
 syn = "2.0.26"
+textwrap = "0.16.0"
 tracing = "0.1.37"
 tracing-subscriber = "0.3.17"
 

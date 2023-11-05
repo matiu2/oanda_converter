@@ -1,6 +1,7 @@
 /// The identification of a Trade as referred to by clients
 ///
-/// Format: Either the Trade’s OANDA-assigned TradeID or the Trade’s client-provided ClientID prefixed by the “@” symbol
+/// Format: Either the Trade’s OANDA-assigned TradeID or the
+/// Trade’s client-provided ClientID prefixed by the “@” symbol
 ///
 /// Example: @my_trade_id
 struct TradeSpecifier(String);

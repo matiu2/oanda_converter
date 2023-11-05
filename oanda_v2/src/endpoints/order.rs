@@ -84,7 +84,8 @@ impl<'a> Order<'a> {
             .header("Accept-Datetime-Format", accept_datetime_format)
             .query(&query);
     }
-    /// Replace an Order in an Account by simultaneously cancelling it and creating a replacement Order
+    /// Replace an Order in an Account by simultaneously cancelling
+    /// it and creating a replacement Order
     pub async fn put(
         &self,
         authorization: String,
@@ -126,7 +127,9 @@ impl<'a> Order<'a> {
             .header("ClientRequestID", client_request_id)
             .query(&query);
     }
-    /// Update the Client Extensions for an Order in an Account. Do not set, modify, or delete clientExtensions if your account is associated with MT4.
+    /// Update the Client Extensions for an Order in an Account. Do
+    /// not set, modify, or delete clientExtensions if your account
+    /// is associated with MT4.
     pub async fn client_extensions(
         &self,
         authorization: String,

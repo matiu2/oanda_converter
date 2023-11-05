@@ -3,7 +3,9 @@ struct Position<'a> {
     client: &'a Client,
 }
 impl<'a> Position<'a> {
-    /// List all Positions for an Account. The Positions returned are for every instrument that has had a position during the lifetime of an the Account.
+    /// List all Positions for an Account. The Positions returned
+    /// are for every instrument that has had a position during the
+    /// lifetime of an the Account.
     pub async fn positions(
         &self,
         authorization: String,
@@ -15,7 +17,9 @@ impl<'a> Position<'a> {
         let query = [];
         self.client.get(url).header("Authorization", authorization).query(&query);
     }
-    /// List all open Positions for an Account. An open Position is a Position in an Account that currently has a Trade opened for it.
+    /// List all open Positions for an Account. An open Position is
+    /// a Position in an Account that currently has a Trade opened
+    /// for it.
     pub async fn open_positions(
         &self,
         authorization: String,
@@ -27,7 +31,8 @@ impl<'a> Position<'a> {
         let query = [];
         self.client.get(url).header("Authorization", authorization).query(&query);
     }
-    /// Get the details of a single Instrument’s Position in an Account. The Position may by open or not.
+    /// Get the details of a single Instrument’s Position in an
+    /// Account. The Position may by open or not.
     pub async fn get(
         &self,
         authorization: String,
@@ -41,7 +46,8 @@ impl<'a> Position<'a> {
         let query = [];
         self.client.get(url).header("Authorization", authorization).query(&query);
     }
-    /// Closeout the open Position for a specific instrument in an Account.
+    /// Closeout the open Position for a specific instrument in
+    /// an Account.
     pub async fn close(
         &self,
         authorization: String,

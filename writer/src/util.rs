@@ -47,8 +47,9 @@ pub fn stream_to_string(stream: &TokenStream) -> Result<String> {
 /// Takes a raw doc string and returns a pretty token_stream
 /// Example usage: `#(#doc_string)*`
 pub fn pretty_doc_string(input: &str) -> Result<Vec<TokenStream>> {
-    input
-        .lines()
+    let lines = textwrap::wrap(input, 60);
+    lines
+        .iter()
         .map(|line| {
             let line = format!("/// {line}");
             line.parse()

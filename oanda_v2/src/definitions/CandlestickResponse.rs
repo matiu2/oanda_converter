@@ -1,7 +1,8 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 struct CandlestickResponse {
-    /// The instrument whose Prices are represented by the candlesticks.
+    /// The instrument whose Prices are represented by the
+    /// candlesticks.
     instrument: Option<InstrumentName>,
     /// The granularity of the candlesticks provided.
     granularity: Option<CandlestickGranularity>,

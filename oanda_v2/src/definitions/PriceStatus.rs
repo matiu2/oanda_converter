@@ -6,6 +6,7 @@ pub enum PriceStatus {
     Tradeable,
     /// The Instrument’s price is not tradeable.
     NonTradeable,
-    /// The Instrument of the price is invalid or there is no valid Price for the Instrument.
+    /// The Instrument of the price is invalid or there is no valid
+    /// Price for the Instrument.
     Invalid,
 }

@@ -1,6 +1,8 @@
-/// Instrument name identifier. Used by clients to refer to an Instrument.
+/// Instrument name identifier. Used by clients to refer to
+/// an Instrument.
 ///
-/// A string containing the base currency and quote currency delimited by a “_”.
+/// A string containing the base currency and quote currency
+/// delimited by a “_”.
 struct InstrumentName(String);
 impl std::ops::Deref for InstrumentName {
     type Target = &str;

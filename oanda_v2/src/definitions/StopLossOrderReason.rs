@@ -4,8 +4,11 @@
 pub enum StopLossOrderReason {
     /// The Stop Loss Order was initiated at the request of a client
     ClientOrder,
-    /// The Stop Loss Order was initiated as a replacement for an existing Order
+    /// The Stop Loss Order was initiated as a replacement for an
+    /// existing Order
     Replacement,
-    /// The Stop Loss Order was initiated automatically when an Order was filled that opened a new Trade requiring a Stop Loss Order.
+    /// The Stop Loss Order was initiated automatically when an
+    /// Order was filled that opened a new Trade requiring a Stop
+    /// Loss Order.
     OnFill,
 }
