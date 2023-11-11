@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// The reason that an Order was filled
 #[derive(Deserialize, Serialize)]
 #[rename_all("SCREAMING_SNAKE_CASE")]

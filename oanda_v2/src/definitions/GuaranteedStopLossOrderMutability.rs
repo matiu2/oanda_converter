@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// For Accounts that support guaranteed Stop Loss Orders,
 /// describes the actions that can be be performed on guaranteed
 /// Stop Loss Orders.

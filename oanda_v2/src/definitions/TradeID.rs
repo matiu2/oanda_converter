@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// The Trade’s identifier, unique within the Trade’s Account.
 ///
 /// Format: The string representation of the OANDA-assigned

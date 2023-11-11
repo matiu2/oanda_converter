@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// In the context of an Order or a Trade, defines whether the
 /// units are positive or negative.
 #[derive(Deserialize, Serialize)]

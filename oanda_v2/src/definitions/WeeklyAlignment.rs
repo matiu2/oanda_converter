@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// The day of the week to use for candlestick granularities
 /// with weekly alignment.
 #[derive(Deserialize, Serialize)]

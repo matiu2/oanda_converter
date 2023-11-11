@@ -15,7 +15,6 @@ pub fn gen_struct(s: &Struct, name: &str) -> Result<TokenStream> {
         .attach_printable_lazy(|| format!("While generating fields for struct {name}"))?;
     let name = Ident::new(name, proc_macro2::Span::call_site());
     Ok(quote! {
-        use serde::{Serialize, Deserialize};
 
         #[derive(Serialize, Deserialize)]
         struct #name {
@@ -28,8 +27,6 @@ pub fn gen_struct(s: &Struct, name: &str) -> Result<TokenStream> {
 pub fn gen_typed_string(name: &str) -> Result<TokenStream> {
     let name = Ident::new(name, proc_macro2::Span::call_site());
     Ok(quote! {
-        use serde::{Serialize, Deserialize};
-
         #[derive(Serialize, Deserialize, Deref)]
         struct #name (String);
 

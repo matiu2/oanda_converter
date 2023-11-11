@@ -1,4 +1,3 @@
-use error_stack::{IntoReport as ESIntoReport, ResultExt};
 use parse_display::Display;
 use reqwest::StatusCode;
 use serde::Deserialize;
@@ -34,15 +33,3 @@ pub struct ApiError {
 }
 impl std::error::Error for Error {}
 pub type Result<T> = error_stack::Result<T, Error>;
-pub trait IntoReport<T> {
-    fn into_report(self) -> Result<T>;
-}
-impl<T, E> IntoReport<T> for std::result::Result<T, E>
-where
-    std::result::Result<T, E>: ESIntoReport<Ok = T, Err = E>,
-{
-    #[track_caller]
-    fn into_report(self) -> Result<T> {
-        ESIntoReport::into_report(self).change_context(Error::General)
-    }
-}

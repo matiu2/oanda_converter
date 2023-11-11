@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// The classification of TradePLs.
 #[derive(Deserialize, Serialize)]
 #[rename_all("SCREAMING_SNAKE_CASE")]

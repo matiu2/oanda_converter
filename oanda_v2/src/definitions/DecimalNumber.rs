@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// The string representation of a decimal number.
 ///
 /// A decimal number encoded as a string. The amount of

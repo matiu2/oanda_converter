@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// The way that position values for an Account are calculated
 /// and aggregated.
 #[derive(Deserialize, Serialize)]

@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// Specification of which price component should be used when
 /// determining if an Order should be triggered and filled.
 /// This allows Orders to be triggered based on the bid, ask,

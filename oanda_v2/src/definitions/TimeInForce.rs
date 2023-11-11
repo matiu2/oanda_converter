@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// The time-in-force of an Order. TimeInForce describes
 /// how long an Order should remain pending before being
 /// automatically cancelled by the execution system.

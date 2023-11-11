@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// The reason that the Market Order was created to perform a
 /// margin closeout
 #[derive(Deserialize, Serialize)]

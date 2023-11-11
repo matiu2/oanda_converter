@@ -29,11 +29,15 @@ impl<'a> Pricing<'a> {
             ("alignmentTimezone", alignment_timezone),
             ("weeklyAlignment", weekly_alignment),
         ];
-        self.client
+        let response = self
+            .client
             .get(url)
             .header("Authorization", authorization)
             .header("Accept-Datetime-Format", accept_datetime_format)
-            .query(&query);
+            .query(&query)
+            .send()
+            .await?;
+        let status_code = response.status_code();
     }
     /// Get pricing information for a specified list of Instruments
     /// within an Account.
@@ -56,11 +60,15 @@ impl<'a> Pricing<'a> {
             ("includeUnitsAvailable", include_units_available),
             ("includeHomeConversions", include_home_conversions),
         ];
-        self.client
+        let response = self
+            .client
             .get(url)
             .header("Authorization", authorization)
             .header("Accept-Datetime-Format", accept_datetime_format)
-            .query(&query);
+            .query(&query)
+            .send()
+            .await?;
+        let status_code = response.status_code();
     }
     /// Get a stream of Account Prices starting from when the
     /// request is made.
@@ -96,11 +104,15 @@ impl<'a> Pricing<'a> {
             ("snapshot", snapshot),
             ("includeHomeConversions", include_home_conversions),
         ];
-        self.client
+        let response = self
+            .client
             .get(url)
             .header("Authorization", authorization)
             .header("Accept-Datetime-Format", accept_datetime_format)
-            .query(&query);
+            .query(&query)
+            .send()
+            .await?;
+        let status_code = response.status_code();
     }
     /// Fetch candlestick data for an instrument.
     pub async fn candles(
@@ -138,10 +150,14 @@ impl<'a> Pricing<'a> {
             ("weeklyAlignment", weekly_alignment),
             ("units", units),
         ];
-        self.client
+        let response = self
+            .client
             .get(url)
             .header("Authorization", authorization)
             .header("Accept-Datetime-Format", accept_datetime_format)
-            .query(&query);
+            .query(&query)
+            .send()
+            .await?;
+        let status_code = response.status_code();
     }
 }

@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// The granularity of a candlestick
 #[derive(Deserialize, Serialize)]
 #[rename_all("SCREAMING_SNAKE_CASE")]

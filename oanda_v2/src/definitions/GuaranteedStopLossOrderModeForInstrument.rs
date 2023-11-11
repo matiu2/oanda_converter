@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// The overall behaviour of the Account regarding Guaranteed
 /// Stop Loss Orders for a specific Instrument.
 #[derive(Deserialize, Serialize)]

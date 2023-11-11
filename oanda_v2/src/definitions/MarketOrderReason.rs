@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// The reason that the Market Order was created
 #[derive(Deserialize, Serialize)]
 #[rename_all("SCREAMING_SNAKE_CASE")]

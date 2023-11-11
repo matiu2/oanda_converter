@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// The reason that a Transaction was rejected.
 #[derive(Deserialize, Serialize)]
 #[rename_all("SCREAMING_SNAKE_CASE")]

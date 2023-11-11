@@ -1,12 +1,11 @@
-use std::path::Path;
-
 use crate::error::{EasyError, Error, Result};
 use crate::gen_definition::gen_definition;
 use crate::gen_endpoint::gen_endpoint;
 use error_stack::ResultExt;
 use proc_macro2::{Ident, TokenStream};
-use quote::format_ident;
+use quote::{format_ident, quote};
 use rust_format::{Config, Formatter, PrettyPlease};
+use std::path::Path;
 
 use crate::gen_error::gen_error;
 use crate::gen_lib::gen_lib;
@@ -36,7 +35,7 @@ pub fn stream_to_file(stream: TokenStream, path: &str) -> Result<()> {
     Ok(())
 }
 
-/// Writes a token_stream out to a file
+/// Writes a token_stream into a string and makes it pretty if it can
 pub fn stream_to_string(stream: &TokenStream) -> Result<String> {
     let config = Config::new_str().post_proc(rust_format::PostProcess::ReplaceMarkersAndDocBlocks);
     PrettyPlease::from_config(config)
@@ -71,8 +70,13 @@ pub fn generate_source(base_path: &str, contents: &[Content]) -> Result<()> {
     mods.push("client");
     // Generate all the definitions we need
     for definition in contents.iter().flat_map(Content::definitions).flatten() {
-        let tokens = gen_definition(definition)
+        let content = gen_definition(definition)
             .attach_printable_lazy(|| format!("Generating definition for {}", definition.name))?;
+        let tokens = quote! {
+            use serde::{Serialize, Deserialize};
+
+            #content
+        };
         let filename = format!("{base_path}/definitions/{}.rs", definition.name);
         stream_to_file(tokens, &filename)
             .attach_printable_lazy(|| format!("Saving definition to {filename}"))?;
@@ -108,7 +112,6 @@ macro_rules! bail {
 
 /// Takes a name from the yaml and turns it into a nice field name
 pub fn field_name(name: &str) -> TokenStream {
-    use quote::quote;
     if name == "type" {
         let name = format_ident! { "r#type" };
         quote! { #name }

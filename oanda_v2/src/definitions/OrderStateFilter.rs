@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// The state to filter the requested Orders by.
 #[derive(Deserialize, Serialize)]
 #[rename_all("SCREAMING_SNAKE_CASE")]

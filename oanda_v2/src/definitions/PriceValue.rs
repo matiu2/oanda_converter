@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// The string representation of a Price for a Bucket.
 ///
 /// A decimal number encodes as a string. The amount of

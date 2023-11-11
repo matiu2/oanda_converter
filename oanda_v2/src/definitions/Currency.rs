@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// Currency name identifier. Used by clients to refer to
 /// currencies.
 ///

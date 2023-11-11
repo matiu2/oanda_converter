@@ -1,12 +1,12 @@
 //! Generates error.rs for oanda_v2
-use crate::error::Result;
-use model::{definition_docs::Value, Definition};
-use proc_macro2::TokenStream;
-
 use self::{
     gen_row::{gen_rows, gen_single_row},
-    gen_struct::{gen_struct, gen_typed_string},
+    gen_struct::gen_typed_string,
 };
+use crate::error::Result;
+pub use gen_struct::gen_struct;
+use model::{definition_docs::Value, Definition};
+use proc_macro2::TokenStream;
 
 mod gen_row;
 mod gen_struct;

@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// The DayOfWeek provides a representation of the day of the
 /// week.
 #[derive(Deserialize, Serialize)]

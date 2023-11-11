@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// The reason that an Order was cancelled.
 #[derive(Deserialize, Serialize)]
 #[rename_all("SCREAMING_SNAKE_CASE")]

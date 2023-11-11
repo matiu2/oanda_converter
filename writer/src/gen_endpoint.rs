@@ -3,12 +3,13 @@ use crate::{util::pretty_doc_string, Error, Result};
 use change_case::{lower_case, pascal_case, snake_case};
 use error_stack::ResultExt;
 use model::{
-    definition_docs::{Schema, Stream, Struct},
+    definition_docs::{Schema, Stream},
     endpoint_docs::{HttpMethod, Response, RestCall},
     Endpoint,
 };
 use proc_macro2::{Ident, Span, TokenStream};
 use quote::quote;
+use tracing::instrument;
 
 pub trait CallName {
     /// Basic method name - don't convert it to an Ident
@@ -17,6 +18,11 @@ pub trait CallName {
     fn method_name(&self) -> Result<Ident> {
         self.method_name_as_string()
             .map(|basic| Ident::new(basic.as_str(), Span::call_site()))
+    }
+    /// Name/prefix for the response struct
+    fn response_struct_name(&self) -> Result<String> {
+        let method_name = pascal_case(&self.method_name_as_string()?);
+        Ok(format!("{method_name}_response"))
     }
 }
 
@@ -101,48 +107,100 @@ fn gen_header_param(header_name: &str, description: &str) -> Result<TokenStream>
     )})
 }
 
-fn gen_responses(struct_name: &str, call: &RestCall) -> Result<TokenStream> {
+/// Generates all the possible responses for a particular API call endpoint
+#[instrument(skip(call))]
+fn gen_responses(struct_prefix: &str, call: &RestCall) -> Result<TokenStream> {
+    let span = tracing::Span::current();
     let method_name = call.method_name()?;
-    let enum_name = format!("{struct_name}{method_name}Response");
+    // Generate a struct for the Ok response
+    let ok_name = format!("{struct_prefix}Ok");
+    let ok_ident = Ident::new(&ok_name, Span::call_site());
+    // TODO: Make a response for every code. Make a struct for the OK code and an enum for all the error codes
+
+    // We generate a type for every call, because there are very few repeat types
+    // $ open content.yaml |
+    //   get documentation |
+    //   select name calls? |
+    //   where calls != null |
+    //   select name calls |
+    //   flatten |
+    //   flatten |
+    //   select name responses |
+    //   flatten |
+    //   flatten |
+    //   where code != 200 |
+    //   select name code schema.fields |
+    //    select name code schema_fields.name  schema_fields.type_name  |
+    //   upsert pair { get schema_fields_name schema_fields_type_name |
+    //   str join " - " } |
+    //   select pair  |
+    //   uniq -c |
+    //   sort-by count -nr
+    // Generate an enum for the error
+    let enum_name = format!("{struct_prefix}{method_name}Response");
     let enum_ident = Ident::new(&enum_name, Span::call_site());
-    let responses = call
+    // Get the good response (always 200 or 201)
+    let (good_responses, bad_responses): (Vec<&Response>, Vec<&Response>) = call
         .responses
         .iter()
+        .partition(|r| (200..300).contains(&r.code));
+    let good_response = good_responses
+        .first()
+        .cloned()
         .map(gen_response)
-        .collect::<Result<TokenStream>>()?;
+        .ok_or_else(|| Error::new("Expected at least one good response"))
+        .attach_printable_lazy(|| format!("Generating good responses: {span:#?}"))??;
+    // We'll put the bad responses in their own error enum
+
+    let variant_names = bad_responses
+        .iter()
+        .map(|r| Ident::new(&format!("E{}", r.code), Span::call_site()));
+    let bad_responses = bad_responses
+        .iter()
+        .cloned()
+        .map(gen_response)
+        .collect::<Result<TokenStream>>()
+        .attach_printable_lazy(|| format!("Generating bad responses: {span:#?}"))?;
+
+    let enum_contents: Vec<TokenStream> = variant_names
+        .zip(bad_responses.into_iter())
+        .map(|(enum_name, contents)| {
+            quote!(
+                #enum_name: #contents
+            )
+        })
+        .collect();
+
     Ok(quote! {
+        #good_response
+
         pub enum #enum_ident {
-            #responses
+            #(#enum_contents),*
         }
     })
 }
 
-/// Generates the type that A
+/// Generates the type that contents for response to ?
 fn gen_response(response: &Response) -> Result<TokenStream> {
     let name = format!("Code{}", response.code);
-    let ident = Ident::new(&name, Span::call_site());
+    // let ident = Ident::new(&name, Span::call_site());
     let doc_string = pretty_doc_string(&response.description)?;
-    let schema = gen_response_schema(&response.schema);
-    // Make xd
+    let schema = gen_response_schema(&response.schema, &name)?;
+    // Make
     Ok(quote! {
         #(#doc_string)*
-        #ident
-
+        #schema
     })
 }
 
-pub fn gen_response_schema(schema: &Schema) -> Result<TokenStream> {
+pub fn gen_response_schema(schema: &Schema, name: &str) -> Result<TokenStream> {
     match schema {
-        Schema::Struct(r#struct) => gen_response_struct(r#struct),
+        Schema::Struct(r#struct) => crate::gen_definition::gen_struct(r#struct, name),
         Schema::Stream(stream) => gen_response_stream(stream),
     }
 }
 
 fn gen_response_stream(stream: &Stream) -> Result<TokenStream> {
-    todo!()
-}
-
-fn gen_response_struct(r#struct: &Struct) -> Result<TokenStream> {
     todo!()
 }
 
@@ -163,16 +221,24 @@ fn gen_call(call: &RestCall, endpoint_name: &str) -> Result<TokenStream> {
     let path_params = gen_path_params(call);
     let query_params = gen_query_params(call)?;
     let header_params = gen_header_params(call)?;
+    let struct_prefix = call.response_struct_name()?;
+    let responses = gen_responses(&struct_prefix, call)?;
     Ok(quote!(
+        #responses
+
         #(#doc_string)*
         pub async fn #method_name(&self, #param_inputs) -> Result<()> {
             let url = #path;
             #path_params
             let url = self.client.url(url);
             let query = #query_params;
-            #http_method
+            let response = #http_method
             #header_params
-            .query(&query);
+            .query(&query)
+            .send()
+            .await?;
+            let status_code = response.status_code();
+            // TODO: Convert the response into the right thing
         }
     ))
 }
@@ -212,4 +278,49 @@ pub fn gen_endpoint(endpoint: &Endpoint) -> Result<TokenStream> {
             #(#calls)*
         }
     ))
+}
+
+#[cfg(test)]
+mod unit_test {
+    use crate::{util::stream_to_string, Result};
+    use model::{
+        definition_docs::{Field, Schema, Struct},
+        endpoint_docs::{Response, ResponseHeader},
+    };
+    use pretty_assertions::assert_eq;
+
+    #[test]
+    fn test_gen_test_response() -> Result<()> {
+        let response = Response {
+            code: 200,
+            description: "Pricing information has been successfully provided.".to_string(),
+            headers: vec![ResponseHeader {
+                name: "RequestID".to_string(),
+                description: "The unique identifier generated for the request".to_string(),
+            }],
+            schema: Schema::Struct(Struct {
+                fields: vec![Field {
+                    name: "latestCandles".to_string(),
+                    type_name: "CandlestickResponse".to_string(),
+                    doc_string: "The latest candle sticks.".to_string(),
+                    is_array: true,
+                    r#default: None,
+                    required: false,
+                }],
+            }),
+        };
+        let ts = super::gen_response(&response)?;
+        let s = stream_to_string(&ts)?;
+        assert_eq!(
+            s,
+            r#"/// Pricing information has been successfully provided.
+#[derive(Serialize, Deserialize)]
+struct Code200 {
+    /// The latest candle sticks.
+    latest_candles: Vec<CandlestickResponse>,
+}
+"#
+        );
+        Ok(())
+    }
 }

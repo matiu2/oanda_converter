@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// The reason that the Market-if-touched Order was initiated
 #[derive(Deserialize, Serialize)]
 #[rename_all("SCREAMING_SNAKE_CASE")]

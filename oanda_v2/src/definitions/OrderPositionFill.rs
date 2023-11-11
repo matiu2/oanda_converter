@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// Specification of how Positions in the Account are modified
 /// when the Order is filled.
 #[derive(Deserialize, Serialize)]

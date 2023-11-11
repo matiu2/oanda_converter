@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// The state to filter the Trades by
 #[derive(Deserialize, Serialize)]
 #[rename_all("SCREAMING_SNAKE_CASE")]

@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// The type of the Order.
 #[derive(Deserialize, Serialize)]
 #[rename_all("SCREAMING_SNAKE_CASE")]

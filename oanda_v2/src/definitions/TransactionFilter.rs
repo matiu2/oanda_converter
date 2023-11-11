@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// A filter that can be used when fetching Transactions
 #[derive(Deserialize, Serialize)]
 #[rename_all("SCREAMING_SNAKE_CASE")]

@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// The current state of the Trade.
 #[derive(Deserialize, Serialize)]
 #[rename_all("SCREAMING_SNAKE_CASE")]

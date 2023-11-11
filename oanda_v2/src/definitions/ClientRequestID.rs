@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// A client provided request identifier.
 ///
 /// my_request_id
