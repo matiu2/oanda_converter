@@ -2,13 +2,15 @@ pub mod definitions;
 pub mod endpoint_docs;
 
 use definitions::get_definitions;
+use error_stack::Report;
 use model::{Content, Documentation, Endpoint, ErrorDefinition, Everything};
+use parse_display::Display;
 use url::Url;
 pub mod error;
 use endpoint_docs::endpoint_docs;
 pub use error::{Error, IntoReport, Result};
 use error_stack::ResultExt;
-use scraper::{Html, Selector};
+use scraper::{ElementRef, Html, Node, Selector};
 
 #[macro_export]
 macro_rules! bail {
@@ -160,30 +162,114 @@ async fn scrape_error_page() -> Result<Vec<ErrorDefinition>> {
     parse_error_page(&html)
 }
 
+#[derive(Default, Debug, Display, parse_display::FromStr)]
+#[display(style = "lowercase")]
+enum TextType {
+    H5,
+    B,
+    Code,
+    #[default]
+    PlainText,
+}
+
+/// Gets the child (not descendent) text nodes
+fn get_text(e: &ElementRef) -> String {
+    e.children()
+        .flat_map(|n| {
+            if let scraper::node::Node::Text(text) = n.value() {
+                Some(String::from_utf8_lossy(text.text.as_bytes()))
+            } else {
+                None
+            }
+        })
+        .collect::<String>()
+        .trim()
+        .to_string()
+}
+
+/// Returns true if this is a `<p><b>Reason:</b> something</p>`
+fn is_reason(e: &ElementRef) -> bool {
+    if e.value().name() == "p" {
+        if let Some(child) = e.first_child() {
+            if let Node::Element(b) = child.value() {
+                if b.name() == "b" {
+                    for node in child.children() {
+                        if let Node::Text(text) = node.value() {
+                            if text.as_bytes() == b"Reason:" {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    false
+}
+
 fn parse_error_page(html: &str) -> Result<Vec<ErrorDefinition>> {
     let document = Html::parse_document(html);
     let selector = Selector::parse("#single-column *").map_err(Error::from)?;
+    let is_h4 = |e: &ElementRef| e.value().name() == "h4";
+    let is_not_h4 = |e: &ElementRef| !is_h4(e);
     // First skip until the second <h4> tag
-    let nodes: Vec<_> = document
+    let nodes: Vec<ElementRef> = document
         .select(&selector)
-        .skip_while(|e| e.value().name() != "h4")
+        .skip_while(is_not_h4)
         // Skip over the actual <h4>table of contents</h4>
         .skip(1)
-        .skip_while(|e| e.value().name() != "h4")
-        .inspect(|e| println!("e: {} {}", e.value().name(), e.text().collect::<String>()))
+        .skip_while(is_not_h4)
+        // .inspect(|e| println!("e: {} {}", e.value().name(), e.text().collect::<String>()))
         .collect();
-    // Grab a section of text
-    let text: String = nodes
+    // Each ErrorDefinition starts with an h4 element, followed by a bunch of other elements
+    nodes
         .iter()
-        .take_while(|e| e.value().name() != "h4")
-        .map(|e| e.text().collect::<String>())
-        .collect();
-    println!("text: {text}");
-    // let mut sections = Vec::new();
-    for (i, element) in nodes.iter().enumerate() {
-        println!("Element {i}: {:#?}", element.value());
-    }
-    todo!()
+        .enumerate()
+        // Just iterate over the h4 headers first
+        .filter(|(_i, e)| is_h4(e))
+        // For each h4
+        .map(|(i, h4)| {
+            // Read the http error code that we're documenting from the h4
+            let h4 = h4.text().collect::<String>();
+            let code: String = h4
+                .split_whitespace()
+                .next()
+                .ok_or_else(|| {
+                    Report::from(Error::new(format!(
+                        "h4 header on error page doesn't have spaces: {h4}"
+                    )))
+                })?
+                .to_string();
+            let code: u16 = code.parse().into_report()?;
+            // Gather the non-h4 nodes by creating a slice of the original nodes vec from i+1 to the end...
+            let documentation: String = nodes[(i + 1)..]
+                .iter()
+                // ..but stop if we hit another h4
+                .take_while(|e| is_not_h4(e))
+                .map(|e| {
+                    // Gather the html nodes' text and turn it into markdown
+                    let text = get_text(e);
+                    let tag_name = e.value().name();
+                    // Sometimes we hit a <p><b>Reason:</b> something</p> - because we're just walking all descendents and not recursing
+                    // That would put them out of order, but because it's the only case, we're just treating it differently
+                    if tag_name == "p" && !text.is_empty() && is_reason(e) {
+                        format!("\n**Reason:** {text}\n")
+                    } else {
+                        match tag_name.parse::<TextType>().unwrap_or_default() {
+                            TextType::H5 => format!("\n\n## {text}\n\n"),
+                            TextType::B => Default::default(),
+                            TextType::Code => format!("\n```\n{text}\n```\n"),
+                            TextType::PlainText => text,
+                        }
+                    }
+                })
+                .collect();
+            Ok(ErrorDefinition {
+                code,
+                documentation,
+            })
+        })
+        .collect()
 }
 
 #[cfg(test)]
@@ -195,7 +281,7 @@ mod tests {
     use model::{
         definition_docs::Schema,
         endpoint_docs::{Endpoints, HttpMethod},
-        Endpoint,
+        Endpoint, ErrorDefinition,
     };
     use reqwest::Url;
 
@@ -286,6 +372,14 @@ mod tests {
     #[test]
     fn test_parse_error_page() {
         let input = include_str!("../test_content/errors.html");
-        super::parse_error_page(input).unwrap();
+        let out = super::parse_error_page(input).unwrap();
+        for ErrorDefinition {
+            code,
+            documentation,
+        } in out
+        {
+            println!("\n# {code}\n");
+            println!("{documentation}");
+        }
     }
 }

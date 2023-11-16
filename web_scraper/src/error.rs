@@ -13,6 +13,12 @@ pub enum Error {
     Message(String),
 }
 
+impl Error {
+    pub fn new(message: impl ToString) -> Error {
+        Error::Message(message.to_string())
+    }
+}
+
 impl std::error::Error for Error {}
 pub type Result<T> = error_stack::Result<T, Error>;
 pub type HttpResult<T> = std::result::Result<T, Error>;
