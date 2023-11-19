@@ -1,3 +1,4 @@
+content:
 - urls:
   - https://developer.oanda.com/rest-live-v20/account-ep/
   - https://developer.oanda.com/rest-live-v20/instrument-ep/
@@ -12557,3 +12558,107 @@
           is_array: false
           default: null
           required: false
+errors:
+- code: 400
+  documentation: |
+    A “400 Bad Request” reponse may be returned from the v20 REST API when the client has provided invalid data to be processed.
+
+    ## Malformed Request
+
+    If an incorrect request is submitted the following error will be returned to the user.
+    ```
+    "errorMessage" : "The request was missing required data"
+    ```
+
+    **Reason:** One or more required parameters for the request is missing or is invalid.
+
+
+    ## Invalid Instrument
+
+    If an incorrect currency is submitted the following error will be returned to the user.
+    ```
+    "errorMessage":"Invalid value specified for 'instrument'"
+    ```
+
+    **Reason:** The Currency provided is invalid. Confirm the structure of currency is correct.
+
+
+    ## PRECISION_EXCEEDED
+
+    If an incorrect value is submitted the following error will be returned to the user.
+    ```
+    "rejectReason":" STOP_LOSS_ON_FILL_PRICE_PRECISION_EXCEEDED"
+    ```
+
+    **Reason:** The error message “STOP_LOSS_ON_FILL_PRICE_PRECISION_EXCEEDED” means that The Stop Loss on fill specifies a price with more precision than is allowed by the Order’s instrument. Confirm the value provided for price is a string.
+- code: 401
+  documentation: |-
+    A “401 Unauthorized” reponse may be returned from the v20 REST API when the endpoint being accessed requires the client to be authenticated however the authentication token is invalid or has not been provided.
+
+    ## Invalid AccountID
+
+    If an incorrect accountID is submitted the following error will be returned to the user.
+    ```
+    "errorMessage":"The provided request was forbidden."
+    ```
+
+    **Reason:** The given accountID is invalid. Confirm the accountID is correct.
+
+
+    ## Insufficient Authorization
+
+    If an incorrect request is submitted the following error will be returned to the user.
+    ```
+    "errorMessage":"Insufficient authorization to perform request."
+    ```
+
+    **Reason:** The endpoint being accessed requires the client to be authenticated. The following information needs to be verified:
+    1.The  provided to the curl command is correct.  to learn how to configure curl examples that can be copied without further modification.URLClick here2.The authentication  is valid and has been added as a Bearer token in the HTTP Authorization header.token
+- code: 403
+  documentation: |
+    A “403 Forbidden” response may be returned from the v20 REST API when the client has provided a token that does not authorize them to perform the action implemented by the API endpoint.
+
+    ## Account Not Tradable
+
+    If an incorrect request is submitted the following error will be returned to the user.
+    ```
+    "errorMessage":"Insufficient authorization to perform request."
+    ```
+
+    **Reason:** The account specified can not be used for trading. Please contact OANDA support for more details
+- code: 404
+  documentation: |
+    A “404 Not Found” response may be returned from the v20 REST API when the client is attempting to refer to an entity (Account, Trade, Order, Position, etc.) that does not exist.
+
+    ## NO_SUCH_TRADE
+
+    If an incorrect trade ID is submitted the following error will be returned to the user.
+    ```
+    "errorMessage":"The trade ID specified does not exist"
+    ```
+
+    **Reason:** The trade id specified is not valid. The /trade returns recent trade and it is possible that the trade being referenced is no longer in the recent trade list.
+
+
+    ## NO_SUCH_TRANSACTION
+
+    If an incorrect transaction ID is submitted the following error will be returned to the user.
+    ```
+    "errorMessage":"The transaction ID specified does not exist"
+    ```
+
+    **Reason:** The transaction id specified is not valid. The /transactions returns recent transactions and it is possible that the transaction being referenced is no longer in the recent transactions list.
+
+
+    ## NO_SUCH_ORDER
+
+    If an incorrect order ID is submitted the following error will be returned to the user.
+    ```
+    "errorMessage":"The order ID specified does not exist"
+    ```
+
+    **Reason:** The order id specified is not valid. The /orders returns recent transactions and it is possible that the order being referenced is no longer in the recent order list.
+- code: 405
+  documentation: |-
+    The “405 Method Not Allowed” response may be returned from the v20 REST API when the client is accessing an endpoint using an incorrect
+    HTTP method – for example, using GET on an endpoint that requires POST.
