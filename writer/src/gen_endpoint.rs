@@ -20,9 +20,8 @@ pub trait CallName {
             .map(|basic| Ident::new(basic.as_str(), Span::call_site()))
     }
     /// Name/prefix for the response struct
-    fn response_struct_name(&self) -> Result<String> {
-        let method_name = pascal_case(&self.method_name_as_string()?);
-        Ok(format!("{method_name}_response"))
+    fn response_struct_prefix(&self) -> Result<String> {
+        Ok(pascal_case(&self.method_name_as_string()?))
     }
 }
 
@@ -109,33 +108,13 @@ fn gen_header_param(header_name: &str, description: &str) -> Result<TokenStream>
 
 /// Generates all the possible responses for a particular API call endpoint
 #[instrument(skip(call))]
-fn gen_responses(struct_prefix: &str, call: &RestCall) -> Result<TokenStream> {
+fn gen_responses_for_call(call: &RestCall) -> Result<TokenStream> {
+    let struct_prefix = call.response_struct_prefix()?;
     let span = tracing::Span::current();
     let method_name = call.method_name()?;
     // Generate a struct for the Ok response
     let ok_name = format!("{struct_prefix}Ok");
     let ok_ident = Ident::new(&ok_name, Span::call_site());
-    // TODO: Make a response for every code. Make a struct for the OK code and an enum for all the error codes
-
-    // We generate a type for every call, because there are very few repeat types
-    // $ open content.yaml |
-    //   get documentation |
-    //   select name calls? |
-    //   where calls != null |
-    //   select name calls |
-    //   flatten |
-    //   flatten |
-    //   select name responses |
-    //   flatten |
-    //   flatten |
-    //   where code != 200 |
-    //   select name code schema.fields |
-    //    select name code schema_fields.name  schema_fields.type_name  |
-    //   upsert pair { get schema_fields_name schema_fields_type_name |
-    //   str join " - " } |
-    //   select pair  |
-    //   uniq -c |
-    //   sort-by count -nr
     // Generate an enum for the error
     let enum_name = format!("{struct_prefix}{method_name}Response");
     let enum_ident = Ident::new(&enum_name, Span::call_site());
@@ -147,7 +126,7 @@ fn gen_responses(struct_prefix: &str, call: &RestCall) -> Result<TokenStream> {
     let good_response = good_responses
         .first()
         .cloned()
-        .map(gen_response)
+        .map(|r| gen_response(&struct_prefix, r))
         .ok_or_else(|| Error::new("Expected at least one good response"))
         .attach_printable_lazy(|| format!("Generating good responses: {span:#?}"))??;
     // We'll put the bad responses in their own error enum
@@ -155,34 +134,40 @@ fn gen_responses(struct_prefix: &str, call: &RestCall) -> Result<TokenStream> {
     let variant_names = bad_responses
         .iter()
         .map(|r| Ident::new(&format!("E{}", r.code), Span::call_site()));
-    let bad_responses = bad_responses
+    let bad_response_names: Vec<String> = bad_responses
         .iter()
-        .cloned()
-        .map(gen_response)
-        .collect::<Result<TokenStream>>()
+        .map(|r| format!("{struct_prefix}{}", r.code))
+        .collect();
+    let bad_response_structs = bad_response_names
+        .iter()
+        .zip(bad_responses.iter().cloned())
+        .map(|(name, r)| gen_response_schema(&r.schema, &name))
+        .collect::<Result<Vec<TokenStream>>>()
         .attach_printable_lazy(|| format!("Generating bad responses: {span:#?}"))?;
 
-    let enum_contents: Vec<TokenStream> = variant_names
-        .zip(bad_responses.into_iter())
-        .map(|(enum_name, contents)| {
-            quote!(
-                #enum_name: #contents
-            )
-        })
-        .collect();
+    // let enum_contents: Vec<TokenStream> = variant_names
+    //     .zip(bad_responses.into_iter())
+    //     .map(|(enum_name, contents)| {
+    //         quote!(
+    //             #enum_name(#contents)
+    //         )
+    //     })
+    //     .collect();
 
     Ok(quote! {
         #good_response
 
-        pub enum #enum_ident {
-            #(#enum_contents),*
-        }
+        #(#bad_response_structs)*
+
+        // pub enum #enum_ident {
+        //     #(#enum_contents),*
+        // }
     })
 }
 
 /// Generates the type that contents for response to ?
-fn gen_response(response: &Response) -> Result<TokenStream> {
-    let name = format!("Code{}", response.code);
+fn gen_response(struct_prefix: &str, response: &Response) -> Result<TokenStream> {
+    let name = format!("{struct_prefix}{}", response.code);
     // let ident = Ident::new(&name, Span::call_site());
     let doc_string = pretty_doc_string(&response.description)?;
     let schema = gen_response_schema(&response.schema, &name)?;
@@ -221,11 +206,7 @@ fn gen_call(call: &RestCall, endpoint_name: &str) -> Result<TokenStream> {
     let path_params = gen_path_params(call);
     let query_params = gen_query_params(call)?;
     let header_params = gen_header_params(call)?;
-    let struct_prefix = call.response_struct_name()?;
-    let responses = gen_responses(&struct_prefix, call)?;
     Ok(quote!(
-        #responses
-
         #(#doc_string)*
         pub async fn #method_name(&self, #param_inputs) -> Result<()> {
             let url = #path;
@@ -262,6 +243,10 @@ pub fn gen_endpoint(endpoint: &Endpoint) -> Result<TokenStream> {
     let struct_name = pascal_case(name);
     let struct_ident = Ident::new(&struct_name, Span::call_site());
     // Make the Response type for each call
+    let responses = calls
+        .iter()
+        .map(gen_responses_for_call)
+        .collect::<Result<Vec<TokenStream>>>()?;
     let calls = calls
         .iter()
         .map(|call| gen_call(call, name))
@@ -269,6 +254,8 @@ pub fn gen_endpoint(endpoint: &Endpoint) -> Result<TokenStream> {
 
     Ok(quote!(
         use crate::client::Client;
+
+        #(#responses)*
 
         struct #struct_ident<'a> {
             client: &'a Client,
@@ -309,13 +296,14 @@ mod unit_test {
                 }],
             }),
         };
-        let ts = super::gen_response(&response)?;
+        let struct_prefix = "MyCall";
+        let ts = super::gen_response(struct_prefix, &response)?;
         let s = stream_to_string(&ts)?;
         assert_eq!(
             s,
             r#"/// Pricing information has been successfully provided.
 #[derive(Serialize, Deserialize)]
-struct Code200 {
+struct MyCall200 {
     /// The latest candle sticks.
     latest_candles: Vec<CandlestickResponse>,
 }
