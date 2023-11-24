@@ -77,7 +77,10 @@ pub fn generate_source(base_path: &str, contents: &[Content]) -> Result<()> {
 
             #content
         };
-        let filename = format!("{base_path}/definitions/{}.rs", definition.name);
+        let filename = format!(
+            "{base_path}/definitions/{}.rs",
+            change_case::snake_case(&definition.name)
+        );
         stream_to_file(tokens, &filename)
             .attach_printable_lazy(|| format!("Saving definition to {filename}"))?;
     }
