@@ -1,6 +1,6 @@
 use crate::error::{EasyError, Error, Result};
 use crate::gen_definition::gen_definition;
-use crate::gen_endpoint::gen_endpoint;
+use crate::gen_endpoint::{gen_endpoint, gen_endpoint_responses};
 use error_stack::ResultExt;
 use proc_macro2::{Ident, TokenStream};
 use quote::{format_ident, quote};
@@ -86,6 +86,12 @@ pub fn generate_source(base_path: &str, contents: &[Content]) -> Result<()> {
         let tokens = gen_endpoint(endpoint)
             .attach_printable_lazy(|| format!("Generating endpoint for {}", endpoint.name))?;
         let filename = format!("{base_path}/endpoints/{}.rs", endpoint.name);
+        stream_to_file(tokens, &filename)
+            .attach_printable_lazy(|| format!("Saving endpoint to {filename}"))?;
+        // Generate the responses in a sub module
+        let tokens = gen_endpoint_responses(endpoint)
+            .attach_printable_lazy(|| format!("Generating endpoint for {}", endpoint.name))?;
+        let filename = format!("{base_path}/endpoints/{}/responses.rs", endpoint.name);
         stream_to_file(tokens, &filename)
             .attach_printable_lazy(|| format!("Saving endpoint to {filename}"))?;
     }

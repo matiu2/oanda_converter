@@ -238,6 +238,20 @@ fn gen_params(call: &RestCall) -> Result<TokenStream> {
     Ok(quote! {#(#params),*})
 }
 
+pub fn gen_endpoint_responses(endpoint: &Endpoint) -> Result<TokenStream> {
+    let Endpoint { name, calls } = endpoint;
+    let struct_name = pascal_case(name);
+    let struct_ident = Ident::new(&struct_name, Span::call_site());
+    // Make the Response type for each call
+    let responses = calls
+        .iter()
+        .map(gen_responses_for_call)
+        .collect::<Result<Vec<TokenStream>>>()?;
+    Ok(quote!(
+        #(#responses)*
+    ))
+}
+
 pub fn gen_endpoint(endpoint: &Endpoint) -> Result<TokenStream> {
     let Endpoint { name, calls } = endpoint;
     let struct_name = pascal_case(name);
@@ -255,7 +269,7 @@ pub fn gen_endpoint(endpoint: &Endpoint) -> Result<TokenStream> {
     Ok(quote!(
         use crate::client::Client;
 
-        #(#responses)*
+        pub mod responses;
 
         struct #struct_ident<'a> {
             client: &'a Client,
