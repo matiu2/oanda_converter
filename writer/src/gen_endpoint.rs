@@ -1,15 +1,21 @@
 //! Generates all the code for a single endpoint
-use crate::{util::pretty_doc_string, Error, Result};
+mod gen_responses;
+
+use self::gen_responses::gen_responses_for_call;
+use crate::{
+    util::{pretty_doc_string, stream_to_file},
+    Error, Result,
+};
 use change_case::{lower_case, pascal_case, snake_case};
 use error_stack::ResultExt;
 use model::{
-    definition_docs::{Schema, Stream},
-    endpoint_docs::{HttpMethod, Response, RestCall},
+    endpoint_docs::{HttpMethod, RestCall},
     Endpoint,
 };
 use proc_macro2::{Ident, Span, TokenStream};
 use quote::quote;
-use tracing::instrument;
+use std::collections::HashMap;
+use tracing::{info, instrument};
 
 pub trait CallName {
     /// Basic method name - don't convert it to an Ident
@@ -106,89 +112,6 @@ fn gen_header_param(header_name: &str, description: &str) -> Result<TokenStream>
     )})
 }
 
-/// Generates all the possible responses for a particular API call endpoint
-#[instrument(skip(call))]
-fn gen_responses_for_call(call: &RestCall) -> Result<TokenStream> {
-    let struct_prefix = call.response_struct_prefix()?;
-    let span = tracing::Span::current();
-    let method_name = call.method_name()?;
-    // Generate a struct for the Ok response
-    let ok_name = format!("{struct_prefix}Ok");
-    let ok_ident = Ident::new(&ok_name, Span::call_site());
-    // Generate an enum for the error
-    let enum_name = format!("{struct_prefix}{method_name}Response");
-    let enum_ident = Ident::new(&enum_name, Span::call_site());
-    // Get the good response (always 200 or 201)
-    let (good_responses, bad_responses): (Vec<&Response>, Vec<&Response>) = call
-        .responses
-        .iter()
-        .partition(|r| (200..300).contains(&r.code));
-    let good_response = good_responses
-        .first()
-        .cloned()
-        .map(|r| gen_response(&struct_prefix, r))
-        .ok_or_else(|| Error::new("Expected at least one good response"))
-        .attach_printable_lazy(|| format!("Generating good responses: {span:#?}"))??;
-    // We'll put the bad responses in their own error enum
-
-    let variant_names = bad_responses
-        .iter()
-        .map(|r| Ident::new(&format!("E{}", r.code), Span::call_site()));
-    let bad_response_names: Vec<String> = bad_responses
-        .iter()
-        .map(|r| format!("{struct_prefix}{}", r.code))
-        .collect();
-    let bad_response_structs = bad_response_names
-        .iter()
-        .zip(bad_responses.iter().cloned())
-        .map(|(name, r)| gen_response_schema(&r.schema, &name))
-        .collect::<Result<Vec<TokenStream>>>()
-        .attach_printable_lazy(|| format!("Generating bad responses: {span:#?}"))?;
-
-    // let enum_contents: Vec<TokenStream> = variant_names
-    //     .zip(bad_responses.into_iter())
-    //     .map(|(enum_name, contents)| {
-    //         quote!(
-    //             #enum_name(#contents)
-    //         )
-    //     })
-    //     .collect();
-
-    Ok(quote! {
-        #good_response
-
-        #(#bad_response_structs)*
-
-        // pub enum #enum_ident {
-        //     #(#enum_contents),*
-        // }
-    })
-}
-
-/// Generates the type that contents for response to ?
-fn gen_response(struct_prefix: &str, response: &Response) -> Result<TokenStream> {
-    let name = format!("{struct_prefix}{}", response.code);
-    // let ident = Ident::new(&name, Span::call_site());
-    let doc_string = pretty_doc_string(&response.description)?;
-    let schema = gen_response_schema(&response.schema, &name)?;
-    // Make
-    Ok(quote! {
-        #(#doc_string)*
-        #schema
-    })
-}
-
-pub fn gen_response_schema(schema: &Schema, name: &str) -> Result<TokenStream> {
-    match schema {
-        Schema::Struct(r#struct) => crate::gen_definition::gen_struct(r#struct, name),
-        Schema::Stream(stream) => gen_response_stream(stream),
-    }
-}
-
-fn gen_response_stream(stream: &Stream) -> Result<TokenStream> {
-    todo!()
-}
-
 /// Generates a single method that performs a Rest API call for a certain endpoint
 fn gen_call(call: &RestCall, endpoint_name: &str) -> Result<TokenStream> {
     let RestCall { path, .. } = call;
@@ -238,17 +161,33 @@ fn gen_params(call: &RestCall) -> Result<TokenStream> {
     Ok(quote! {#(#params),*})
 }
 
-pub fn gen_endpoint_responses(endpoint: &Endpoint) -> Result<TokenStream> {
-    let Endpoint { name, calls } = endpoint;
-    let struct_name = pascal_case(name);
-    let struct_ident = Ident::new(&struct_name, Span::call_site());
+#[instrument(skip(calls))]
+pub fn gen_endpoint_responses(
+    base_path: &str,
+    Endpoint {
+        name: endpoint_name,
+        calls,
+    }: &Endpoint,
+) -> Result<TokenStream> {
+    info!("Generating responses for endpoint");
     // Make the Response type for each call
-    let responses = calls
+    let response_map = calls
         .iter()
-        .map(gen_responses_for_call)
-        .collect::<Result<Vec<TokenStream>>>()?;
+        .map(|call| Ok((call.method_name_as_string()?, gen_responses_for_call(call)?)))
+        .collect::<Result<HashMap<String, TokenStream>>>()?;
+    let modules = response_map
+        .keys()
+        .map(|key| Ident::new(key.as_str(), Span::call_site()))
+        .collect::<Vec<Ident>>();
+    // Generate each of the responses sub-modules
+    for (name, tokens) in response_map {
+        let filename = format!("{base_path}/endpoints/{endpoint_name}/responses/{name}.rs");
+        stream_to_file(tokens, &filename)
+            .attach_printable_lazy(|| format!("Saving endpoint to {filename}"))?;
+    }
+    // Generate the responses module itself
     Ok(quote!(
-        #(#responses)*
+        #(pub mod #modules);*;
     ))
 }
 
@@ -257,14 +196,14 @@ pub fn gen_endpoint(endpoint: &Endpoint) -> Result<TokenStream> {
     let struct_name = pascal_case(name);
     let struct_ident = Ident::new(&struct_name, Span::call_site());
     // Make the Response type for each call
-    let responses = calls
-        .iter()
-        .map(gen_responses_for_call)
-        .collect::<Result<Vec<TokenStream>>>()?;
-    let calls = calls
-        .iter()
-        .map(|call| gen_call(call, name))
-        .collect::<Result<Vec<TokenStream>>>()?;
+    // let responses = calls
+    //     .iter()
+    //     .map(gen_responses_for_call)
+    //     .collect::<Result<Vec<TokenStream>>>()?;
+    // let calls = calls
+    //     .iter()
+    //     .map(|call| gen_call(call, name))
+    //     .collect::<Result<Vec<TokenStream>>>()?;
 
     Ok(quote!(
         use crate::client::Client;
@@ -276,14 +215,14 @@ pub fn gen_endpoint(endpoint: &Endpoint) -> Result<TokenStream> {
         }
 
         impl<'a> #struct_ident<'a> {
-            #(#calls)*
+            // #(#calls)*
         }
     ))
 }
 
 #[cfg(test)]
 mod unit_test {
-    use crate::{util::stream_to_string, Result};
+    use crate::{gen_endpoint::gen_responses::gen_response, util::stream_to_string, Result};
     use model::{
         definition_docs::{Field, Schema, Struct},
         endpoint_docs::{Response, ResponseHeader},
@@ -311,7 +250,7 @@ mod unit_test {
             }),
         };
         let struct_prefix = "MyCall";
-        let ts = super::gen_response(struct_prefix, &response)?;
+        let ts = gen_response(struct_prefix, &response)?;
         let s = stream_to_string(&ts)?;
         assert_eq!(
             s,

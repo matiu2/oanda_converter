@@ -15,7 +15,6 @@ pub fn gen_struct(s: &Struct, name: &str) -> Result<TokenStream> {
         .attach_printable_lazy(|| format!("While generating fields for struct {name}"))?;
     let name = Ident::new(name, proc_macro2::Span::call_site());
     Ok(quote! {
-
         #[derive(Serialize, Deserialize)]
         struct #name {
             #(#fields)*
@@ -129,8 +128,6 @@ mod test {
         assert_eq!(
             code.to_string(),
             indoc! {r#"
-                use serde::{Serialize, Deserialize};
-                
                 #[derive(Serialize, Deserialize)]
                 struct TestStruct {
                     /// Field 1

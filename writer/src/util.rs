@@ -6,6 +6,7 @@ use proc_macro2::{Ident, TokenStream};
 use quote::{format_ident, quote};
 use rust_format::{Config, Formatter, PrettyPlease};
 use std::path::Path;
+use tracing::info;
 
 use crate::gen_error::gen_error;
 use crate::gen_lib::gen_lib;
@@ -92,7 +93,7 @@ pub fn generate_source(base_path: &str, contents: &[Content]) -> Result<()> {
         stream_to_file(tokens, &filename)
             .attach_printable_lazy(|| format!("Saving endpoint to {filename}"))?;
         // Generate the responses in a sub module
-        let tokens = gen_endpoint_responses(endpoint)
+        let tokens = gen_endpoint_responses(base_path, &endpoint)
             .attach_printable_lazy(|| format!("Generating endpoint for {}", endpoint.name))?;
         let filename = format!("{base_path}/endpoints/{}/responses.rs", endpoint.name);
         stream_to_file(tokens, &filename)
