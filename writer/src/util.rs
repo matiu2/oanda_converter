@@ -1,4 +1,5 @@
 use crate::error::{EasyError, Error, Result};
+use crate::gen_client::gen_client;
 use crate::gen_definition::gen_definition;
 use crate::gen_endpoint::{gen_endpoint, gen_endpoint_responses};
 use error_stack::ResultExt;
@@ -9,7 +10,7 @@ use std::path::Path;
 
 use crate::gen_error::gen_error;
 use crate::gen_lib::gen_lib;
-use model::Content;
+use model::{Content, Endpoint};
 
 /// Writes a token_stream out to a file
 pub fn stream_to_file(stream: TokenStream, path: &str) -> Result<()> {
@@ -67,7 +68,6 @@ pub fn generate_source(base_path: &str, contents: &[Content]) -> Result<()> {
     mods.push("error");
     stream_to_file(gen_error(), &format!("{base_path}/error.rs"))
         .attach_printable("Writing error.rs")?;
-    mods.push("client");
     // Generate all the definitions we need
     for definition in contents.iter().flat_map(Content::definitions).flatten() {
         let content = gen_definition(definition)
@@ -84,6 +84,21 @@ pub fn generate_source(base_path: &str, contents: &[Content]) -> Result<()> {
         stream_to_file(tokens, &filename)
             .attach_printable_lazy(|| format!("Saving definition to {filename}"))?;
     }
+
+    // Just list the endpoint names
+    let endpoints: Vec<&str> = contents
+        .iter()
+        .flat_map(Content::as_endpoint)
+        .map(|Endpoint { name, .. }| name.as_str())
+        .collect();
+
+    // Generate endpoints.rs
+    let tokens = gen_endpoints(&endpoints);
+    let filename = format!("{base_path}/endpoints.rs");
+    stream_to_file(tokens, &filename)
+        .attach_printable_lazy(|| format!("Saving endpoint to {filename}"))?;
+    mods.push("endpoints");
+
     // Generate each of the endpoints
     for endpoint in contents.iter().flat_map(Content::as_endpoint) {
         let tokens = gen_endpoint(endpoint)
@@ -92,12 +107,16 @@ pub fn generate_source(base_path: &str, contents: &[Content]) -> Result<()> {
         stream_to_file(tokens, &filename)
             .attach_printable_lazy(|| format!("Saving endpoint to {filename}"))?;
         // Generate the responses in a sub module
-        let tokens = gen_endpoint_responses(base_path, &endpoint)
+        let tokens = gen_endpoint_responses(base_path, endpoint)
             .attach_printable_lazy(|| format!("Generating endpoint for {}", endpoint.name))?;
         let filename = format!("{base_path}/endpoints/{}/responses.rs", endpoint.name);
         stream_to_file(tokens, &filename)
             .attach_printable_lazy(|| format!("Saving endpoint to {filename}"))?;
     }
+    // Generate client.rs
+    mods.push("client");
+    stream_to_file(gen_client(&endpoints), &format!("{base_path}/client.rs"))
+        .attach_printable("Writing client.rs")?;
     // for endpoint in contents {
     //     stream_to_file(
     //         gen_endpoint::gen_endpoint(&endpoint),
@@ -112,6 +131,15 @@ pub fn generate_source(base_path: &str, contents: &[Content]) -> Result<()> {
     stream_to_file(gen_lib(mods.as_slice()), &format!("{base_path}/lib.rs"))
         .attach_printable("Generating lib.rs")?;
     Ok(())
+}
+
+/// Just generates the src/endpoints.rs
+fn gen_endpoints(endpoints: &[&str]) -> TokenStream {
+    let uses = endpoints.iter().map(|ep| {
+        let ep = Ident::new(ep, proc_macro2::Span::call_site());
+        quote!(mod #ep;)
+    });
+    quote!(#(#uses)*)
 }
 
 #[macro_export]

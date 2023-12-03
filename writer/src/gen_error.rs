@@ -4,12 +4,11 @@ use quote::quote;
 
 pub fn gen_error() -> TokenStream {
     quote!(
-
         use parse_display::Display;
         use reqwest::StatusCode;
         use serde::Deserialize;
 
-        #[derive(Display, Debug, Default)]
+        #[derive(Display, Debug)]
         #[display(style = "snake_case")]
         pub enum Error {
             #[display("reqwest error: {0}")]
