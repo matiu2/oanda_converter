@@ -6,7 +6,6 @@ use proc_macro2::{Ident, TokenStream};
 use quote::{format_ident, quote};
 use rust_format::{Config, Formatter, PrettyPlease};
 use std::path::Path;
-use tracing::info;
 
 use crate::gen_error::gen_error;
 use crate::gen_lib::gen_lib;

@@ -195,15 +195,10 @@ pub fn gen_endpoint(endpoint: &Endpoint) -> Result<TokenStream> {
     let Endpoint { name, calls } = endpoint;
     let struct_name = pascal_case(name);
     let struct_ident = Ident::new(&struct_name, Span::call_site());
-    // Make the Response type for each call
-    // let responses = calls
-    //     .iter()
-    //     .map(gen_responses_for_call)
-    //     .collect::<Result<Vec<TokenStream>>>()?;
-    // let calls = calls
-    //     .iter()
-    //     .map(|call| gen_call(call, name))
-    //     .collect::<Result<Vec<TokenStream>>>()?;
+    let calls = calls
+        .iter()
+        .map(|call| gen_call(call, name))
+        .collect::<Result<Vec<TokenStream>>>()?;
 
     Ok(quote!(
         use crate::client::Client;
@@ -215,7 +210,7 @@ pub fn gen_endpoint(endpoint: &Endpoint) -> Result<TokenStream> {
         }
 
         impl<'a> #struct_ident<'a> {
-            // #(#calls)*
+            #(#calls)*
         }
     ))
 }

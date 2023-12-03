@@ -1,6 +1,6 @@
-pub mod put;
 pub mod get;
-pub mod cancel;
-pub mod orders;
 pub mod pending_orders;
+pub mod orders;
+pub mod put;
+pub mod cancel;
 pub mod client_extensions;
