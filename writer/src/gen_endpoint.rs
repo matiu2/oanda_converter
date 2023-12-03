@@ -3,7 +3,7 @@ mod gen_responses;
 
 use self::gen_responses::gen_responses_for_call;
 use crate::{
-    util::{pretty_doc_string, stream_to_file},
+    util::{field_name, pretty_doc_string, stream_to_file},
     Error, Result,
 };
 use change_case::{lower_case, pascal_case, snake_case};
@@ -87,7 +87,7 @@ fn gen_query_params(call: &RestCall) -> Result<TokenStream> {
 
 /// Generates code that passes a parameter via an http get param
 fn gen_query_param(name: &str) -> Result<TokenStream> {
-    let value = Ident::new(&snake_case(name), Span::call_site());
+    let value = field_name(name);
     Ok(quote! { (#name, #value) })
 }
 
@@ -153,7 +153,7 @@ fn gen_params(call: &RestCall) -> Result<TokenStream> {
         .parameters
         .iter()
         .map(|p| {
-            let name = Ident::new(&snake_case(&p.name), Span::call_site());
+            let name = field_name(&p.name);
             let type_name = Ident::new(&pascal_case(&p.type_name), Span::call_site());
             quote! { #name: #type_name }
         })
