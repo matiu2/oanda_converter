@@ -1,7 +1,8 @@
 use parse_display::Display;
 use reqwest::StatusCode;
-use serde::Deserialize;
-#[derive(Display, Debug)]
+use serde::{Serialize, Deserialize};
+use thiserror::Error as ThisError;
+#[derive(ThisError, Display, Debug)]
 #[display(style = "snake_case")]
 pub enum Error {
     #[display("reqwest error: {0}")]

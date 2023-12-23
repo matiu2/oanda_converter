@@ -3,6 +3,7 @@ mod gen_responses;
 
 use self::gen_responses::gen_responses_for_call;
 use crate::{
+    state::StateGuard,
     util::{field_name, pretty_doc_string, stream_to_file},
     Error, Result,
 };
@@ -191,7 +192,7 @@ pub fn gen_endpoint_responses(
     ))
 }
 
-pub fn gen_endpoint(endpoint: &Endpoint) -> Result<TokenStream> {
+pub fn gen_endpoint(endpoint: &Endpoint, state: StateGuard) -> Result<TokenStream> {
     let Endpoint { name, calls } = endpoint;
     let struct_name = pascal_case(name);
     let struct_ident = Ident::new(&struct_name, Span::call_site());

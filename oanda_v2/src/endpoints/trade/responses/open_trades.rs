@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// The Account’s list of open Trades is provided
 #[derive(Serialize, Deserialize)]
 struct OpenTrades200 {

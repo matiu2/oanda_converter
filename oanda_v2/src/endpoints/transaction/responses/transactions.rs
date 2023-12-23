@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// The requested time range of Transaction pages are provided.
 #[derive(Serialize, Deserialize)]
 struct Transactions200 {

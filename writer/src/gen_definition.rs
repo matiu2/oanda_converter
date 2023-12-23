@@ -3,7 +3,7 @@ use self::{
     gen_row::{gen_rows, gen_single_row},
     gen_struct::gen_typed_string,
 };
-use crate::error::Result;
+use crate::{error::Result, state::StateGuard};
 pub use gen_struct::gen_struct;
 use model::{definition_docs::Value, Definition};
 use proc_macro2::TokenStream;
@@ -17,14 +17,15 @@ pub fn gen_definition(
         doc_string,
         value,
     }: &Definition,
+    state: StateGuard,
 ) -> Result<TokenStream> {
     match value {
         Value::Table(rows) => match rows.as_slice() {
-            [row] => gen_single_row(row, name, doc_string),
-            rows => gen_rows(rows, name, doc_string),
+            [row] => gen_single_row(row, name, doc_string, &mut state),
+            rows => gen_rows(rows, name, doc_string, &mut state),
         },
-        Value::Struct(s) => gen_struct(s, name),
-        Value::Empty => gen_typed_string(name),
+        Value::Struct(s) => gen_struct(s, name, &mut state),
+        Value::Empty => gen_typed_string(name, &mut state),
     }
 }
 

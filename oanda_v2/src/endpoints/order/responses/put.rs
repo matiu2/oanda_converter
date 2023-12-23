@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// The Order was successfully cancelled and replaced
 #[derive(Serialize, Deserialize)]
 struct Put201 {

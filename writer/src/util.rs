@@ -2,6 +2,7 @@ use crate::error::{EasyError, Error, Result};
 use crate::gen_client::gen_client;
 use crate::gen_definition::gen_definition;
 use crate::gen_endpoint::{gen_endpoint, gen_endpoint_responses};
+use crate::state::State;
 use error_stack::ResultExt;
 use proc_macro2::{Ident, TokenStream};
 use quote::{format_ident, quote};
@@ -63,6 +64,7 @@ pub fn pretty_doc_string(input: &str) -> Result<Vec<TokenStream>> {
 /// Generate all the source code
 pub fn generate_source(base_path: &str, contents: &[Content]) -> Result<()> {
     let mut mods = Vec::new();
+    let state = State::default();
     // let mut endpoints = Vec::new();
     // Generate the error.rs
     mods.push("error");

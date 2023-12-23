@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// The list of authorized Accounts has been provided.
 #[derive(Serialize, Deserialize)]
 struct Accounts200 {

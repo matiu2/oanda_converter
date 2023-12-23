@@ -1,6 +1,7 @@
 //! Generates error.rs for oanda_v2
 use crate::{
     error::{Result, Tracer},
+    state::StateGuard,
     util::{field_name, pretty_doc_string},
 };
 use error_stack::ResultExt;
@@ -10,7 +11,7 @@ use quote::quote;
 use syn::Ident;
 
 /// Generates a serde derive struct used to talk to the oanda api
-pub fn gen_struct(s: &Struct, name: &str) -> Result<TokenStream> {
+pub fn gen_struct(s: &Struct, name: &str, state: &mut StateGuard) -> Result<TokenStream> {
     let fields = gen_fields(&s.fields)
         .attach_printable_lazy(|| format!("While generating fields for struct {name}"))?;
     let name = Ident::new(name, proc_macro2::Span::call_site());
@@ -23,7 +24,7 @@ pub fn gen_struct(s: &Struct, name: &str) -> Result<TokenStream> {
 }
 
 /// Generates a with a single string inside
-pub fn gen_typed_string(name: &str) -> Result<TokenStream> {
+pub fn gen_typed_string(name: &str, state: &mut StateGuard) -> Result<TokenStream> {
     let name = Ident::new(name, proc_macro2::Span::call_site());
     Ok(quote! {
         #[derive(Serialize, Deserialize, Deref)]
@@ -80,12 +81,13 @@ fn gen_field(
 #[cfg(test)]
 mod test {
     use super::*;
-    use crate::error::Tracer;
+    use crate::{error::Tracer, state::State};
     use indoc::indoc;
     use pretty_assertions::assert_eq;
 
     #[test]
     fn test_gen_struct() -> Result<()> {
+        let mut state = State::default();
         let fields = vec![
             Field {
                 name: "field1".to_string(),
@@ -120,9 +122,10 @@ mod test {
                 required: false,
             },
         ];
+        let mut state_guard = state.new_mod("test_struct");
         let s = Struct { fields };
         let name = "TestStruct";
-        let tokens = gen_struct(&s, name).trace()?;
+        let tokens = gen_struct(&s, name, &mut state_guard).trace()?;
         let code = crate::util::stream_to_string(&tokens).trace()?;
         println!("{code}");
         assert_eq!(

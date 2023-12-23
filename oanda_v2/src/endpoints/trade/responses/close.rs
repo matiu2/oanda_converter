@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// The Trade has been closed as requested
 #[derive(Serialize, Deserialize)]
 struct Close200 {

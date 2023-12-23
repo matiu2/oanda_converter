@@ -1,4 +1,4 @@
-use error_stack::{Report, ResultExt};
+use error_stack::ResultExt;
 use model::Content;
 use std::fs::read_to_string;
 use writer::{util::generate_source, EasyError, Error};

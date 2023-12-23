@@ -6,9 +6,10 @@ pub fn gen_error() -> TokenStream {
     quote!(
         use parse_display::Display;
         use reqwest::StatusCode;
-        use serde::Deserialize;
+        use serde::{Serialize, Deserialize};
+        use thiserror::Error as ThisError;
 
-        #[derive(Display, Debug)]
+        #[derive(ThisError, Display, Debug)]
         #[display(style = "snake_case")]
         pub enum Error {
             #[display("reqwest error: {0}")]

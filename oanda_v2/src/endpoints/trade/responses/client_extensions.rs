@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// The Trade’s Client Extensions have been updated as
 /// requested.
 #[derive(Serialize, Deserialize)]

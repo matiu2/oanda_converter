@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// The Order’s Client Extensions were successfully modified
 #[derive(Serialize, Deserialize)]
 struct ClientExtensions200 {

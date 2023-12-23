@@ -1,5 +1,5 @@
 //! Generates error.rs for oanda_v2
-use crate::{bail, error::Result, util::pretty_doc_string};
+use crate::{bail, error::Result, state::StateGuard, util::pretty_doc_string};
 use model::definition_docs::Row;
 use proc_macro2::TokenStream;
 use quote::quote;
@@ -36,7 +36,12 @@ fn type_name(row: &Row) -> Ident {
 
 /// Generates the rust code for a table row from the documentation
 /// Where there is only one row in the documentation table
-pub fn gen_single_row(row: &Row, name: &str, struct_doc_string: &str) -> Result<TokenStream> {
+pub fn gen_single_row(
+    row: &Row,
+    name: &str,
+    struct_doc_string: &str,
+    state: &mut StateGuard,
+) -> Result<TokenStream> {
     let struct_name = Ident::new(name, proc_macro2::Span::call_site());
     let field_doc_string = doc_string(row);
     let type_name = type_name(row);
@@ -57,7 +62,12 @@ pub fn gen_single_row(row: &Row, name: &str, struct_doc_string: &str) -> Result<
 }
 
 /// Generates an enum from an HTML table that has more than one row
-pub fn gen_rows(rows: &[Row], enum_name: &str, enum_doc_string: &str) -> Result<TokenStream> {
+pub fn gen_rows(
+    rows: &[Row],
+    enum_name: &str,
+    enum_doc_string: &str,
+    state: &mut StateGuard,
+) -> Result<TokenStream> {
     let enum_name = Ident::new(enum_name, proc_macro2::Span::call_site());
     let doc_string = pretty_doc_string(enum_doc_string)?;
     let enum_variants = rows

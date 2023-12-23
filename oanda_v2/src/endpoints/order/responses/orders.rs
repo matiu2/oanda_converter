@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// The list of Orders requested
 #[derive(Serialize, Deserialize)]
 struct Orders200 {

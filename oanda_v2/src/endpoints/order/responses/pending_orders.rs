@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// List of pending Orders for the Account
 #[derive(Serialize, Deserialize)]
 struct PendingOrders200 {
