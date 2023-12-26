@@ -18,7 +18,7 @@ pub fn create_uses_map_recursive(mod_name: &ModName) -> HashMap<String, String> 
     let map: HashMap<String, String> = declarations
         .into_iter()
         .map(|d| {
-            let mod_name = format!("{base_path}::{d}");
+            let mod_name = mod_name.clone().add_part(&d).mod_name();
             (d, mod_name)
         })
         .collect();
@@ -52,7 +52,7 @@ pub fn get_mods(code: &syn::File) -> impl Iterator<Item = String> + '_ {
     code.items.iter().flat_map(|i| {
         if let syn::Item::Mod(m) = i {
             // We only want to return modules that have no content,
-            // because they'll be new files
+            // because they'll be new filesw
             m.content.is_none().then(|| m.ident.to_string())
         } else {
             None

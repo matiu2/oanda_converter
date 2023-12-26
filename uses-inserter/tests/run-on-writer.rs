@@ -9,5 +9,4 @@ fn test_run_on_writer() {
     let map = create_uses_map_recursive(&mod_name);
     // For now just print it, but eventually we'll turn this into an actual test
     println!("{map:#?}");
-    panic!()
 }
