@@ -3,6 +3,36 @@ use log::debug;
 pub use mod_name::ModName;
 use std::collections::HashMap;
 
+/// Represents a rust module. It's file/mod name + its contents
+pub struct Mod<'a> {
+    pub mod_name: ModName<'a>,
+    pub contents: syn::File,
+}
+
+/// A rust module and all the types it declares and all the types it requires
+pub struct ModInfo<'a> {
+    pub module: Mod<'a>,
+    pub declares: Vec<String>,
+    pub requires: Vec<String>,
+}
+
+/// Opens the given rust mod, and recurses down through all the mods declared.
+/// Doesn't support the /mod_name/mod.rs format, only /mod_name.rs + /mod_name/sub_mod.rs
+pub fn recurse_sub_modules(mod_name: ModName<'_>) -> Box<dyn Iterator<Item = Mod<'_>> + '_> {
+    // Open the file
+    let file_name = mod_name.file_name();
+    let s = std::fs::read_to_string(file_name).unwrap();
+    let contents: syn::File = syn::parse_str(&s).unwrap();
+    let my_mod = mod_name.clone();
+    let sub_mods: Vec<String> = get_mods(&contents).collect();
+    let once = std::iter::once(Mod { mod_name, contents });
+    let sub_mods = sub_mods
+        .into_iter()
+        .map(move |s| my_mod.clone().add_part(s))
+        .flat_map(recurse_sub_modules);
+    Box::new(once.chain(sub_mods))
+}
+
 /// Parses lib.rs (you pass the path to this)
 pub fn create_uses_map_recursive(mod_name: &ModName) -> HashMap<String, String> {
     // Open the file
@@ -12,7 +42,6 @@ pub fn create_uses_map_recursive(mod_name: &ModName) -> HashMap<String, String> 
     let code: syn::File = syn::parse_str(&s).unwrap();
     let declarations = collect_declarations(&code);
     let mods = get_mods(&code);
-    let base_path = mod_name.new_base_path();
 
     // Map the declarations from the current module
     let map: HashMap<String, String> = declarations

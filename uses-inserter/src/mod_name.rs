@@ -1,15 +1,17 @@
+use std::borrow::Cow;
+
 use itertools::Itertools;
 
 #[derive(Clone, PartialEq, Eq)]
-pub struct ModName {
-    base_path: String,
-    parts: Vec<String>,
+pub struct ModName<'a> {
+    base_path: Cow<'a, str>,
+    parts: Vec<Cow<'a, str>>,
 }
 
-impl ModName {
+impl<'a> ModName<'a> {
     pub fn new(base_path: impl ToString) -> Self {
         Self {
-            base_path: base_path.to_string(),
+            base_path: base_path.to_string().into(),
             parts: Default::default(),
         }
     }
@@ -19,7 +21,7 @@ impl ModName {
         let ln = self.parts.len();
         self.parts
             .iter()
-            .map(String::as_str)
+            .map(Cow::as_ref)
             .enumerate()
             .flat_map(move |(i, p)| match (i, p) {
                 // If it's the last in the list, don't filter it
@@ -35,7 +37,7 @@ impl ModName {
     pub fn parts_for_mod(&self) -> impl Iterator<Item = &str> + '_ {
         self.parts
             .iter()
-            .map(String::as_str)
+            .map(Cow::as_ref)
             .filter(|&p| p != "lib" && p != "mod")
     }
 
@@ -55,17 +57,14 @@ impl ModName {
         format!("crate::{parts}", parts = self.parts_for_mod().join("::"))
     }
 
-    pub fn add_part(mut self, part: impl ToString) -> ModName {
-        self.parts.push(part.to_string());
+    pub fn add_part(mut self, part: impl ToString) -> ModName<'a> {
+        self.parts.push(part.to_string().into());
         self
     }
 
     /// If you were to recurse deeper, you'd want the base_path of the current mod.
-    /// ```rust
-    /// let mut m = ModName::new("base_1/src");
-    /// m.add_part("mod1")
-    /// assert_eq!("base_1/src/mod1", &m.new_base_path())
-    /// ```
+    /// Returns the whole mod in the form of a base_path so you can add new mods to it.
+    /// Basically the same as `file_name` but without the `.rs` on the end.
     pub fn new_base_path(&self) -> String {
         format!(
             "{base_path}/{parts}",
@@ -82,7 +81,7 @@ impl ModName {
 mod test {
     use super::ModName;
 
-    fn init() -> ModName {
+    fn init() -> ModName<'static> {
         ModName::new("xxx").add_part("a").add_part("b")
     }
 
@@ -116,7 +115,7 @@ mod test {
     }
 }
 
-impl std::fmt::Debug for ModName {
+impl std::fmt::Debug for ModName<'_> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", self.mod_name())
     }
