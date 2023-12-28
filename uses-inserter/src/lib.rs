@@ -1,4 +1,5 @@
 mod mod_name;
+mod struct_parsing;
 use itertools::Itertools;
 use log::debug;
 pub use mod_name::ModName;
@@ -86,94 +87,6 @@ fn collect_requirements(contents: &syn::File) -> Vec<String> {
             _ => None,
         })
         .collect()
-}
-
-/// Given a rust struct that we're parsing, return all the field types
-fn get_field_types(s: &syn::ItemStruct) -> Vec<String> {
-    match &s.fields {
-        syn::Fields::Named(FieldsNamed { named, .. }) => named
-            .iter()
-            .flat_map(|f| {
-                if let Type::Verbatim(ts) = &f.ty {
-                    Some(ts.to_string())
-                } else {
-                    None
-                }
-            })
-            .collect(),
-        syn::Fields::Unnamed(FieldsUnnamed { unnamed, .. }) => unnamed
-            .iter()
-            .flat_map(|f| match &f.ty {
-                Type::Array(_) => {
-                    println!("Type::Array(_)");
-                    None
-                }
-                Type::BareFn(_) => {
-                    println!("Type::BareFn(_)");
-                    None
-                }
-                Type::Group(_) => {
-                    println!("Type::Group(_)");
-                    None
-                }
-                Type::ImplTrait(_) => {
-                    println!("Type::ImplTrait(_)");
-                    None
-                }
-                Type::Infer(_) => {
-                    println!("Type::Infer(_)");
-                    None
-                }
-                Type::Macro(_) => {
-                    println!("Type::Macro(_)");
-                    None
-                }
-                Type::Never(_) => {
-                    println!("Type::Never(_)");
-                    None
-                }
-                Type::Paren(_) => {
-                    println!("Type::Paren(_)");
-                    None
-                }
-                Type::Path(TypePath {
-                    path: Path { segments, .. },
-                    ..
-                }) => Some(
-                    segments
-                        .iter()
-                        .map(|PathSegment { ident, .. }| ident.to_string())
-                        .join(" - "),
-                ),
-                Type::Ptr(_) => {
-                    println!("Type::Ptr(_)");
-                    None
-                }
-                Type::Reference(_) => {
-                    println!("Type::Reference(_)");
-                    None
-                }
-                Type::Slice(_) => {
-                    println!("Type::Slice(_)");
-                    None
-                }
-                Type::TraitObject(_) => {
-                    println!("Type::TraitObject(_)");
-                    None
-                }
-                Type::Tuple(_) => {
-                    println!("Type::Tuple(_)");
-                    None
-                }
-                Type::Verbatim(ts) => Some(ts.to_string()),
-                _ => {
-                    println!("_");
-                    None
-                }
-            })
-            .collect(),
-        syn::Fields::Unit => todo!(),
-    }
 }
 
 /// Parses lib.rs (you pass the path to this)
@@ -286,16 +199,5 @@ mod test {
         for module in super::recurse_sub_modules(base) {
             debug!("Using module {}", module.mod_name);
         }
-    }
-
-    #[test]
-    fn test_get_field_types() {
-        let s = quote::quote! {struct MyStruct(Happy, Bun);};
-        let s: syn::ItemStruct = syn::parse2(s).unwrap();
-        let fields: Vec<String> = super::get_field_types(&s);
-        for field in &fields {
-            println!("Field: {field}");
-        }
-        assert_eq!(vec!["Happy", "Bun"], fields);
     }
 }
