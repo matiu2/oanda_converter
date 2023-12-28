@@ -1,11 +1,10 @@
 mod mod_name;
 mod struct_parsing;
-use itertools::Itertools;
 use log::debug;
 pub use mod_name::ModName;
-use quote::quote;
 use std::collections::{HashMap, VecDeque};
-use syn::{FieldsNamed, FieldsUnnamed, Path, PathSegment, Type, TypeInfer, TypePath};
+
+use crate::struct_parsing::get_field_types;
 
 /// Represents a rust module. It's file/mod name + its contents
 pub struct Mod<'a> {
@@ -81,10 +80,10 @@ fn collect_requirements(contents: &syn::File) -> Vec<String> {
         .items
         .iter()
         .flat_map(|i| match i {
-            Struct(s) => Some(s.ident.to_string()),
-            Enum(e) => Some(e.ident.to_string()),
+            Struct(s) => get_field_types(s),
+            Enum(e) => todo!(),
             syn::Item::Impl(i) => todo!(),
-            _ => None,
+            _ => vec![],
         })
         .collect()
 }
