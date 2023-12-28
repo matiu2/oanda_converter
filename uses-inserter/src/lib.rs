@@ -1,7 +1,10 @@
 mod mod_name;
+use itertools::Itertools;
 use log::debug;
 pub use mod_name::ModName;
+use quote::quote;
 use std::collections::{HashMap, VecDeque};
+use syn::{FieldsNamed, FieldsUnnamed, Path, PathSegment, Type, TypeInfer, TypePath};
 
 /// Represents a rust module. It's file/mod name + its contents
 pub struct Mod<'a> {
@@ -19,24 +22,12 @@ pub struct ModInfo<'a> {
 /// Opens the given rust mod, and recurses down through all the mods declared.
 /// Doesn't support the /mod_name/mod.rs format, only /mod_name.rs + /mod_name/sub_mod.rs
 /// Don't worry. It doesn't load all the mods into memory; it pops them out one at a time.
-pub fn recurse_sub_modules(mod_name: ModName<'_>) -> Box<dyn Iterator<Item = Mod<'_>> + '_> {
-    // Open the file
-    let file_name = mod_name.file_name();
-    let s = std::fs::read_to_string(file_name).unwrap();
-    let contents: syn::File = syn::parse_str(&s).unwrap();
-    let my_mod = mod_name.clone();
-    let sub_mods: Vec<String> = get_mods(&contents).collect();
-    debug!("getting data for {mod_name}");
-    let once = std::iter::once(Mod { mod_name, contents });
-    let sub_mods = sub_mods
-        .into_iter()
-        .map(move |s| my_mod.clone().add_part(s))
-        .flat_map(recurse_sub_modules);
-    Box::new(once.chain(sub_mods))
+pub fn recurse_sub_modules(mod_name: ModName<'_>) -> RecurseSubModules {
+    RecurseSubModules::new(mod_name)
 }
 
 #[derive(Default, Debug)]
-struct RecurseSubModules<'a> {
+pub struct RecurseSubModules<'a> {
     // The queue of modules yet to yield
     queue: VecDeque<ModName<'a>>,
 }
@@ -49,13 +40,6 @@ impl<'a> RecurseSubModules<'a> {
     }
 }
 
-/// Given a mod name, returns the contents of the rust module
-fn get_file_contents(mod_name: &ModName<'_>) -> syn::File {
-    let file_name = mod_name.file_name();
-    let s = std::fs::read_to_string(file_name).unwrap();
-    syn::parse_str(&s).unwrap()
-}
-
 impl<'a> Iterator for RecurseSubModules<'a> {
     type Item = Mod<'a>;
 
@@ -64,7 +48,8 @@ impl<'a> Iterator for RecurseSubModules<'a> {
         // If there's something in the queue, parse it
         let mod_name = self.queue.pop_front()?;
         debug!("getting data for {mod_name}");
-        let contents = get_file_contents(&mod_name);
+        let s = std::fs::read_to_string(mod_name.file_name()).unwrap();
+        let contents = syn::parse_str(&s).unwrap();
         // Extracts the module names declared in the current rust module, as strings
         // then turns them into module names relative to the current module
         // And appends them to our queue
@@ -90,7 +75,105 @@ pub fn mod_info_recursive(mod_name: ModName<'_>) -> Vec<ModInfo> {
 
 /// Collects all the types that this module needs to import
 fn collect_requirements(contents: &syn::File) -> Vec<String> {
-    todo!()
+    use syn::Item::{Enum, Struct};
+    contents
+        .items
+        .iter()
+        .flat_map(|i| match i {
+            Struct(s) => Some(s.ident.to_string()),
+            Enum(e) => Some(e.ident.to_string()),
+            syn::Item::Impl(i) => todo!(),
+            _ => None,
+        })
+        .collect()
+}
+
+/// Given a rust struct that we're parsing, return all the field types
+fn get_field_types(s: &syn::ItemStruct) -> Vec<String> {
+    match &s.fields {
+        syn::Fields::Named(FieldsNamed { named, .. }) => named
+            .iter()
+            .flat_map(|f| {
+                if let Type::Verbatim(ts) = &f.ty {
+                    Some(ts.to_string())
+                } else {
+                    None
+                }
+            })
+            .collect(),
+        syn::Fields::Unnamed(FieldsUnnamed { unnamed, .. }) => unnamed
+            .iter()
+            .flat_map(|f| match &f.ty {
+                Type::Array(_) => {
+                    println!("Type::Array(_)");
+                    None
+                }
+                Type::BareFn(_) => {
+                    println!("Type::BareFn(_)");
+                    None
+                }
+                Type::Group(_) => {
+                    println!("Type::Group(_)");
+                    None
+                }
+                Type::ImplTrait(_) => {
+                    println!("Type::ImplTrait(_)");
+                    None
+                }
+                Type::Infer(_) => {
+                    println!("Type::Infer(_)");
+                    None
+                }
+                Type::Macro(_) => {
+                    println!("Type::Macro(_)");
+                    None
+                }
+                Type::Never(_) => {
+                    println!("Type::Never(_)");
+                    None
+                }
+                Type::Paren(_) => {
+                    println!("Type::Paren(_)");
+                    None
+                }
+                Type::Path(TypePath {
+                    path: Path { segments, .. },
+                    ..
+                }) => Some(
+                    segments
+                        .iter()
+                        .map(|PathSegment { ident, .. }| ident.to_string())
+                        .join(" - "),
+                ),
+                Type::Ptr(_) => {
+                    println!("Type::Ptr(_)");
+                    None
+                }
+                Type::Reference(_) => {
+                    println!("Type::Reference(_)");
+                    None
+                }
+                Type::Slice(_) => {
+                    println!("Type::Slice(_)");
+                    None
+                }
+                Type::TraitObject(_) => {
+                    println!("Type::TraitObject(_)");
+                    None
+                }
+                Type::Tuple(_) => {
+                    println!("Type::Tuple(_)");
+                    None
+                }
+                Type::Verbatim(ts) => Some(ts.to_string()),
+                _ => {
+                    println!("_");
+                    None
+                }
+            })
+            .collect(),
+        syn::Fields::Unit => todo!(),
+    }
 }
 
 /// Parses lib.rs (you pass the path to this)
@@ -198,7 +281,7 @@ mod test {
 
     #[test]
     fn test_recursion() {
-        pretty_env_logger::init();
+        pretty_env_logger::try_init().ok();
         let base = ModName::new("../oanda_v2/src").add_part("lib");
         for module in super::recurse_sub_modules(base) {
             debug!("Using module {}", module.mod_name);
@@ -206,11 +289,13 @@ mod test {
     }
 
     #[test]
-    fn test_recursion2() {
-        pretty_env_logger::init();
-        let base = ModName::new("../oanda_v2/src").add_part("lib");
-        for module in super::RecurseSubModules::new(base) {
-            debug!("Using module {}", module.mod_name);
+    fn test_get_field_types() {
+        let s = quote::quote! {struct MyStruct(Happy, Bun);};
+        let s: syn::ItemStruct = syn::parse2(s).unwrap();
+        let fields: Vec<String> = super::get_field_types(&s);
+        for field in &fields {
+            println!("Field: {field}");
         }
+        assert_eq!(vec!["Happy", "Bun"], fields);
     }
 }
