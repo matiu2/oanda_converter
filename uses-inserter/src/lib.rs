@@ -1,7 +1,7 @@
 mod mod_name;
 use log::debug;
 pub use mod_name::ModName;
-use std::collections::HashMap;
+use std::collections::{HashMap, VecDeque};
 
 /// Represents a rust module. It's file/mod name + its contents
 pub struct Mod<'a> {
@@ -18,6 +18,7 @@ pub struct ModInfo<'a> {
 
 /// Opens the given rust mod, and recurses down through all the mods declared.
 /// Doesn't support the /mod_name/mod.rs format, only /mod_name.rs + /mod_name/sub_mod.rs
+/// Don't worry. It doesn't load all the mods into memory; it pops them out one at a time.
 pub fn recurse_sub_modules(mod_name: ModName<'_>) -> Box<dyn Iterator<Item = Mod<'_>> + '_> {
     // Open the file
     let file_name = mod_name.file_name();
@@ -25,12 +26,71 @@ pub fn recurse_sub_modules(mod_name: ModName<'_>) -> Box<dyn Iterator<Item = Mod
     let contents: syn::File = syn::parse_str(&s).unwrap();
     let my_mod = mod_name.clone();
     let sub_mods: Vec<String> = get_mods(&contents).collect();
+    debug!("getting data for {mod_name}");
     let once = std::iter::once(Mod { mod_name, contents });
     let sub_mods = sub_mods
         .into_iter()
         .map(move |s| my_mod.clone().add_part(s))
         .flat_map(recurse_sub_modules);
     Box::new(once.chain(sub_mods))
+}
+
+#[derive(Default, Debug)]
+struct RecurseSubModules<'a> {
+    // The queue of modules yet to yield
+    queue: VecDeque<ModName<'a>>,
+}
+
+impl<'a> RecurseSubModules<'a> {
+    fn new(start: ModName<'a>) -> Self {
+        Self {
+            queue: vec![start].into(),
+        }
+    }
+}
+
+/// Given a mod name, returns the contents of the rust module
+fn get_file_contents(mod_name: &ModName<'_>) -> syn::File {
+    let file_name = mod_name.file_name();
+    let s = std::fs::read_to_string(file_name).unwrap();
+    syn::parse_str(&s).unwrap()
+}
+
+impl<'a> Iterator for RecurseSubModules<'a> {
+    type Item = Mod<'a>;
+
+    /// Get's the next rust module recursively, breadth first
+    fn next(&mut self) -> Option<Self::Item> {
+        // If there's something in the queue, parse it
+        let mod_name = self.queue.pop_front()?;
+        debug!("getting data for {mod_name}");
+        let contents = get_file_contents(&mod_name);
+        // Extracts the module names declared in the current rust module, as strings
+        // then turns them into module names relative to the current module
+        // And appends them to our queue
+        self.queue
+            .extend(get_mods(&contents).map(|s| mod_name.clone().add_part(s)));
+        Some(Mod { mod_name, contents })
+    }
+}
+
+pub fn mod_info_recursive(mod_name: ModName<'_>) -> Vec<ModInfo> {
+    recurse_sub_modules(mod_name)
+        .map(|m| {
+            let declares = collect_declarations(&m.contents);
+            let requires = collect_requirements(&m.contents);
+            ModInfo {
+                module: m,
+                declares,
+                requires,
+            }
+        })
+        .collect()
+}
+
+/// Collects all the types that this module needs to import
+fn collect_requirements(contents: &syn::File) -> Vec<String> {
+    todo!()
 }
 
 /// Parses lib.rs (you pass the path to this)
@@ -91,7 +151,10 @@ pub fn get_mods(code: &syn::File) -> impl Iterator<Item = String> + '_ {
 
 #[cfg(test)]
 mod test {
+    use log::debug;
     use proc_macro2::TokenStream;
+
+    use crate::ModName;
 
     #[test]
     fn test_collect_mods() {
@@ -131,5 +194,23 @@ mod test {
         println!("{mods:#?}");
         let expected: Vec<&str> = vec![];
         assert_eq!(expected, mods);
+    }
+
+    #[test]
+    fn test_recursion() {
+        pretty_env_logger::init();
+        let base = ModName::new("../oanda_v2/src").add_part("lib");
+        for module in super::recurse_sub_modules(base) {
+            debug!("Using module {}", module.mod_name);
+        }
+    }
+
+    #[test]
+    fn test_recursion2() {
+        pretty_env_logger::init();
+        let base = ModName::new("../oanda_v2/src").add_part("lib");
+        for module in super::RecurseSubModules::new(base) {
+            debug!("Using module {}", module.mod_name);
+        }
     }
 }

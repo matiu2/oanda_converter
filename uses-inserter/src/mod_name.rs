@@ -120,3 +120,9 @@ impl std::fmt::Debug for ModName<'_> {
         write!(f, "{}", self.mod_name())
     }
 }
+
+impl std::fmt::Display for ModName<'_> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}: {}", &self.base_path, self.mod_name())
+    }
+}
