@@ -1,10 +1,12 @@
+mod enum_parsing;
+mod fields;
 mod mod_name;
 mod recurse_sub_modules;
 mod struct_parsing;
 pub use mod_name::ModName;
 use recurse_sub_modules::recurse_sub_modules;
 
-use crate::struct_parsing::get_field_types;
+use crate::{enum_parsing::get_types_from_enum, struct_parsing::get_struct_field_types};
 
 /// Represents a rust module. It's file/mod name + its contents
 pub struct Mod<'a> {
@@ -44,14 +46,14 @@ pub fn mod_info_recursive(start: ModName<'_>) -> Vec<ModInfo> {
 
 /// Collects all the types that this module needs to import
 fn collect_requirements(contents: &syn::File) -> Vec<String> {
-    use syn::Item::{Enum, Struct};
+    use syn::Item::{Enum, Impl, Struct};
     contents
         .items
         .iter()
         .flat_map(|i| match i {
-            Struct(s) => get_field_types(s),
-            Enum(e) => todo!(),
-            syn::Item::Impl(i) => todo!(),
+            Struct(s) => get_struct_field_types(s),
+            Enum(e) => get_types_from_enum(e),
+            Impl(i) => todo!(),
             _ => vec![],
         })
         .collect()
