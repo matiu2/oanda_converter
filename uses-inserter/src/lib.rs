@@ -9,7 +9,10 @@ use fn_parsing::get_type_names_from_fn;
 pub use mod_name::ModName;
 use recurse_sub_modules::recurse_sub_modules;
 
-use crate::{enum_parsing::get_types_from_enum, struct_parsing::get_struct_field_types};
+use crate::{
+    enum_parsing::get_types_from_enum, impl_parsing::get_type_names_from_impl,
+    struct_parsing::get_struct_field_types,
+};
 
 /// Represents a rust module. It's file/mod name + its contents
 pub struct Mod<'a> {
@@ -56,7 +59,7 @@ fn collect_requirements(contents: &syn::File) -> Vec<String> {
         .flat_map(|i| match i {
             Struct(s) => get_struct_field_types(s),
             Enum(e) => get_types_from_enum(e),
-            Impl(i) => todo!("get_types_from_impl(i)"),
+            Impl(i) => get_type_names_from_impl(i),
             Fn(f) => get_type_names_from_fn(f),
             _ => vec![],
         })

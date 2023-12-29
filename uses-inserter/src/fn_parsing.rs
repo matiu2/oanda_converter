@@ -1,21 +1,25 @@
 use syn::FnArg;
 
-use crate::fields::get_type_name;
+use crate::fields::get_type_names;
 
-/// Given a syn Fn - returns the type names from both the arguments and the return type
-pub fn get_type_names_from_fn(f: &syn::ItemFn) -> Vec<String> {
-    let arg_type_names = f.sig.inputs.iter().flat_map(|arg| {
+pub fn get_type_names_from_fn_sig(sig: &syn::Signature) -> Vec<String> {
+    let arg_type_names = sig.inputs.iter().flat_map(|arg| {
         if let FnArg::Typed(arg) = arg {
-            get_type_name(&arg.ty)
+            get_type_names(&arg.ty)
         } else {
             vec![]
         }
     });
-    let out_type = match &f.sig.output {
-        syn::ReturnType::Type(_, ty) => get_type_name(ty),
+    let out_type = match &sig.output {
+        syn::ReturnType::Type(_, ty) => get_type_names(ty),
         _ => vec![],
     };
     arg_type_names.chain(out_type).collect()
+}
+
+/// Given a syn Fn - returns the type names from both the arguments and the return type
+pub fn get_type_names_from_fn(f: &syn::ItemFn) -> Vec<String> {
+    get_type_names_from_fn_sig(&f.sig)
 }
 
 #[cfg(test)]

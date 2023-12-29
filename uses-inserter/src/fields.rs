@@ -1,7 +1,7 @@
 use syn::{Field, FieldsNamed, FieldsUnnamed, Path, PathSegment, Type, TypePath};
 
 /// Takes a syn::Type and returns its type name as a string
-pub fn get_type_name(ty: &syn::Type) -> Vec<String> {
+pub fn get_type_names(ty: &syn::Type) -> Vec<String> {
     match ty {
         Type::Path(TypePath {
             path: Path { segments, .. },
@@ -16,7 +16,7 @@ pub fn get_type_name(ty: &syn::Type) -> Vec<String> {
                         .args
                         .iter()
                         .flat_map(|a| match a {
-                            syn::GenericArgument::Type(ty) => get_type_name(ty),
+                            syn::GenericArgument::Type(ty) => get_type_names(ty),
                             _ => vec![],
                         })
                         .collect(),
@@ -25,14 +25,28 @@ pub fn get_type_name(ty: &syn::Type) -> Vec<String> {
                 args
             })
             .collect(),
-        _ => unreachable!(),
+        Type::Reference(r) => get_type_names(&r.elem),
+        Type::Array(_) => unreachable!("Type::Array(_) "),
+        Type::BareFn(_) => unreachable!("Type::BareFn(_) "),
+        Type::Group(_) => unreachable!("Type::Group(_) "),
+        Type::ImplTrait(_) => vec![],
+        Type::Infer(_) => unreachable!("Type::Infer(_) "),
+        Type::Macro(_) => unreachable!("Type::Macro(_) "),
+        Type::Never(_) => unreachable!("Type::Never(_) "),
+        Type::Paren(_) => unreachable!("Type::Paren(_) "),
+        Type::Ptr(_) => unreachable!("Type::Ptr(_) "),
+        Type::Slice(_) => unreachable!("Type::Slice(_) "),
+        Type::TraitObject(_) => unreachable!("Type::TraitObject(_) "),
+        Type::Tuple(t) => t.elems.iter().flat_map(get_type_names).collect(),
+        Type::Verbatim(_) => unreachable!("Type::Verbatim(_) "),
+        _ => unreachable!("_ "),
     }
 }
 
 /// Given some fields, returns all the types of all the fields
 pub fn get_field_type_names(fields: &syn::Fields) -> Vec<String> {
     fn get_field_name(f: &Field) -> Vec<String> {
-        get_type_name(&f.ty)
+        get_type_names(&f.ty)
     }
     match &fields {
         syn::Fields::Named(FieldsNamed { named, .. }) => {
@@ -75,7 +89,7 @@ mod test {
     fn test_get_type_name() {
         let s = quote::quote! {Result<SomeType>};
         let ty: syn::Type = syn::parse2(s).unwrap();
-        let fields: Vec<String> = super::get_type_name(&ty);
+        let fields: Vec<String> = super::get_type_names(&ty);
         for field in &fields {
             debug!("Field: {field}");
         }
