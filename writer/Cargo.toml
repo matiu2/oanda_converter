@@ -18,6 +18,7 @@ syn = "2.0.26"
 textwrap = "0.16.0"
 tracing = "0.1.37"
 tracing-subscriber = "0.3.17"
+utils = { version = "0.1.0", path = "../utils" }
 
 [dev-dependencies]
 indoc = "2.0.3"

@@ -2,10 +2,7 @@
 mod gen_responses;
 
 use self::gen_responses::gen_responses_for_call;
-use crate::{
-    util::{field_name, pretty_doc_string, stream_to_file},
-    Error, Result,
-};
+use crate::{util::field_name, Error, Result};
 use change_case::{lower_case, pascal_case, snake_case};
 use error_stack::ResultExt;
 use model::{
@@ -16,6 +13,7 @@ use proc_macro2::{Ident, Span, TokenStream};
 use quote::quote;
 use std::collections::HashMap;
 use tracing::{info, instrument};
+use utils::{pretty_doc_string, stream_to_file};
 
 pub trait CallName {
     /// Basic method name - don't convert it to an Ident
@@ -118,7 +116,7 @@ fn gen_call(call: &RestCall, endpoint_name: &str) -> Result<TokenStream> {
     let method_name = call
         .method_name()
         .attach_printable_lazy(|| format!("for endpoint {endpoint_name}"))?;
-    let doc_string = pretty_doc_string(&call.doc_string)?;
+    let doc_string = pretty_doc_string(&call.doc_string).change_context_lazy(Error::default)?;
     let http_method = match call.http_method {
         HttpMethod::Get => quote! { self.client.get(url) },
         HttpMethod::Post => quote! { self.client.post(url) },
@@ -183,7 +181,8 @@ pub fn gen_endpoint_responses(
     for (name, tokens) in response_map {
         let filename = format!("{base_path}/endpoints/{endpoint_name}/responses/{name}.rs");
         stream_to_file(tokens, &filename)
-            .attach_printable_lazy(|| format!("Saving endpoint to {filename}"))?;
+            .attach_printable_lazy(|| format!("Saving endpoint to {filename}"))
+            .change_context_lazy(Error::default)?;
     }
     // Generate the responses module itself
     Ok(quote!(
@@ -217,12 +216,14 @@ pub fn gen_endpoint(endpoint: &Endpoint) -> Result<TokenStream> {
 
 #[cfg(test)]
 mod unit_test {
-    use crate::{gen_endpoint::gen_responses::gen_response, util::stream_to_string, Result};
+    use crate::{gen_endpoint::gen_responses::gen_response, Error, Result};
+    use error_stack::ResultExt;
     use model::{
         definition_docs::{Field, Schema, Struct},
         endpoint_docs::{Response, ResponseHeader},
     };
     use pretty_assertions::assert_eq;
+    use utils::stream_to_string;
 
     #[test]
     fn test_gen_test_response() -> Result<()> {
@@ -246,7 +247,7 @@ mod unit_test {
         };
         let struct_prefix = "MyCall";
         let ts = gen_response(struct_prefix, &response)?;
-        let s = stream_to_string(&ts)?;
+        let s = stream_to_string(&ts).change_context_lazy(Error::default)?;
         assert_eq!(
             s,
             r#"/// Pricing information has been successfully provided.

@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// The Account’s open Positions are provided.
 #[derive(Serialize, Deserialize)]
 struct OpenPositions200 {

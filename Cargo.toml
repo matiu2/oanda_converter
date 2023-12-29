@@ -1,4 +1,4 @@
 [workspace]
-members = ["web_scraper", "model", "writer",  "serialize_all", "uses-inserter"]
+members = ["utils", "web_scraper", "model", "writer",  "serialize_all", "uses-inserter"]
 exclude = ["oanda_v2", "writer_codegen"]
 resolver = "2"

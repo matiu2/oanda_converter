@@ -1,9 +1,11 @@
 //! Generates error.rs for oanda_v2
-use crate::{bail, error::Result, util::pretty_doc_string};
+use crate::{bail, error::Result, Error};
+use error_stack::ResultExt;
 use model::definition_docs::Row;
 use proc_macro2::TokenStream;
 use quote::quote;
 use syn::Ident;
+use utils::pretty_doc_string;
 
 /// Returns a doc_string if there is one
 fn doc_string(row: &Row) -> String {
@@ -41,7 +43,8 @@ pub fn gen_single_row(row: &Row, name: &str, struct_doc_string: &str) -> Result<
     let field_doc_string = doc_string(row);
     let type_name = type_name(row);
     let doc_string = format!("{struct_doc_string}\n\n{field_doc_string}");
-    let doc_string = pretty_doc_string(&doc_string)?;
+    let doc_string =
+        pretty_doc_string(&doc_string).change_context_lazy(|| Error::new("Creating doc string"))?;
     Ok(quote! {
         #(#doc_string)*
         struct #struct_name(#type_name);
@@ -59,14 +62,15 @@ pub fn gen_single_row(row: &Row, name: &str, struct_doc_string: &str) -> Result<
 /// Generates an enum from an HTML table that has more than one row
 pub fn gen_rows(rows: &[Row], enum_name: &str, enum_doc_string: &str) -> Result<TokenStream> {
     let enum_name = Ident::new(enum_name, proc_macro2::Span::call_site());
-    let doc_string = pretty_doc_string(enum_doc_string)?;
+    let doc_string = pretty_doc_string(enum_doc_string).change_context_lazy(Error::default)?;
     let enum_variants = rows
         .iter()
         .map(|row: &Row| match row {
             Row::ValueDescription { value, description } => Ok({
                 let value = change_case::pascal_case(value);
                 let variant_name = Ident::new(&value, proc_macro2::Span::call_site());
-                let doc_string = pretty_doc_string(description)?;
+                let doc_string = pretty_doc_string(description)
+                    .change_context_lazy(|| Error::new("Creating doc string"))?;
                 quote! {
                     #(#doc_string)*
                     #variant_name,
@@ -89,7 +93,11 @@ pub fn gen_rows(rows: &[Row], enum_name: &str, enum_doc_string: &str) -> Result<
 
 #[cfg(test)]
 mod test {
+    use error_stack::ResultExt;
     use model::definition_docs::Row;
+    use utils::stream_to_string;
+
+    use crate::Error;
 
     #[test]
     fn test_gen_single_row() -> crate::error::Result<()> {
@@ -98,7 +106,7 @@ mod test {
             description: "this is a very important field".to_string(),
         };
         let tokens = super::gen_single_row(&input, "SuperStruct", "This is a fine struct")?;
-        let code = crate::util::stream_to_string(&tokens)?;
+        let code = stream_to_string(&tokens).change_context_lazy(Error::default)?;
         println!("{code}");
         assert!(code.contains("SuperStruct"));
         Ok(())
@@ -137,7 +145,7 @@ mod test {
             },
         ];
         let tokens = super::gen_rows(input.as_slice(), "SuperEnum", "This is a fine Enum")?;
-        let code = crate::util::stream_to_string(&tokens)?;
+        let code = stream_to_string(&tokens).change_context_lazy(Error::default)?;
         println!("{code}");
         assert!(code.contains("SuperEnum"));
         Ok(())

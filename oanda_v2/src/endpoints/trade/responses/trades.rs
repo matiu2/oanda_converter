@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// The list of Trades requested
 #[derive(Serialize, Deserialize)]
 struct Trades200 {

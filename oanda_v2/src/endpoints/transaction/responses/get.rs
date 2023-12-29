@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// The details of the requested Transaction are provided.
 #[derive(Serialize, Deserialize)]
 struct Get200 {

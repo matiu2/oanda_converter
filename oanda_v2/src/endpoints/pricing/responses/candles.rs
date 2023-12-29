@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// Pricing information has been successfully provided.
 #[derive(Serialize, Deserialize)]
 struct Candles200 {

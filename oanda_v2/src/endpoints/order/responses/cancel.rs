@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// The Order was cancelled as specified
 #[derive(Serialize, Deserialize)]
 struct Cancel200 {

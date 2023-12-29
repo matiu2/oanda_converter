@@ -1,6 +1,8 @@
 use error_stack::{Report, ResultExt};
 use model::Content;
 use std::fs::read_to_string;
+use uses_inserter::insert_uses_clauses;
+use uses_inserter::ModName;
 use writer::{util::generate_source, EasyError, Error};
 
 pub type Result<T> = error_stack::Result<T, Error>;
@@ -14,5 +16,7 @@ fn main() -> Result<()> {
         .annotate("Opening content.yaml")?;
     let content: Vec<Content> = serde_yaml::from_str(&yaml).annotate("Reading in content.yaml")?;
     generate_source(base_path, content.as_slice()).attach_printable("Generating the source")?;
+    let mod_name = ModName::new("src").add_part("lib");
+    insert_uses_clauses(mod_name);
     Ok(())
 }

@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// The requested time range of Transactions are provided.
 #[derive(Serialize, Deserialize)]
 struct Sinceid200 {

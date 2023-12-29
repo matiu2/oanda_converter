@@ -7,11 +7,9 @@ use std::{
 /// An Empty error. It just represents that it's an error from
 /// the medication_knowledge_client library
 /// Further error message can be gotten from the error_stack library
-#[derive(Debug, Default)]
+#[derive(Debug)]
 pub enum Error {
     Message(String),
-    #[default]
-    General,
 }
 
 impl Error {
@@ -27,7 +25,6 @@ impl std::fmt::Display for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             Error::Message(message) => write!(f, "{message}"),
-            Error::General => write!(f, "General"),
         }
     }
 }

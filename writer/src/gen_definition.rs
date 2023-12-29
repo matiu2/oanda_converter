@@ -30,7 +30,11 @@ pub fn gen_definition(
 
 #[cfg(test)]
 mod test {
+    use error_stack::ResultExt;
     use model::{definition_docs::Value, Definition};
+    use utils::stream_to_string;
+
+    use crate::Error;
 
     #[test]
     fn test_gen_definition() -> crate::error::Result<()> {
@@ -41,7 +45,7 @@ mod test {
             value: Value::Empty,
         };
         let tokens = super::gen_definition(&input)?;
-        let code = crate::util::stream_to_string(&tokens)?;
+        let code = stream_to_string(&tokens).change_context_lazy(Error::default)?;
         println!("{code}");
         Ok(())
     }

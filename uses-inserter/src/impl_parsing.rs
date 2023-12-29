@@ -1,4 +1,4 @@
-use crate::fn_parsing::{get_type_names_from_fn, get_type_names_from_fn_sig};
+use crate::fn_parsing::get_type_names_from_fn_sig;
 
 pub fn get_type_names_from_impl(i: &syn::ItemImpl) -> Vec<String> {
     i.items

@@ -1,13 +1,15 @@
 //! Generates error.rs for oanda_v2
 use crate::{
     error::{Result, Tracer},
-    util::{field_name, pretty_doc_string},
+    util::field_name,
+    Error,
 };
 use error_stack::ResultExt;
 use model::definition_docs::{Field, Struct};
 use proc_macro2::TokenStream;
 use quote::quote;
 use syn::Ident;
+use utils::pretty_doc_string;
 
 /// Generates a serde derive struct used to talk to the oanda api
 pub fn gen_struct(s: &Struct, name: &str) -> Result<TokenStream> {
@@ -54,6 +56,7 @@ fn gen_field(
     let name = field_name(name);
     let type_name = Ident::new(type_name, proc_macro2::Span::call_site());
     let doc_string = pretty_doc_string(doc_string)
+        .change_context_lazy(Error::default)
         .trace()
         .attach_printable("Making the doc string pretty")?;
     let type_name = if *is_array {
@@ -83,6 +86,7 @@ mod test {
     use crate::error::Tracer;
     use indoc::indoc;
     use pretty_assertions::assert_eq;
+    use utils::stream_to_string;
 
     #[test]
     fn test_gen_struct() -> Result<()> {
@@ -123,7 +127,9 @@ mod test {
         let s = Struct { fields };
         let name = "TestStruct";
         let tokens = gen_struct(&s, name).trace()?;
-        let code = crate::util::stream_to_string(&tokens).trace()?;
+        let code = stream_to_string(&tokens)
+            .change_context_lazy(Error::default)
+            .trace()?;
         println!("{code}");
         assert_eq!(
             code.to_string(),
@@ -156,7 +162,9 @@ mod test {
             }
         };
         println!("{}", &tokens);
-        crate::util::stream_to_string(&tokens).trace()
+        stream_to_string(&tokens)
+            .change_context_lazy(Error::default)
+            .trace()
     }
 
     #[test]

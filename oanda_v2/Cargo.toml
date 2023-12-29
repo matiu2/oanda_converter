@@ -19,4 +19,5 @@ error-stack = "0.4.1"
 model = { version = "0.1.0", path = "../model" }
 serde_yaml = "0.9.25"
 tracing-subscriber = "0.3.17"
-writer = { version = "0.1.0", path = "../writer" }
+writer = { path = "../writer" }
+uses-inserter = { version = "0.1.0", path = "../uses-inserter" }

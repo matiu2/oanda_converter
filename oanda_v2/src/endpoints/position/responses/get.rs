@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// The Position is provided.
 #[derive(Serialize, Deserialize)]
 struct Get200 {

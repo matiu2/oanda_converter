@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// The Account’s Positions are provided.
 #[derive(Serialize, Deserialize)]
 struct Positions200 {

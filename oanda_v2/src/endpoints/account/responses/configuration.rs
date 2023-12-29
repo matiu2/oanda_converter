@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// The Account was configured successfully.
 #[derive(Serialize, Deserialize)]
 struct Configuration200 {

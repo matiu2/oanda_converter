@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// The list of tradeable instruments for the Account has been
 /// provided.
 #[derive(Serialize, Deserialize)]
