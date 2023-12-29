@@ -1,8 +1,11 @@
 mod enum_parsing;
 mod fields;
+mod fn_parsing;
+mod impl_parsing;
 mod mod_name;
 mod recurse_sub_modules;
 mod struct_parsing;
+use fn_parsing::get_type_names_from_fn;
 pub use mod_name::ModName;
 use recurse_sub_modules::recurse_sub_modules;
 
@@ -46,14 +49,15 @@ pub fn mod_info_recursive(start: ModName<'_>) -> Vec<ModInfo> {
 
 /// Collects all the types that this module needs to import
 fn collect_requirements(contents: &syn::File) -> Vec<String> {
-    use syn::Item::{Enum, Impl, Struct};
+    use syn::Item::{Enum, Fn, Impl, Struct};
     contents
         .items
         .iter()
         .flat_map(|i| match i {
             Struct(s) => get_struct_field_types(s),
             Enum(e) => get_types_from_enum(e),
-            Impl(i) => todo!(),
+            Impl(i) => todo!("get_types_from_impl(i)"),
+            Fn(f) => get_type_names_from_fn(f),
             _ => vec![],
         })
         .collect()

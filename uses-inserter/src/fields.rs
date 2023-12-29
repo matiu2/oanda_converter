@@ -1,23 +1,38 @@
-use itertools::Itertools;
 use syn::{Field, FieldsNamed, FieldsUnnamed, Path, PathSegment, Type, TypePath};
+
+/// Takes a syn::Type and returns its type name as a string
+pub fn get_type_name(ty: &syn::Type) -> Vec<String> {
+    match ty {
+        Type::Path(TypePath {
+            path: Path { segments, .. },
+            ..
+        }) => segments
+            .iter()
+            .flat_map(|PathSegment { ident, arguments }| {
+                let mut args = vec![ident.to_string()];
+                args.extend(match arguments {
+                    syn::PathArguments::None => vec![],
+                    syn::PathArguments::AngleBracketed(args) => args
+                        .args
+                        .iter()
+                        .flat_map(|a| match a {
+                            syn::GenericArgument::Type(ty) => get_type_name(ty),
+                            _ => vec![],
+                        })
+                        .collect(),
+                    syn::PathArguments::Parenthesized(_) => todo!(),
+                });
+                args
+            })
+            .collect(),
+        _ => unreachable!(),
+    }
+}
 
 /// Given some fields, returns all the types of all the fields
 pub fn get_field_type_names(fields: &syn::Fields) -> Vec<String> {
-    fn get_field_name(f: &Field) -> Option<String> {
-        if let Type::Path(TypePath {
-            path: Path { segments, .. },
-            ..
-        }) = &f.ty
-        {
-            Some(
-                segments
-                    .iter()
-                    .map(|PathSegment { ident, .. }| ident.to_string())
-                    .join(" - "),
-            )
-        } else {
-            None
-        }
+    fn get_field_name(f: &Field) -> Vec<String> {
+        get_type_name(&f.ty)
     }
     match &fields {
         syn::Fields::Named(FieldsNamed { named, .. }) => {
@@ -30,6 +45,7 @@ pub fn get_field_type_names(fields: &syn::Fields) -> Vec<String> {
     }
 }
 
+#[cfg(test)]
 mod test {
     use log::debug;
 
@@ -53,5 +69,16 @@ mod test {
             debug!("Field: {field}");
         }
         assert_eq!(vec!["Happy", "Bun"], fields);
+    }
+
+    #[test]
+    fn test_get_type_name() {
+        let s = quote::quote! {Result<SomeType>};
+        let ty: syn::Type = syn::parse2(s).unwrap();
+        let fields: Vec<String> = super::get_type_name(&ty);
+        for field in &fields {
+            debug!("Field: {field}");
+        }
+        assert_eq!(vec!["Result", "SomeType"], fields);
     }
 }

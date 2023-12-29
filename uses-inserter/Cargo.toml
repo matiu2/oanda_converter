@@ -13,4 +13,5 @@ quote = "1.0.29"
 syn = { version = "2.0.26", features = ["full"] }
 
 [dev-dependencies]
+pretty_assertions = "1.4.0"
 pretty_env_logger = "0.4.0"
