@@ -1,4 +1,4 @@
-use crate::client::Client;
+use crate::{client::Client, Error, Result};
 pub mod responses;
 struct Position<'a> {
     client: &'a Client,

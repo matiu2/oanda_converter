@@ -24,11 +24,13 @@ pub fn get_type_names_from_fn(f: &syn::ItemFn) -> Vec<String> {
 
 #[cfg(test)]
 mod test {
+    use crate::{Error, Result};
+    use error_stack::{Report, ResultExt};
     use pretty_assertions::assert_eq;
     use quote::quote;
 
     #[test]
-    fn test_fn_parsing() {
+    fn test_fn_parsing() -> Result<()> {
         let input = quote! {
             pub async fn trades(
                 &self,
@@ -42,7 +44,9 @@ mod test {
                 before_id: TradeId,
             ) -> Result<SomeType> {todo!()}
         };
-        let f = syn::parse2(input).unwrap();
+        let f = syn::parse2(input.clone())
+            .map_err(Report::from)
+            .change_context_lazy(|| Error::new(format!("Parsing tokens {input:#?}")))?;
         let got = super::get_type_names_from_fn(&f);
         let expected = vec![
             "String",
@@ -57,5 +61,6 @@ mod test {
             "SomeType",
         ];
         assert_eq!(expected, got);
+        Ok(())
     }
 }

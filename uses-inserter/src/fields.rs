@@ -61,38 +61,49 @@ pub fn get_field_type_names(fields: &syn::Fields) -> Vec<String> {
 
 #[cfg(test)]
 mod test {
+    use crate::{Error, Result};
+    use error_stack::{Report, ResultExt};
     use log::debug;
 
     #[test]
-    fn test_get_field_types_unnamed() {
+    fn test_get_field_types_unnamed() -> Result<()> {
         let s = quote::quote! {struct MyStruct(Happy, Bun);};
-        let s: syn::ItemStruct = syn::parse2(s).unwrap();
+        let s: syn::ItemStruct = syn::parse2(s.clone())
+            .map_err(Report::from)
+            .change_context_lazy(|| Error::new(format!("Parsing {s:#?}")))?;
         let fields: Vec<String> = super::get_field_type_names(&s.fields);
         for field in &fields {
             debug!("Field: {field}");
         }
         assert_eq!(vec!["Happy", "Bun"], fields);
+        Ok(())
     }
 
     #[test]
-    fn test_get_field_types_named() {
+    fn test_get_field_types_named() -> Result<()> {
         let s = quote::quote! {struct MyStruct{field1: Happy, field2: Bun}};
-        let s: syn::ItemStruct = syn::parse2(s).unwrap();
+        let s: syn::ItemStruct = syn::parse2(s.clone())
+            .map_err(Report::from)
+            .change_context_lazy(|| Error::new(format!("Parsing {s:#?}")))?;
         let fields: Vec<String> = super::get_field_type_names(&s.fields);
         for field in &fields {
             debug!("Field: {field}");
         }
         assert_eq!(vec!["Happy", "Bun"], fields);
+        Ok(())
     }
 
     #[test]
-    fn test_get_type_name() {
+    fn test_get_type_name() -> Result<()> {
         let s = quote::quote! {Result<SomeType>};
-        let ty: syn::Type = syn::parse2(s).unwrap();
+        let ty: syn::Type = syn::parse2(s.clone())
+            .map_err(Report::from)
+            .change_context_lazy(|| Error::new(format!("Parsing {s:#?}")))?;
         let fields: Vec<String> = super::get_type_names(&ty);
         for field in &fields {
             debug!("Field: {field}");
         }
         assert_eq!(vec!["Result", "SomeType"], fields);
+        Ok(())
     }
 }

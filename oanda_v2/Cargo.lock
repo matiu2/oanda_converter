@@ -1705,6 +1705,7 @@ dependencies = [
 name = "uses-inserter"
 version = "0.1.0"
 dependencies = [
+ "error-stack",
  "itertools",
  "log 0.4.20",
  "proc-macro2",

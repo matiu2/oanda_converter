@@ -16,16 +16,22 @@ pub fn get_type_names_from_impl(i: &syn::ItemImpl) -> Vec<String> {
 
 #[cfg(test)]
 mod test {
+    use crate::{Error, Result};
+    use error_stack::{Report, ResultExt};
+    use pretty_assertions::assert_eq;
     use quote::quote;
 
     #[test]
-    fn test_get_type_names_from_impl() {
+    fn test_get_type_names_from_impl() -> Result<()> {
         let input = quote! {
             impl<'a> Account<'a> { pub async fn some_func(&self, authorization: AuthType) -> Result<OutType> {todo!()} }
         };
-        let input: syn::ItemImpl = syn::parse2(input).unwrap();
+        let input: syn::ItemImpl = syn::parse2(input.clone())
+            .map_err(Report::from)
+            .change_context_lazy(|| Error::new(format!("Parsing tokens {input:#?}")))?;
         let got = super::get_type_names_from_impl(&input);
         let expected = vec!["AuthType", "Result", "OutType"];
         assert_eq!(&expected, &got);
+        Ok(())
     }
 }
