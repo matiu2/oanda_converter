@@ -1,4 +1,3 @@
-use lib::endpoints::position::responses::close;
 use parse_display::Display;
 use thiserror::Error as ThisError;
 use reqwest::StatusCode;

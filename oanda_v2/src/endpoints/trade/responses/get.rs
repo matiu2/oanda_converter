@@ -1,4 +1,3 @@
-use lib::endpoints::trade;
 use serde::{Serialize, Deserialize};
 /// The details for the requested Trade is provided
 #[derive(Serialize, Deserialize)]

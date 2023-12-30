@@ -1,4 +1,3 @@
-use lib::client;
 use crate::{client::Client, Error, Result};
 pub mod responses;
 struct Transaction<'a> {

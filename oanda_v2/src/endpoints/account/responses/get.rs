@@ -1,4 +1,3 @@
-use lib::endpoints::account;
 use serde::{Serialize, Deserialize};
 /// The full Account details are provided
 #[derive(Serialize, Deserialize)]

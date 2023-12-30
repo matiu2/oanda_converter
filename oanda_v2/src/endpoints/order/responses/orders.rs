@@ -1,4 +1,3 @@
-use lib::endpoints::order;
 use serde::{Serialize, Deserialize};
 /// The list of Orders requested
 #[derive(Serialize, Deserialize)]

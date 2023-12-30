@@ -1,4 +1,3 @@
-use lib::endpoints::order::responses::cancel;
 use serde::{Serialize, Deserialize};
 /// The Order was cancelled as specified
 #[derive(Serialize, Deserialize)]

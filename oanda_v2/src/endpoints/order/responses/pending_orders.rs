@@ -1,4 +1,3 @@
-use lib::endpoints::order;
 use serde::{Serialize, Deserialize};
 /// List of pending Orders for the Account
 #[derive(Serialize, Deserialize)]

@@ -1,1 +1,61 @@
-use lib :: endpoints :: trade :: responses :: client_extensions ; ; use lib :: endpoints :: trade :: responses :: client_extensions ; use serde :: { Serialize , Deserialize } ; # [doc = " The Trade’s Client Extensions have been updated as"] # [doc = " requested."] # [derive (Serialize , Deserialize)] struct ClientExtensions200 { # [doc = " The Transaction that updates the Trade’s Client Extensions."] trade_client_extensions_modify_transaction : Option < TradeClientExtensionsModifyTransaction , > , # [doc = " The IDs of all Transactions that were created while"] # [doc = " satisfying the request."] related_transaction_i_ds : Vec < TransactionID > , # [doc = " The ID of the most recent Transaction created for the"] # [doc = " Account"] last_transaction_id : Option < TransactionID > , } # [derive (Serialize , Deserialize)] struct ClientExtensions400 { # [doc = " The Transaction that rejects the modification of the Trade’s"] # [doc = " Client Extensions."] trade_client_extensions_modify_reject_transaction : Option < TradeClientExtensionsModifyRejectTransaction , > , # [doc = " The ID of the most recent Transaction created for the"] # [doc = " Account."] last_transaction_id : Option < TransactionID > , # [doc = " The IDs of all Transactions that were created while"] # [doc = " satisfying the request."] related_transaction_i_ds : Vec < TransactionID > , # [doc = " The code of the error that has occurred. This field may not"] # [doc = " be returned for some errors."] error_code : Option < string > , # [doc = " The human-readable description of the error that has"] # [doc = " occurred."] error_message : string , } # [derive (Serialize , Deserialize)] struct ClientExtensions404 { # [doc = " The Transaction that rejects the modification of the Trade’s"] # [doc = " Client Extensions. Only present if the Account exists."] trade_client_extensions_modify_reject_transaction : Option < TradeClientExtensionsModifyRejectTransaction , > , # [doc = " The ID of the most recent Transaction created for the"] # [doc = " Account. Only present if the Account exists."] last_transaction_id : Option < TransactionID > , # [doc = " The IDs of all Transactions that were created while"] # [doc = " satisfying the request. Only present if the Account exists."] related_transaction_i_ds : Vec < TransactionID > , # [doc = " The code of the error that has occurred. This field may not"] # [doc = " be returned for some errors."] error_code : Option < string > , # [doc = " The human-readable description of the error that has"] # [doc = " occurred."] error_message : string , } # [derive (Debug)] pub enum Error { E400 (ClientExtensions400) , E404 (ClientExtensions404) , }
+use serde::{Serialize, Deserialize};
+/// The Trade’s Client Extensions have been updated as
+/// requested.
+#[derive(Serialize, Deserialize)]
+struct ClientExtensions200 {
+    /// The Transaction that updates the Trade’s Client Extensions.
+    trade_client_extensions_modify_transaction: Option<
+        TradeClientExtensionsModifyTransaction,
+    >,
+    /// The IDs of all Transactions that were created while
+    /// satisfying the request.
+    related_transaction_i_ds: Vec<TransactionID>,
+    /// The ID of the most recent Transaction created for the
+    /// Account
+    last_transaction_id: Option<TransactionID>,
+}
+#[derive(Serialize, Deserialize)]
+struct ClientExtensions400 {
+    /// The Transaction that rejects the modification of the Trade’s
+    /// Client Extensions.
+    trade_client_extensions_modify_reject_transaction: Option<
+        TradeClientExtensionsModifyRejectTransaction,
+    >,
+    /// The ID of the most recent Transaction created for the
+    /// Account.
+    last_transaction_id: Option<TransactionID>,
+    /// The IDs of all Transactions that were created while
+    /// satisfying the request.
+    related_transaction_i_ds: Vec<TransactionID>,
+    /// The code of the error that has occurred. This field may not
+    /// be returned for some errors.
+    error_code: Option<string>,
+    /// The human-readable description of the error that has
+    /// occurred.
+    error_message: string,
+}
+#[derive(Serialize, Deserialize)]
+struct ClientExtensions404 {
+    /// The Transaction that rejects the modification of the Trade’s
+    /// Client Extensions. Only present if the Account exists.
+    trade_client_extensions_modify_reject_transaction: Option<
+        TradeClientExtensionsModifyRejectTransaction,
+    >,
+    /// The ID of the most recent Transaction created for the
+    /// Account. Only present if the Account exists.
+    last_transaction_id: Option<TransactionID>,
+    /// The IDs of all Transactions that were created while
+    /// satisfying the request. Only present if the Account exists.
+    related_transaction_i_ds: Vec<TransactionID>,
+    /// The code of the error that has occurred. This field may not
+    /// be returned for some errors.
+    error_code: Option<string>,
+    /// The human-readable description of the error that has
+    /// occurred.
+    error_message: string,
+}
+#[derive(Debug)]
+pub enum Error {
+    E400(ClientExtensions400),
+    E404(ClientExtensions404),
+}
