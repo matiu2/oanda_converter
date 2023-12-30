@@ -1,3 +1,4 @@
+use lib::endpoints::trade::responses::orders;
 use serde::{Serialize, Deserialize};
 /// The Trade’s dependent Orders have been modified as
 /// requested.

@@ -106,4 +106,18 @@ mod test {
         assert_eq!(vec!["Result", "SomeType"], fields);
         Ok(())
     }
+
+    #[test]
+    fn test_get_type_name_from_option() -> Result<()> {
+        let s = quote::quote! {Option<SomeType>};
+        let ty: syn::Type = syn::parse2(s.clone())
+            .map_err(Report::from)
+            .change_context_lazy(|| Error::new(format!("Parsing {s:#?}")))?;
+        let fields: Vec<String> = super::get_type_names(&ty);
+        for field in &fields {
+            debug!("Field: {field}");
+        }
+        assert_eq!(vec!["Option", "SomeType"], fields);
+        Ok(())
+    }
 }

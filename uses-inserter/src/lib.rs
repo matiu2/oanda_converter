@@ -19,7 +19,7 @@ pub use mod_name::ModName;
 use proc_macro2::{Ident, Span};
 use quote::quote;
 use recurse_sub_modules::recurse_sub_modules;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use utils::stream_to_file;
 
 /// Represents a rust module. It's file/mod name + its contents
@@ -44,8 +44,23 @@ pub struct ModInfo<'a> {
 
 /// Given a rust module address, recursively collects all type declarations and type usages (requirements).
 /// The ultimate goal is to insert the use statements at the top of each module so it'll compile
-pub fn mod_info_recursive(start: ModName<'_>) -> Result<Vec<ModInfo>> {
+pub fn mod_info_recursive<'a>(
+    start: ModName<'a>,
+    files_to_ignore: &HashSet<ModName<'a>>,
+) -> Result<Vec<ModInfo<'a>>> {
     recurse_sub_modules(start)
+        .filter(|r| match r {
+            Ok(m) => {
+                let ok = !files_to_ignore.contains(&m.mod_name);
+                if !ok {
+                    log::debug!("Ignoring file {}", &m.mod_name);
+                } else {
+                    log::debug!("Keeping file {}", &m.mod_name);
+                }
+                ok
+            }
+            Err(_) => true,
+        })
         .map(|r| {
             let m = r?;
             let declares = collect_declarations(&m.contents);
@@ -60,13 +75,19 @@ pub fn mod_info_recursive(start: ModName<'_>) -> Result<Vec<ModInfo>> {
 }
 
 /// Inserts the uses clauses at the top of each generated source module
-pub fn insert_uses_clauses(start: ModName<'_>) -> Result<()> {
-    let info = mod_info_recursive(start)?;
+/// `files_to_ignore` will not be processed
+pub fn insert_uses_clauses(
+    start: ModName<'_>,
+    files_to_ignore: &HashSet<ModName<'_>>,
+) -> Result<()> {
+    let info = mod_info_recursive(start, files_to_ignore)?;
+    log::info!("info: {info:#?}");
     // Make a hashmap of which module declares which type
     let module_by_decl_type: HashMap<&str, &ModName> = info
         .iter()
         .flat_map(|i| i.declares.iter().map(|d| (d.as_str(), &i.module.mod_name)))
         .collect();
+    log::info!("declarations by module: {module_by_decl_type:#?}");
     // For each module, create the uses clause and insert it in the top of the file
     for m in &info {
         let uses = m
@@ -76,11 +97,17 @@ pub fn insert_uses_clauses(start: ModName<'_>) -> Result<()> {
                 module_by_decl_type
                     .get(r.as_str())
                     .into_iter()
-                    .map(|mod_name| Ident::new(&mod_name.mod_name(), Span::call_site()))
+                    .map(|m| {
+                        m.mod_parts()
+                            .iter()
+                            .map(|part| Ident::new(part, Span::call_site()))
+                            .collect_vec()
+                    })
+                    .map(|mod_name| quote! { #(#mod_name)::* })
                     .collect_vec()
             })
             .filter(|mods| !mods.is_empty())
-            .map(|m| quote! {use #(#m*)::*})
+            .map(|m| quote! {use #(#m;)*})
             .collect_vec();
         let contents = std::fs::read_to_string(m.module.mod_name.file_name())
             .map_err(Report::from)

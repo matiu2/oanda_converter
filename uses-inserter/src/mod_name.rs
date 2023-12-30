@@ -2,7 +2,7 @@ use std::borrow::Cow;
 
 use itertools::Itertools;
 
-#[derive(Clone, PartialEq, Eq)]
+#[derive(Hash, Clone, PartialEq, Eq)]
 pub struct ModName<'a> {
     base_path: Cow<'a, str>,
     parts: Vec<Cow<'a, str>>,
@@ -55,6 +55,12 @@ impl<'a> ModName<'a> {
     /// eg. crate::mod1::mod2
     pub fn mod_name(&self) -> String {
         format!("crate::{parts}", parts = self.parts_for_mod().join("::"))
+    }
+
+    /// The mod parts split by '::'
+    /// eg. crate::mod1::mod2 -> [crate, mod1, mod2]
+    pub fn mod_parts(&self) -> &[Cow<'_, str>] {
+        self.parts.as_slice()
     }
 
     pub fn add_part(mut self, part: impl ToString) -> ModName<'a> {

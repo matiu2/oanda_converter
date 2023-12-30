@@ -17,5 +17,7 @@ pub fn gen_lib(mods: &[&str]) -> TokenStream {
     quote! {
         pub mod host;
         #generated
+
+        pub use error::{Error, Result};
     }
 }

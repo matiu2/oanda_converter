@@ -74,6 +74,7 @@ mod test {
     use crate::{Error, Result};
     use error_stack::{Report, ResultExt};
     use proc_macro2::TokenStream;
+    use quote::quote;
 
     #[test]
     fn test_get_mods() -> Result<()> {
@@ -116,6 +117,39 @@ mod test {
         let mods: Vec<String> = super::get_mods(&code).collect();
         println!("{mods:#?}");
         let expected: Vec<&str> = vec![];
+        assert_eq!(expected, mods);
+        Ok(())
+    }
+
+    #[test]
+    fn test_public_mod() -> Result<()> {
+        let input = quote! {
+            pub mod responses;
+        };
+        let code: syn::File = syn::parse2(input.clone())
+            .map_err(Report::from)
+            .change_context_lazy(|| Error::new(format!("Parsing tokens {input:#?}")))?;
+        let mods: Vec<String> = super::get_mods(&code).collect();
+        println!("{mods:#?}");
+        let expected: Vec<&str> = vec!["responses"];
+        assert_eq!(expected, mods);
+        Ok(())
+    }
+
+    #[test]
+    fn test_endpoints_account() -> Result<()> {
+        let file_name = "../oanda_v2/src/endpoints/account.rs";
+        let s = std::fs::read_to_string(file_name)
+            .map_err(Report::from)
+            .change_context_lazy(|| Error::new(format!("Opening {file_name}")))?;
+        let code: TokenStream = syn::parse_str(&s)
+            .map_err(Report::from)
+            .change_context_lazy(|| Error::new(format!("Parsing string {s}")))?;
+        let code: syn::File = syn::parse2(code.clone())
+            .map_err(Report::from)
+            .change_context_lazy(|| Error::new(format!("Parsing tokens {code:#?}")))?;
+        let mods: Vec<String> = super::get_mods(&code).collect();
+        let expected = vec!["responses"];
         assert_eq!(expected, mods);
         Ok(())
     }

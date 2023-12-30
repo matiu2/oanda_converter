@@ -1,3 +1,4 @@
+use lib::endpoints::transaction;
 use serde::{Serialize, Deserialize};
 /// The details of the requested Transaction are provided.
 #[derive(Serialize, Deserialize)]

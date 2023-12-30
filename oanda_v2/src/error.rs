@@ -1,7 +1,9 @@
+use lib::endpoints::position::responses::close;
 use parse_display::Display;
+use thiserror::Error as ThisError;
 use reqwest::StatusCode;
 use serde::Deserialize;
-#[derive(Display, Debug)]
+#[derive(Display, Debug, ThisError)]
 #[display(style = "snake_case")]
 pub enum Error {
     #[display("reqwest error: {0}")]
@@ -9,5 +11,4 @@ pub enum Error {
     #[display("Unexpected http error: {code} {body}")]
     UnexpectedHttp { code: u16, body: String },
 }
-impl std::error::Error for Error {}
 pub type Result<T> = error_stack::Result<T, Error>;
