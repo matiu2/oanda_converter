@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct QuoteHomeConversionFactors {
+pub struct QuoteHomeConversionFactors {
     /// The factor used to convert a positive amount of the Price’s
     /// Instrument’s quote currency into a positive amount of
     /// the Account’s home currency. Conversion is performed by

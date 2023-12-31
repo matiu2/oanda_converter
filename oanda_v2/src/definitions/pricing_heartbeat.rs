@@ -1,9 +1,9 @@
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 #[derive(Serialize, Deserialize)]
-struct PricingHeartbeat {
+pub struct PricingHeartbeat {
     /// The string “HEARTBEAT”
     #[serde(default = "HEARTBEAT")]
-    r#type: string,
+    r#type: String,
     /// The date/time when the Heartbeat was created.
     time: Option<DateTime>,
 }

@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct FixedPriceOrderTransaction {
+pub struct FixedPriceOrderTransaction {
     /// The Transaction’s Identifier.
     id: Option<TransactionID>,
     /// The date/time when the Transaction was created.
@@ -37,7 +37,7 @@ struct FixedPriceOrderTransaction {
     position_fill: OrderPositionFill,
     /// The state that the trade resulting from the Fixed Price
     /// Order should be set to.
-    trade_state: string,
+    trade_state: String,
     /// The reason that the Fixed Price Order was created
     reason: Option<FixedPriceOrderReason>,
     /// The client extensions for the Fixed Price Order.

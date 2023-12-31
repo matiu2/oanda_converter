@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct Candlestick {
+pub struct Candlestick {
     /// The start time of the candlestick
     time: Option<DateTime>,
     /// The candlestick data based on bids. Only provided if bid-

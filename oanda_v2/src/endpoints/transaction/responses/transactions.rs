@@ -1,7 +1,8 @@
 use serde::{Serialize, Deserialize};
 /// The requested time range of Transaction pages are provided.
+use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct Transactions200 {
+pub struct Transactions200 {
     /// The starting time provided in the request.
     from: Option<DateTime>,
     /// The ending time provided in the request.
@@ -15,7 +16,7 @@ struct Transactions200 {
     count: Option<integer>,
     /// The list of URLs that represent idrange queries providing
     /// the data for each page in the query results
-    pages: Vec<string>,
+    pages: Vec<String>,
     /// The ID of the most recent Transaction created for the
     /// Account
     last_transaction_id: Option<TransactionID>,

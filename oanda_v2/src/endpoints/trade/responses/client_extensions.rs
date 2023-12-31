@@ -1,8 +1,9 @@
 use serde::{Serialize, Deserialize};
 /// The Trade’s Client Extensions have been updated as
 /// requested.
+use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct ClientExtensions200 {
+pub struct ClientExtensions200 {
     /// The Transaction that updates the Trade’s Client Extensions.
     trade_client_extensions_modify_transaction: Option<
         TradeClientExtensionsModifyTransaction,
@@ -14,8 +15,9 @@ struct ClientExtensions200 {
     /// Account
     last_transaction_id: Option<TransactionID>,
 }
+use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct ClientExtensions400 {
+pub struct ClientExtensions400 {
     /// The Transaction that rejects the modification of the Trade’s
     /// Client Extensions.
     trade_client_extensions_modify_reject_transaction: Option<
@@ -29,13 +31,14 @@ struct ClientExtensions400 {
     related_transaction_i_ds: Vec<TransactionID>,
     /// The code of the error that has occurred. This field may not
     /// be returned for some errors.
-    error_code: Option<string>,
+    error_code: Option<String>,
     /// The human-readable description of the error that has
     /// occurred.
-    error_message: string,
+    error_message: String,
 }
+use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct ClientExtensions404 {
+pub struct ClientExtensions404 {
     /// The Transaction that rejects the modification of the Trade’s
     /// Client Extensions. Only present if the Account exists.
     trade_client_extensions_modify_reject_transaction: Option<
@@ -49,10 +52,10 @@ struct ClientExtensions404 {
     related_transaction_i_ds: Vec<TransactionID>,
     /// The code of the error that has occurred. This field may not
     /// be returned for some errors.
-    error_code: Option<string>,
+    error_code: Option<String>,
     /// The human-readable description of the error that has
     /// occurred.
-    error_message: string,
+    error_message: String,
 }
 #[derive(Debug)]
 pub enum Error {

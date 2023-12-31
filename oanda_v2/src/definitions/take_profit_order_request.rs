@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct TakeProfitOrderRequest {
+pub struct TakeProfitOrderRequest {
     /// The type of the Order to Create. Must be set to
     /// “TAKE_PROFIT” when creating a Take Profit Order.
     #[serde(default = "TAKE_PROFIT")]

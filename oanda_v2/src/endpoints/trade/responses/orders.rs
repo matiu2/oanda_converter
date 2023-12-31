@@ -1,8 +1,9 @@
 use serde::{Serialize, Deserialize};
 /// The Trade’s dependent Orders have been modified as
 /// requested.
+use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct Orders200 {
+pub struct Orders200 {
     /// The Transaction created that cancels the Trade’s existing
     /// Take Profit Order.
     take_profit_order_cancel_transaction: Option<OrderCancelTransaction>,
@@ -50,8 +51,9 @@ struct Orders200 {
     /// Account
     last_transaction_id: Option<TransactionID>,
 }
+use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct Orders400 {
+pub struct Orders400 {
     /// An OrderCancelRejectTransaction represents the rejection of
     /// the cancellation of an Order in the client’s Account.
     take_profit_order_cancel_reject_transaction: Option<OrderCancelRejectTransaction>,
@@ -92,10 +94,10 @@ struct Orders400 {
     related_transaction_i_ds: Vec<TransactionID>,
     /// The code of the error that has occurred. This field may not
     /// be returned for some errors.
-    error_code: Option<string>,
+    error_code: Option<String>,
     /// The human-readable description of the error that has
     /// occurred.
-    error_message: string,
+    error_message: String,
 }
 #[derive(Debug)]
 pub enum Error {

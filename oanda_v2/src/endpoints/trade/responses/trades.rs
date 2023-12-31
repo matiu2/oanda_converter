@@ -1,7 +1,8 @@
 use serde::{Serialize, Deserialize};
 /// The list of Trades requested
+use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct Trades200 {
+pub struct Trades200 {
     /// The list of Trade detail objects
     trades: Vec<Trade>,
     /// The ID of the most recent Transaction created for the

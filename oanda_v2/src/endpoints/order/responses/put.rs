@@ -1,7 +1,8 @@
 use serde::{Serialize, Deserialize};
 /// The Order was successfully cancelled and replaced
+use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct Put201 {
+pub struct Put201 {
     /// The Transaction that cancelled the Order to be replaced.
     order_cancel_transaction: Option<OrderCancelTransaction>,
     /// The Transaction that created the replacing Order as
@@ -31,8 +32,9 @@ struct Put201 {
     /// Account
     last_transaction_id: Option<TransactionID>,
 }
+use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct Put400 {
+pub struct Put400 {
     /// The Transaction that rejected the creation of the replacing
     /// Order
     order_reject_transaction: Option<Transaction>,
@@ -44,13 +46,14 @@ struct Put400 {
     last_transaction_id: Option<TransactionID>,
     /// The code of the error that has occurred. This field may not
     /// be returned for some errors.
-    error_code: Option<string>,
+    error_code: Option<String>,
     /// The human-readable description of the error that has
     /// occurred.
-    error_message: string,
+    error_message: String,
 }
+use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct Put404 {
+pub struct Put404 {
     /// The Transaction that rejected the cancellation of the Order
     /// to be replaced. Only present if the Account exists.
     order_cancel_reject_transaction: Option<Transaction>,
@@ -62,10 +65,10 @@ struct Put404 {
     last_transaction_id: Option<TransactionID>,
     /// The code of the error that has occurred. This field may not
     /// be returned for some errors.
-    error_code: Option<string>,
+    error_code: Option<String>,
     /// The human-readable description of the error that has
     /// occurred.
-    error_message: string,
+    error_message: String,
 }
 #[derive(Debug)]
 pub enum Error {

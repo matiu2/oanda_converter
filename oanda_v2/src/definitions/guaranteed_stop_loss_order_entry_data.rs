@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct GuaranteedStopLossOrderEntryData {
+pub struct GuaranteedStopLossOrderEntryData {
     /// The minimum distance allowed between the Trade’s fill price
     /// and the configured price for guaranteed Stop Loss Orders
     /// created for this instrument. Specified in price units.

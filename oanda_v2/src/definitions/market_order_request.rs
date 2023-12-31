@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct MarketOrderRequest {
+pub struct MarketOrderRequest {
     /// The type of the Order to Create. Must be set to “MARKET”
     /// when creating a Market Order.
     #[serde(default = "MARKET")]

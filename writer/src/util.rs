@@ -26,8 +26,6 @@ pub fn generate_source(base_path: &str, contents: &[Content]) -> Result<()> {
         let content = gen_definition(definition)
             .attach_printable_lazy(|| format!("Generating definition for {}", definition.name))?;
         let tokens = quote! {
-            use serde::{Serialize, Deserialize};
-
             #content
         };
         let mod_name = change_case::snake_case(&definition.name);

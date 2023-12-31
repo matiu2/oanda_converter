@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct DailyFinancingTransaction {
+pub struct DailyFinancingTransaction {
     /// The Transaction’s Identifier.
     id: Option<TransactionID>,
     /// The date/time when the Transaction was created.

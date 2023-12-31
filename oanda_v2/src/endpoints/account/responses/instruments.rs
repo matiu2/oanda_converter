@@ -1,8 +1,9 @@
 use serde::{Serialize, Deserialize};
 /// The list of tradeable instruments for the Account has been
 /// provided.
+use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct Instruments200 {
+pub struct Instruments200 {
     /// The requested list of instruments.
     instruments: Vec<Instrument>,
     /// The ID of the most recent Transaction created for the

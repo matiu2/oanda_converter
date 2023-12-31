@@ -1,4 +1,3 @@
-use serde::{Serialize, Deserialize};
 /// The Order’s identifier, unique within the Order’s Account.
 ///
 /// Format: The string representation of the OANDA-assigned
@@ -11,6 +10,6 @@ struct OrderID(String);
 impl std::ops::Deref for OrderID {
     type Target = str;
     fn deref(&self) -> &Self::Target {
-        self.0
+        self.0.as_str()
     }
 }

@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct TransferFundsRejectTransaction {
+pub struct TransferFundsRejectTransaction {
     /// The Transaction’s Identifier.
     id: Option<TransactionID>,
     /// The date/time when the Transaction was created.
@@ -29,7 +29,7 @@ struct TransferFundsRejectTransaction {
     funding_reason: Option<FundingReason>,
     /// An optional comment that may be attached to a fund transfer
     /// for audit purposes
-    comment: Option<string>,
+    comment: Option<String>,
     /// The reason that the Reject Transaction was created
     reject_reason: Option<TransactionRejectReason>,
 }

@@ -1,7 +1,8 @@
 use serde::{Serialize, Deserialize};
 /// The Position is provided.
+use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct Get200 {
+pub struct Get200 {
     /// The requested Position.
     position: Option<Position>,
     /// The ID of the most recent Transaction created for the

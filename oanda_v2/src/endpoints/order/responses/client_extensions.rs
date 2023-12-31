@@ -1,7 +1,8 @@
 use serde::{Serialize, Deserialize};
 /// The Order’s Client Extensions were successfully modified
+use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct ClientExtensions200 {
+pub struct ClientExtensions200 {
     /// The Transaction that modified the Client Extensions for
     /// the Order
     order_client_extensions_modify_transaction: Option<
@@ -14,8 +15,9 @@ struct ClientExtensions200 {
     /// satisfying the request.
     related_transaction_i_ds: Vec<TransactionID>,
 }
+use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct ClientExtensions400 {
+pub struct ClientExtensions400 {
     /// The Transaction that rejected the modification of the Client
     /// Extensions for the Order
     order_client_extensions_modify_reject_transaction: Option<
@@ -29,13 +31,14 @@ struct ClientExtensions400 {
     related_transaction_i_ds: Vec<TransactionID>,
     /// The code of the error that has occurred. This field may not
     /// be returned for some errors.
-    error_code: Option<string>,
+    error_code: Option<String>,
     /// The human-readable description of the error that has
     /// occurred.
-    error_message: string,
+    error_message: String,
 }
+use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct ClientExtensions404 {
+pub struct ClientExtensions404 {
     /// The Transaction that rejected the modification of the
     /// Client Extensions for the Order. Only present if the Account
     /// exists.
@@ -50,10 +53,10 @@ struct ClientExtensions404 {
     related_transaction_i_ds: Vec<TransactionID>,
     /// The code of the error that has occurred. This field may not
     /// be returned for some errors.
-    error_code: Option<string>,
+    error_code: Option<String>,
     /// The human-readable description of the error that has
     /// occurred.
-    error_message: string,
+    error_message: String,
 }
 #[derive(Debug)]
 pub enum Error {

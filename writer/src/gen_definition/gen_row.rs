@@ -53,7 +53,7 @@ pub fn gen_single_row(row: &Row, name: &str, struct_doc_string: &str) -> Result<
             type Target = str;
 
             fn deref(&self) -> &Self::Target {
-                self.0
+                self.0.as_str()
             }
         }
     })
@@ -80,6 +80,7 @@ pub fn gen_rows(rows: &[Row], enum_name: &str, enum_doc_string: &str) -> Result<
         })
         .collect::<Result<Vec<TokenStream>>>()?;
     Ok(quote! {
+        use serde::{Serialize, Deserialize};
 
         #(#doc_string)*
         #[derive(Deserialize, Serialize)]

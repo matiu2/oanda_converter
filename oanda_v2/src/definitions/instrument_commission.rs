@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct InstrumentCommission {
+pub struct InstrumentCommission {
     /// The commission amount (in the Account’s home currency)
     /// charged per unitsTraded of the instrument
     commission: Option<DecimalNumber>,

@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct ClientConfigureTransaction {
+pub struct ClientConfigureTransaction {
     /// The Transaction’s Identifier.
     id: Option<TransactionID>,
     /// The date/time when the Transaction was created.
@@ -22,7 +22,7 @@ struct ClientConfigureTransaction {
     #[serde(default = "CLIENT_CONFIGURE")]
     r#type: TransactionType,
     /// The client-provided alias for the Account.
-    alias: Option<string>,
+    alias: Option<String>,
     /// The margin rate override for the Account.
     margin_rate: Option<DecimalNumber>,
 }

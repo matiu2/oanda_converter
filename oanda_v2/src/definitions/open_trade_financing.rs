@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct OpenTradeFinancing {
+pub struct OpenTradeFinancing {
     /// The ID of the Trade that financing is being paid/collected
     /// for.
     trade_id: Option<TradeID>,

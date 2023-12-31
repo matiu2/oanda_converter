@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct ClientConfigureRejectTransaction {
+pub struct ClientConfigureRejectTransaction {
     /// The Transaction’s Identifier.
     id: Option<TransactionID>,
     /// The date/time when the Transaction was created.
@@ -23,7 +23,7 @@ struct ClientConfigureRejectTransaction {
     #[serde(default = "CLIENT_CONFIGURE_REJECT")]
     r#type: TransactionType,
     /// The client-provided alias for the Account.
-    alias: Option<string>,
+    alias: Option<String>,
     /// The margin rate override for the Account.
     margin_rate: Option<DecimalNumber>,
     /// The reason that the Reject Transaction was created

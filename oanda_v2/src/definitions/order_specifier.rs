@@ -1,4 +1,3 @@
-use serde::{Serialize, Deserialize};
 /// The specification of an Order as referred to by clients
 ///
 /// Format: Either the Order’s OANDA-assigned OrderID or the
@@ -9,6 +8,6 @@ struct OrderSpecifier(String);
 impl std::ops::Deref for OrderSpecifier {
     type Target = str;
     fn deref(&self) -> &Self::Target {
-        self.0
+        self.0.as_str()
     }
 }

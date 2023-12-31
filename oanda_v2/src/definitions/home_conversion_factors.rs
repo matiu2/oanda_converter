@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct HomeConversionFactors {
+pub struct HomeConversionFactors {
     /// The ConversionFactor in effect for the Account for
     /// converting any gains realized in Instrument quote units into
     /// units of the Account’s home currency.

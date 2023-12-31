@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct OrderBook {
+pub struct OrderBook {
     /// The order book’s instrument
     instrument: Option<InstrumentName>,
     /// The time when the order book snapshot was created.

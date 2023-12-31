@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct GuaranteedStopLossOrderLevelRestriction {
+pub struct GuaranteedStopLossOrderLevelRestriction {
     /// Applies to Trades with a guaranteed Stop Loss Order attached
     /// for the specified Instrument. This is the total allowed
     /// Trade volume that can exist within the priceRange based on

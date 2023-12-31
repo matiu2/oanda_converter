@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct CandlestickResponse {
+pub struct CandlestickResponse {
     /// The instrument whose Prices are represented by the
     /// candlesticks.
     instrument: Option<InstrumentName>,

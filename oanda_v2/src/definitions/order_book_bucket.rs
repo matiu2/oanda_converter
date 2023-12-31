@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct OrderBookBucket {
+pub struct OrderBookBucket {
     /// The lowest price (inclusive) covered by the bucket. The
     /// bucket covers the price range from the price to price + the
     /// order book’s bucketWidth.

@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct TakeProfitDetails {
+pub struct TakeProfitDetails {
     /// The price that the Take Profit Order will be triggered at.
     /// Only one of the price and distance fields may be specified.
     price: Option<PriceValue>,

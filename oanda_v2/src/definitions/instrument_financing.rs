@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct InstrumentFinancing {
+pub struct InstrumentFinancing {
     /// The financing rate to be used for a long position for the
     /// instrument. The value is in decimal rather than percentage
     /// points, i.e. 5% is represented as 0.05.

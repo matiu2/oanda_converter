@@ -101,7 +101,10 @@ pub fn insert_uses_clauses(
                             .map(|part| Ident::new(part, Span::call_site()))
                             .collect_vec()
                     })
-                    .map(|mod_name| quote! { #(#mod_name)::* })
+                    .map(|mod_name| {
+                        let r = Ident::new(r, Span::call_site());
+                        quote! { #(#mod_name ::)* #r }
+                    })
                     .collect_vec()
             })
             .filter(|mods| !mods.is_empty())

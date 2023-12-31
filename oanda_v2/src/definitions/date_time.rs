@@ -1,4 +1,3 @@
-use serde::{Serialize, Deserialize};
 /// A date and time value using either RFC3339 or UNIX time
 /// representation.
 ///
@@ -7,6 +6,6 @@ struct DateTime(String);
 impl std::ops::Deref for DateTime {
     type Target = str;
     fn deref(&self) -> &Self::Target {
-        self.0
+        self.0.as_str()
     }
 }

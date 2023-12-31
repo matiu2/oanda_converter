@@ -1,7 +1,8 @@
 use serde::{Serialize, Deserialize};
 /// The requested time range of Transactions are provided.
+use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct Sinceid200 {
+pub struct Sinceid200 {
     /// The list of Transactions that satisfy the request.
     transactions: Vec<Transaction>,
     /// The ID of the most recent Transaction created for the

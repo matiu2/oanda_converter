@@ -1,7 +1,8 @@
 use serde::{Serialize, Deserialize};
 /// The Account state and changes are provided.
+use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct Changes200 {
+pub struct Changes200 {
     /// The changes to the Account’s Orders, Trades and Positions
     /// since the specified Transaction ID. Only provided if the
     /// sinceTransactionID is supplied to the poll request.

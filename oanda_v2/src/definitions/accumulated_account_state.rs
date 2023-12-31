@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct AccumulatedAccountState {
+pub struct AccumulatedAccountState {
     /// The current balance of the account.
     balance: Option<AccountUnits>,
     /// The total profit/loss realized over the lifetime of the

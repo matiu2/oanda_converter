@@ -1,8 +1,9 @@
 use serde::{Serialize, Deserialize};
 /// The Position closeout request has been successfully
 /// processed.
+use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct Close200 {
+pub struct Close200 {
     /// The MarketOrderTransaction created to close the long
     /// Position.
     long_order_create_transaction: Option<MarketOrderTransaction>,
@@ -26,8 +27,9 @@ struct Close200 {
     /// Account
     last_transaction_id: Option<TransactionID>,
 }
+use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct Close400 {
+pub struct Close400 {
     /// The Transaction created that rejects the creation of a
     /// MarketOrder to close the long Position.
     long_order_reject_transaction: Option<MarketOrderRejectTransaction>,
@@ -42,13 +44,14 @@ struct Close400 {
     last_transaction_id: Option<TransactionID>,
     /// The code of the error that has occurred. This field may not
     /// be returned for some errors.
-    error_code: Option<string>,
+    error_code: Option<String>,
     /// The human-readable description of the error that has
     /// occurred.
-    error_message: string,
+    error_message: String,
 }
+use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct Close404 {
+pub struct Close404 {
     /// The Transaction created that rejects the creation of a
     /// MarketOrder to close the long Position. Only present if the
     /// Account exists and a long Position was specified.
@@ -65,10 +68,10 @@ struct Close404 {
     last_transaction_id: Option<TransactionID>,
     /// The code of the error that has occurred. This field may not
     /// be returned for some errors.
-    error_code: Option<string>,
+    error_code: Option<String>,
     /// The human-readable description of the error that has
     /// occurred.
-    error_message: string,
+    error_message: String,
 }
 #[derive(Debug)]
 pub enum Error {

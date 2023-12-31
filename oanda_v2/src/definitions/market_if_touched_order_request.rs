@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct MarketIfTouchedOrderRequest {
+pub struct MarketIfTouchedOrderRequest {
     /// The type of the Order to Create. Must be set to
     /// “MARKET_IF_TOUCHED” when creating a Market If Touched Order.
     #[serde(default = "MARKET_IF_TOUCHED")]

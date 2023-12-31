@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct TradeOpen {
+pub struct TradeOpen {
     /// The ID of the Trade that was opened
     trade_id: Option<TradeID>,
     /// The number of units opened by the Trade

@@ -16,7 +16,7 @@ fn main() -> Result<()> {
         .annotate("Opening content.yaml")?;
     let content: Vec<Content> = serde_yaml::from_str(&yaml).annotate("Reading in content.yaml")?;
     generate_source(base_path, content.as_slice()).attach_printable("Generating the source")?;
-    let mod_name = ModName::new("src").add_part("lib");
+    // let mod_name = ModName::new("src").add_part("lib");
     // let files_to_ignore = ["host", "error", "lib", "client"]
     //     .into_iter()
     //     .map(|s| ModName::new(base_path).add_part(s))

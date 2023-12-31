@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct GuaranteedStopLossOrder {
+pub struct GuaranteedStopLossOrder {
     /// The Order’s identifier, unique within the Order’s Account.
     id: Option<OrderID>,
     /// The time when the Order was created.

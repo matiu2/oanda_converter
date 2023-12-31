@@ -1,7 +1,8 @@
 use serde::{Serialize, Deserialize};
 /// Pricing information has been successfully provided.
+use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct Pricing200 {
+pub struct Pricing200 {
     /// The list of Price objects requested.
     prices: Vec<ClientPrice>,
     /// The list of home currency conversion factors requested. This

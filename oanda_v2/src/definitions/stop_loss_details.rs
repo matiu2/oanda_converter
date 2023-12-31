@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct StopLossDetails {
+pub struct StopLossDetails {
     /// The price that the Stop Loss Order will be triggered at.
     /// Only one of the price and distance fields may be specified.
     price: Option<PriceValue>,

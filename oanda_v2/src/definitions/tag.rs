@@ -1,8 +1,8 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct Tag {
+pub struct Tag {
     /// The type of the tag.
-    r#type: Option<string>,
+    r#type: Option<String>,
     /// The name of the tag.
-    name: Option<string>,
+    name: Option<String>,
 }

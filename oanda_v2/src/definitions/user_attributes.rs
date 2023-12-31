@@ -1,20 +1,20 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct UserAttributes {
+pub struct UserAttributes {
     /// The user’s OANDA-assigned user ID.
     user_id: Option<integer>,
     /// The user-provided username.
-    username: Option<string>,
+    username: Option<String>,
     /// The user’s title.
-    title: Option<string>,
+    title: Option<String>,
     /// The user’s name.
-    name: Option<string>,
+    name: Option<String>,
     /// The user’s email address.
-    email: Option<string>,
+    email: Option<String>,
     /// The OANDA division the user belongs to.
-    division_abbreviation: Option<string>,
+    division_abbreviation: Option<String>,
     /// The user’s preferred language.
-    language_abbreviation: Option<string>,
+    language_abbreviation: Option<String>,
     /// The home currency of the Account.
     home_currency: Option<Currency>,
 }

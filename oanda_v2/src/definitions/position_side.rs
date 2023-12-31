@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct PositionSide {
+pub struct PositionSide {
     /// Number of units in the position (negative value indicates
     /// short position, positive indicates long position).
     units: Option<DecimalNumber>,

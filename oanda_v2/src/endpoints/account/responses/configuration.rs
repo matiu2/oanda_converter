@@ -1,14 +1,16 @@
 use serde::{Serialize, Deserialize};
 /// The Account was configured successfully.
+use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct Configuration200 {
+pub struct Configuration200 {
     /// The transaction that configures the Account.
     client_configure_transaction: Option<ClientConfigureTransaction>,
     /// The ID of the last Transaction created for the Account.
     last_transaction_id: Option<TransactionID>,
 }
+use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct Configuration400 {
+pub struct Configuration400 {
     /// The transaction that rejects the configuration of the
     /// Account.
     client_configure_reject_transaction: Option<ClientConfigureRejectTransaction>,
@@ -16,13 +18,14 @@ struct Configuration400 {
     last_transaction_id: Option<TransactionID>,
     /// The code of the error that has occurred. This field may not
     /// be returned for some errors.
-    error_code: Option<string>,
+    error_code: Option<String>,
     /// The human-readable description of the error that has
     /// occurred.
-    error_message: string,
+    error_message: String,
 }
+use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct Configuration403 {
+pub struct Configuration403 {
     /// The transaction that rejects the configuration of the
     /// Account.
     client_configure_reject_transaction: Option<ClientConfigureRejectTransaction>,
@@ -30,10 +33,10 @@ struct Configuration403 {
     last_transaction_id: Option<TransactionID>,
     /// The code of the error that has occurred. This field may not
     /// be returned for some errors.
-    error_code: Option<string>,
+    error_code: Option<String>,
     /// The human-readable description of the error that has
     /// occurred.
-    error_message: string,
+    error_message: String,
 }
 #[derive(Debug)]
 pub enum Error {

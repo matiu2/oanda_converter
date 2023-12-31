@@ -17,8 +17,10 @@ pub fn gen_struct(s: &Struct, name: &str) -> Result<TokenStream> {
         .attach_printable_lazy(|| format!("While generating fields for struct {name}"))?;
     let name = Ident::new(name, proc_macro2::Span::call_site());
     Ok(quote! {
+        use serde::{Serialize, Deserialize};
+
         #[derive(Serialize, Deserialize)]
-        struct #name {
+        pub struct #name {
             #(#fields)*
         }
     })
@@ -28,11 +30,13 @@ pub fn gen_struct(s: &Struct, name: &str) -> Result<TokenStream> {
 pub fn gen_typed_string(name: &str) -> Result<TokenStream> {
     let name = Ident::new(name, proc_macro2::Span::call_site());
     Ok(quote! {
+        use serde::{Serialize, Deserialize};
+
         #[derive(Serialize, Deserialize)]
-        struct #name (String);
+        pub struct #name (String);
 
         impl ToString for #name {
-            fn to_string(self) -> String {
+            fn to_string(&self) -> String {
                 self.0
             }
         }
@@ -62,6 +66,11 @@ fn gen_field(
     }: &Field,
 ) -> Result<TokenStream> {
     let name = field_name(name);
+    let type_name = if type_name.as_str() == "string" {
+        "String"
+    } else {
+        type_name.as_str()
+    };
     let type_name = Ident::new(type_name, proc_macro2::Span::call_site());
     let doc_string = pretty_doc_string(doc_string)
         .change_context_lazy(Error::default)

@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct LimitOrderRequest {
+pub struct LimitOrderRequest {
     /// The type of the Order to Create. Must be set to “LIMIT” when
     /// creating a Market Order.
     #[serde(default = "LIMIT")]

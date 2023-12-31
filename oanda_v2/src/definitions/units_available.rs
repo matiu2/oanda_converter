@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct UnitsAvailable {
+pub struct UnitsAvailable {
     /// The number of units that are available to be traded using
     /// an Order with a positionFill option of “DEFAULT”. For an
     /// Account with hedging enabled, this value will be the same

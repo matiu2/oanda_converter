@@ -1,10 +1,10 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct ClientPrice {
+pub struct ClientPrice {
     /// The string “PRICE”. Used to identify the a Price object when
     /// found in a stream.
     #[serde(default = "PRICE")]
-    r#type: string,
+    r#type: String,
     /// The Price’s Instrument.
     instrument: Option<InstrumentName>,
     /// The date/time when the Price was created

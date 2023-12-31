@@ -1,7 +1,8 @@
 use serde::{Serialize, Deserialize};
 /// The details of the requested Transaction are provided.
+use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct Get200 {
+pub struct Get200 {
     /// The details of the Transaction requested
     transaction: Option<Transaction>,
     /// The ID of the most recent Transaction created for the

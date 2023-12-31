@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct StopOrderRequest {
+pub struct StopOrderRequest {
     /// The type of the Order to Create. Must be set to “STOP” when
     /// creating a Stop Order.
     #[serde(default = "STOP")]

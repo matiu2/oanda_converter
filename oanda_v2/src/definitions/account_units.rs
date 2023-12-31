@@ -1,4 +1,3 @@
-use serde::{Serialize, Deserialize};
 /// The string representation of a quantity of an Account’s
 /// home currency.
 ///
@@ -8,6 +7,6 @@ struct AccountUnits(String);
 impl std::ops::Deref for AccountUnits {
     type Target = str;
     fn deref(&self) -> &Self::Target {
-        self.0
+        self.0.as_str()
     }
 }

@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct CalculatedPositionState {
+pub struct CalculatedPositionState {
     /// The Position’s Instrument.
     instrument: Option<InstrumentName>,
     /// The Position’s net unrealized profit/loss

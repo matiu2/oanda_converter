@@ -1,4 +1,3 @@
-use serde::{Serialize, Deserialize};
 /// The identification of a Trade as referred to by clients
 ///
 /// Format: Either the Trade’s OANDA-assigned TradeID or the
@@ -9,6 +8,6 @@ struct TradeSpecifier(String);
 impl std::ops::Deref for TradeSpecifier {
     type Target = str;
     fn deref(&self) -> &Self::Target {
-        self.0
+        self.0.as_str()
     }
 }

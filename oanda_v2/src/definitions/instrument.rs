@@ -1,12 +1,12 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct Instrument {
+pub struct Instrument {
     /// The name of the Instrument
     name: Option<InstrumentName>,
     /// The type of the Instrument
     r#type: Option<InstrumentType>,
     /// The display name of the Instrument
-    display_name: Option<string>,
+    display_name: Option<String>,
     /// The location of the “pip” for this instrument. The decimal
     /// position of the pip in this Instrument’s price can be
     /// found at 10 ^ pipLocation (e.g. -4 pipLocation results in a

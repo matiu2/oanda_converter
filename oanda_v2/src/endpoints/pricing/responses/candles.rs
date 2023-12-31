@@ -1,7 +1,8 @@
 use serde::{Serialize, Deserialize};
 /// Pricing information has been successfully provided.
+use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct Candles200 {
+pub struct Candles200 {
     /// The instrument whose Prices are represented by the
     /// candlesticks.
     instrument: Option<InstrumentName>,

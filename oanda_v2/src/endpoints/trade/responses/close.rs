@@ -1,7 +1,8 @@
 use serde::{Serialize, Deserialize};
 /// The Trade has been closed as requested
+use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct Close200 {
+pub struct Close200 {
     /// The MarketOrder Transaction created to close the Trade.
     order_create_transaction: Option<MarketOrderTransaction>,
     /// The OrderFill Transaction that fills the Trade-closing
@@ -17,20 +18,22 @@ struct Close200 {
     /// Account
     last_transaction_id: Option<TransactionID>,
 }
+use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct Close400 {
+pub struct Close400 {
     /// The MarketOrderReject Transaction that rejects the creation
     /// of the Trade- closing MarketOrder.
     order_reject_transaction: Option<MarketOrderRejectTransaction>,
     /// The code of the error that has occurred. This field may not
     /// be returned for some errors.
-    error_code: Option<string>,
+    error_code: Option<String>,
     /// The human-readable description of the error that has
     /// occurred.
-    error_message: string,
+    error_message: String,
 }
+use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct Close404 {
+pub struct Close404 {
     /// The MarketOrderReject Transaction that rejects the creation
     /// of the Trade- closing MarketOrder. Only present if the
     /// Account exists.
@@ -43,10 +46,10 @@ struct Close404 {
     related_transaction_i_ds: Vec<TransactionID>,
     /// The code of the error that has occurred. This field may not
     /// be returned for some errors.
-    error_code: Option<string>,
+    error_code: Option<String>,
     /// The human-readable description of the error that has
     /// occurred.
-    error_message: string,
+    error_message: String,
 }
 #[derive(Debug)]
 pub enum Error {

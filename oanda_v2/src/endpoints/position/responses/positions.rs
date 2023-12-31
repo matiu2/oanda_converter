@@ -1,7 +1,8 @@
 use serde::{Serialize, Deserialize};
 /// The Account’s Positions are provided.
+use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct Positions200 {
+pub struct Positions200 {
     /// The list of Account Positions.
     positions: Vec<Position>,
     /// The ID of the most recent Transaction created for the

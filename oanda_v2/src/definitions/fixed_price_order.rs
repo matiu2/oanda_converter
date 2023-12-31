@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct FixedPriceOrder {
+pub struct FixedPriceOrder {
     /// The Order’s identifier, unique within the Order’s Account.
     id: Option<OrderID>,
     /// The time when the Order was created.
@@ -31,7 +31,7 @@ struct FixedPriceOrder {
     position_fill: OrderPositionFill,
     /// The state that the trade resulting from the Fixed Price
     /// Order should be set to.
-    trade_state: string,
+    trade_state: String,
     /// TakeProfitDetails specifies the details of a Take Profit
     /// Order to be created on behalf of a client. This may happen
     /// when an Order is filled that opens a Trade requiring a Take

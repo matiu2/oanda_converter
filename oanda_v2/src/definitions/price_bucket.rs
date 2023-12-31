@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct PriceBucket {
+pub struct PriceBucket {
     /// The Price offered by the PriceBucket
     price: Option<PriceValue>,
     /// The amount of liquidity offered by the PriceBucket

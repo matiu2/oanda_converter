@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct HomeConversions {
+pub struct HomeConversions {
     /// The currency to be converted into the home currency.
     currency: Option<Currency>,
     /// The factor used to convert any gains for an Account in the

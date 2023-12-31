@@ -1,4 +1,3 @@
-use serde::{Serialize, Deserialize};
 /// The string representation of an Account Identifier.
 ///
 /// Format: “-“-delimited string with format
@@ -9,6 +8,6 @@ struct AccountID(String);
 impl std::ops::Deref for AccountID {
     type Target = str;
     fn deref(&self) -> &Self::Target {
-        self.0
+        self.0.as_str()
     }
 }

@@ -1,4 +1,3 @@
-use serde::{Serialize, Deserialize};
 /// An instrument name, a granularity, and a price component to
 /// get candlestick data for.
 ///
@@ -9,6 +8,6 @@ struct CandleSpecification(String);
 impl std::ops::Deref for CandleSpecification {
     type Target = str;
     fn deref(&self) -> &Self::Target {
-        self.0
+        self.0.as_str()
     }
 }

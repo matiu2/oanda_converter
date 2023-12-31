@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct DynamicOrderState {
+pub struct DynamicOrderState {
     /// The Order’s ID.
     id: Option<OrderID>,
     /// The Order’s calculated trailing stop value.

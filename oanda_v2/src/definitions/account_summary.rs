@@ -1,11 +1,11 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct AccountSummary {
+pub struct AccountSummary {
     /// The Account’s identifier
     id: Option<AccountID>,
     /// Client-assigned alias for the Account. Only provided if the
     /// Account has an alias set
-    alias: Option<string>,
+    alias: Option<String>,
     /// The home currency of the Account
     currency: Option<Currency>,
     /// ID of the user that created the Account.

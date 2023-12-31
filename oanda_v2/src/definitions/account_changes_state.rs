@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct AccountChangesState {
+pub struct AccountChangesState {
     /// The total unrealized profit/loss for all Trades currently
     /// open in the Account.
     unrealized_pl: Option<AccountUnits>,

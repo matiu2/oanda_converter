@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct TradeSummary {
+pub struct TradeSummary {
     /// The Trade’s identifier, unique within the Trade’s Account.
     id: Option<TradeID>,
     /// The Trade’s Instrument.

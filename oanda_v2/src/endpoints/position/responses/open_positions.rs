@@ -1,7 +1,8 @@
 use serde::{Serialize, Deserialize};
 /// The Account’s open Positions are provided.
+use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct OpenPositions200 {
+pub struct OpenPositions200 {
     /// The list of open Positions in the Account.
     positions: Vec<Position>,
     /// The ID of the most recent Transaction created for the

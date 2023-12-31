@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct PositionFinancing {
+pub struct PositionFinancing {
     /// The instrument of the Position that financing is being paid/
     /// collected for.
     instrument: Option<InstrumentName>,

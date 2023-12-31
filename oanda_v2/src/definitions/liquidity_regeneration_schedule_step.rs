@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct LiquidityRegenerationScheduleStep {
+pub struct LiquidityRegenerationScheduleStep {
     /// The timestamp of the schedule step.
     timestamp: Option<DateTime>,
     /// The amount of bid liquidity used at this step in the

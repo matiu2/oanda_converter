@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
-struct StopLossOrderRequest {
+pub struct StopLossOrderRequest {
     /// The type of the Order to Create. Must be set to “STOP_LOSS”
     /// when creating a Stop Loss Order.
     #[serde(default = "STOP_LOSS")]
