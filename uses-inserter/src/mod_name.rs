@@ -1,4 +1,4 @@
-use std::borrow::Cow;
+use std::{borrow::Cow, hash::Hash};
 
 use itertools::Itertools;
 
@@ -64,6 +64,8 @@ impl<'a> ModName<'a> {
     }
 
     pub fn add_part(mut self, part: impl ToString) -> ModName<'a> {
+        // Take lib off of the end if that was a thing
+        self.parts.retain(|p| p != "lib");
         self.parts.push(part.to_string().into());
         self
     }
@@ -83,12 +85,38 @@ impl<'a> ModName<'a> {
     }
 }
 
+impl std::fmt::Debug for ModName<'_> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        // let parts = self.parts.iter().map(Deref::deref).collect_vec();
+        write!(
+            f,
+            "base_path: {base_path} parts: {parts:#?}",
+            base_path = &self.base_path,
+            parts = &self.parts
+        )
+    }
+}
+
+impl std::fmt::Display for ModName<'_> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}: {}", &self.base_path, self.mod_name())
+    }
+}
+
 #[cfg(test)]
 mod test {
     use super::ModName;
+    use std::collections::HashSet;
 
     fn init() -> ModName<'static> {
         ModName::new("xxx").add_part("a").add_part("b")
+    }
+
+    #[test]
+    fn test_pop_lib() {
+        let a = ModName::new("../oanda_v2").add_part("lib");
+        let b = a.add_part("definitions");
+        assert!(!b.parts.iter().any(|p| p == "lib"));
     }
 
     #[test]
@@ -119,16 +147,15 @@ mod test {
         let mod_name = mod_name.add_part("mod");
         assert_eq!("xxx/a/b", &mod_name.new_base_path());
     }
-}
 
-impl std::fmt::Debug for ModName<'_> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.mod_name())
-    }
-}
-
-impl std::fmt::Display for ModName<'_> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}: {}", &self.base_path, self.mod_name())
+    #[test]
+    fn test_hash_set() {
+        let base_path = "../oanda_v2";
+        let files_to_ignore: HashSet<ModName> = ["host", "error", "lib", "client"]
+            .into_iter()
+            .map(|s| ModName::new(base_path).add_part(s))
+            .collect();
+        let host = ModName::new("../oanda_v2").add_part("host");
+        assert!(files_to_ignore.contains(&host))
     }
 }

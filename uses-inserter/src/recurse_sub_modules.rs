@@ -73,6 +73,7 @@ pub fn get_mods(code: &syn::File) -> impl Iterator<Item = String> + '_ {
 mod test {
     use crate::{Error, Result};
     use error_stack::{Report, ResultExt};
+    use pretty_assertions::assert_eq;
     use proc_macro2::TokenStream;
     use quote::quote;
 
@@ -95,7 +96,7 @@ mod test {
             "gen_definition",
             "gen_endpoint",
             "gen_error",
-            "gen_lib",
+            "gen_mods",
             "util",
         ];
         assert_eq!(expected, mods);

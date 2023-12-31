@@ -48,14 +48,15 @@ pub fn mod_info_recursive<'a>(
     start: ModName<'a>,
     files_to_ignore: &HashSet<ModName<'a>>,
 ) -> Result<Vec<ModInfo<'a>>> {
+    let file_names = files_to_ignore.iter().map(ModName::file_name).collect_vec();
     recurse_sub_modules(start)
         .filter(|r| match r {
             Ok(m) => {
-                let ok = !files_to_ignore.contains(&m.mod_name);
-                if !ok {
+                let should_ignore = files_to_ignore.contains(&m.mod_name);
+                if should_ignore {
                     log::debug!("Ignoring file {}", &m.mod_name);
                 }
-                ok
+                !should_ignore
             }
             Err(_) => true,
         })
@@ -74,9 +75,12 @@ pub fn mod_info_recursive<'a>(
 
 /// Inserts the uses clauses at the top of each generated source module
 /// `files_to_ignore` will not be processed
-pub fn insert_uses_clauses(
-    start: ModName<'_>,
-    files_to_ignore: &HashSet<ModName<'_>>,
+/// `known_sources` can be used to declare types not found under start, but also to override found types.
+///                 A good example is: [(DateTime, chrono::DateTime)]
+pub fn insert_uses_clauses<'a>(
+    start: ModName<'a>,
+    files_to_ignore: &HashSet<ModName<'a>>,
+    known_sources: &HashMap<&'a str, ModName<'a>>,
 ) -> Result<()> {
     let info = mod_info_recursive(start, files_to_ignore)?;
     log::info!("info: {info:#?}");
@@ -84,13 +88,28 @@ pub fn insert_uses_clauses(
     let module_by_decl_type: HashMap<&str, &ModName> = info
         .iter()
         .flat_map(|i| i.declares.iter().map(|d| (d.as_str(), &i.module.mod_name)))
+        .chain(known_sources.iter().map(|(&decl, module)| (decl, module)))
         .collect();
     log::info!("declarations by module: {module_by_decl_type:#?}");
+    // Find a list of requires that are not in declared
+    let not_provided: HashSet<&str> = info
+        .iter()
+        .flat_map(|m| m.requires.iter())
+        .map(|t| t.as_str())
+        .filter(|t| !module_by_decl_type.contains_key(t))
+        .collect();
+    log::info!("Things I need to be declared outside: {not_provided:#?}");
     // For each module, create the uses clause and insert it in the top of the file
     for m in &info {
         let uses = m
             .requires
             .iter()
+            .filter(|mods| !mods.is_empty())
+            .inspect(|mods| {
+                if mods.len() < 2 {
+                    log::info!("Small mods: {mods:#?}");
+                }
+            })
             .map(|r| {
                 module_by_decl_type
                     .get(r.as_str())
@@ -107,12 +126,6 @@ pub fn insert_uses_clauses(
                     })
                     .collect_vec()
             })
-            .inspect(|mods| {
-                if mods.len() < 2 {
-                    log::info!("Small mods: {mods:#?}");
-                }
-            })
-            .filter(|mods| !mods.is_empty())
             .map(|m| quote! {use #(#m;)*})
             .collect_vec();
         let contents = std::fs::read_to_string(m.module.mod_name.file_name())

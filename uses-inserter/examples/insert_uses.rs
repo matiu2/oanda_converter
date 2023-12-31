@@ -6,9 +6,15 @@ fn main() -> uses_inserter::Result<()> {
     pretty_env_logger::init();
     let base_path = "../oanda_v2/src";
     let mod_name = ModName::new(base_path).add_part("lib");
-    let files_to_ignore = ["host"]
+    let files_to_ignore = ["host", "error", "lib", "client"]
         .into_iter()
         .map(|s| ModName::new(base_path).add_part(s))
         .collect();
-    insert_uses_clauses(mod_name, &files_to_ignore)
+    let known_sources = vec![
+        ("DateTime", ModName::new("").add_part("chrono")),
+        ("Utc", ModName::new("").add_part("chrono")),
+    ]
+    .into_iter()
+    .collect();
+    insert_uses_clauses(mod_name, &files_to_ignore, &known_sources)
 }
