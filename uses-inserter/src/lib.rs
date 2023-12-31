@@ -107,6 +107,11 @@ pub fn insert_uses_clauses(
                     })
                     .collect_vec()
             })
+            .inspect(|mods| {
+                if mods.len() < 2 {
+                    log::info!("Small mods: {mods:#?}");
+                }
+            })
             .filter(|mods| !mods.is_empty())
             .map(|m| quote! {use #(#m;)*})
             .collect_vec();
