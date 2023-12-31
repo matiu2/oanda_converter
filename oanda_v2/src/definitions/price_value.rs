@@ -5,7 +5,7 @@ use serde::{Serialize, Deserialize};
 /// precision provided depends on the Instrument.
 struct PriceValue(String);
 impl std::ops::Deref for PriceValue {
-    type Target = &str;
+    type Target = str;
     fn deref(&self) -> &Self::Target {
         self.0
     }

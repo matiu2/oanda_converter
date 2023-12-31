@@ -4,7 +4,7 @@ use serde::{Serialize, Deserialize};
 ///
 struct RequestID(String);
 impl std::ops::Deref for RequestID {
-    type Target = &str;
+    type Target = str;
     fn deref(&self) -> &Self::Target {
         self.0
     }

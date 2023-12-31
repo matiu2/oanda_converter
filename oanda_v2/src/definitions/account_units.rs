@@ -6,7 +6,7 @@ use serde::{Serialize, Deserialize};
 /// precision provided depends on the Account’s home currency.
 struct AccountUnits(String);
 impl std::ops::Deref for AccountUnits {
-    type Target = &str;
+    type Target = str;
     fn deref(&self) -> &Self::Target {
         self.0
     }

@@ -1,7 +1,7 @@
 use serde::{Serialize, Deserialize};
 /// The type of the Order.
 #[derive(Deserialize, Serialize)]
-#[rename_all("SCREAMING_SNAKE_CASE")]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum OrderType {
     /// A Market Order
     Market,

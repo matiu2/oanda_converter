@@ -1,7 +1,7 @@
 use serde::{Serialize, Deserialize};
 /// The reason that the Market Order was created
 #[derive(Deserialize, Serialize)]
-#[rename_all("SCREAMING_SNAKE_CASE")]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum MarketOrderReason {
     /// The Market Order was created at the request of a client
     ClientOrder,

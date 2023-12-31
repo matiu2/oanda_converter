@@ -1,7 +1,7 @@
 use serde::{Serialize, Deserialize};
 /// The classification of TradePLs.
 #[derive(Deserialize, Serialize)]
-#[rename_all("SCREAMING_SNAKE_CASE")]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum TradePL {
     /// An open Trade currently has a positive (profitable)
     /// unrealized P/L, or a closed Trade realized a positive amount

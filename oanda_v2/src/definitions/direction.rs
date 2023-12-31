@@ -2,7 +2,7 @@ use serde::{Serialize, Deserialize};
 /// In the context of an Order or a Trade, defines whether the
 /// units are positive or negative.
 #[derive(Deserialize, Serialize)]
-#[rename_all("SCREAMING_SNAKE_CASE")]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum Direction {
     /// A long Order is used to to buy units of an Instrument. A
     /// Trade is long when it has bought units of an Instrument.

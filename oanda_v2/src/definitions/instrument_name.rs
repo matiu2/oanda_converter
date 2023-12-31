@@ -6,7 +6,7 @@ use serde::{Serialize, Deserialize};
 /// delimited by a “_”.
 struct InstrumentName(String);
 impl std::ops::Deref for InstrumentName {
-    type Target = &str;
+    type Target = str;
     fn deref(&self) -> &Self::Target {
         self.0
     }

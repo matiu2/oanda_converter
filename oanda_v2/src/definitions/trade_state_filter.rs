@@ -1,7 +1,7 @@
 use serde::{Serialize, Deserialize};
 /// The state to filter the Trades by
 #[derive(Deserialize, Serialize)]
-#[rename_all("SCREAMING_SNAKE_CASE")]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum TradeStateFilter {
     /// The Trades that are currently open
     Open,

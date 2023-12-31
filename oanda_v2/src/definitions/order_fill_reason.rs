@@ -1,7 +1,7 @@
 use serde::{Serialize, Deserialize};
 /// The reason that an Order was filled
 #[derive(Deserialize, Serialize)]
-#[rename_all("SCREAMING_SNAKE_CASE")]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum OrderFillReason {
     /// The Order filled was a Limit Order
     LimitOrder,

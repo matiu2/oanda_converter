@@ -2,7 +2,7 @@ use serde::{Serialize, Deserialize};
 /// The day of the week to use for candlestick granularities
 /// with weekly alignment.
 #[derive(Deserialize, Serialize)]
-#[rename_all("SCREAMING_SNAKE_CASE")]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum WeeklyAlignment {
     /// Monday
     Monday,

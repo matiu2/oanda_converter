@@ -1,7 +1,7 @@
 use serde::{Serialize, Deserialize};
 /// The reason that a Transaction was rejected.
 #[derive(Deserialize, Serialize)]
-#[rename_all("SCREAMING_SNAKE_CASE")]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum TransactionRejectReason {
     /// An unexpected internal server error has occurred
     InternalServerError,

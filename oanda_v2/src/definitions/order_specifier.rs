@@ -7,7 +7,7 @@ use serde::{Serialize, Deserialize};
 /// Example: 1523
 struct OrderSpecifier(String);
 impl std::ops::Deref for OrderSpecifier {
-    type Target = &str;
+    type Target = str;
     fn deref(&self) -> &Self::Target {
         self.0
     }

@@ -7,7 +7,7 @@ use serde::{Serialize, Deserialize};
 /// Example: 1523
 struct TransactionID(String);
 impl std::ops::Deref for TransactionID {
-    type Target = &str;
+    type Target = str;
     fn deref(&self) -> &Self::Target {
         self.0
     }

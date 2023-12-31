@@ -1,7 +1,7 @@
 use serde::{Serialize, Deserialize};
 /// The reason that the Trailing Stop Loss Order was initiated
 #[derive(Deserialize, Serialize)]
-#[rename_all("SCREAMING_SNAKE_CASE")]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum TrailingStopLossOrderReason {
     /// The Trailing Stop Loss Order was initiated at the request of
     /// a client

@@ -1,7 +1,7 @@
 use serde::{Serialize, Deserialize};
 /// DateTime header
 #[derive(Deserialize, Serialize)]
-#[rename_all("SCREAMING_SNAKE_CASE")]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum AcceptDatetimeFormat {
     /// If “UNIX” is specified DateTime fields will be specified or
     /// returned in the “12345678.000000123” format.

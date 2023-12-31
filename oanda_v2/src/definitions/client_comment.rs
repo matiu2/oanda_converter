@@ -7,7 +7,7 @@ use serde::{Serialize, Deserialize};
 /// This is a client comment
 struct ClientComment(String);
 impl std::ops::Deref for ClientComment {
-    type Target = &str;
+    type Target = str;
     fn deref(&self) -> &Self::Target {
         self.0
     }

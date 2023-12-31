@@ -1,7 +1,7 @@
 use serde::{Serialize, Deserialize};
 /// The reason that an Account is being funded.
 #[derive(Deserialize, Serialize)]
-#[rename_all("SCREAMING_SNAKE_CASE")]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum FundingReason {
     /// The client has initiated a funds transfer
     ClientFunding,

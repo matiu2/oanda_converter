@@ -22,7 +22,7 @@ use serde::{Serialize, Deserialize};
 /// for a long trade valid values are “DEFAULT” and “BID”, and
 /// for short trades “DEFAULT” and “ASK” are valid.
 #[derive(Deserialize, Serialize)]
-#[rename_all("SCREAMING_SNAKE_CASE")]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum OrderTriggerCondition {
     /// Trigger an Order the “natural” way: compare its price to the
     /// ask for long Orders and bid for short Orders.

@@ -23,9 +23,9 @@ use writer::{util::generate_source, EasyError, Result};
 
 fn main() -> Result<()> {
     tracing_subscriber::fmt::init();
-    let base_path = "./src";
+    let base_path = "../oanda_v2/src";
     // You will have already run 'serialize_all' and generated a content.yaml. Now we'll read it in
-    let yaml = std::fs::read_to_string("content.yaml").annotate("Opening content.yaml")?;
+    let yaml = std::fs::read_to_string("../content.yaml").annotate("Opening content.yaml")?;
     let content: Vec<Content> = serde_yaml::from_str(&yaml).annotate("Reading in content.yaml")?;
     generate_source(base_path, content.as_slice()).attach_printable("Generating the source")?;
     Ok(())

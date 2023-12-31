@@ -3,7 +3,7 @@ use serde::{Serialize, Deserialize};
 /// describes the actions that can be be performed on guaranteed
 /// Stop Loss Orders.
 #[derive(Deserialize, Serialize)]
-#[rename_all("SCREAMING_SNAKE_CASE")]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum GuaranteedStopLossOrderMutability {
     /// Once a guaranteed Stop Loss Order has been created it cannot
     /// be replaced or cancelled.

@@ -1,7 +1,7 @@
 use serde::{Serialize, Deserialize};
 /// The state to filter the requested Orders by.
 #[derive(Deserialize, Serialize)]
-#[rename_all("SCREAMING_SNAKE_CASE")]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum OrderStateFilter {
     /// The Orders that are currently pending execution
     Pending,

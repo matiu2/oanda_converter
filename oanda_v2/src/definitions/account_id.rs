@@ -7,7 +7,7 @@ use serde::{Serialize, Deserialize};
 /// Example: 001-011-5838423-001
 struct AccountID(String);
 impl std::ops::Deref for AccountID {
-    type Target = &str;
+    type Target = str;
     fn deref(&self) -> &Self::Target {
         self.0
     }

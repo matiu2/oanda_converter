@@ -38,8 +38,8 @@ impl<'a> std::fmt::Debug for Mod<'a> {
 #[derive(Debug)]
 pub struct ModInfo<'a> {
     pub module: Mod<'a>,
-    pub declares: Vec<String>,
-    pub requires: Vec<String>,
+    pub declares: HashSet<String>,
+    pub requires: HashSet<String>,
 }
 
 /// Given a rust module address, recursively collects all type declarations and type usages (requirements).
@@ -54,8 +54,6 @@ pub fn mod_info_recursive<'a>(
                 let ok = !files_to_ignore.contains(&m.mod_name);
                 if !ok {
                     log::debug!("Ignoring file {}", &m.mod_name);
-                } else {
-                    log::debug!("Keeping file {}", &m.mod_name);
                 }
                 ok
             }
@@ -136,7 +134,7 @@ pub fn insert_uses_clauses(
 }
 
 /// Collects all the types that this module needs to import
-fn collect_requirements(contents: &syn::File) -> Vec<String> {
+fn collect_requirements(contents: &syn::File) -> HashSet<String> {
     use syn::Item::{Enum, Fn, Impl, Struct};
     contents
         .items
@@ -152,7 +150,7 @@ fn collect_requirements(contents: &syn::File) -> Vec<String> {
 }
 
 /// Collects all the struct and enum declarations from a TokenStream
-pub fn collect_declarations(code: &syn::File) -> Vec<String> {
+pub fn collect_declarations(code: &syn::File) -> HashSet<String> {
     use syn::Item::{Enum, Struct};
     code.items
         .iter()
@@ -166,6 +164,8 @@ pub fn collect_declarations(code: &syn::File) -> Vec<String> {
 
 #[cfg(test)]
 mod test {
+    use std::collections::HashSet;
+
     use crate::{Error, ModName, Result};
     use error_stack::{Report, ResultExt};
     use log::debug;
@@ -184,7 +184,12 @@ mod test {
             .map_err(Report::from)
             .change_context_lazy(|| Error::new(format!("Parsing tokens from {file_name}")))?;
         let declarations = super::collect_declarations(&code);
-        assert_eq!(vec!["Instruments200".to_string()], declarations);
+        assert_eq!(
+            vec!["Instruments200".to_string()]
+                .into_iter()
+                .collect::<HashSet<String>>(),
+            declarations
+        );
         Ok(())
     }
 

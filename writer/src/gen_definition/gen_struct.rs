@@ -28,12 +28,20 @@ pub fn gen_struct(s: &Struct, name: &str) -> Result<TokenStream> {
 pub fn gen_typed_string(name: &str) -> Result<TokenStream> {
     let name = Ident::new(name, proc_macro2::Span::call_site());
     Ok(quote! {
-        #[derive(Serialize, Deserialize, Deref)]
+        #[derive(Serialize, Deserialize)]
         struct #name (String);
 
         impl ToString for #name {
             fn to_string(self) -> String {
                 self.0
+            }
+        }
+
+        impl std::ops::Deref for X {
+            type Target = str;
+
+            fn deref(&self) -> &Self::Target {
+                self.0.as_str()
             }
         }
     })

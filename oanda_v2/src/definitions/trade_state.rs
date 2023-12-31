@@ -1,7 +1,7 @@
 use serde::{Serialize, Deserialize};
 /// The current state of the Trade.
 #[derive(Deserialize, Serialize)]
-#[rename_all("SCREAMING_SNAKE_CASE")]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum TradeState {
     /// The Trade is currently open
     Open,

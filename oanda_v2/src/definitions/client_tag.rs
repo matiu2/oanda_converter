@@ -6,7 +6,7 @@ use serde::{Serialize, Deserialize};
 /// client_tag_1
 struct ClientTag(String);
 impl std::ops::Deref for ClientTag {
-    type Target = &str;
+    type Target = str;
     fn deref(&self) -> &Self::Target {
         self.0
     }

@@ -1,7 +1,7 @@
 use serde::{Serialize, Deserialize};
 /// A filter that can be used when fetching Transactions
 #[derive(Deserialize, Serialize)]
-#[rename_all("SCREAMING_SNAKE_CASE")]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum TransactionFilter {
     /// Order-related Transactions. These are the Transactions that
     /// create, cancel, fill or trigger Orders

@@ -2,7 +2,7 @@ use serde::{Serialize, Deserialize};
 /// The reason that the Market Order was created to perform a
 /// margin closeout
 #[derive(Deserialize, Serialize)]
-#[rename_all("SCREAMING_SNAKE_CASE")]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum MarketOrderMarginCloseoutReason {
     /// Trade closures resulted from violating OANDA’s margin policy
     MarginCheckViolation,

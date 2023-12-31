@@ -50,7 +50,7 @@ pub fn gen_single_row(row: &Row, name: &str, struct_doc_string: &str) -> Result<
         struct #struct_name(#type_name);
 
         impl std::ops::Deref for #struct_name {
-            type Target = &str;
+            type Target = str;
 
             fn deref(&self) -> &Self::Target {
                 self.0
@@ -83,7 +83,7 @@ pub fn gen_rows(rows: &[Row], enum_name: &str, enum_doc_string: &str) -> Result<
 
         #(#doc_string)*
         #[derive(Deserialize, Serialize)]
-        #[rename_all("SCREAMING_SNAKE_CASE")]
+        #[serde(rename_all="SCREAMING_SNAKE_CASE")]
         pub enum #enum_name {
             #(#enum_variants)*
         }

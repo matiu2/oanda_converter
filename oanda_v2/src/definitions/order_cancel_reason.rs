@@ -1,7 +1,7 @@
 use serde::{Serialize, Deserialize};
 /// The reason that an Order was cancelled.
 #[derive(Deserialize, Serialize)]
-#[rename_all("SCREAMING_SNAKE_CASE")]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum OrderCancelReason {
     /// The Order was cancelled because at the time of filling, an
     /// unexpected internal server error occurred.

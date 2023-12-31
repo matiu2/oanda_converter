@@ -1,7 +1,7 @@
 use serde::{Serialize, Deserialize};
 /// The possible types of a Transaction
 #[derive(Deserialize, Serialize)]
-#[rename_all("SCREAMING_SNAKE_CASE")]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum TransactionType {
     /// Account Create Transaction
     Create,

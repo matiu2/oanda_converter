@@ -3,7 +3,7 @@ use serde::{Serialize, Deserialize};
 /// how long an Order should remain pending before being
 /// automatically cancelled by the execution system.
 #[derive(Deserialize, Serialize)]
-#[rename_all("SCREAMING_SNAKE_CASE")]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum TimeInForce {
     /// The Order is “Good unTil Cancelled”
     Gtc,

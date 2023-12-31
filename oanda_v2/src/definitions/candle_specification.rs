@@ -7,7 +7,7 @@ use serde::{Serialize, Deserialize};
 /// PricingComponent e.g. EUR_USD:S10:BM
 struct CandleSpecification(String);
 impl std::ops::Deref for CandleSpecification {
-    type Target = &str;
+    type Target = str;
     fn deref(&self) -> &Self::Target {
         self.0
     }

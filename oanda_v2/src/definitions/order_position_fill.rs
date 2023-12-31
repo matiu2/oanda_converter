@@ -2,7 +2,7 @@ use serde::{Serialize, Deserialize};
 /// Specification of how Positions in the Account are modified
 /// when the Order is filled.
 #[derive(Deserialize, Serialize)]
-#[rename_all("SCREAMING_SNAKE_CASE")]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum OrderPositionFill {
     /// When the Order is filled, only allow Positions to be opened
     /// or extended.

@@ -2,7 +2,7 @@ use serde::{Serialize, Deserialize};
 /// The overall behaviour of the Account regarding guaranteed
 /// Stop Loss Orders.
 #[derive(Deserialize, Serialize)]
-#[rename_all("SCREAMING_SNAKE_CASE")]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum GuaranteedStopLossOrderMode {
     /// The Account is not permitted to create guaranteed Stop Loss
     /// Orders.

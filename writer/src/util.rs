@@ -3,7 +3,7 @@ use crate::gen_client::gen_client;
 use crate::gen_definition::gen_definition;
 use crate::gen_endpoint::{gen_endpoint, gen_endpoint_responses};
 use crate::gen_error::gen_error;
-use crate::gen_lib::gen_lib;
+use crate::gen_mods::gen_mods;
 use crate::Error;
 use error_stack::ResultExt;
 use model::{Content, Endpoint};
@@ -13,13 +13,15 @@ use utils::stream_to_file;
 
 /// Generate all the source code
 pub fn generate_source(base_path: &str, contents: &[Content]) -> Result<()> {
-    let mut mods = Vec::new();
+    let mut mods = vec!["host"];
     // let mut endpoints = Vec::new();
     // Generate the error.rs
     mods.push("error");
     stream_to_file(gen_error(), &format!("{base_path}/error.rs"))
         .change_context(Error::new("Writing error.rs"))?;
     // Generate all the definitions we need
+    mods.push("definitions");
+    let mut definition_mods = Vec::new();
     for definition in contents.iter().flat_map(Content::definitions).flatten() {
         let content = gen_definition(definition)
             .attach_printable_lazy(|| format!("Generating definition for {}", definition.name))?;
@@ -28,13 +30,18 @@ pub fn generate_source(base_path: &str, contents: &[Content]) -> Result<()> {
 
             #content
         };
-        let filename = format!(
-            "{base_path}/definitions/{}.rs",
-            change_case::snake_case(&definition.name)
-        );
+        let mod_name = change_case::snake_case(&definition.name);
+        definition_mods.push(mod_name.clone());
+        let filename = format!("{base_path}/definitions/{mod_name}.rs");
         stream_to_file(tokens, &filename)
             .change_context_lazy(|| Error::new(format!("Saving definition to {filename}")))?;
     }
+    // Write definitions.rs
+    stream_to_file(
+        gen_mods(definition_mods.as_slice()),
+        &format!("{base_path}/definitions.rs"),
+    )
+    .change_context_lazy(|| Error::new("Generating lib.rs"))?;
 
     // Just list the endpoint names
     let endpoints: Vec<&str> = contents
@@ -79,7 +86,13 @@ pub fn generate_source(base_path: &str, contents: &[Content]) -> Result<()> {
     // stream_to_file(gen_client::gen_client(), &format!("{base_path}/client.rs"))
     //     .attach_printable("Generating client.rs")?;
     // We use the mods here
-    stream_to_file(gen_lib(mods.as_slice()), &format!("{base_path}/lib.rs"))
+    let mods = gen_mods(mods.as_slice());
+    let lib = quote! {
+        #mods
+
+        pub use error::{Error, Result};
+    };
+    stream_to_file(lib, &format!("{base_path}/lib.rs"))
         .change_context_lazy(|| Error::new("Generating lib.rs"))?;
     Ok(())
 }
