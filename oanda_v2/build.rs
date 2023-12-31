@@ -17,19 +17,18 @@ fn main() -> Result<()> {
     let content: Vec<Content> = serde_yaml::from_str(&yaml).annotate("Reading in content.yaml")?;
     generate_source(base_path, content.as_slice()).attach_printable("Generating the source")?;
     let mod_name = ModName::new("src").add_part("lib");
-    // let files_to_ignore = ["host", "error", "lib", "client"]
-    //     .into_iter()
-    //     .map(|s| ModName::new(base_path).add_part(s))
-    //     .collect();
-    // let known_sources = vec![
-    //     ("DateTime", ModName::new("").add_part("chrono")),
-    //     ("Utc", ModName::new("").add_part("chrono")),
-    //     ("Serialize", ModName::new("").add_part("serde")),
-    //     ("Deserialize", ModName::new("").add_part("serde")),
-    // ]
-    // .into_iter()
-    // .collect();
-    // insert_uses_clauses(mod_name, &files_to_ignore, &known_sources)
-    //     .change_context_lazy(|| Error::new("Inserting uses clauses"))
-    Ok(())
+    let files_to_ignore = ["host", "error", "lib", "client"]
+        .into_iter()
+        .map(|s| ModName::new(base_path).add_part(s))
+        .collect();
+    let known_sources = vec![
+        ("DateTime", ModName::new("").add_part("chrono")),
+        ("Utc", ModName::new("").add_part("chrono")),
+        ("Serialize", ModName::new("").add_part("serde")),
+        ("Deserialize", ModName::new("").add_part("serde")),
+    ]
+    .into_iter()
+    .collect();
+    insert_uses_clauses(mod_name, &files_to_ignore, &known_sources)
+        .change_context_lazy(|| Error::new("Inserting uses clauses"))
 }

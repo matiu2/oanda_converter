@@ -1,3 +1,4 @@
+use definitions::units_available_details::UnitsAvailableDetails;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct UnitsAvailable {

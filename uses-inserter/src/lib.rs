@@ -48,7 +48,6 @@ pub fn mod_info_recursive<'a>(
     start: ModName<'a>,
     files_to_ignore: &HashSet<ModName<'a>>,
 ) -> Result<Vec<ModInfo<'a>>> {
-    let file_names = files_to_ignore.iter().map(ModName::file_name).collect_vec();
     recurse_sub_modules(start)
         .filter(|r| match r {
             Ok(m) => {
@@ -104,11 +103,8 @@ pub fn insert_uses_clauses<'a>(
         let uses = m
             .requires
             .iter()
-            .filter(|mods| !mods.is_empty())
             .inspect(|mods| {
-                if mods.len() < 2 {
-                    log::info!("Small mods: {mods:#?}");
-                }
+                log::info!("Getting: {mods:#?}");
             })
             .map(|r| {
                 module_by_decl_type
@@ -126,7 +122,9 @@ pub fn insert_uses_clauses<'a>(
                     })
                     .collect_vec()
             })
+            .filter(|mods| !mods.is_empty())
             .map(|m| quote! {use #(#m;)*})
+            .inspect(|m| log::info!("Sending: {m}"))
             .collect_vec();
         let contents = std::fs::read_to_string(m.module.mod_name.file_name())
             .map_err(Report::from)
@@ -142,7 +140,7 @@ pub fn insert_uses_clauses<'a>(
                 ))
             })?;
         let new_contents = quote!(
-            #(#uses);*
+            #(#uses)*
             #contents
         );
         stream_to_file(new_contents, m.module.mod_name.file_name().as_str())

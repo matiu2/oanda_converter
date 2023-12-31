@@ -1,3 +1,5 @@
+use definitions::transaction_id::TransactionID;
+use chrono::DateTime;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct TransactionHeartbeat {

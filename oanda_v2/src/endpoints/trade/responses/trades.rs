@@ -1,3 +1,5 @@
+use endpoints::trade::Trade;
+use definitions::transaction_id::TransactionID;
 use serde::{Serialize, Deserialize};
 /// The list of Trades requested
 use serde::{Serialize, Deserialize};

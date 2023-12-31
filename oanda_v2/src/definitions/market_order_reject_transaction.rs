@@ -1,3 +1,24 @@
+use definitions::market_order_reason::MarketOrderReason;
+use definitions::take_profit_details::TakeProfitDetails;
+use definitions::transaction_id::TransactionID;
+use definitions::decimal_number::DecimalNumber;
+use definitions::order_position_fill::OrderPositionFill;
+use definitions::market_order_margin_closeout::MarketOrderMarginCloseout;
+use definitions::stop_loss_details::StopLossDetails;
+use definitions::account_id::AccountID;
+use definitions::instrument_name::InstrumentName;
+use definitions::trailing_stop_loss_details::TrailingStopLossDetails;
+use definitions::guaranteed_stop_loss_details::GuaranteedStopLossDetails;
+use definitions::market_order_position_closeout::MarketOrderPositionCloseout;
+use definitions::transaction_type::TransactionType;
+use definitions::price_value::PriceValue;
+use definitions::request_id::RequestID;
+use definitions::market_order_delayed_trade_close::MarketOrderDelayedTradeClose;
+use definitions::transaction_reject_reason::TransactionRejectReason;
+use definitions::client_extensions::ClientExtensions;
+use chrono::DateTime;
+use definitions::time_in_force::TimeInForce;
+use definitions::market_order_trade_close::MarketOrderTradeClose;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct MarketOrderRejectTransaction {

@@ -1,3 +1,9 @@
+use chrono::DateTime;
+use definitions::account_id::AccountID;
+use definitions::request_id::RequestID;
+use definitions::transaction_type::TransactionType;
+use definitions::transaction_id::TransactionID;
+use definitions::decimal_number::DecimalNumber;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct ClientConfigureTransaction {

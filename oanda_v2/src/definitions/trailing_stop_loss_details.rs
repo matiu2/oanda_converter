@@ -1,3 +1,7 @@
+use definitions::time_in_force::TimeInForce;
+use definitions::decimal_number::DecimalNumber;
+use chrono::DateTime;
+use definitions::client_extensions::ClientExtensions;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct TrailingStopLossDetails {

@@ -1,3 +1,12 @@
+use definitions::client_id::ClientID;
+use definitions::transaction_type::TransactionType;
+use definitions::transaction_id::TransactionID;
+use definitions::account_id::AccountID;
+use chrono::DateTime;
+use definitions::order_id::OrderID;
+use definitions::client_extensions::ClientExtensions;
+use definitions::transaction_reject_reason::TransactionRejectReason;
+use definitions::request_id::RequestID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct OrderClientExtensionsModifyRejectTransaction {

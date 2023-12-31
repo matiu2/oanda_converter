@@ -1,3 +1,15 @@
+use definitions::price_value::PriceValue;
+use definitions::instrument_name::InstrumentName;
+use definitions::take_profit_order::TakeProfitOrder;
+use definitions::stop_loss_order::StopLossOrder;
+use definitions::trailing_stop_loss_order::TrailingStopLossOrder;
+use definitions::transaction_id::TransactionID;
+use chrono::DateTime;
+use definitions::account_units::AccountUnits;
+use definitions::trade_id::TradeID;
+use definitions::trade_state::TradeState;
+use definitions::decimal_number::DecimalNumber;
+use definitions::client_extensions::ClientExtensions;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Trade {

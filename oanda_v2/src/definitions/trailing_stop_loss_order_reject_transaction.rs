@@ -1,3 +1,17 @@
+use definitions::transaction_id::TransactionID;
+use definitions::trailing_stop_loss_order_reason::TrailingStopLossOrderReason;
+use definitions::order_id::OrderID;
+use definitions::account_id::AccountID;
+use definitions::transaction_type::TransactionType;
+use definitions::time_in_force::TimeInForce;
+use definitions::request_id::RequestID;
+use definitions::transaction_reject_reason::TransactionRejectReason;
+use definitions::decimal_number::DecimalNumber;
+use definitions::client_extensions::ClientExtensions;
+use definitions::client_id::ClientID;
+use definitions::trade_id::TradeID;
+use definitions::order_trigger_condition::OrderTriggerCondition;
+use chrono::DateTime;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct TrailingStopLossOrderRejectTransaction {

@@ -1,3 +1,5 @@
+use definitions::client_id::ClientID;
+use definitions::order_id::OrderID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct OrderIdentifier {

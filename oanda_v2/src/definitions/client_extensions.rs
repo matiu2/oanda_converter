@@ -1,3 +1,6 @@
+use definitions::client_id::ClientID;
+use definitions::client_comment::ClientComment;
+use definitions::client_tag::ClientTag;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct ClientExtensions {

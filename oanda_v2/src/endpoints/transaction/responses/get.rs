@@ -1,3 +1,5 @@
+use definitions::transaction_id::TransactionID;
+use endpoints::transaction::Transaction;
 use serde::{Serialize, Deserialize};
 /// The details of the requested Transaction are provided.
 use serde::{Serialize, Deserialize};

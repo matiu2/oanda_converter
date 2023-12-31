@@ -1,3 +1,4 @@
+use definitions::account_properties::AccountProperties;
 use serde::{Serialize, Deserialize};
 /// The list of authorized Accounts has been provided.
 use serde::{Serialize, Deserialize};

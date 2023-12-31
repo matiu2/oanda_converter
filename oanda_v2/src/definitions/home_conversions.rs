@@ -1,3 +1,5 @@
+use definitions::currency::Currency;
+use definitions::decimal_number::DecimalNumber;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct HomeConversions {

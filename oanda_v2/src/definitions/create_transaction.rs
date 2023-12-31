@@ -1,3 +1,9 @@
+use definitions::account_id::AccountID;
+use definitions::request_id::RequestID;
+use chrono::DateTime;
+use definitions::currency::Currency;
+use definitions::transaction_id::TransactionID;
+use definitions::transaction_type::TransactionType;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct CreateTransaction {

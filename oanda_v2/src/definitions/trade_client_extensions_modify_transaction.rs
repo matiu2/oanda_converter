@@ -1,3 +1,11 @@
+use definitions::transaction_id::TransactionID;
+use chrono::DateTime;
+use definitions::transaction_type::TransactionType;
+use definitions::client_extensions::ClientExtensions;
+use definitions::trade_id::TradeID;
+use definitions::account_id::AccountID;
+use definitions::request_id::RequestID;
+use definitions::client_id::ClientID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct TradeClientExtensionsModifyTransaction {

@@ -1,3 +1,5 @@
+use definitions::decimal_number::DecimalNumber;
+use chrono::DateTime;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct LiquidityRegenerationScheduleStep {

@@ -1,3 +1,5 @@
+use endpoints::order::Order;
+use definitions::transaction_id::TransactionID;
 use serde::{Serialize, Deserialize};
 /// The list of Orders requested
 use serde::{Serialize, Deserialize};

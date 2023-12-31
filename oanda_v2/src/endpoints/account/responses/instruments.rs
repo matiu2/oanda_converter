@@ -1,3 +1,5 @@
+use definitions::transaction_id::TransactionID;
+use definitions::instrument::Instrument;
 use serde::{Serialize, Deserialize};
 /// The list of tradeable instruments for the Account has been
 /// provided.

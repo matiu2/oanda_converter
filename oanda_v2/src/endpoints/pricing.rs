@@ -1,3 +1,10 @@
+use chrono::DateTime;
+use definitions::instrument_name::InstrumentName;
+use definitions::accept_datetime_format::AcceptDatetimeFormat;
+use definitions::weekly_alignment::WeeklyAlignment;
+use definitions::decimal_number::DecimalNumber;
+use definitions::pricing_component::PricingComponent;
+use definitions::candlestick_granularity::CandlestickGranularity;
 use crate::{client::Client, Error, Result};
 pub mod responses;
 struct Pricing<'a> {
