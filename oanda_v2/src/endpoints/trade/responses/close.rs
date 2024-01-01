@@ -1,10 +1,10 @@
+use endpoints::position::responses::close::Close404;
+use definitions::transaction_id::TransactionID;
+use definitions::market_order_reject_transaction::MarketOrderRejectTransaction;
+use definitions::order_cancel_transaction::OrderCancelTransaction;
 use definitions::market_order_transaction::MarketOrderTransaction;
 use endpoints::position::responses::close::Close400;
-use endpoints::position::responses::close::Close404;
 use definitions::order_fill_transaction::OrderFillTransaction;
-use definitions::transaction_id::TransactionID;
-use definitions::order_cancel_transaction::OrderCancelTransaction;
-use definitions::market_order_reject_transaction::MarketOrderRejectTransaction;
 use serde::{Serialize, Deserialize};
 /// The Trade has been closed as requested
 use serde::{Serialize, Deserialize};

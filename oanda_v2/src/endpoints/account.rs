@@ -13,7 +13,8 @@ impl<'a> Account<'a> {
         let query = [];
         let response = self
             .client
-            .get(url)
+            .get(self.client.start_get(url))
+            .await?
             .header("Authorization", authorization)
             .query(&query)
             .send()
@@ -35,7 +36,8 @@ impl<'a> Account<'a> {
         let query = [];
         let response = self
             .client
-            .get(url)
+            .get(self.client.start_get(url))
+            .await?
             .header("Authorization", authorization)
             .header("Accept-Datetime-Format", accept_datetime_format)
             .query(&query)
@@ -57,7 +59,8 @@ impl<'a> Account<'a> {
         let query = [];
         let response = self
             .client
-            .get(url)
+            .get(self.client.start_get(url))
+            .await?
             .header("Authorization", authorization)
             .header("Accept-Datetime-Format", accept_datetime_format)
             .query(&query)
@@ -81,7 +84,8 @@ impl<'a> Account<'a> {
         let query = [("instruments", instruments)];
         let response = self
             .client
-            .get(url)
+            .get(self.client.start_get(url))
+            .await?
             .header("Authorization", authorization)
             .query(&query)
             .send()
@@ -124,7 +128,8 @@ impl<'a> Account<'a> {
         let query = [("sinceTransactionID", since_transaction_id)];
         let response = self
             .client
-            .get(url)
+            .get(self.client.start_get(url))
+            .await?
             .header("Authorization", authorization)
             .header("Accept-Datetime-Format", accept_datetime_format)
             .query(&query)

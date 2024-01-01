@@ -1,5 +1,5 @@
-use definitions::decimal_number::DecimalNumber;
 use definitions::financing_day_of_week::FinancingDayOfWeek;
+use definitions::decimal_number::DecimalNumber;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct InstrumentFinancing {

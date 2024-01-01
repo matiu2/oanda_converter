@@ -29,7 +29,8 @@ impl<'a> Transaction<'a> {
         ];
         let response = self
             .client
-            .get(url)
+            .get(self.client.start_get(url))
+            .await?
             .header("Authorization", authorization)
             .header("Accept-Datetime-Format", accept_datetime_format)
             .query(&query)
@@ -52,7 +53,8 @@ impl<'a> Transaction<'a> {
         let query = [];
         let response = self
             .client
-            .get(url)
+            .get(self.client.start_get(url))
+            .await?
             .header("Authorization", authorization)
             .header("Accept-Datetime-Format", accept_datetime_format)
             .query(&query)
@@ -77,7 +79,8 @@ impl<'a> Transaction<'a> {
         let query = [("from", from), ("to", to), ("type", r#type)];
         let response = self
             .client
-            .get(url)
+            .get(self.client.start_get(url))
+            .await?
             .header("Authorization", authorization)
             .header("Accept-Datetime-Format", accept_datetime_format)
             .query(&query)
@@ -101,7 +104,8 @@ impl<'a> Transaction<'a> {
         let query = [("id", id), ("type", r#type)];
         let response = self
             .client
-            .get(url)
+            .get(self.client.start_get(url))
+            .await?
             .header("Authorization", authorization)
             .header("Accept-Datetime-Format", accept_datetime_format)
             .query(&query)
@@ -122,7 +126,8 @@ impl<'a> Transaction<'a> {
         let query = [];
         let response = self
             .client
-            .get(url)
+            .get(self.client.start_get(url))
+            .await?
             .header("Authorization", authorization)
             .query(&query)
             .send()

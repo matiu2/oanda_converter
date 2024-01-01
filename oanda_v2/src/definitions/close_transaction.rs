@@ -1,8 +1,8 @@
-use definitions::transaction_id::TransactionID;
 use definitions::account_id::AccountID;
 use definitions::transaction_type::TransactionType;
 use definitions::request_id::RequestID;
 use chrono::DateTime;
+use definitions::transaction_id::TransactionID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct CloseTransaction {

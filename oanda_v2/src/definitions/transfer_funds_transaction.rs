@@ -1,10 +1,10 @@
-use definitions::account_units::AccountUnits;
-use definitions::funding_reason::FundingReason;
-use definitions::transaction_id::TransactionID;
-use definitions::request_id::RequestID;
-use chrono::DateTime;
 use definitions::transaction_type::TransactionType;
+use chrono::DateTime;
+use definitions::request_id::RequestID;
+use definitions::account_units::AccountUnits;
+use definitions::transaction_id::TransactionID;
 use definitions::account_id::AccountID;
+use definitions::funding_reason::FundingReason;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct TransferFundsTransaction {

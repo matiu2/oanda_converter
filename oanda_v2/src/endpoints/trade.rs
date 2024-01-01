@@ -1,7 +1,7 @@
-use definitions::trade_specifier::TradeSpecifier;
-use definitions::instrument_name::InstrumentName;
 use definitions::accept_datetime_format::AcceptDatetimeFormat;
+use definitions::trade_specifier::TradeSpecifier;
 use definitions::trade_state_filter::TradeStateFilter;
+use definitions::instrument_name::InstrumentName;
 use crate::{client::Client, Error, Result};
 pub mod responses;
 struct Trade<'a> {
@@ -32,7 +32,8 @@ impl<'a> Trade<'a> {
         ];
         let response = self
             .client
-            .get(url)
+            .get(self.client.start_get(url))
+            .await?
             .header("Authorization", authorization)
             .header("Accept-Datetime-Format", accept_datetime_format)
             .query(&query)
@@ -53,7 +54,8 @@ impl<'a> Trade<'a> {
         let query = [];
         let response = self
             .client
-            .get(url)
+            .get(self.client.start_get(url))
+            .await?
             .header("Authorization", authorization)
             .header("Accept-Datetime-Format", accept_datetime_format)
             .query(&query)
@@ -76,7 +78,8 @@ impl<'a> Trade<'a> {
         let query = [];
         let response = self
             .client
-            .get(url)
+            .get(self.client.start_get(url))
+            .await?
             .header("Authorization", authorization)
             .header("Accept-Datetime-Format", accept_datetime_format)
             .query(&query)

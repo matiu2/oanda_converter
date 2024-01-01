@@ -120,7 +120,7 @@ fn gen_call(call: &RestCall, endpoint_name: &str) -> Result<TokenStream> {
         .attach_printable_lazy(|| format!("for endpoint {endpoint_name}"))?;
     let doc_string = pretty_doc_string(&call.doc_string).change_context_lazy(Error::default)?;
     let http_method = match call.http_method {
-        HttpMethod::Get => quote! { self.client.get(url) },
+        HttpMethod::Get => quote! { self.client.get(self.client.start_get(url)).await? },
         HttpMethod::Post => quote! { self.client.post(url) },
         HttpMethod::Put => quote! { self.client.put(url) },
         HttpMethod::Patch => quote! { self.client.patch(url) },

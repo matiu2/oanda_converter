@@ -1,5 +1,5 @@
-use endpoints::order::Order;
 use definitions::trade_summary::TradeSummary;
+use endpoints::order::Order;
 use endpoints::position::Position;
 use endpoints::transaction::Transaction;
 use serde::{Serialize, Deserialize};

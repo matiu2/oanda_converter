@@ -1,9 +1,9 @@
-use definitions::pricing_component::PricingComponent;
-use definitions::decimal_number::DecimalNumber;
-use definitions::candlestick_granularity::CandlestickGranularity;
-use definitions::weekly_alignment::WeeklyAlignment;
 use definitions::instrument_name::InstrumentName;
 use chrono::DateTime;
+use definitions::candlestick_granularity::CandlestickGranularity;
+use definitions::weekly_alignment::WeeklyAlignment;
+use definitions::decimal_number::DecimalNumber;
+use definitions::pricing_component::PricingComponent;
 use definitions::accept_datetime_format::AcceptDatetimeFormat;
 use crate::{client::Client, Error, Result};
 pub mod responses;
@@ -39,7 +39,8 @@ impl<'a> Pricing<'a> {
         ];
         let response = self
             .client
-            .get(url)
+            .get(self.client.start_get(url))
+            .await?
             .header("Authorization", authorization)
             .header("Accept-Datetime-Format", accept_datetime_format)
             .query(&query)
@@ -70,7 +71,8 @@ impl<'a> Pricing<'a> {
         ];
         let response = self
             .client
-            .get(url)
+            .get(self.client.start_get(url))
+            .await?
             .header("Authorization", authorization)
             .header("Accept-Datetime-Format", accept_datetime_format)
             .query(&query)
@@ -114,7 +116,8 @@ impl<'a> Pricing<'a> {
         ];
         let response = self
             .client
-            .get(url)
+            .get(self.client.start_get(url))
+            .await?
             .header("Authorization", authorization)
             .header("Accept-Datetime-Format", accept_datetime_format)
             .query(&query)
@@ -160,7 +163,8 @@ impl<'a> Pricing<'a> {
         ];
         let response = self
             .client
-            .get(url)
+            .get(self.client.start_get(url))
+            .await?
             .header("Authorization", authorization)
             .header("Accept-Datetime-Format", accept_datetime_format)
             .query(&query)

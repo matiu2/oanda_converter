@@ -1,6 +1,6 @@
-use definitions::position_side::PositionSide;
-use definitions::account_units::AccountUnits;
 use definitions::instrument_name::InstrumentName;
+use definitions::account_units::AccountUnits;
+use definitions::position_side::PositionSide;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Position {

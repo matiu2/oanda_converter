@@ -1,6 +1,6 @@
 use definitions::client_price::ClientPrice;
-use definitions::home_conversions::HomeConversions;
 use chrono::DateTime;
+use definitions::home_conversions::HomeConversions;
 use serde::{Serialize, Deserialize};
 /// Pricing information has been successfully provided.
 use serde::{Serialize, Deserialize};

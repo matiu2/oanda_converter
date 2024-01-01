@@ -1,22 +1,22 @@
-use definitions::request_id::RequestID;
-use definitions::account_id::AccountID;
-use definitions::take_profit_details::TakeProfitDetails;
 use definitions::transaction_id::TransactionID;
-use definitions::order_position_fill::OrderPositionFill;
-use definitions::stop_loss_details::StopLossDetails;
+use definitions::instrument_name::InstrumentName;
+use definitions::time_in_force::TimeInForce;
 use definitions::decimal_number::DecimalNumber;
+use definitions::order_position_fill::OrderPositionFill;
+use chrono::DateTime;
+use definitions::account_id::AccountID;
 use definitions::order_trigger_condition::OrderTriggerCondition;
-use definitions::order_id::OrderID;
+use definitions::client_extensions::ClientExtensions;
+use definitions::take_profit_details::TakeProfitDetails;
 use definitions::guaranteed_stop_loss_details::GuaranteedStopLossDetails;
+use definitions::order_id::OrderID;
 use definitions::trailing_stop_loss_details::TrailingStopLossDetails;
 use definitions::transaction_reject_reason::TransactionRejectReason;
-use definitions::stop_order_reason::StopOrderReason;
-use definitions::client_extensions::ClientExtensions;
-use chrono::DateTime;
-use definitions::time_in_force::TimeInForce;
+use definitions::stop_loss_details::StopLossDetails;
 use definitions::price_value::PriceValue;
+use definitions::stop_order_reason::StopOrderReason;
 use definitions::transaction_type::TransactionType;
-use definitions::instrument_name::InstrumentName;
+use definitions::request_id::RequestID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct StopOrderRejectTransaction {

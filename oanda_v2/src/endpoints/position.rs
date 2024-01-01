@@ -20,7 +20,8 @@ impl<'a> Position<'a> {
         let query = [];
         let response = self
             .client
-            .get(url)
+            .get(self.client.start_get(url))
+            .await?
             .header("Authorization", authorization)
             .query(&query)
             .send()
@@ -41,7 +42,8 @@ impl<'a> Position<'a> {
         let query = [];
         let response = self
             .client
-            .get(url)
+            .get(self.client.start_get(url))
+            .await?
             .header("Authorization", authorization)
             .query(&query)
             .send()
@@ -63,7 +65,8 @@ impl<'a> Position<'a> {
         let query = [];
         let response = self
             .client
-            .get(url)
+            .get(self.client.start_get(url))
+            .await?
             .header("Authorization", authorization)
             .query(&query)
             .send()

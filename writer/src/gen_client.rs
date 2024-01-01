@@ -1,8 +1,11 @@
+use crate::{Error, Result};
 use change_case::pascal_case;
-use proc_macro2::{Ident, TokenStream};
+use error_stack::ResultExt;
+use proc_macro2::{Ident, Span, TokenStream};
 use quote::quote;
+use utils::pretty_doc_string;
 
-pub fn gen_client(mods: &[&str]) -> TokenStream {
+pub fn gen_client(mods: &[&str]) -> Result<TokenStream> {
     let mods: Vec<TokenStream> = mods
         .iter()
         .map(|name| {
@@ -11,7 +14,23 @@ pub fn gen_client(mods: &[&str]) -> TokenStream {
             quote!(use crate::endpoints::#m::#s;)
         })
         .collect();
-    quote!(
+
+    let builders = ["get", "put", "patch", "post", "delete"].into_iter().map(|http_method| {
+        let ident = Ident::new(http_method, Span::call_site());
+        let doc_string = pretty_doc_string(&format!("Given a URL path, creates a {http_method} request builder with the correct host and authentication token")).
+        change_context_lazy(|| Error::new(format!("Creating doc string for {http_method} builder in gen_client")))?;
+        Ok(quote! {
+            #(#doc_string)*
+            pub fn #ident(&self, url: &str) -> RequestBuilder {
+                use reqwest::header::{ACCEPT, AUTHORIZATION};
+                self.rest_client
+                    .#ident(url)
+                    .header(AUTHORIZATION, format!("Bearer {}", &self.token))
+                    .header(ACCEPT, "application/json")
+            }
+        })
+    }).collect::<Result<Vec<TokenStream>>>()?;
+    Ok(quote!(
         use std::borrow::ToOwned;
         use error_stack::{report, IntoReport, ResultExt};
         use reqwest::RequestBuilder;
@@ -51,18 +70,10 @@ pub fn gen_client(mods: &[&str]) -> TokenStream {
                 self.host.rest_url(path)
             }
 
-            /// Given a URL path, creates a Get request builder with the correct
-            /// host and authentication token
-            pub fn start_get(&self, url: &str) -> RequestBuilder {
-                use reqwest::header::{ACCEPT, AUTHORIZATION};
-                self.rest_client
-                    .get(url)
-                    .header(AUTHORIZATION, format!("Bearer {}", &self.token))
-                    .header(ACCEPT, "application/json")
-            }
+            #(#builders)*
 
             /// Makes an authenticated get request to a path in the rest api
-            pub async fn get<T: DeserializeOwned>(
+            pub async fn send<T: DeserializeOwned>(
                 &self,
                 request: RequestBuilder,
             ) -> error_stack::Result<T, Error> {
@@ -113,7 +124,6 @@ pub fn gen_client(mods: &[&str]) -> TokenStream {
             pub fn accounts(&self) -> Accounts {
                 Accounts { client: self }
             }
-
 
             /// Rest API for anything instrument related
             pub fn instrument(&self, instrument: impl ToString) -> Instrument {
@@ -168,5 +178,5 @@ pub fn gen_client(mods: &[&str]) -> TokenStream {
                 }
             }
         }
-    )
+    ))
 }

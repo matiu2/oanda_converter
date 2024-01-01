@@ -71,7 +71,7 @@ pub fn generate_source(base_path: &str, contents: &[Content]) -> Result<()> {
     }
     // Generate client.rs
     mods.push("client");
-    stream_to_file(gen_client(&endpoints), &format!("{base_path}/client.rs"))
+    stream_to_file(gen_client(&endpoints)?, &format!("{base_path}/client.rs"))
         .change_context_lazy(|| Error::new("Writing client.rs"))?;
     // for endpoint in contents {
     //     stream_to_file(

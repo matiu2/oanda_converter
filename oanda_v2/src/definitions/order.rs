@@ -1,7 +1,7 @@
+use definitions::order_id::OrderID;
+use chrono::DateTime;
 use definitions::client_extensions::ClientExtensions;
 use definitions::order_state::OrderState;
-use chrono::DateTime;
-use definitions::order_id::OrderID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Order {

@@ -34,17 +34,53 @@ impl Client {
     pub fn url(&self, path: &str) -> String {
         self.host.rest_url(path)
     }
-    /// Given a URL path, creates a Get request builder with the correct
-    /// host and authentication token
-    pub fn start_get(&self, url: &str) -> RequestBuilder {
+    /// Given a URL path, creates a get request builder with the
+    /// correct host and authentication token
+    pub fn get(&self, url: &str) -> RequestBuilder {
         use reqwest::header::{ACCEPT, AUTHORIZATION};
         self.rest_client
             .get(url)
             .header(AUTHORIZATION, format!("Bearer {}", & self.token))
             .header(ACCEPT, "application/json")
     }
+    /// Given a URL path, creates a put request builder with the
+    /// correct host and authentication token
+    pub fn put(&self, url: &str) -> RequestBuilder {
+        use reqwest::header::{ACCEPT, AUTHORIZATION};
+        self.rest_client
+            .put(url)
+            .header(AUTHORIZATION, format!("Bearer {}", & self.token))
+            .header(ACCEPT, "application/json")
+    }
+    /// Given a URL path, creates a patch request builder with the
+    /// correct host and authentication token
+    pub fn patch(&self, url: &str) -> RequestBuilder {
+        use reqwest::header::{ACCEPT, AUTHORIZATION};
+        self.rest_client
+            .patch(url)
+            .header(AUTHORIZATION, format!("Bearer {}", & self.token))
+            .header(ACCEPT, "application/json")
+    }
+    /// Given a URL path, creates a post request builder with the
+    /// correct host and authentication token
+    pub fn post(&self, url: &str) -> RequestBuilder {
+        use reqwest::header::{ACCEPT, AUTHORIZATION};
+        self.rest_client
+            .post(url)
+            .header(AUTHORIZATION, format!("Bearer {}", & self.token))
+            .header(ACCEPT, "application/json")
+    }
+    /// Given a URL path, creates a delete request builder with the
+    /// correct host and authentication token
+    pub fn delete(&self, url: &str) -> RequestBuilder {
+        use reqwest::header::{ACCEPT, AUTHORIZATION};
+        self.rest_client
+            .delete(url)
+            .header(AUTHORIZATION, format!("Bearer {}", & self.token))
+            .header(ACCEPT, "application/json")
+    }
     /// Makes an authenticated get request to a path in the rest api
-    pub async fn get<T: DeserializeOwned>(
+    pub async fn send<T: DeserializeOwned>(
         &self,
         request: RequestBuilder,
     ) -> error_stack::Result<T, Error> {

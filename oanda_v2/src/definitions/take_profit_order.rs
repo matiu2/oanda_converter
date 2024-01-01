@@ -1,14 +1,14 @@
-use definitions::order_state::OrderState;
-use definitions::client_extensions::ClientExtensions;
-use definitions::order_type::OrderType;
-use definitions::trade_id::TradeID;
 use definitions::order_id::OrderID;
+use definitions::order_type::OrderType;
+use definitions::order_trigger_condition::OrderTriggerCondition;
 use chrono::DateTime;
+use definitions::client_extensions::ClientExtensions;
+use definitions::client_id::ClientID;
+use definitions::order_state::OrderState;
 use definitions::price_value::PriceValue;
+use definitions::trade_id::TradeID;
 use definitions::time_in_force::TimeInForce;
 use definitions::transaction_id::TransactionID;
-use definitions::client_id::ClientID;
-use definitions::order_trigger_condition::OrderTriggerCondition;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct TakeProfitOrder {

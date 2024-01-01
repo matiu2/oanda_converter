@@ -1,7 +1,7 @@
-use definitions::order_specifier::OrderSpecifier;
-use definitions::order_state_filter::OrderStateFilter;
 use definitions::instrument_name::InstrumentName;
 use definitions::accept_datetime_format::AcceptDatetimeFormat;
+use definitions::order_state_filter::OrderStateFilter;
+use definitions::order_specifier::OrderSpecifier;
 use crate::{client::Client, Error, Result};
 pub mod responses;
 struct Order<'a> {
@@ -53,7 +53,8 @@ impl<'a> Order<'a> {
         ];
         let response = self
             .client
-            .get(url)
+            .get(self.client.start_get(url))
+            .await?
             .header("Authorization", authorization)
             .header("Accept-Datetime-Format", accept_datetime_format)
             .query(&query)
@@ -74,7 +75,8 @@ impl<'a> Order<'a> {
         let query = [];
         let response = self
             .client
-            .get(url)
+            .get(self.client.start_get(url))
+            .await?
             .header("Authorization", authorization)
             .header("Accept-Datetime-Format", accept_datetime_format)
             .query(&query)
@@ -97,7 +99,8 @@ impl<'a> Order<'a> {
         let query = [];
         let response = self
             .client
-            .get(url)
+            .get(self.client.start_get(url))
+            .await?
             .header("Authorization", authorization)
             .header("Accept-Datetime-Format", accept_datetime_format)
             .query(&query)

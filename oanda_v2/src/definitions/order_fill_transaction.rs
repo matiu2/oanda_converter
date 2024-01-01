@@ -1,19 +1,19 @@
-use definitions::client_id::ClientID;
-use definitions::instrument_name::InstrumentName;
-use definitions::decimal_number::DecimalNumber;
-use definitions::home_conversion_factors::HomeConversionFactors;
-use definitions::price_value::PriceValue;
-use definitions::account_id::AccountID;
-use definitions::account_units::AccountUnits;
-use definitions::order_id::OrderID;
 use definitions::trade_open::TradeOpen;
-use definitions::client_price::ClientPrice;
+use definitions::account_id::AccountID;
 use definitions::transaction_id::TransactionID;
-use definitions::order_fill_reason::OrderFillReason;
-use definitions::transaction_type::TransactionType;
-use definitions::request_id::RequestID;
-use chrono::DateTime;
 use definitions::trade_reduce::TradeReduce;
+use definitions::order_fill_reason::OrderFillReason;
+use definitions::client_id::ClientID;
+use definitions::decimal_number::DecimalNumber;
+use definitions::request_id::RequestID;
+use definitions::instrument_name::InstrumentName;
+use definitions::order_id::OrderID;
+use definitions::transaction_type::TransactionType;
+use chrono::DateTime;
+use definitions::client_price::ClientPrice;
+use definitions::price_value::PriceValue;
+use definitions::home_conversion_factors::HomeConversionFactors;
+use definitions::account_units::AccountUnits;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct OrderFillTransaction {
