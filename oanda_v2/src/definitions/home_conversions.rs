@@ -1,5 +1,5 @@
-use definitions::currency::Currency;
 use definitions::decimal_number::DecimalNumber;
+use definitions::currency::Currency;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct HomeConversions {
@@ -22,4 +22,15 @@ pub struct HomeConversions {
     /// Conversion is performed by multiplying the Position or Trade
     /// Value by the conversion factor.
     position_value: Option<DecimalNumber>,
+}
+impl Default for HomeConversions {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            currency: default(),
+            account_gain: default(),
+            account_loss: default(),
+            position_value: default(),
+        }
+    }
 }

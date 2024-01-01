@@ -1,6 +1,6 @@
-use definitions::trade_id::TradeID;
 use definitions::account_units::AccountUnits;
 use definitions::decimal_number::DecimalNumber;
+use definitions::trade_id::TradeID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct OpenTradeDividendAdjustment {
@@ -13,4 +13,14 @@ pub struct OpenTradeDividendAdjustment {
     /// The dividend adjustment amount to pay or collect for the
     /// Trade, in the Instrument’s quote currency.
     quote_dividend_adjustment: Option<DecimalNumber>,
+}
+impl Default for OpenTradeDividendAdjustment {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            trade_id: default(),
+            dividend_adjustment: default(),
+            quote_dividend_adjustment: default(),
+        }
+    }
 }

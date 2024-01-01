@@ -1,6 +1,6 @@
-use chrono::DateTime;
 use definitions::home_conversions::HomeConversions;
 use definitions::client_price::ClientPrice;
+use chrono::DateTime;
 use serde::{Serialize, Deserialize};
 /// Pricing information has been successfully provided.
 use serde::{Serialize, Deserialize};
@@ -15,4 +15,14 @@ pub struct Pricing200 {
     /// The DateTime value to use for the “since” parameter in the
     /// next poll request.
     time: Option<DateTime>,
+}
+impl Default for Pricing200 {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            prices: default(),
+            home_conversions: default(),
+            time: default(),
+        }
+    }
 }

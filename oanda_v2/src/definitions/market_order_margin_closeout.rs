@@ -6,3 +6,9 @@ pub struct MarketOrderMarginCloseout {
     /// closeout
     reason: Option<MarketOrderMarginCloseoutReason>,
 }
+impl Default for MarketOrderMarginCloseout {
+    fn default() -> Self {
+        use Default::default;
+        Self { reason: default() }
+    }
+}

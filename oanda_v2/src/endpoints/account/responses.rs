@@ -1,6 +1,6 @@
-pub mod changes;
-pub mod summary;
 pub mod accounts;
-pub mod get;
-pub mod instruments;
 pub mod configuration;
+pub mod instruments;
+pub mod summary;
+pub mod changes;
+pub mod get;

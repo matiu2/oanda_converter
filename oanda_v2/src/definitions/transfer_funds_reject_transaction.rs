@@ -1,11 +1,11 @@
-use definitions::transaction_type::TransactionType;
-use definitions::account_units::AccountUnits;
 use definitions::account_id::AccountID;
-use definitions::request_id::RequestID;
-use definitions::transaction_reject_reason::TransactionRejectReason;
-use chrono::DateTime;
-use definitions::funding_reason::FundingReason;
+use definitions::transaction_type::TransactionType;
 use definitions::transaction_id::TransactionID;
+use chrono::DateTime;
+use definitions::account_units::AccountUnits;
+use definitions::transaction_reject_reason::TransactionRejectReason;
+use definitions::request_id::RequestID;
+use definitions::funding_reason::FundingReason;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct TransferFundsRejectTransaction {
@@ -27,7 +27,7 @@ pub struct TransferFundsRejectTransaction {
     request_id: Option<RequestID>,
     /// The Type of the Transaction. Always set to
     /// “TRANSFER_FUNDS_REJECT” in a TransferFundsRejectTransaction.
-    #[serde(default = "TRANSFER_FUNDS_REJECT")]
+    #[serde_inline_default("TRANSFER_FUNDS_REJECT")]
     r#type: TransactionType,
     /// The amount to deposit/withdraw from the Account in the
     /// Account’s home currency. A positive value indicates a
@@ -40,4 +40,22 @@ pub struct TransferFundsRejectTransaction {
     comment: Option<String>,
     /// The reason that the Reject Transaction was created
     reject_reason: Option<TransactionRejectReason>,
+}
+impl Default for TransferFundsRejectTransaction {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            id: default(),
+            time: default(),
+            user_id: default(),
+            account_id: default(),
+            batch_id: default(),
+            request_id: default(),
+            r#type: "TRANSFER_FUNDS_REJECT",
+            amount: default(),
+            funding_reason: default(),
+            comment: default(),
+            reject_reason: default(),
+        }
+    }
 }

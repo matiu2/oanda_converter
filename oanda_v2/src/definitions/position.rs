@@ -35,3 +35,21 @@ pub struct Position {
     /// The details of the short side of the Position.
     short: Option<PositionSide>,
 }
+impl Default for Position {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            instrument: default(),
+            pl: default(),
+            unrealized_pl: default(),
+            margin_used: default(),
+            resettable_pl: default(),
+            financing: default(),
+            commission: default(),
+            dividend_adjustment: default(),
+            guaranteed_execution_fees: default(),
+            long: default(),
+            short: default(),
+        }
+    }
+}

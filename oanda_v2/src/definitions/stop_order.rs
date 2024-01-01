@@ -1,20 +1,20 @@
-use definitions::trade_id::TradeID;
-use definitions::trailing_stop_loss_details::TrailingStopLossDetails;
 use definitions::order_position_fill::OrderPositionFill;
-use definitions::price_value::PriceValue;
-use definitions::decimal_number::DecimalNumber;
-use definitions::order_trigger_condition::OrderTriggerCondition;
-use definitions::order_id::OrderID;
-use definitions::stop_loss_details::StopLossDetails;
-use definitions::client_extensions::ClientExtensions;
-use definitions::order_type::OrderType;
-use definitions::transaction_id::TransactionID;
 use chrono::DateTime;
-use definitions::instrument_name::InstrumentName;
-use definitions::time_in_force::TimeInForce;
-use definitions::order_state::OrderState;
 use definitions::take_profit_details::TakeProfitDetails;
+use definitions::price_value::PriceValue;
 use definitions::guaranteed_stop_loss_details::GuaranteedStopLossDetails;
+use definitions::trade_id::TradeID;
+use definitions::client_extensions::ClientExtensions;
+use definitions::order_trigger_condition::OrderTriggerCondition;
+use definitions::stop_loss_details::StopLossDetails;
+use definitions::order_id::OrderID;
+use definitions::time_in_force::TimeInForce;
+use definitions::decimal_number::DecimalNumber;
+use definitions::order_type::OrderType;
+use definitions::trailing_stop_loss_details::TrailingStopLossDetails;
+use definitions::instrument_name::InstrumentName;
+use definitions::order_state::OrderState;
+use definitions::transaction_id::TransactionID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct StopOrder {
@@ -29,7 +29,7 @@ pub struct StopOrder {
     /// MT4.
     client_extensions: Option<ClientExtensions>,
     /// The type of the Order. Always set to “STOP” for Stop Orders.
-    #[serde(default = "STOP")]
+    #[serde_inline_default("STOP")]
     r#type: OrderType,
     /// The Stop Order’s Instrument.
     instrument: InstrumentName,
@@ -47,14 +47,14 @@ pub struct StopOrder {
     /// of being filled.
     price_bound: Option<PriceValue>,
     /// The time-in-force requested for the Stop Order.
-    #[serde(default = "GTC")]
+    #[serde_inline_default("GTC")]
     time_in_force: TimeInForce,
     /// The date/time when the Stop Order will be cancelled if its
     /// timeInForce is “GTD”.
     gtd_time: Option<DateTime>,
     /// Specification of how Positions in the Account are modified
     /// when the Order is filled.
-    #[serde(default = "DEFAULT")]
+    #[serde_inline_default("DEFAULT")]
     position_fill: OrderPositionFill,
     /// Specification of which price component should be used when
     /// determining if an Order should be triggered and filled.
@@ -77,7 +77,7 @@ pub struct StopOrder {
     /// results in. So for a Guaranteed Stop Loss Order for a long
     /// trade valid values are “DEFAULT” and “BID”, and for short
     /// trades “DEFAULT” and “ASK” are valid.
-    #[serde(default = "DEFAULT")]
+    #[serde_inline_default("DEFAULT")]
     trigger_condition: OrderTriggerCondition,
     /// TakeProfitDetails specifies the details of a Take Profit
     /// Order to be created on behalf of a client. This may happen
@@ -141,4 +141,38 @@ pub struct StopOrder {
     /// The ID of the Order that replaced this Order (only provided
     /// if this Order was cancelled as part of a cancel/replace).
     replaced_by_order_id: Option<OrderID>,
+}
+impl Default for StopOrder {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            id: default(),
+            create_time: default(),
+            state: default(),
+            client_extensions: default(),
+            r#type: "STOP",
+            instrument: default(),
+            units: default(),
+            price: default(),
+            price_bound: default(),
+            time_in_force: "GTC",
+            gtd_time: default(),
+            position_fill: "DEFAULT",
+            trigger_condition: "DEFAULT",
+            take_profit_on_fill: default(),
+            stop_loss_on_fill: default(),
+            guaranteed_stop_loss_on_fill: default(),
+            trailing_stop_loss_on_fill: default(),
+            trade_client_extensions: default(),
+            filling_transaction_id: default(),
+            filled_time: default(),
+            trade_opened_id: default(),
+            trade_reduced_id: default(),
+            trade_closed_i_ds: default(),
+            cancelling_transaction_id: default(),
+            cancelled_time: default(),
+            replaces_order_id: default(),
+            replaced_by_order_id: default(),
+        }
+    }
 }

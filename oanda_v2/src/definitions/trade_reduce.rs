@@ -1,7 +1,7 @@
-use definitions::decimal_number::DecimalNumber;
-use definitions::price_value::PriceValue;
 use definitions::account_units::AccountUnits;
+use definitions::decimal_number::DecimalNumber;
 use definitions::trade_id::TradeID;
+use definitions::price_value::PriceValue;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct TradeReduce {
@@ -38,4 +38,22 @@ pub struct TradeReduce {
     /// a positive or negative value and is represented in the home
     /// currency of the Account.
     half_spread_cost: Option<AccountUnits>,
+}
+impl Default for TradeReduce {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            trade_id: default(),
+            units: default(),
+            price: default(),
+            realized_pl: default(),
+            financing: default(),
+            base_financing: default(),
+            quote_financing: default(),
+            financing_rate: default(),
+            guaranteed_execution_fee: default(),
+            quote_guaranteed_execution_fee: default(),
+            half_spread_cost: default(),
+        }
+    }
 }

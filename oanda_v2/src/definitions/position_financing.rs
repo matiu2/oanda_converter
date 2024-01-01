@@ -1,9 +1,9 @@
-use definitions::account_financing_mode::AccountFinancingMode;
-use definitions::instrument_name::InstrumentName;
 use definitions::open_trade_financing::OpenTradeFinancing;
-use definitions::home_conversion_factors::HomeConversionFactors;
-use definitions::account_units::AccountUnits;
 use definitions::decimal_number::DecimalNumber;
+use definitions::instrument_name::InstrumentName;
+use definitions::account_units::AccountUnits;
+use definitions::account_financing_mode::AccountFinancingMode;
+use definitions::home_conversion_factors::HomeConversionFactors;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct PositionFinancing {
@@ -27,4 +27,18 @@ pub struct PositionFinancing {
     /// The account financing mode at the time of the daily
     /// financing.
     account_financing_mode: Option<AccountFinancingMode>,
+}
+impl Default for PositionFinancing {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            instrument: default(),
+            financing: default(),
+            base_financing: default(),
+            quote_financing: default(),
+            home_conversion_factors: default(),
+            open_trade_financings: default(),
+            account_financing_mode: default(),
+        }
+    }
 }

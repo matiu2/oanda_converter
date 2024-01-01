@@ -1,5 +1,5 @@
-use definitions::instrument_name::InstrumentName;
 use definitions::candlestick::Candlestick;
+use definitions::instrument_name::InstrumentName;
 use definitions::candlestick_granularity::CandlestickGranularity;
 use serde::{Serialize, Deserialize};
 /// Pricing information has been successfully provided.
@@ -13,4 +13,14 @@ pub struct Candles200 {
     granularity: Option<CandlestickGranularity>,
     /// The list of candlesticks that satisfy the request.
     candles: Vec<Candlestick>,
+}
+impl Default for Candles200 {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            instrument: default(),
+            granularity: default(),
+            candles: default(),
+        }
+    }
 }

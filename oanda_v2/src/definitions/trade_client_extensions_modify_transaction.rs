@@ -1,11 +1,11 @@
 use definitions::transaction_id::TransactionID;
-use chrono::DateTime;
-use definitions::transaction_type::TransactionType;
-use definitions::client_extensions::ClientExtensions;
-use definitions::trade_id::TradeID;
 use definitions::account_id::AccountID;
 use definitions::request_id::RequestID;
+use definitions::client_extensions::ClientExtensions;
+use chrono::DateTime;
+use definitions::transaction_type::TransactionType;
 use definitions::client_id::ClientID;
+use definitions::trade_id::TradeID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct TradeClientExtensionsModifyTransaction {
@@ -28,7 +28,7 @@ pub struct TradeClientExtensionsModifyTransaction {
     /// The Type of the Transaction. Always set
     /// to “TRADE_CLIENT_EXTENSIONS_MODIFY” for a
     /// TradeClientExtensionsModifyTransaction.
-    #[serde(default = "TRADE_CLIENT_EXTENSIONS_MODIFY")]
+    #[serde_inline_default("TRADE_CLIENT_EXTENSIONS_MODIFY")]
     r#type: TransactionType,
     /// The ID of the Trade who’s client extensions are to be
     /// modified.
@@ -38,4 +38,21 @@ pub struct TradeClientExtensionsModifyTransaction {
     client_trade_id: Option<ClientID>,
     /// The new Client Extensions for the Trade.
     trade_client_extensions_modify: Option<ClientExtensions>,
+}
+impl Default for TradeClientExtensionsModifyTransaction {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            id: default(),
+            time: default(),
+            user_id: default(),
+            account_id: default(),
+            batch_id: default(),
+            request_id: default(),
+            r#type: "TRADE_CLIENT_EXTENSIONS_MODIFY",
+            trade_id: default(),
+            client_trade_id: default(),
+            trade_client_extensions_modify: default(),
+        }
+    }
 }

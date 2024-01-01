@@ -1,11 +1,11 @@
-use definitions::instrument_name::InstrumentName;
-use definitions::instrument_commission::InstrumentCommission;
-use definitions::tag::Tag;
 use definitions::instrument_type::InstrumentType;
-use definitions::guaranteed_stop_loss_order_mode_for_instrument::GuaranteedStopLossOrderModeForInstrument;
-use definitions::decimal_number::DecimalNumber;
 use definitions::guaranteed_stop_loss_order_level_restriction::GuaranteedStopLossOrderLevelRestriction;
+use definitions::instrument_name::InstrumentName;
 use definitions::instrument_financing::InstrumentFinancing;
+use definitions::decimal_number::DecimalNumber;
+use definitions::instrument_commission::InstrumentCommission;
+use definitions::guaranteed_stop_loss_order_mode_for_instrument::GuaranteedStopLossOrderModeForInstrument;
+use definitions::tag::Tag;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Instrument {
@@ -73,4 +73,30 @@ pub struct Instrument {
     financing: Option<InstrumentFinancing>,
     /// The tags associated with this instrument.
     tags: Vec<Tag>,
+}
+impl Default for Instrument {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            name: default(),
+            r#type: default(),
+            display_name: default(),
+            pip_location: default(),
+            display_precision: default(),
+            trade_units_precision: default(),
+            minimum_trade_size: default(),
+            maximum_trailing_stop_distance: default(),
+            minimum_guaranteed_stop_loss_distance: default(),
+            minimum_trailing_stop_distance: default(),
+            maximum_position_size: default(),
+            maximum_order_units: default(),
+            margin_rate: default(),
+            commission: default(),
+            guaranteed_stop_loss_order_mode: default(),
+            guaranteed_stop_loss_order_execution_premium: default(),
+            guaranteed_stop_loss_order_level_restriction: default(),
+            financing: default(),
+            tags: default(),
+        }
+    }
 }

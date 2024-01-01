@@ -1,5 +1,5 @@
-use definitions::account_units::AccountUnits;
 use definitions::decimal_number::DecimalNumber;
+use definitions::account_units::AccountUnits;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct CalculatedAccountState {
@@ -38,4 +38,24 @@ pub struct CalculatedAccountState {
     /// The Account’s margin call percentage. When this value is 1.0
     /// or above the Account is in a margin call situation.
     margin_call_percent: Option<DecimalNumber>,
+}
+impl Default for CalculatedAccountState {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            unrealized_pl: default(),
+            nav: default(),
+            margin_used: default(),
+            margin_available: default(),
+            position_value: default(),
+            margin_closeout_unrealized_pl: default(),
+            margin_closeout_nav: default(),
+            margin_closeout_margin_used: default(),
+            margin_closeout_percent: default(),
+            margin_closeout_position_value: default(),
+            withdrawal_limit: default(),
+            margin_call_margin_used: default(),
+            margin_call_percent: default(),
+        }
+    }
 }

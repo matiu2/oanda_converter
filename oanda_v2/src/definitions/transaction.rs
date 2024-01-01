@@ -1,7 +1,7 @@
-use definitions::transaction_id::TransactionID;
-use definitions::account_id::AccountID;
 use chrono::DateTime;
 use definitions::request_id::RequestID;
+use definitions::account_id::AccountID;
+use definitions::transaction_id::TransactionID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Transaction {
@@ -21,4 +21,17 @@ pub struct Transaction {
     /// The Request ID of the request which generated the
     /// transaction.
     request_id: Option<RequestID>,
+}
+impl Default for Transaction {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            id: default(),
+            time: default(),
+            user_id: default(),
+            account_id: default(),
+            batch_id: default(),
+            request_id: default(),
+        }
+    }
 }

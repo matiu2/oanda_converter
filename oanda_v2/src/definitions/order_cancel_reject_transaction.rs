@@ -1,10 +1,10 @@
-use definitions::transaction_type::TransactionType;
-use definitions::transaction_reject_reason::TransactionRejectReason;
-use definitions::account_id::AccountID;
 use definitions::request_id::RequestID;
+use definitions::transaction_type::TransactionType;
 use definitions::order_id::OrderID;
-use chrono::DateTime;
+use definitions::transaction_reject_reason::TransactionRejectReason;
 use definitions::transaction_id::TransactionID;
+use chrono::DateTime;
+use definitions::account_id::AccountID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct OrderCancelRejectTransaction {
@@ -26,7 +26,7 @@ pub struct OrderCancelRejectTransaction {
     request_id: Option<RequestID>,
     /// The Type of the Transaction. Always set to
     /// “ORDER_CANCEL_REJECT” for an OrderCancelRejectTransaction.
-    #[serde(default = "ORDER_CANCEL_REJECT")]
+    #[serde_inline_default("ORDER_CANCEL_REJECT")]
     r#type: TransactionType,
     /// The ID of the Order intended to be cancelled
     order_id: Option<OrderID>,
@@ -35,4 +35,21 @@ pub struct OrderCancelRejectTransaction {
     client_order_id: Option<OrderID>,
     /// The reason that the Reject Transaction was created
     reject_reason: Option<TransactionRejectReason>,
+}
+impl Default for OrderCancelRejectTransaction {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            id: default(),
+            time: default(),
+            user_id: default(),
+            account_id: default(),
+            batch_id: default(),
+            request_id: default(),
+            r#type: "ORDER_CANCEL_REJECT",
+            order_id: default(),
+            client_order_id: default(),
+            reject_reason: default(),
+        }
+    }
 }

@@ -1,9 +1,9 @@
-use definitions::transaction_id::TransactionID;
-use definitions::transaction_type::TransactionType;
 use definitions::request_id::RequestID;
-use definitions::account_id::AccountID;
 use definitions::order_id::OrderID;
+use definitions::account_id::AccountID;
+use definitions::transaction_type::TransactionType;
 use chrono::DateTime;
+use definitions::transaction_id::TransactionID;
 use definitions::order_cancel_reason::OrderCancelReason;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
@@ -26,7 +26,7 @@ pub struct OrderCancelTransaction {
     request_id: Option<RequestID>,
     /// The Type of the Transaction. Always set to “ORDER_CANCEL”
     /// for an OrderCancelTransaction.
-    #[serde(default = "ORDER_CANCEL")]
+    #[serde_inline_default("ORDER_CANCEL")]
     r#type: TransactionType,
     /// The ID of the Order cancelled
     order_id: Option<OrderID>,
@@ -38,4 +38,22 @@ pub struct OrderCancelTransaction {
     /// The ID of the Order that replaced this Order (only provided
     /// if this Order was cancelled for replacement).
     replaced_by_order_id: Option<OrderID>,
+}
+impl Default for OrderCancelTransaction {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            id: default(),
+            time: default(),
+            user_id: default(),
+            account_id: default(),
+            batch_id: default(),
+            request_id: default(),
+            r#type: "ORDER_CANCEL",
+            order_id: default(),
+            client_order_id: default(),
+            reason: default(),
+            replaced_by_order_id: default(),
+        }
+    }
 }

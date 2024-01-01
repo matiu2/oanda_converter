@@ -1,9 +1,9 @@
-use definitions::dynamic_order_state::DynamicOrderState;
-use definitions::calculated_trade_state::CalculatedTradeState;
-use chrono::DateTime;
 use definitions::account_units::AccountUnits;
-use definitions::decimal_number::DecimalNumber;
+use definitions::dynamic_order_state::DynamicOrderState;
+use chrono::DateTime;
 use definitions::calculated_position_state::CalculatedPositionState;
+use definitions::calculated_trade_state::CalculatedTradeState;
+use definitions::decimal_number::DecimalNumber;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct AccountChangesState {
@@ -79,4 +79,37 @@ pub struct AccountChangesState {
     /// The price-dependent state for each open Position in the
     /// Account.
     positions: Vec<CalculatedPositionState>,
+}
+impl Default for AccountChangesState {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            unrealized_pl: default(),
+            nav: default(),
+            margin_used: default(),
+            margin_available: default(),
+            position_value: default(),
+            margin_closeout_unrealized_pl: default(),
+            margin_closeout_nav: default(),
+            margin_closeout_margin_used: default(),
+            margin_closeout_percent: default(),
+            margin_closeout_position_value: default(),
+            withdrawal_limit: default(),
+            margin_call_margin_used: default(),
+            margin_call_percent: default(),
+            balance: default(),
+            pl: default(),
+            resettable_pl: default(),
+            financing: default(),
+            commission: default(),
+            dividend_adjustment: default(),
+            guaranteed_execution_fees: default(),
+            margin_call_enter_time: default(),
+            margin_call_extension_count: default(),
+            last_margin_call_extension_time: default(),
+            orders: default(),
+            trades: default(),
+            positions: default(),
+        }
+    }
 }

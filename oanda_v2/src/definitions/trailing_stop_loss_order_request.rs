@@ -1,18 +1,18 @@
 use definitions::order_trigger_condition::OrderTriggerCondition;
-use definitions::client_extensions::ClientExtensions;
-use definitions::decimal_number::DecimalNumber;
-use definitions::order_type::OrderType;
-use definitions::client_id::ClientID;
-use definitions::time_in_force::TimeInForce;
 use chrono::DateTime;
 use definitions::trade_id::TradeID;
+use definitions::time_in_force::TimeInForce;
+use definitions::client_id::ClientID;
+use definitions::order_type::OrderType;
+use definitions::decimal_number::DecimalNumber;
+use definitions::client_extensions::ClientExtensions;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct TrailingStopLossOrderRequest {
     /// The type of the Order to Create. Must be set to
     /// “TRAILING_STOP_LOSS” when creating a Trailing Stop Loss
     /// Order.
-    #[serde(default = "TRAILING_STOP_LOSS")]
+    #[serde_inline_default("TRAILING_STOP_LOSS")]
     r#type: OrderType,
     /// The ID of the Trade to close when the price threshold is
     /// breached.
@@ -26,7 +26,7 @@ pub struct TrailingStopLossOrderRequest {
     /// The time-in-force requested for the TrailingStopLoss Order.
     /// Restricted to “GTC”, “GFD” and “GTD” for TrailingStopLoss
     /// Orders.
-    #[serde(default = "GTC")]
+    #[serde_inline_default("GTC")]
     time_in_force: TimeInForce,
     /// The date/time when the StopLoss Order will be cancelled if
     /// its timeInForce is “GTD”.
@@ -52,10 +52,25 @@ pub struct TrailingStopLossOrderRequest {
     /// results in. So for a Guaranteed Stop Loss Order for a long
     /// trade valid values are “DEFAULT” and “BID”, and for short
     /// trades “DEFAULT” and “ASK” are valid.
-    #[serde(default = "DEFAULT")]
+    #[serde_inline_default("DEFAULT")]
     trigger_condition: OrderTriggerCondition,
     /// The client extensions to add to the Order. Do not set,
     /// modify, or delete clientExtensions if your account is
     /// associated with MT4.
     client_extensions: Option<ClientExtensions>,
+}
+impl Default for TrailingStopLossOrderRequest {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            r#type: "TRAILING_STOP_LOSS",
+            trade_id: default(),
+            client_trade_id: default(),
+            distance: default(),
+            time_in_force: "GTC",
+            gtd_time: default(),
+            trigger_condition: "DEFAULT",
+            client_extensions: default(),
+        }
+    }
 }

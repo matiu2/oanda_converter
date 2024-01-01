@@ -8,3 +8,12 @@ pub struct OrderIdentifier {
     /// The client-provided client Order ID
     client_order_id: Option<ClientID>,
 }
+impl Default for OrderIdentifier {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            order_id: default(),
+            client_order_id: default(),
+        }
+    }
+}

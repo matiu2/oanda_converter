@@ -1,7 +1,7 @@
-use endpoints::order::responses::cancel::Cancel404;
 use definitions::transaction_id::TransactionID;
 use definitions::order_cancel_transaction::OrderCancelTransaction;
 use definitions::order_cancel_reject_transaction::OrderCancelRejectTransaction;
+use endpoints::order::responses::cancel::Cancel404;
 use serde::{Serialize, Deserialize};
 /// The Order was cancelled as specified
 use serde::{Serialize, Deserialize};
@@ -15,6 +15,16 @@ pub struct Cancel200 {
     /// The ID of the most recent Transaction created for the
     /// Account
     last_transaction_id: Option<TransactionID>,
+}
+impl Default for Cancel200 {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            order_cancel_transaction: default(),
+            related_transaction_i_ds: default(),
+            last_transaction_id: default(),
+        }
+    }
 }
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
@@ -34,6 +44,18 @@ pub struct Cancel404 {
     /// The human-readable description of the error that has
     /// occurred.
     error_message: String,
+}
+impl Default for Cancel404 {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            order_cancel_reject_transaction: default(),
+            related_transaction_i_ds: default(),
+            last_transaction_id: default(),
+            error_code: default(),
+            error_message: default(),
+        }
+    }
 }
 #[derive(Debug)]
 pub enum Error {

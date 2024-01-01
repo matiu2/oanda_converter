@@ -10,3 +10,13 @@ pub struct MarketOrderTradeClose {
     /// or a DecimalNumber reflection a partial close of the Trade.
     units: Option<String>,
 }
+impl Default for MarketOrderTradeClose {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            trade_id: default(),
+            client_trade_id: default(),
+            units: default(),
+        }
+    }
+}

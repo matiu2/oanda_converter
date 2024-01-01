@@ -11,3 +11,12 @@ pub struct Get200 {
     /// Account.
     last_transaction_id: Option<TransactionID>,
 }
+impl Default for Get200 {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            account: default(),
+            last_transaction_id: default(),
+        }
+    }
+}

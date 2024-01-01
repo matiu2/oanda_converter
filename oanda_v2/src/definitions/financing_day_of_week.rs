@@ -8,3 +8,12 @@ pub struct FinancingDayOfWeek {
     /// dayOfWeek.
     days_charged: Option<integer>,
 }
+impl Default for FinancingDayOfWeek {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            day_of_week: default(),
+            days_charged: default(),
+        }
+    }
+}

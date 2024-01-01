@@ -1,5 +1,5 @@
-use definitions::transaction_filter::TransactionFilter;
 use definitions::transaction_id::TransactionID;
+use definitions::transaction_filter::TransactionFilter;
 use chrono::DateTime;
 use serde::{Serialize, Deserialize};
 /// The requested time range of Transaction pages are provided.
@@ -23,4 +23,18 @@ pub struct Transactions200 {
     /// The ID of the most recent Transaction created for the
     /// Account
     last_transaction_id: Option<TransactionID>,
+}
+impl Default for Transactions200 {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            from: default(),
+            to: default(),
+            page_size: default(),
+            r#type: default(),
+            count: default(),
+            pages: default(),
+            last_transaction_id: default(),
+        }
+    }
 }

@@ -7,3 +7,12 @@ pub struct PriceBucket {
     /// The amount of liquidity offered by the PriceBucket
     liquidity: Option<Decimal>,
 }
+impl Default for PriceBucket {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            price: default(),
+            liquidity: default(),
+        }
+    }
+}

@@ -15,3 +15,14 @@ pub struct CandlestickData {
     /// the candlestick.
     c: Option<PriceValue>,
 }
+impl Default for CandlestickData {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            o: default(),
+            h: default(),
+            l: default(),
+            c: default(),
+        }
+    }
+}

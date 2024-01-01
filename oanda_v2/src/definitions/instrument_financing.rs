@@ -1,5 +1,5 @@
-use definitions::financing_day_of_week::FinancingDayOfWeek;
 use definitions::decimal_number::DecimalNumber;
+use definitions::financing_day_of_week::FinancingDayOfWeek;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct InstrumentFinancing {
@@ -15,4 +15,14 @@ pub struct InstrumentFinancing {
     /// the exact time of day at which to charge the financing is
     /// set in the DivisionTradingGroup for the client’s account.
     financing_days_of_week: Vec<FinancingDayOfWeek>,
+}
+impl Default for InstrumentFinancing {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            long_rate: default(),
+            short_rate: default(),
+            financing_days_of_week: default(),
+        }
+    }
 }

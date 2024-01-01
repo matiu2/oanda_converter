@@ -1,15 +1,15 @@
-use definitions::price_value::PriceValue;
-use definitions::instrument_name::InstrumentName;
-use definitions::take_profit_order::TakeProfitOrder;
-use definitions::stop_loss_order::StopLossOrder;
 use definitions::trailing_stop_loss_order::TrailingStopLossOrder;
 use definitions::transaction_id::TransactionID;
+use definitions::price_value::PriceValue;
 use chrono::DateTime;
-use definitions::account_units::AccountUnits;
-use definitions::trade_id::TradeID;
 use definitions::trade_state::TradeState;
-use definitions::decimal_number::DecimalNumber;
+use definitions::account_units::AccountUnits;
+use definitions::take_profit_order::TakeProfitOrder;
+use definitions::trade_id::TradeID;
+use definitions::stop_loss_order::StopLossOrder;
 use definitions::client_extensions::ClientExtensions;
+use definitions::instrument_name::InstrumentName;
+use definitions::decimal_number::DecimalNumber;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Trade {
@@ -65,4 +65,31 @@ pub struct Trade {
     /// Full representation of the Trade’s Trailing Stop Loss Order,
     /// only provided if such an Order exists.
     trailing_stop_loss_order: Option<TrailingStopLossOrder>,
+}
+impl Default for Trade {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            id: default(),
+            instrument: default(),
+            price: default(),
+            open_time: default(),
+            state: default(),
+            initial_units: default(),
+            initial_margin_required: default(),
+            current_units: default(),
+            realized_pl: default(),
+            unrealized_pl: default(),
+            margin_used: default(),
+            average_close_price: default(),
+            closing_transaction_i_ds: default(),
+            financing: default(),
+            dividend_adjustment: default(),
+            close_time: default(),
+            client_extensions: default(),
+            take_profit_order: default(),
+            stop_loss_order: default(),
+            trailing_stop_loss_order: default(),
+        }
+    }
 }

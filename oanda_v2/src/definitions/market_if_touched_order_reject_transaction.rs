@@ -1,22 +1,22 @@
-use definitions::stop_loss_details::StopLossDetails;
-use definitions::order_id::OrderID;
-use definitions::market_if_touched_order_reason::MarketIfTouchedOrderReason;
-use definitions::instrument_name::InstrumentName;
-use definitions::order_position_fill::OrderPositionFill;
-use definitions::order_trigger_condition::OrderTriggerCondition;
-use definitions::take_profit_details::TakeProfitDetails;
-use definitions::trailing_stop_loss_details::TrailingStopLossDetails;
-use definitions::transaction_id::TransactionID;
-use definitions::guaranteed_stop_loss_details::GuaranteedStopLossDetails;
-use definitions::request_id::RequestID;
-use definitions::client_extensions::ClientExtensions;
-use chrono::DateTime;
 use definitions::transaction_reject_reason::TransactionRejectReason;
-use definitions::price_value::PriceValue;
-use definitions::account_id::AccountID;
 use definitions::decimal_number::DecimalNumber;
+use definitions::order_position_fill::OrderPositionFill;
+use definitions::account_id::AccountID;
+use definitions::take_profit_details::TakeProfitDetails;
+use definitions::transaction_id::TransactionID;
 use definitions::time_in_force::TimeInForce;
 use definitions::transaction_type::TransactionType;
+use definitions::stop_loss_details::StopLossDetails;
+use definitions::instrument_name::InstrumentName;
+use definitions::guaranteed_stop_loss_details::GuaranteedStopLossDetails;
+use chrono::DateTime;
+use definitions::client_extensions::ClientExtensions;
+use definitions::market_if_touched_order_reason::MarketIfTouchedOrderReason;
+use definitions::price_value::PriceValue;
+use definitions::order_trigger_condition::OrderTriggerCondition;
+use definitions::order_id::OrderID;
+use definitions::trailing_stop_loss_details::TrailingStopLossDetails;
+use definitions::request_id::RequestID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct MarketIfTouchedOrderRejectTransaction {
@@ -39,7 +39,7 @@ pub struct MarketIfTouchedOrderRejectTransaction {
     /// The Type of the Transaction. Always set
     /// to “MARKET_IF_TOUCHED_ORDER_REJECT” in a
     /// MarketIfTouchedOrderRejectTransaction.
-    #[serde(default = "MARKET_IF_TOUCHED_ORDER_REJECT")]
+    #[serde_inline_default("MARKET_IF_TOUCHED_ORDER_REJECT")]
     r#type: TransactionType,
     /// The MarketIfTouched Order’s Instrument.
     instrument: InstrumentName,
@@ -61,14 +61,14 @@ pub struct MarketIfTouchedOrderRejectTransaction {
     /// The time-in-force requested for the MarketIfTouched Order.
     /// Restricted to “GTC”, “GFD” and “GTD” for MarketIfTouched
     /// Orders.
-    #[serde(default = "GTC")]
+    #[serde_inline_default("GTC")]
     time_in_force: TimeInForce,
     /// The date/time when the MarketIfTouched Order will be
     /// cancelled if its timeInForce is “GTD”.
     gtd_time: Option<DateTime>,
     /// Specification of how Positions in the Account are modified
     /// when the Order is filled.
-    #[serde(default = "DEFAULT")]
+    #[serde_inline_default("DEFAULT")]
     position_fill: OrderPositionFill,
     /// Specification of which price component should be used when
     /// determining if an Order should be triggered and filled.
@@ -91,7 +91,7 @@ pub struct MarketIfTouchedOrderRejectTransaction {
     /// results in. So for a Guaranteed Stop Loss Order for a long
     /// trade valid values are “DEFAULT” and “BID”, and for short
     /// trades “DEFAULT” and “ASK” are valid.
-    #[serde(default = "DEFAULT")]
+    #[serde_inline_default("DEFAULT")]
     trigger_condition: OrderTriggerCondition,
     /// The reason that the Market-if-touched Order was initiated
     reason: Option<MarketIfTouchedOrderReason>,
@@ -125,4 +125,35 @@ pub struct MarketIfTouchedOrderRejectTransaction {
     intended_replaces_order_id: Option<OrderID>,
     /// The reason that the Reject Transaction was created
     reject_reason: Option<TransactionRejectReason>,
+}
+impl Default for MarketIfTouchedOrderRejectTransaction {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            id: default(),
+            time: default(),
+            user_id: default(),
+            account_id: default(),
+            batch_id: default(),
+            request_id: default(),
+            r#type: "MARKET_IF_TOUCHED_ORDER_REJECT",
+            instrument: default(),
+            units: default(),
+            price: default(),
+            price_bound: default(),
+            time_in_force: "GTC",
+            gtd_time: default(),
+            position_fill: "DEFAULT",
+            trigger_condition: "DEFAULT",
+            reason: default(),
+            client_extensions: default(),
+            take_profit_on_fill: default(),
+            stop_loss_on_fill: default(),
+            trailing_stop_loss_on_fill: default(),
+            guaranteed_stop_loss_on_fill: default(),
+            trade_client_extensions: default(),
+            intended_replaces_order_id: default(),
+            reject_reason: default(),
+        }
+    }
 }

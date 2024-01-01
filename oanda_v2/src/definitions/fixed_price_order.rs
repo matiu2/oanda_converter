@@ -1,18 +1,18 @@
-use definitions::transaction_id::TransactionID;
+use definitions::guaranteed_stop_loss_details::GuaranteedStopLossDetails;
 use definitions::order_id::OrderID;
-use definitions::client_extensions::ClientExtensions;
-use definitions::order_type::OrderType;
+use definitions::trailing_stop_loss_details::TrailingStopLossDetails;
+use chrono::DateTime;
 use definitions::instrument_name::InstrumentName;
+use definitions::order_type::OrderType;
+use definitions::take_profit_details::TakeProfitDetails;
+use definitions::trade_id::TradeID;
+use definitions::transaction_id::TransactionID;
 use definitions::order_state::OrderState;
 use definitions::decimal_number::DecimalNumber;
+use definitions::client_extensions::ClientExtensions;
 use definitions::stop_loss_details::StopLossDetails;
-use definitions::order_position_fill::OrderPositionFill;
-use chrono::DateTime;
-use definitions::trailing_stop_loss_details::TrailingStopLossDetails;
 use definitions::price_value::PriceValue;
-use definitions::guaranteed_stop_loss_details::GuaranteedStopLossDetails;
-use definitions::trade_id::TradeID;
-use definitions::take_profit_details::TakeProfitDetails;
+use definitions::order_position_fill::OrderPositionFill;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct FixedPriceOrder {
@@ -28,7 +28,7 @@ pub struct FixedPriceOrder {
     client_extensions: Option<ClientExtensions>,
     /// The type of the Order. Always set to “FIXED_PRICE” for Fixed
     /// Price Orders.
-    #[serde(default = "FIXED_PRICE")]
+    #[serde_inline_default("FIXED_PRICE")]
     r#type: OrderType,
     /// The Fixed Price Order’s Instrument.
     instrument: InstrumentName,
@@ -42,7 +42,7 @@ pub struct FixedPriceOrder {
     price: PriceValue,
     /// Specification of how Positions in the Account are modified
     /// when the Order is filled.
-    #[serde(default = "DEFAULT")]
+    #[serde_inline_default("DEFAULT")]
     position_fill: OrderPositionFill,
     /// The state that the trade resulting from the Fixed Price
     /// Order should be set to.
@@ -102,4 +102,33 @@ pub struct FixedPriceOrder {
     /// Date/time when the Order was cancelled (only provided when
     /// the state of the Order is CANCELLED)
     cancelled_time: Option<DateTime>,
+}
+impl Default for FixedPriceOrder {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            id: default(),
+            create_time: default(),
+            state: default(),
+            client_extensions: default(),
+            r#type: "FIXED_PRICE",
+            instrument: default(),
+            units: default(),
+            price: default(),
+            position_fill: "DEFAULT",
+            trade_state: default(),
+            take_profit_on_fill: default(),
+            stop_loss_on_fill: default(),
+            guaranteed_stop_loss_on_fill: default(),
+            trailing_stop_loss_on_fill: default(),
+            trade_client_extensions: default(),
+            filling_transaction_id: default(),
+            filled_time: default(),
+            trade_opened_id: default(),
+            trade_reduced_id: default(),
+            trade_closed_i_ds: default(),
+            cancelling_transaction_id: default(),
+            cancelled_time: default(),
+        }
+    }
 }

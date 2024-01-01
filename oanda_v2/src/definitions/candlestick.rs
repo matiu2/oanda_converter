@@ -1,5 +1,5 @@
-use chrono::DateTime;
 use definitions::candlestick_data::CandlestickData;
+use chrono::DateTime;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Candlestick {
@@ -20,4 +20,17 @@ pub struct Candlestick {
     /// A flag indicating if the candlestick is complete. A complete
     /// candlestick is one whose ending time is not in the future.
     complete: Option<boolean>,
+}
+impl Default for Candlestick {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            time: default(),
+            bid: default(),
+            ask: default(),
+            mid: default(),
+            volume: default(),
+            complete: default(),
+        }
+    }
 }

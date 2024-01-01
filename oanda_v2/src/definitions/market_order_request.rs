@@ -1,20 +1,20 @@
-use definitions::time_in_force::TimeInForce;
-use definitions::decimal_number::DecimalNumber;
-use definitions::price_value::PriceValue;
-use definitions::take_profit_details::TakeProfitDetails;
-use definitions::instrument_name::InstrumentName;
 use definitions::stop_loss_details::StopLossDetails;
-use definitions::order_type::OrderType;
-use definitions::client_extensions::ClientExtensions;
-use definitions::guaranteed_stop_loss_details::GuaranteedStopLossDetails;
-use definitions::trailing_stop_loss_details::TrailingStopLossDetails;
+use definitions::price_value::PriceValue;
+use definitions::time_in_force::TimeInForce;
 use definitions::order_position_fill::OrderPositionFill;
+use definitions::client_extensions::ClientExtensions;
+use definitions::trailing_stop_loss_details::TrailingStopLossDetails;
+use definitions::guaranteed_stop_loss_details::GuaranteedStopLossDetails;
+use definitions::order_type::OrderType;
+use definitions::decimal_number::DecimalNumber;
+use definitions::instrument_name::InstrumentName;
+use definitions::take_profit_details::TakeProfitDetails;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct MarketOrderRequest {
     /// The type of the Order to Create. Must be set to “MARKET”
     /// when creating a Market Order.
-    #[serde(default = "MARKET")]
+    #[serde_inline_default("MARKET")]
     r#type: OrderType,
     /// The Market Order’s Instrument.
     instrument: InstrumentName,
@@ -24,14 +24,14 @@ pub struct MarketOrderRequest {
     units: DecimalNumber,
     /// The time-in-force requested for the Market Order. Restricted
     /// to FOK or IOC for a MarketOrder.
-    #[serde(default = "FOK")]
+    #[serde_inline_default("FOK")]
     time_in_force: TimeInForce,
     /// The worst price that the client is willing to have the
     /// Market Order filled at.
     price_bound: Option<PriceValue>,
     /// Specification of how Positions in the Account are modified
     /// when the Order is filled.
-    #[serde(default = "DEFAULT")]
+    #[serde_inline_default("DEFAULT")]
     position_fill: OrderPositionFill,
     /// The client extensions to add to the Order. Do not set,
     /// modify, or delete clientExtensions if your account is
@@ -68,4 +68,23 @@ pub struct MarketOrderRequest {
     /// modify, or delete tradeClientExtensions if your account is
     /// associated with MT4.
     trade_client_extensions: Option<ClientExtensions>,
+}
+impl Default for MarketOrderRequest {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            r#type: "MARKET",
+            instrument: default(),
+            units: default(),
+            time_in_force: "FOK",
+            price_bound: default(),
+            position_fill: "DEFAULT",
+            client_extensions: default(),
+            take_profit_on_fill: default(),
+            stop_loss_on_fill: default(),
+            guaranteed_stop_loss_on_fill: default(),
+            trailing_stop_loss_on_fill: default(),
+            trade_client_extensions: default(),
+        }
+    }
 }

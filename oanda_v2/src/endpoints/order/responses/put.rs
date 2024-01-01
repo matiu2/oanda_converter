@@ -1,9 +1,9 @@
-use definitions::transaction_id::TransactionID;
-use endpoints::order::responses::put::Put404;
-use definitions::order_fill_transaction::OrderFillTransaction;
-use definitions::order_cancel_transaction::OrderCancelTransaction;
-use endpoints::order::responses::put::Put400;
 use endpoints::transaction::Transaction;
+use definitions::transaction_id::TransactionID;
+use endpoints::order::responses::put::Put400;
+use definitions::order_cancel_transaction::OrderCancelTransaction;
+use definitions::order_fill_transaction::OrderFillTransaction;
+use endpoints::order::responses::put::Put404;
 use serde::{Serialize, Deserialize};
 /// The Order was successfully cancelled and replaced
 use serde::{Serialize, Deserialize};
@@ -38,6 +38,21 @@ pub struct Put201 {
     /// Account
     last_transaction_id: Option<TransactionID>,
 }
+impl Default for Put201 {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            order_cancel_transaction: default(),
+            order_create_transaction: default(),
+            order_fill_transaction: default(),
+            order_reissue_transaction: default(),
+            order_reissue_reject_transaction: default(),
+            replacing_order_cancel_transaction: default(),
+            related_transaction_i_ds: default(),
+            last_transaction_id: default(),
+        }
+    }
+}
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Put400 {
@@ -57,6 +72,18 @@ pub struct Put400 {
     /// occurred.
     error_message: String,
 }
+impl Default for Put400 {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            order_reject_transaction: default(),
+            related_transaction_i_ds: default(),
+            last_transaction_id: default(),
+            error_code: default(),
+            error_message: default(),
+        }
+    }
+}
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Put404 {
@@ -75,6 +102,18 @@ pub struct Put404 {
     /// The human-readable description of the error that has
     /// occurred.
     error_message: String,
+}
+impl Default for Put404 {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            order_cancel_reject_transaction: default(),
+            related_transaction_i_ds: default(),
+            last_transaction_id: default(),
+            error_code: default(),
+            error_message: default(),
+        }
+    }
 }
 #[derive(Debug)]
 pub enum Error {

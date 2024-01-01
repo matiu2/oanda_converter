@@ -5,3 +5,9 @@ pub struct LiquidityRegenerationSchedule {
     /// The steps in the Liquidity Regeneration Schedule
     steps: Vec<LiquidityRegenerationScheduleStep>,
 }
+impl Default for LiquidityRegenerationSchedule {
+    fn default() -> Self {
+        use Default::default;
+        Self { steps: default() }
+    }
+}

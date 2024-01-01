@@ -1,15 +1,15 @@
-use definitions::client_id::ClientID;
-use definitions::order_type::OrderType;
 use definitions::client_extensions::ClientExtensions;
+use definitions::client_id::ClientID;
+use definitions::order_trigger_condition::OrderTriggerCondition;
+use definitions::order_state::OrderState;
+use definitions::transaction_id::TransactionID;
+use definitions::trade_id::TradeID;
+use definitions::decimal_number::DecimalNumber;
+use definitions::order_type::OrderType;
+use definitions::time_in_force::TimeInForce;
 use definitions::price_value::PriceValue;
 use chrono::DateTime;
-use definitions::decimal_number::DecimalNumber;
-use definitions::order_state::OrderState;
-use definitions::order_trigger_condition::OrderTriggerCondition;
-use definitions::trade_id::TradeID;
 use definitions::order_id::OrderID;
-use definitions::time_in_force::TimeInForce;
-use definitions::transaction_id::TransactionID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct GuaranteedStopLossOrder {
@@ -25,7 +25,7 @@ pub struct GuaranteedStopLossOrder {
     client_extensions: Option<ClientExtensions>,
     /// The type of the Order. Always set to “GUARANTEED_STOP_LOSS”
     /// for Guaranteed Stop Loss Orders.
-    #[serde(default = "GUARANTEED_STOP_LOSS")]
+    #[serde_inline_default("GUARANTEED_STOP_LOSS")]
     r#type: OrderType,
     /// The premium that will be charged if the Guaranteed Stop
     /// Loss Order is filled at the guaranteed price. It is in price
@@ -48,7 +48,7 @@ pub struct GuaranteedStopLossOrder {
     /// The time-in-force requested for the GuaranteedStopLoss
     /// Order. Restricted to “GTC”, “GFD” and “GTD” for
     /// GuaranteedStopLoss Orders.
-    #[serde(default = "GTC")]
+    #[serde_inline_default("GTC")]
     time_in_force: TimeInForce,
     /// The date/time when the GuaranteedStopLoss Order will be
     /// cancelled if its timeInForce is “GTD”.
@@ -74,7 +74,7 @@ pub struct GuaranteedStopLossOrder {
     /// results in. So for a Guaranteed Stop Loss Order for a long
     /// trade valid values are “DEFAULT” and “BID”, and for short
     /// trades “DEFAULT” and “ASK” are valid.
-    #[serde(default = "DEFAULT")]
+    #[serde_inline_default("DEFAULT")]
     trigger_condition: OrderTriggerCondition,
     /// ID of the Transaction that filled this Order (only provided
     /// when the Order’s state is FILLED)
@@ -107,4 +107,33 @@ pub struct GuaranteedStopLossOrder {
     /// The ID of the Order that replaced this Order (only provided
     /// if this Order was cancelled as part of a cancel/replace).
     replaced_by_order_id: Option<OrderID>,
+}
+impl Default for GuaranteedStopLossOrder {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            id: default(),
+            create_time: default(),
+            state: default(),
+            client_extensions: default(),
+            r#type: "GUARANTEED_STOP_LOSS",
+            guaranteed_execution_premium: default(),
+            trade_id: default(),
+            client_trade_id: default(),
+            price: default(),
+            distance: default(),
+            time_in_force: "GTC",
+            gtd_time: default(),
+            trigger_condition: "DEFAULT",
+            filling_transaction_id: default(),
+            filled_time: default(),
+            trade_opened_id: default(),
+            trade_reduced_id: default(),
+            trade_closed_i_ds: default(),
+            cancelling_transaction_id: default(),
+            cancelled_time: default(),
+            replaces_order_id: default(),
+            replaced_by_order_id: default(),
+        }
+    }
 }

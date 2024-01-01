@@ -11,3 +11,12 @@ pub struct GuaranteedStopLossOrderLevelRestriction {
     /// price units.
     price_range: Option<DecimalNumber>,
 }
+impl Default for GuaranteedStopLossOrderLevelRestriction {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            volume: default(),
+            price_range: default(),
+        }
+    }
+}

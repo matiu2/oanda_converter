@@ -1,10 +1,10 @@
-use definitions::transaction_type::TransactionType;
-use definitions::account_id::AccountID;
-use definitions::request_id::RequestID;
 use definitions::position_financing::PositionFinancing;
-use definitions::transaction_id::TransactionID;
-use definitions::account_units::AccountUnits;
 use chrono::DateTime;
+use definitions::account_id::AccountID;
+use definitions::account_units::AccountUnits;
+use definitions::transaction_id::TransactionID;
+use definitions::request_id::RequestID;
+use definitions::transaction_type::TransactionType;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct DailyFinancingTransaction {
@@ -26,7 +26,7 @@ pub struct DailyFinancingTransaction {
     request_id: Option<RequestID>,
     /// The Type of the Transaction. Always set to “DAILY_FINANCING”
     /// for a DailyFinancingTransaction.
-    #[serde(default = "DAILY_FINANCING")]
+    #[serde_inline_default("DAILY_FINANCING")]
     r#type: TransactionType,
     /// The amount of financing paid/collected for the Account.
     financing: Option<AccountUnits>,
@@ -35,4 +35,21 @@ pub struct DailyFinancingTransaction {
     /// The financing paid/collected for each Position in the
     /// Account.
     position_financings: Vec<PositionFinancing>,
+}
+impl Default for DailyFinancingTransaction {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            id: default(),
+            time: default(),
+            user_id: default(),
+            account_id: default(),
+            batch_id: default(),
+            request_id: default(),
+            r#type: "DAILY_FINANCING",
+            financing: default(),
+            account_balance: default(),
+            position_financings: default(),
+        }
+    }
 }

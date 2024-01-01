@@ -1,19 +1,19 @@
-use definitions::decimal_number::DecimalNumber;
-use definitions::account_units::AccountUnits;
-use definitions::instrument_name::InstrumentName;
-use chrono::DateTime;
-use definitions::account_id::AccountID;
-use definitions::transaction_type::TransactionType;
 use definitions::order_id::OrderID;
-use definitions::client_id::ClientID;
-use definitions::trade_open::TradeOpen;
-use definitions::order_fill_reason::OrderFillReason;
-use definitions::transaction_id::TransactionID;
-use definitions::request_id::RequestID;
+use chrono::DateTime;
+use definitions::decimal_number::DecimalNumber;
 use definitions::trade_reduce::TradeReduce;
-use definitions::client_price::ClientPrice;
+use definitions::instrument_name::InstrumentName;
+use definitions::request_id::RequestID;
 use definitions::home_conversion_factors::HomeConversionFactors;
+use definitions::account_id::AccountID;
+use definitions::client_price::ClientPrice;
 use definitions::price_value::PriceValue;
+use definitions::transaction_id::TransactionID;
+use definitions::transaction_type::TransactionType;
+use definitions::client_id::ClientID;
+use definitions::order_fill_reason::OrderFillReason;
+use definitions::account_units::AccountUnits;
+use definitions::trade_open::TradeOpen;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct OrderFillTransaction {
@@ -35,7 +35,7 @@ pub struct OrderFillTransaction {
     request_id: Option<RequestID>,
     /// The Type of the Transaction. Always set to “ORDER_FILL” for
     /// an OrderFillTransaction.
-    #[serde(default = "ORDER_FILL")]
+    #[serde_inline_default("ORDER_FILL")]
     r#type: TransactionType,
     /// The ID of the Order filled.
     order_id: Option<OrderID>,
@@ -107,4 +107,39 @@ pub struct OrderFillTransaction {
     /// value and is represented in the home currency of the
     /// Account.
     half_spread_cost: Option<AccountUnits>,
+}
+impl Default for OrderFillTransaction {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            id: default(),
+            time: default(),
+            user_id: default(),
+            account_id: default(),
+            batch_id: default(),
+            request_id: default(),
+            r#type: "ORDER_FILL",
+            order_id: default(),
+            client_order_id: default(),
+            instrument: default(),
+            units: default(),
+            home_conversion_factors: default(),
+            full_vwap: default(),
+            full_price: default(),
+            reason: default(),
+            pl: default(),
+            quote_pl: default(),
+            financing: default(),
+            base_financing: default(),
+            quote_financing: default(),
+            commission: default(),
+            guaranteed_execution_fee: default(),
+            quote_guaranteed_execution_fee: default(),
+            account_balance: default(),
+            trade_opened: default(),
+            trades_closed: default(),
+            trade_reduced: default(),
+            half_spread_cost: default(),
+        }
+    }
 }

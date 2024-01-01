@@ -1,5 +1,5 @@
-use definitions::accept_datetime_format::AcceptDatetimeFormat;
 use definitions::instrument_name::InstrumentName;
+use definitions::accept_datetime_format::AcceptDatetimeFormat;
 use crate::{client::Client, Error, Result};
 pub mod responses;
 struct Position<'a> {

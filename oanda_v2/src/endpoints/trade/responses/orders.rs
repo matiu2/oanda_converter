@@ -1,16 +1,16 @@
-use definitions::stop_loss_order_transaction::StopLossOrderTransaction;
 use definitions::transaction_id::TransactionID;
-use definitions::guaranteed_stop_loss_order_reject_transaction::GuaranteedStopLossOrderRejectTransaction;
-use definitions::take_profit_order_reject_transaction::TakeProfitOrderRejectTransaction;
-use definitions::guaranteed_stop_loss_order_transaction::GuaranteedStopLossOrderTransaction;
-use endpoints::trade::responses::orders::Orders400;
-use definitions::trailing_stop_loss_order_reject_transaction::TrailingStopLossOrderRejectTransaction;
-use definitions::order_cancel_transaction::OrderCancelTransaction;
+use definitions::stop_loss_order_transaction::StopLossOrderTransaction;
 use definitions::trailing_stop_loss_order_transaction::TrailingStopLossOrderTransaction;
-use definitions::order_cancel_reject_transaction::OrderCancelRejectTransaction;
-use definitions::order_fill_transaction::OrderFillTransaction;
-use definitions::stop_loss_order_reject_transaction::StopLossOrderRejectTransaction;
+use definitions::take_profit_order_reject_transaction::TakeProfitOrderRejectTransaction;
+use definitions::order_cancel_transaction::OrderCancelTransaction;
+use definitions::guaranteed_stop_loss_order_transaction::GuaranteedStopLossOrderTransaction;
 use definitions::take_profit_order_transaction::TakeProfitOrderTransaction;
+use definitions::order_fill_transaction::OrderFillTransaction;
+use definitions::trailing_stop_loss_order_reject_transaction::TrailingStopLossOrderRejectTransaction;
+use definitions::stop_loss_order_reject_transaction::StopLossOrderRejectTransaction;
+use endpoints::trade::responses::orders::Orders400;
+use definitions::order_cancel_reject_transaction::OrderCancelRejectTransaction;
+use definitions::guaranteed_stop_loss_order_reject_transaction::GuaranteedStopLossOrderRejectTransaction;
 use serde::{Serialize, Deserialize};
 /// The Trade’s dependent Orders have been modified as
 /// requested.
@@ -64,6 +64,27 @@ pub struct Orders200 {
     /// Account
     last_transaction_id: Option<TransactionID>,
 }
+impl Default for Orders200 {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            take_profit_order_cancel_transaction: default(),
+            take_profit_order_transaction: default(),
+            take_profit_order_fill_transaction: default(),
+            take_profit_order_created_cancel_transaction: default(),
+            stop_loss_order_cancel_transaction: default(),
+            stop_loss_order_transaction: default(),
+            stop_loss_order_fill_transaction: default(),
+            stop_loss_order_created_cancel_transaction: default(),
+            trailing_stop_loss_order_cancel_transaction: default(),
+            trailing_stop_loss_order_transaction: default(),
+            guaranteed_stop_loss_order_cancel_transaction: default(),
+            guaranteed_stop_loss_order_transaction: default(),
+            related_transaction_i_ds: default(),
+            last_transaction_id: default(),
+        }
+    }
+}
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Orders400 {
@@ -111,6 +132,25 @@ pub struct Orders400 {
     /// The human-readable description of the error that has
     /// occurred.
     error_message: String,
+}
+impl Default for Orders400 {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            take_profit_order_cancel_reject_transaction: default(),
+            take_profit_order_reject_transaction: default(),
+            stop_loss_order_cancel_reject_transaction: default(),
+            stop_loss_order_reject_transaction: default(),
+            trailing_stop_loss_order_cancel_reject_transaction: default(),
+            trailing_stop_loss_order_reject_transaction: default(),
+            guaranteed_stop_loss_order_cancel_reject_transaction: default(),
+            guaranteed_stop_loss_order_reject_transaction: default(),
+            last_transaction_id: default(),
+            related_transaction_i_ds: default(),
+            error_code: default(),
+            error_message: default(),
+        }
+    }
 }
 #[derive(Debug)]
 pub enum Error {

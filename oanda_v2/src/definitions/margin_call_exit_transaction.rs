@@ -1,7 +1,7 @@
-use chrono::DateTime;
-use definitions::transaction_id::TransactionID;
-use definitions::account_id::AccountID;
 use definitions::request_id::RequestID;
+use definitions::account_id::AccountID;
+use definitions::transaction_id::TransactionID;
+use chrono::DateTime;
 use definitions::transaction_type::TransactionType;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
@@ -24,6 +24,20 @@ pub struct MarginCallExitTransaction {
     request_id: Option<RequestID>,
     /// The Type of the Transaction. Always set to
     /// “MARGIN_CALL_EXIT” for an MarginCallExitTransaction.
-    #[serde(default = "MARGIN_CALL_EXIT")]
+    #[serde_inline_default("MARGIN_CALL_EXIT")]
     r#type: TransactionType,
+}
+impl Default for MarginCallExitTransaction {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            id: default(),
+            time: default(),
+            user_id: default(),
+            account_id: default(),
+            batch_id: default(),
+            request_id: default(),
+            r#type: "MARGIN_CALL_EXIT",
+        }
+    }
 }

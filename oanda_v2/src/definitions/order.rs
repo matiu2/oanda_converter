@@ -1,7 +1,7 @@
-use chrono::DateTime;
-use definitions::order_state::OrderState;
-use definitions::order_id::OrderID;
 use definitions::client_extensions::ClientExtensions;
+use chrono::DateTime;
+use definitions::order_id::OrderID;
+use definitions::order_state::OrderState;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Order {
@@ -15,4 +15,15 @@ pub struct Order {
     /// delete clientExtensions if your account is associated with
     /// MT4.
     client_extensions: Option<ClientExtensions>,
+}
+impl Default for Order {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            id: default(),
+            create_time: default(),
+            state: default(),
+            client_extensions: default(),
+        }
+    }
 }

@@ -1,8 +1,8 @@
+use definitions::request_id::RequestID;
 use definitions::transaction_type::TransactionType;
-use definitions::account_id::AccountID;
 use chrono::DateTime;
 use definitions::transaction_id::TransactionID;
-use definitions::request_id::RequestID;
+use definitions::account_id::AccountID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct CloseTransaction {
@@ -24,6 +24,20 @@ pub struct CloseTransaction {
     request_id: Option<RequestID>,
     /// The Type of the Transaction. Always set to “CLOSE” in a
     /// CloseTransaction.
-    #[serde(default = "CLOSE")]
+    #[serde_inline_default("CLOSE")]
     r#type: TransactionType,
+}
+impl Default for CloseTransaction {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            id: default(),
+            time: default(),
+            user_id: default(),
+            account_id: default(),
+            batch_id: default(),
+            request_id: default(),
+            r#type: "CLOSE",
+        }
+    }
 }

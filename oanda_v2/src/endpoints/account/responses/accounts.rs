@@ -8,3 +8,9 @@ pub struct Accounts200 {
     /// their associated properties.
     accounts: Vec<AccountProperties>,
 }
+impl Default for Accounts200 {
+    fn default() -> Self {
+        use Default::default;
+        Self { accounts: default() }
+    }
+}

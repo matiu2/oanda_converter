@@ -11,3 +11,12 @@ pub struct Positions200 {
     /// Account
     last_transaction_id: Option<TransactionID>,
 }
+impl Default for Positions200 {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            positions: default(),
+            last_transaction_id: default(),
+        }
+    }
+}

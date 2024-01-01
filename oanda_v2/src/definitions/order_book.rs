@@ -1,6 +1,6 @@
-use definitions::instrument_name::InstrumentName;
-use definitions::order_book_bucket::OrderBookBucket;
 use chrono::DateTime;
+use definitions::order_book_bucket::OrderBookBucket;
+use definitions::instrument_name::InstrumentName;
 use definitions::price_value::PriceValue;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
@@ -20,4 +20,16 @@ pub struct OrderBook {
     /// default bucket width. These buckets are only provided for
     /// price ranges which actually contain order or position data.
     buckets: Vec<OrderBookBucket>,
+}
+impl Default for OrderBook {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            instrument: default(),
+            time: default(),
+            price: default(),
+            bucket_width: default(),
+            buckets: default(),
+        }
+    }
 }

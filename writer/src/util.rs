@@ -99,7 +99,7 @@ pub fn generate_source(base_path: &str, contents: &[Content]) -> Result<()> {
 fn gen_endpoints(endpoints: &[&str]) -> TokenStream {
     let uses = endpoints.iter().map(|ep| {
         let ep = Ident::new(ep, proc_macro2::Span::call_site());
-        quote!(mod #ep;)
+        quote!(pub mod #ep;)
     });
     quote!(#(#uses)*)
 }

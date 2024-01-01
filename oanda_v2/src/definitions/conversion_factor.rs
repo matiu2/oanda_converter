@@ -7,3 +7,9 @@ pub struct ConversionFactor {
     /// Account.
     factor: Option<DecimalNumber>,
 }
+impl Default for ConversionFactor {
+    fn default() -> Self {
+        use Default::default;
+        Self { factor: default() }
+    }
+}

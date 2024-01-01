@@ -1,12 +1,12 @@
 use definitions::client_id::ClientID;
-use definitions::transaction_type::TransactionType;
-use definitions::transaction_id::TransactionID;
-use definitions::account_id::AccountID;
-use chrono::DateTime;
+use definitions::request_id::RequestID;
+use definitions::transaction_reject_reason::TransactionRejectReason;
 use definitions::order_id::OrderID;
 use definitions::client_extensions::ClientExtensions;
-use definitions::transaction_reject_reason::TransactionRejectReason;
-use definitions::request_id::RequestID;
+use chrono::DateTime;
+use definitions::transaction_id::TransactionID;
+use definitions::account_id::AccountID;
+use definitions::transaction_type::TransactionType;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct OrderClientExtensionsModifyRejectTransaction {
@@ -29,7 +29,7 @@ pub struct OrderClientExtensionsModifyRejectTransaction {
     /// The Type of the Transaction. Always set to
     /// “ORDER_CLIENT_EXTENSIONS_MODIFY_REJECT” for a
     /// OrderClientExtensionsModifyRejectTransaction.
-    #[serde(default = "ORDER_CLIENT_EXTENSIONS_MODIFY_REJECT")]
+    #[serde_inline_default("ORDER_CLIENT_EXTENSIONS_MODIFY_REJECT")]
     r#type: TransactionType,
     /// The ID of the Order who’s client extensions are to be
     /// modified.
@@ -43,4 +43,23 @@ pub struct OrderClientExtensionsModifyRejectTransaction {
     trade_client_extensions_modify: Option<ClientExtensions>,
     /// The reason that the Reject Transaction was created
     reject_reason: Option<TransactionRejectReason>,
+}
+impl Default for OrderClientExtensionsModifyRejectTransaction {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            id: default(),
+            time: default(),
+            user_id: default(),
+            account_id: default(),
+            batch_id: default(),
+            request_id: default(),
+            r#type: "ORDER_CLIENT_EXTENSIONS_MODIFY_REJECT",
+            order_id: default(),
+            client_order_id: default(),
+            client_extensions_modify: default(),
+            trade_client_extensions_modify: default(),
+            reject_reason: default(),
+        }
+    }
 }

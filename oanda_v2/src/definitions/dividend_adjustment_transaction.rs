@@ -1,13 +1,13 @@
-use definitions::instrument_name::InstrumentName;
-use definitions::request_id::RequestID;
-use definitions::transaction_type::TransactionType;
-use definitions::home_conversion_factors::HomeConversionFactors;
-use definitions::transaction_id::TransactionID;
 use chrono::DateTime;
+use definitions::request_id::RequestID;
+use definitions::instrument_name::InstrumentName;
+use definitions::transaction_id::TransactionID;
+use definitions::home_conversion_factors::HomeConversionFactors;
 use definitions::account_id::AccountID;
-use definitions::decimal_number::DecimalNumber;
 use definitions::account_units::AccountUnits;
+use definitions::decimal_number::DecimalNumber;
 use definitions::open_trade_dividend_adjustment::OpenTradeDividendAdjustment;
+use definitions::transaction_type::TransactionType;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct DividendAdjustmentTransaction {
@@ -29,7 +29,7 @@ pub struct DividendAdjustmentTransaction {
     request_id: Option<RequestID>,
     /// The Type of the Transaction. Always set to
     /// “DIVIDEND_ADJUSTMENT” for a DividendAdjustmentTransaction.
-    #[serde(default = "DIVIDEND_ADJUSTMENT")]
+    #[serde_inline_default("DIVIDEND_ADJUSTMENT")]
     r#type: TransactionType,
     /// The name of the instrument for the dividendAdjustment
     /// transaction
@@ -57,4 +57,24 @@ pub struct DividendAdjustmentTransaction {
     /// each open Trade, within the Account, for which a dividend
     /// adjustment is to be paid or collected.
     open_trade_dividend_adjustments: Vec<OpenTradeDividendAdjustment>,
+}
+impl Default for DividendAdjustmentTransaction {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            id: default(),
+            time: default(),
+            user_id: default(),
+            account_id: default(),
+            batch_id: default(),
+            request_id: default(),
+            r#type: "DIVIDEND_ADJUSTMENT",
+            instrument: default(),
+            dividend_adjustment: default(),
+            quote_dividend_adjustment: default(),
+            home_conversion_factors: default(),
+            account_balance: default(),
+            open_trade_dividend_adjustments: default(),
+        }
+    }
 }

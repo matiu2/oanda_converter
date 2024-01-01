@@ -1,24 +1,24 @@
-use definitions::market_order_reason::MarketOrderReason;
-use definitions::take_profit_details::TakeProfitDetails;
-use definitions::transaction_id::TransactionID;
-use definitions::decimal_number::DecimalNumber;
+use definitions::time_in_force::TimeInForce;
 use definitions::order_position_fill::OrderPositionFill;
-use definitions::market_order_margin_closeout::MarketOrderMarginCloseout;
-use definitions::stop_loss_details::StopLossDetails;
 use definitions::account_id::AccountID;
 use definitions::instrument_name::InstrumentName;
-use definitions::trailing_stop_loss_details::TrailingStopLossDetails;
+use definitions::market_order_reason::MarketOrderReason;
 use definitions::guaranteed_stop_loss_details::GuaranteedStopLossDetails;
-use definitions::market_order_position_closeout::MarketOrderPositionCloseout;
-use definitions::transaction_type::TransactionType;
-use definitions::price_value::PriceValue;
-use definitions::request_id::RequestID;
 use definitions::market_order_delayed_trade_close::MarketOrderDelayedTradeClose;
-use definitions::transaction_reject_reason::TransactionRejectReason;
-use definitions::client_extensions::ClientExtensions;
+use definitions::market_order_position_closeout::MarketOrderPositionCloseout;
+use definitions::request_id::RequestID;
 use chrono::DateTime;
-use definitions::time_in_force::TimeInForce;
+use definitions::price_value::PriceValue;
+use definitions::market_order_margin_closeout::MarketOrderMarginCloseout;
+use definitions::transaction_type::TransactionType;
+use definitions::client_extensions::ClientExtensions;
+use definitions::transaction_reject_reason::TransactionRejectReason;
 use definitions::market_order_trade_close::MarketOrderTradeClose;
+use definitions::stop_loss_details::StopLossDetails;
+use definitions::decimal_number::DecimalNumber;
+use definitions::take_profit_details::TakeProfitDetails;
+use definitions::trailing_stop_loss_details::TrailingStopLossDetails;
+use definitions::transaction_id::TransactionID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct MarketOrderRejectTransaction {
@@ -40,7 +40,7 @@ pub struct MarketOrderRejectTransaction {
     request_id: Option<RequestID>,
     /// The Type of the Transaction. Always set to
     /// “MARKET_ORDER_REJECT” in a MarketOrderRejectTransaction.
-    #[serde(default = "MARKET_ORDER_REJECT")]
+    #[serde_inline_default("MARKET_ORDER_REJECT")]
     r#type: TransactionType,
     /// The Market Order’s Instrument.
     instrument: InstrumentName,
@@ -50,14 +50,14 @@ pub struct MarketOrderRejectTransaction {
     units: DecimalNumber,
     /// The time-in-force requested for the Market Order. Restricted
     /// to FOK or IOC for a MarketOrder.
-    #[serde(default = "FOK")]
+    #[serde_inline_default("FOK")]
     time_in_force: TimeInForce,
     /// The worst price that the client is willing to have the
     /// Market Order filled at.
     price_bound: Option<PriceValue>,
     /// Specification of how Positions in the Account are modified
     /// when the Order is filled.
-    #[serde(default = "DEFAULT")]
+    #[serde_inline_default("DEFAULT")]
     position_fill: OrderPositionFill,
     /// Details of the Trade requested to be closed, only provided
     /// when the Market Order is being used to explicitly close
@@ -105,4 +105,36 @@ pub struct MarketOrderRejectTransaction {
     trade_client_extensions: Option<ClientExtensions>,
     /// The reason that the Reject Transaction was created
     reject_reason: Option<TransactionRejectReason>,
+}
+impl Default for MarketOrderRejectTransaction {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            id: default(),
+            time: default(),
+            user_id: default(),
+            account_id: default(),
+            batch_id: default(),
+            request_id: default(),
+            r#type: "MARKET_ORDER_REJECT",
+            instrument: default(),
+            units: default(),
+            time_in_force: "FOK",
+            price_bound: default(),
+            position_fill: "DEFAULT",
+            trade_close: default(),
+            long_position_closeout: default(),
+            short_position_closeout: default(),
+            margin_closeout: default(),
+            delayed_trade_close: default(),
+            reason: default(),
+            client_extensions: default(),
+            take_profit_on_fill: default(),
+            stop_loss_on_fill: default(),
+            trailing_stop_loss_on_fill: default(),
+            guaranteed_stop_loss_on_fill: default(),
+            trade_client_extensions: default(),
+            reject_reason: default(),
+        }
+    }
 }

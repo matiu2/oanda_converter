@@ -1,13 +1,13 @@
-use definitions::trade_state::TradeState;
-use chrono::DateTime;
-use definitions::decimal_number::DecimalNumber;
 use definitions::instrument_name::InstrumentName;
-use definitions::transaction_id::TransactionID;
-use definitions::client_extensions::ClientExtensions;
-use definitions::order_id::OrderID;
-use definitions::trade_id::TradeID;
 use definitions::price_value::PriceValue;
+use definitions::decimal_number::DecimalNumber;
+use definitions::trade_id::TradeID;
+use definitions::transaction_id::TransactionID;
+use chrono::DateTime;
+use definitions::client_extensions::ClientExtensions;
 use definitions::account_units::AccountUnits;
+use definitions::order_id::OrderID;
+use definitions::trade_state::TradeState;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct TradeSummary {
@@ -66,4 +66,32 @@ pub struct TradeSummary {
     /// ID of the Trade’s Trailing Stop Loss Order, only provided if
     /// such an Order exists.
     trailing_stop_loss_order_id: Option<OrderID>,
+}
+impl Default for TradeSummary {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            id: default(),
+            instrument: default(),
+            price: default(),
+            open_time: default(),
+            state: default(),
+            initial_units: default(),
+            initial_margin_required: default(),
+            current_units: default(),
+            realized_pl: default(),
+            unrealized_pl: default(),
+            margin_used: default(),
+            average_close_price: default(),
+            closing_transaction_i_ds: default(),
+            financing: default(),
+            dividend_adjustment: default(),
+            close_time: default(),
+            client_extensions: default(),
+            take_profit_order_id: default(),
+            stop_loss_order_id: default(),
+            guaranteed_stop_loss_order_id: default(),
+            trailing_stop_loss_order_id: default(),
+        }
+    }
 }

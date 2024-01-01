@@ -19,3 +19,14 @@ pub struct DynamicOrderState {
     /// value will not be set.
     is_trigger_distance_exact: Option<boolean>,
 }
+impl Default for DynamicOrderState {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            id: default(),
+            trailing_stop_value: default(),
+            trigger_distance: default(),
+            is_trigger_distance_exact: default(),
+        }
+    }
+}

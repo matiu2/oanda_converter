@@ -1,10 +1,10 @@
-use definitions::request_id::RequestID;
-use definitions::transaction_id::TransactionID;
 use chrono::DateTime;
-use definitions::market_order_reason::MarketOrderReason;
-use definitions::account_id::AccountID;
 use definitions::transaction_type::TransactionType;
 use definitions::trade_id::TradeID;
+use definitions::request_id::RequestID;
+use definitions::transaction_id::TransactionID;
+use definitions::market_order_reason::MarketOrderReason;
+use definitions::account_id::AccountID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct DelayedTradeClosureTransaction {
@@ -27,11 +27,27 @@ pub struct DelayedTradeClosureTransaction {
     /// The Type of the Transaction. Always
     /// set to “DELAYED_TRADE_CLOSURE” for an
     /// DelayedTradeClosureTransaction.
-    #[serde(default = "DELAYED_TRADE_CLOSURE")]
+    #[serde_inline_default("DELAYED_TRADE_CLOSURE")]
     r#type: TransactionType,
     /// The reason for the delayed trade closure
     reason: Option<MarketOrderReason>,
     /// List of Trade ID’s identifying the open trades that will be
     /// closed when their respective instruments become tradeable
     trade_i_ds: Option<TradeID>,
+}
+impl Default for DelayedTradeClosureTransaction {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            id: default(),
+            time: default(),
+            user_id: default(),
+            account_id: default(),
+            batch_id: default(),
+            request_id: default(),
+            r#type: "DELAYED_TRADE_CLOSURE",
+            reason: default(),
+            trade_i_ds: default(),
+        }
+    }
 }

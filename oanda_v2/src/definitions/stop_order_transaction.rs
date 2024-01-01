@@ -1,21 +1,21 @@
+use definitions::order_trigger_condition::OrderTriggerCondition;
 use chrono::DateTime;
+use definitions::client_extensions::ClientExtensions;
+use definitions::time_in_force::TimeInForce;
+use definitions::request_id::RequestID;
+use definitions::guaranteed_stop_loss_details::GuaranteedStopLossDetails;
+use definitions::transaction_id::TransactionID;
+use definitions::order_position_fill::OrderPositionFill;
+use definitions::transaction_type::TransactionType;
+use definitions::account_id::AccountID;
+use definitions::decimal_number::DecimalNumber;
+use definitions::price_value::PriceValue;
+use definitions::stop_order_reason::StopOrderReason;
+use definitions::instrument_name::InstrumentName;
+use definitions::take_profit_details::TakeProfitDetails;
 use definitions::stop_loss_details::StopLossDetails;
 use definitions::trailing_stop_loss_details::TrailingStopLossDetails;
 use definitions::order_id::OrderID;
-use definitions::order_trigger_condition::OrderTriggerCondition;
-use definitions::request_id::RequestID;
-use definitions::guaranteed_stop_loss_details::GuaranteedStopLossDetails;
-use definitions::take_profit_details::TakeProfitDetails;
-use definitions::price_value::PriceValue;
-use definitions::time_in_force::TimeInForce;
-use definitions::stop_order_reason::StopOrderReason;
-use definitions::instrument_name::InstrumentName;
-use definitions::transaction_id::TransactionID;
-use definitions::account_id::AccountID;
-use definitions::transaction_type::TransactionType;
-use definitions::decimal_number::DecimalNumber;
-use definitions::order_position_fill::OrderPositionFill;
-use definitions::client_extensions::ClientExtensions;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct StopOrderTransaction {
@@ -37,7 +37,7 @@ pub struct StopOrderTransaction {
     request_id: Option<RequestID>,
     /// The Type of the Transaction. Always set to “STOP_ORDER” in a
     /// StopOrderTransaction.
-    #[serde(default = "STOP_ORDER")]
+    #[serde_inline_default("STOP_ORDER")]
     r#type: TransactionType,
     /// The Stop Order’s Instrument.
     instrument: InstrumentName,
@@ -55,14 +55,14 @@ pub struct StopOrderTransaction {
     /// of being filled.
     price_bound: Option<PriceValue>,
     /// The time-in-force requested for the Stop Order.
-    #[serde(default = "GTC")]
+    #[serde_inline_default("GTC")]
     time_in_force: TimeInForce,
     /// The date/time when the Stop Order will be cancelled if its
     /// timeInForce is “GTD”.
     gtd_time: Option<DateTime>,
     /// Specification of how Positions in the Account are modified
     /// when the Order is filled.
-    #[serde(default = "DEFAULT")]
+    #[serde_inline_default("DEFAULT")]
     position_fill: OrderPositionFill,
     /// Specification of which price component should be used when
     /// determining if an Order should be triggered and filled.
@@ -85,7 +85,7 @@ pub struct StopOrderTransaction {
     /// results in. So for a Guaranteed Stop Loss Order for a long
     /// trade valid values are “DEFAULT” and “BID”, and for short
     /// trades “DEFAULT” and “ASK” are valid.
-    #[serde(default = "DEFAULT")]
+    #[serde_inline_default("DEFAULT")]
     trigger_condition: OrderTriggerCondition,
     /// The reason that the Stop Order was initiated
     reason: Option<StopOrderReason>,
@@ -119,4 +119,35 @@ pub struct StopOrderTransaction {
     /// The ID of the Transaction that cancels the replaced Order
     /// (only provided if this Order replaces an existing Order).
     cancelling_transaction_id: Option<TransactionID>,
+}
+impl Default for StopOrderTransaction {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            id: default(),
+            time: default(),
+            user_id: default(),
+            account_id: default(),
+            batch_id: default(),
+            request_id: default(),
+            r#type: "STOP_ORDER",
+            instrument: default(),
+            units: default(),
+            price: default(),
+            price_bound: default(),
+            time_in_force: "GTC",
+            gtd_time: default(),
+            position_fill: "DEFAULT",
+            trigger_condition: "DEFAULT",
+            reason: default(),
+            client_extensions: default(),
+            take_profit_on_fill: default(),
+            stop_loss_on_fill: default(),
+            trailing_stop_loss_on_fill: default(),
+            guaranteed_stop_loss_on_fill: default(),
+            trade_client_extensions: default(),
+            replaces_order_id: default(),
+            cancelling_transaction_id: default(),
+        }
+    }
 }

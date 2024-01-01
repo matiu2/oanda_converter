@@ -1,8 +1,8 @@
-use definitions::transaction_type::TransactionType;
-use definitions::transaction_id::TransactionID;
+use definitions::request_id::RequestID;
 use chrono::DateTime;
 use definitions::account_id::AccountID;
-use definitions::request_id::RequestID;
+use definitions::transaction_id::TransactionID;
+use definitions::transaction_type::TransactionType;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct ReopenTransaction {
@@ -24,6 +24,20 @@ pub struct ReopenTransaction {
     request_id: Option<RequestID>,
     /// The Type of the Transaction. Always set to “REOPEN” in a
     /// ReopenTransaction.
-    #[serde(default = "REOPEN")]
+    #[serde_inline_default("REOPEN")]
     r#type: TransactionType,
+}
+impl Default for ReopenTransaction {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            id: default(),
+            time: default(),
+            user_id: default(),
+            account_id: default(),
+            batch_id: default(),
+            request_id: default(),
+            r#type: "REOPEN",
+        }
+    }
 }

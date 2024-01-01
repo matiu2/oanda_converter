@@ -1,10 +1,10 @@
 use definitions::transaction_type::TransactionType;
-use definitions::account_id::AccountID;
 use chrono::DateTime;
+use definitions::account_id::AccountID;
+use definitions::account_units::AccountUnits;
 use definitions::request_id::RequestID;
 use definitions::funding_reason::FundingReason;
 use definitions::transaction_id::TransactionID;
-use definitions::account_units::AccountUnits;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct TransferFundsTransaction {
@@ -26,7 +26,7 @@ pub struct TransferFundsTransaction {
     request_id: Option<RequestID>,
     /// The Type of the Transaction. Always set to “TRANSFER_FUNDS”
     /// in a TransferFundsTransaction.
-    #[serde(default = "TRANSFER_FUNDS")]
+    #[serde_inline_default("TRANSFER_FUNDS")]
     r#type: TransactionType,
     /// The amount to deposit/withdraw from the Account in the
     /// Account’s home currency. A positive value indicates a
@@ -39,4 +39,22 @@ pub struct TransferFundsTransaction {
     comment: Option<String>,
     /// The Account’s balance after funds are transferred.
     account_balance: Option<AccountUnits>,
+}
+impl Default for TransferFundsTransaction {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            id: default(),
+            time: default(),
+            user_id: default(),
+            account_id: default(),
+            batch_id: default(),
+            request_id: default(),
+            r#type: "TRANSFER_FUNDS",
+            amount: default(),
+            funding_reason: default(),
+            comment: default(),
+            account_balance: default(),
+        }
+    }
 }

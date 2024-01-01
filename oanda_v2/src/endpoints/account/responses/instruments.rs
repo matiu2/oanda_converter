@@ -12,3 +12,12 @@ pub struct Instruments200 {
     /// Account.
     last_transaction_id: Option<TransactionID>,
 }
+impl Default for Instruments200 {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            instruments: default(),
+            last_transaction_id: default(),
+        }
+    }
+}

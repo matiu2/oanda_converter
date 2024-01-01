@@ -19,3 +19,18 @@ pub struct UserAttributes {
     /// The home currency of the Account.
     home_currency: Option<Currency>,
 }
+impl Default for UserAttributes {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            user_id: default(),
+            username: default(),
+            title: default(),
+            name: default(),
+            email: default(),
+            division_abbreviation: default(),
+            language_abbreviation: default(),
+            home_currency: default(),
+        }
+    }
+}

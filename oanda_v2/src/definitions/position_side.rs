@@ -1,7 +1,7 @@
+use definitions::price_value::PriceValue;
 use definitions::trade_id::TradeID;
 use definitions::decimal_number::DecimalNumber;
 use definitions::account_units::AccountUnits;
-use definitions::price_value::PriceValue;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct PositionSide {
@@ -33,4 +33,20 @@ pub struct PositionSide {
     /// Account for the execution of guaranteed Stop Loss Orders
     /// attached to Trades for this PositionSide.
     guaranteed_execution_fees: Option<AccountUnits>,
+}
+impl Default for PositionSide {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            units: default(),
+            average_price: default(),
+            trade_i_ds: default(),
+            pl: default(),
+            unrealized_pl: default(),
+            resettable_pl: default(),
+            financing: default(),
+            dividend_adjustment: default(),
+            guaranteed_execution_fees: default(),
+        }
+    }
 }

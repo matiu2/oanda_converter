@@ -1,9 +1,9 @@
-use definitions::account_id::AccountID;
-use definitions::request_id::RequestID;
-use chrono::DateTime;
-use definitions::currency::Currency;
 use definitions::transaction_id::TransactionID;
 use definitions::transaction_type::TransactionType;
+use chrono::DateTime;
+use definitions::account_id::AccountID;
+use definitions::request_id::RequestID;
+use definitions::currency::Currency;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct CreateTransaction {
@@ -25,7 +25,7 @@ pub struct CreateTransaction {
     request_id: Option<RequestID>,
     /// The Type of the Transaction. Always set to “CREATE” in a
     /// CreateTransaction.
-    #[serde(default = "CREATE")]
+    #[serde_inline_default("CREATE")]
     r#type: TransactionType,
     /// The ID of the Division that the Account is in
     division_id: Option<integer>,
@@ -37,4 +37,23 @@ pub struct CreateTransaction {
     account_number: Option<integer>,
     /// The home currency of the Account
     home_currency: Option<Currency>,
+}
+impl Default for CreateTransaction {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            id: default(),
+            time: default(),
+            user_id: default(),
+            account_id: default(),
+            batch_id: default(),
+            request_id: default(),
+            r#type: "CREATE",
+            division_id: default(),
+            site_id: default(),
+            account_user_id: default(),
+            account_number: default(),
+            home_currency: default(),
+        }
+    }
 }

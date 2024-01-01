@@ -1,22 +1,22 @@
-use definitions::client_extensions::ClientExtensions;
-use definitions::transaction_reject_reason::TransactionRejectReason;
-use definitions::order_position_fill::OrderPositionFill;
-use definitions::stop_loss_details::StopLossDetails;
+use definitions::limit_order_reason::LimitOrderReason;
 use definitions::order_id::OrderID;
-use definitions::trailing_stop_loss_details::TrailingStopLossDetails;
-use definitions::price_value::PriceValue;
+use definitions::time_in_force::TimeInForce;
+use definitions::take_profit_details::TakeProfitDetails;
+use definitions::transaction_id::TransactionID;
+use definitions::transaction_reject_reason::TransactionRejectReason;
 use chrono::DateTime;
-use definitions::instrument_name::InstrumentName;
-use definitions::transaction_type::TransactionType;
 use definitions::guaranteed_stop_loss_details::GuaranteedStopLossDetails;
 use definitions::decimal_number::DecimalNumber;
+use definitions::transaction_type::TransactionType;
+use definitions::trailing_stop_loss_details::TrailingStopLossDetails;
+use definitions::instrument_name::InstrumentName;
 use definitions::request_id::RequestID;
-use definitions::time_in_force::TimeInForce;
-use definitions::order_trigger_condition::OrderTriggerCondition;
-use definitions::limit_order_reason::LimitOrderReason;
-use definitions::take_profit_details::TakeProfitDetails;
 use definitions::account_id::AccountID;
-use definitions::transaction_id::TransactionID;
+use definitions::client_extensions::ClientExtensions;
+use definitions::stop_loss_details::StopLossDetails;
+use definitions::order_trigger_condition::OrderTriggerCondition;
+use definitions::order_position_fill::OrderPositionFill;
+use definitions::price_value::PriceValue;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct LimitOrderRejectTransaction {
@@ -38,7 +38,7 @@ pub struct LimitOrderRejectTransaction {
     request_id: Option<RequestID>,
     /// The Type of the Transaction. Always set to
     /// “LIMIT_ORDER_REJECT” in a LimitOrderRejectTransaction.
-    #[serde(default = "LIMIT_ORDER_REJECT")]
+    #[serde_inline_default("LIMIT_ORDER_REJECT")]
     r#type: TransactionType,
     /// The Limit Order’s Instrument.
     instrument: InstrumentName,
@@ -51,14 +51,14 @@ pub struct LimitOrderRejectTransaction {
     /// or better than this price.
     price: PriceValue,
     /// The time-in-force requested for the Limit Order.
-    #[serde(default = "GTC")]
+    #[serde_inline_default("GTC")]
     time_in_force: TimeInForce,
     /// The date/time when the Limit Order will be cancelled if its
     /// timeInForce is “GTD”.
     gtd_time: Option<DateTime>,
     /// Specification of how Positions in the Account are modified
     /// when the Order is filled.
-    #[serde(default = "DEFAULT")]
+    #[serde_inline_default("DEFAULT")]
     position_fill: OrderPositionFill,
     /// Specification of which price component should be used when
     /// determining if an Order should be triggered and filled.
@@ -81,7 +81,7 @@ pub struct LimitOrderRejectTransaction {
     /// results in. So for a Guaranteed Stop Loss Order for a long
     /// trade valid values are “DEFAULT” and “BID”, and for short
     /// trades “DEFAULT” and “ASK” are valid.
-    #[serde(default = "DEFAULT")]
+    #[serde_inline_default("DEFAULT")]
     trigger_condition: OrderTriggerCondition,
     /// The reason that the Limit Order was initiated
     reason: Option<LimitOrderReason>,
@@ -115,4 +115,34 @@ pub struct LimitOrderRejectTransaction {
     intended_replaces_order_id: Option<OrderID>,
     /// The reason that the Reject Transaction was created
     reject_reason: Option<TransactionRejectReason>,
+}
+impl Default for LimitOrderRejectTransaction {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            id: default(),
+            time: default(),
+            user_id: default(),
+            account_id: default(),
+            batch_id: default(),
+            request_id: default(),
+            r#type: "LIMIT_ORDER_REJECT",
+            instrument: default(),
+            units: default(),
+            price: default(),
+            time_in_force: "GTC",
+            gtd_time: default(),
+            position_fill: "DEFAULT",
+            trigger_condition: "DEFAULT",
+            reason: default(),
+            client_extensions: default(),
+            take_profit_on_fill: default(),
+            stop_loss_on_fill: default(),
+            trailing_stop_loss_on_fill: default(),
+            guaranteed_stop_loss_on_fill: default(),
+            trade_client_extensions: default(),
+            intended_replaces_order_id: default(),
+            reject_reason: default(),
+        }
+    }
 }

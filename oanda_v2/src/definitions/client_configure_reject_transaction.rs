@@ -1,10 +1,10 @@
-use definitions::transaction_reject_reason::TransactionRejectReason;
+use chrono::DateTime;
 use definitions::transaction_type::TransactionType;
 use definitions::account_id::AccountID;
-use definitions::decimal_number::DecimalNumber;
-use chrono::DateTime;
 use definitions::request_id::RequestID;
 use definitions::transaction_id::TransactionID;
+use definitions::transaction_reject_reason::TransactionRejectReason;
+use definitions::decimal_number::DecimalNumber;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct ClientConfigureRejectTransaction {
@@ -27,7 +27,7 @@ pub struct ClientConfigureRejectTransaction {
     /// The Type of the Transaction. Always
     /// set to “CLIENT_CONFIGURE_REJECT” in a
     /// ClientConfigureRejectTransaction.
-    #[serde(default = "CLIENT_CONFIGURE_REJECT")]
+    #[serde_inline_default("CLIENT_CONFIGURE_REJECT")]
     r#type: TransactionType,
     /// The client-provided alias for the Account.
     alias: Option<String>,
@@ -35,4 +35,21 @@ pub struct ClientConfigureRejectTransaction {
     margin_rate: Option<DecimalNumber>,
     /// The reason that the Reject Transaction was created
     reject_reason: Option<TransactionRejectReason>,
+}
+impl Default for ClientConfigureRejectTransaction {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            id: default(),
+            time: default(),
+            user_id: default(),
+            account_id: default(),
+            batch_id: default(),
+            request_id: default(),
+            r#type: "CLIENT_CONFIGURE_REJECT",
+            alias: default(),
+            margin_rate: default(),
+            reject_reason: default(),
+        }
+    }
 }

@@ -1,13 +1,13 @@
-use chrono::DateTime;
-use definitions::instrument_name::InstrumentName;
 use definitions::price_bucket::PriceBucket;
+use definitions::instrument_name::InstrumentName;
+use chrono::DateTime;
 use definitions::price_value::PriceValue;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct ClientPrice {
     /// The string “PRICE”. Used to identify the a Price object when
     /// found in a stream.
-    #[serde(default = "PRICE")]
+    #[serde_inline_default("PRICE")]
     r#type: String,
     /// The Price’s Instrument.
     instrument: Option<InstrumentName>,
@@ -35,4 +35,19 @@ pub struct ClientPrice {
     /// yet there is no ask liquidity. The closeout ask is never
     /// used to open a new position.
     closeout_ask: Option<PriceValue>,
+}
+impl Default for ClientPrice {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            r#type: "PRICE",
+            instrument: default(),
+            time: default(),
+            tradeable: default(),
+            bids: default(),
+            asks: default(),
+            closeout_bid: default(),
+            closeout_ask: default(),
+        }
+    }
 }

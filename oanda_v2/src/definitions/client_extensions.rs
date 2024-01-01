@@ -1,6 +1,6 @@
 use definitions::client_id::ClientID;
-use definitions::client_comment::ClientComment;
 use definitions::client_tag::ClientTag;
+use definitions::client_comment::ClientComment;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct ClientExtensions {
@@ -10,4 +10,14 @@ pub struct ClientExtensions {
     tag: Option<ClientTag>,
     /// A comment associated with the Order/Trade
     comment: Option<ClientComment>,
+}
+impl Default for ClientExtensions {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            id: default(),
+            tag: default(),
+            comment: default(),
+        }
+    }
 }

@@ -19,3 +19,14 @@ pub struct HomeConversionFactors {
     /// units of the Account’s home currency.
     loss_base_home: Option<ConversionFactor>,
 }
+impl Default for HomeConversionFactors {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            gain_quote_home: default(),
+            loss_quote_home: default(),
+            gain_base_home: default(),
+            loss_base_home: default(),
+        }
+    }
+}

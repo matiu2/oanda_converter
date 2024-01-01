@@ -1,22 +1,22 @@
 use definitions::stop_loss_details::StopLossDetails;
-use definitions::decimal_number::DecimalNumber;
-use definitions::trailing_stop_loss_details::TrailingStopLossDetails;
-use definitions::order_trigger_condition::OrderTriggerCondition;
-use definitions::guaranteed_stop_loss_details::GuaranteedStopLossDetails;
-use definitions::order_type::OrderType;
-use definitions::take_profit_details::TakeProfitDetails;
-use definitions::client_extensions::ClientExtensions;
-use definitions::price_value::PriceValue;
-use definitions::order_position_fill::OrderPositionFill;
 use definitions::instrument_name::InstrumentName;
+use definitions::order_trigger_condition::OrderTriggerCondition;
 use chrono::DateTime;
+use definitions::price_value::PriceValue;
+use definitions::decimal_number::DecimalNumber;
+use definitions::guaranteed_stop_loss_details::GuaranteedStopLossDetails;
+use definitions::trailing_stop_loss_details::TrailingStopLossDetails;
+use definitions::client_extensions::ClientExtensions;
+use definitions::order_position_fill::OrderPositionFill;
+use definitions::take_profit_details::TakeProfitDetails;
 use definitions::time_in_force::TimeInForce;
+use definitions::order_type::OrderType;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct MarketIfTouchedOrderRequest {
     /// The type of the Order to Create. Must be set to
     /// “MARKET_IF_TOUCHED” when creating a Market If Touched Order.
-    #[serde(default = "MARKET_IF_TOUCHED")]
+    #[serde_inline_default("MARKET_IF_TOUCHED")]
     r#type: OrderType,
     /// The MarketIfTouched Order’s Instrument.
     instrument: InstrumentName,
@@ -38,14 +38,14 @@ pub struct MarketIfTouchedOrderRequest {
     /// The time-in-force requested for the MarketIfTouched Order.
     /// Restricted to “GTC”, “GFD” and “GTD” for MarketIfTouched
     /// Orders.
-    #[serde(default = "GTC")]
+    #[serde_inline_default("GTC")]
     time_in_force: TimeInForce,
     /// The date/time when the MarketIfTouched Order will be
     /// cancelled if its timeInForce is “GTD”.
     gtd_time: Option<DateTime>,
     /// Specification of how Positions in the Account are modified
     /// when the Order is filled.
-    #[serde(default = "DEFAULT")]
+    #[serde_inline_default("DEFAULT")]
     position_fill: OrderPositionFill,
     /// Specification of which price component should be used when
     /// determining if an Order should be triggered and filled.
@@ -68,7 +68,7 @@ pub struct MarketIfTouchedOrderRequest {
     /// results in. So for a Guaranteed Stop Loss Order for a long
     /// trade valid values are “DEFAULT” and “BID”, and for short
     /// trades “DEFAULT” and “ASK” are valid.
-    #[serde(default = "DEFAULT")]
+    #[serde_inline_default("DEFAULT")]
     trigger_condition: OrderTriggerCondition,
     /// The client extensions to add to the Order. Do not set,
     /// modify, or delete clientExtensions if your account is
@@ -105,4 +105,26 @@ pub struct MarketIfTouchedOrderRequest {
     /// modify, or delete tradeClientExtensions if your account is
     /// associated with MT4.
     trade_client_extensions: Option<ClientExtensions>,
+}
+impl Default for MarketIfTouchedOrderRequest {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            r#type: "MARKET_IF_TOUCHED",
+            instrument: default(),
+            units: default(),
+            price: default(),
+            price_bound: default(),
+            time_in_force: "GTC",
+            gtd_time: default(),
+            position_fill: "DEFAULT",
+            trigger_condition: "DEFAULT",
+            client_extensions: default(),
+            take_profit_on_fill: default(),
+            stop_loss_on_fill: default(),
+            guaranteed_stop_loss_on_fill: default(),
+            trailing_stop_loss_on_fill: default(),
+            trade_client_extensions: default(),
+        }
+    }
 }

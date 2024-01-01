@@ -19,3 +19,14 @@ pub struct UnitsAvailable {
     /// an Order with a positionFill option of “OPEN_ONLY”.
     open_only: Option<UnitsAvailableDetails>,
 }
+impl Default for UnitsAvailable {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            default: default(),
+            reduce_first: default(),
+            reduce_only: default(),
+            open_only: default(),
+        }
+    }
+}

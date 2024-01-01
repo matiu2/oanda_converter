@@ -11,3 +11,12 @@ pub struct MarketOrderPositionCloseout {
     /// the Position.
     units: Option<String>,
 }
+impl Default for MarketOrderPositionCloseout {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            instrument: default(),
+            units: default(),
+        }
+    }
+}

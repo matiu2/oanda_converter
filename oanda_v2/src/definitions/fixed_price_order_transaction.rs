@@ -1,18 +1,18 @@
-use definitions::take_profit_details::TakeProfitDetails;
-use definitions::client_extensions::ClientExtensions;
 use definitions::request_id::RequestID;
-use definitions::trailing_stop_loss_details::TrailingStopLossDetails;
-use definitions::order_position_fill::OrderPositionFill;
+use definitions::take_profit_details::TakeProfitDetails;
+use definitions::transaction_type::TransactionType;
+use definitions::price_value::PriceValue;
 use definitions::fixed_price_order_reason::FixedPriceOrderReason;
+use definitions::decimal_number::DecimalNumber;
 use definitions::instrument_name::InstrumentName;
 use definitions::account_id::AccountID;
+use definitions::trailing_stop_loss_details::TrailingStopLossDetails;
+use definitions::stop_loss_details::StopLossDetails;
+use definitions::transaction_id::TransactionID;
 use definitions::guaranteed_stop_loss_details::GuaranteedStopLossDetails;
 use chrono::DateTime;
-use definitions::price_value::PriceValue;
-use definitions::transaction_id::TransactionID;
-use definitions::stop_loss_details::StopLossDetails;
-use definitions::decimal_number::DecimalNumber;
-use definitions::transaction_type::TransactionType;
+use definitions::order_position_fill::OrderPositionFill;
+use definitions::client_extensions::ClientExtensions;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct FixedPriceOrderTransaction {
@@ -34,7 +34,7 @@ pub struct FixedPriceOrderTransaction {
     request_id: Option<RequestID>,
     /// The Type of the Transaction. Always set to
     /// “FIXED_PRICE_ORDER” in a FixedPriceOrderTransaction.
-    #[serde(default = "FIXED_PRICE_ORDER")]
+    #[serde_inline_default("FIXED_PRICE_ORDER")]
     r#type: TransactionType,
     /// The Fixed Price Order’s Instrument.
     instrument: InstrumentName,
@@ -48,7 +48,7 @@ pub struct FixedPriceOrderTransaction {
     price: PriceValue,
     /// Specification of how Positions in the Account are modified
     /// when the Order is filled.
-    #[serde(default = "DEFAULT")]
+    #[serde_inline_default("DEFAULT")]
     position_fill: OrderPositionFill,
     /// The state that the trade resulting from the Fixed Price
     /// Order should be set to.
@@ -78,4 +78,30 @@ pub struct FixedPriceOrderTransaction {
     /// delete tradeClientExtensions if your account is associated
     /// with MT4.
     trade_client_extensions: Option<ClientExtensions>,
+}
+impl Default for FixedPriceOrderTransaction {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            id: default(),
+            time: default(),
+            user_id: default(),
+            account_id: default(),
+            batch_id: default(),
+            request_id: default(),
+            r#type: "FIXED_PRICE_ORDER",
+            instrument: default(),
+            units: default(),
+            price: default(),
+            position_fill: "DEFAULT",
+            trade_state: default(),
+            reason: default(),
+            client_extensions: default(),
+            take_profit_on_fill: default(),
+            stop_loss_on_fill: default(),
+            trailing_stop_loss_on_fill: default(),
+            guaranteed_stop_loss_on_fill: default(),
+            trade_client_extensions: default(),
+        }
+    }
 }

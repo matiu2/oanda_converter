@@ -6,7 +6,7 @@ use crate::{
 };
 use error_stack::ResultExt;
 use model::definition_docs::{Field, Struct};
-use proc_macro2::TokenStream;
+use proc_macro2::{Span, TokenStream};
 use quote::quote;
 use syn::Ident;
 use utils::pretty_doc_string;
@@ -16,6 +16,7 @@ pub fn gen_struct(s: &Struct, name: &str) -> Result<TokenStream> {
     let fields = gen_fields(&s.fields)
         .attach_printable_lazy(|| format!("While generating fields for struct {name}"))?;
     let name = Ident::new(name, proc_macro2::Span::call_site());
+    let defaults = gen_defaults(&s.fields, &name);
     Ok(quote! {
         use serde::{Serialize, Deserialize};
 
@@ -23,6 +24,8 @@ pub fn gen_struct(s: &Struct, name: &str) -> Result<TokenStream> {
         pub struct #name {
             #(#fields)*
         }
+
+        #defaults
     })
 }
 
@@ -86,7 +89,7 @@ fn gen_field(
     Ok(if let Some(default) = default {
         quote! {
             #(#doc_string)*
-            #[serde(default = #default)]
+            #[serde_inline_default(#default)]
             #name: #type_name,
         }
     } else {
@@ -95,6 +98,31 @@ fn gen_field(
             #name: #type_name,
         }
     })
+}
+
+/// Generates the Default and serde default functions
+fn gen_defaults(fields: &[Field], name: &Ident) -> TokenStream {
+    let fields = fields.iter().map(|Field { name, default, .. }| {
+        let name = field_name(name);
+        let default = default
+            .as_deref()
+            .map(|v| quote! { #v })
+            .unwrap_or_else(|| quote! { default() });
+        quote! {
+            #name: #default
+        }
+    });
+
+    quote! {
+        impl Default for #name {
+            fn default() -> Self {
+                use Default::default;
+                Self{
+                    #(#fields),*
+                }
+            }
+        }
+    }
 }
 
 #[cfg(test)]

@@ -1,12 +1,12 @@
 use definitions::transaction_id::TransactionID;
-use definitions::transaction_reject_reason::TransactionRejectReason;
-use definitions::trade_id::TradeID;
-use definitions::client_id::ClientID;
 use definitions::transaction_type::TransactionType;
 use definitions::client_extensions::ClientExtensions;
+use definitions::transaction_reject_reason::TransactionRejectReason;
 use chrono::DateTime;
 use definitions::account_id::AccountID;
+use definitions::trade_id::TradeID;
 use definitions::request_id::RequestID;
+use definitions::client_id::ClientID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct TradeClientExtensionsModifyRejectTransaction {
@@ -29,7 +29,7 @@ pub struct TradeClientExtensionsModifyRejectTransaction {
     /// The Type of the Transaction. Always set to
     /// “TRADE_CLIENT_EXTENSIONS_MODIFY_REJECT” for a
     /// TradeClientExtensionsModifyRejectTransaction.
-    #[serde(default = "TRADE_CLIENT_EXTENSIONS_MODIFY_REJECT")]
+    #[serde_inline_default("TRADE_CLIENT_EXTENSIONS_MODIFY_REJECT")]
     r#type: TransactionType,
     /// The ID of the Trade who’s client extensions are to be
     /// modified.
@@ -41,4 +41,22 @@ pub struct TradeClientExtensionsModifyRejectTransaction {
     trade_client_extensions_modify: Option<ClientExtensions>,
     /// The reason that the Reject Transaction was created
     reject_reason: Option<TransactionRejectReason>,
+}
+impl Default for TradeClientExtensionsModifyRejectTransaction {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            id: default(),
+            time: default(),
+            user_id: default(),
+            account_id: default(),
+            batch_id: default(),
+            request_id: default(),
+            r#type: "TRADE_CLIENT_EXTENSIONS_MODIFY_REJECT",
+            trade_id: default(),
+            client_trade_id: default(),
+            trade_client_extensions_modify: default(),
+            reject_reason: default(),
+        }
+    }
 }

@@ -1,5 +1,5 @@
-use chrono::DateTime;
 use definitions::account_units::AccountUnits;
+use chrono::DateTime;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct AccumulatedAccountState {
@@ -31,4 +31,21 @@ pub struct AccumulatedAccountState {
     margin_call_extension_count: Option<integer>,
     /// The date/time of the Account’s last margin call extension.
     last_margin_call_extension_time: Option<DateTime>,
+}
+impl Default for AccumulatedAccountState {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            balance: default(),
+            pl: default(),
+            resettable_pl: default(),
+            financing: default(),
+            commission: default(),
+            dividend_adjustment: default(),
+            guaranteed_execution_fees: default(),
+            margin_call_enter_time: default(),
+            margin_call_extension_count: default(),
+            last_margin_call_extension_time: default(),
+        }
+    }
 }

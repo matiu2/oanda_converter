@@ -1,17 +1,17 @@
 use definitions::client_id::ClientID;
 use definitions::client_extensions::ClientExtensions;
 use definitions::time_in_force::TimeInForce;
-use definitions::order_type::OrderType;
 use definitions::trade_id::TradeID;
-use chrono::DateTime;
 use definitions::order_trigger_condition::OrderTriggerCondition;
 use definitions::price_value::PriceValue;
+use definitions::order_type::OrderType;
+use chrono::DateTime;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct TakeProfitOrderRequest {
     /// The type of the Order to Create. Must be set to
     /// “TAKE_PROFIT” when creating a Take Profit Order.
-    #[serde(default = "TAKE_PROFIT")]
+    #[serde_inline_default("TAKE_PROFIT")]
     r#type: OrderType,
     /// The ID of the Trade to close when the price threshold is
     /// breached.
@@ -25,7 +25,7 @@ pub struct TakeProfitOrderRequest {
     price: PriceValue,
     /// The time-in-force requested for the TakeProfit Order.
     /// Restricted to “GTC”, “GFD” and “GTD” for TakeProfit Orders.
-    #[serde(default = "GTC")]
+    #[serde_inline_default("GTC")]
     time_in_force: TimeInForce,
     /// The date/time when the TakeProfit Order will be cancelled if
     /// its timeInForce is “GTD”.
@@ -51,10 +51,25 @@ pub struct TakeProfitOrderRequest {
     /// results in. So for a Guaranteed Stop Loss Order for a long
     /// trade valid values are “DEFAULT” and “BID”, and for short
     /// trades “DEFAULT” and “ASK” are valid.
-    #[serde(default = "DEFAULT")]
+    #[serde_inline_default("DEFAULT")]
     trigger_condition: OrderTriggerCondition,
     /// The client extensions to add to the Order. Do not set,
     /// modify, or delete clientExtensions if your account is
     /// associated with MT4.
     client_extensions: Option<ClientExtensions>,
+}
+impl Default for TakeProfitOrderRequest {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            r#type: "TAKE_PROFIT",
+            trade_id: default(),
+            client_trade_id: default(),
+            price: default(),
+            time_in_force: "GTC",
+            gtd_time: default(),
+            trigger_condition: "DEFAULT",
+            client_extensions: default(),
+        }
+    }
 }

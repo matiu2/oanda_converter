@@ -1,14 +1,14 @@
 use definitions::transaction_id::TransactionID;
-use definitions::trade_summary::TradeSummary;
-use endpoints::position::Position;
 use endpoints::order::Order;
-use definitions::account_units::AccountUnits;
-use definitions::guaranteed_stop_loss_order_mode::GuaranteedStopLossOrderMode;
 use definitions::guaranteed_stop_loss_order_parameters::GuaranteedStopLossOrderParameters;
+use endpoints::position::Position;
+use definitions::currency::Currency;
+use definitions::account_units::AccountUnits;
+use chrono::DateTime;
+use definitions::trade_summary::TradeSummary;
+use definitions::guaranteed_stop_loss_order_mode::GuaranteedStopLossOrderMode;
 use definitions::decimal_number::DecimalNumber;
 use definitions::account_id::AccountID;
-use chrono::DateTime;
-use definitions::currency::Currency;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Account {
@@ -117,4 +117,51 @@ pub struct Account {
     positions: Vec<Position>,
     /// The details of the Orders currently pending in the Account.
     orders: Vec<Order>,
+}
+impl Default for Account {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            id: default(),
+            alias: default(),
+            currency: default(),
+            created_by_user_id: default(),
+            created_time: default(),
+            guaranteed_stop_loss_order_parameters: default(),
+            guaranteed_stop_loss_order_mode: default(),
+            resettable_pl_time: default(),
+            margin_rate: default(),
+            open_trade_count: default(),
+            open_position_count: default(),
+            pending_order_count: default(),
+            hedging_enabled: default(),
+            unrealized_pl: default(),
+            nav: default(),
+            margin_used: default(),
+            margin_available: default(),
+            position_value: default(),
+            margin_closeout_unrealized_pl: default(),
+            margin_closeout_nav: default(),
+            margin_closeout_margin_used: default(),
+            margin_closeout_percent: default(),
+            margin_closeout_position_value: default(),
+            withdrawal_limit: default(),
+            margin_call_margin_used: default(),
+            margin_call_percent: default(),
+            balance: default(),
+            pl: default(),
+            resettable_pl: default(),
+            financing: default(),
+            commission: default(),
+            dividend_adjustment: default(),
+            guaranteed_execution_fees: default(),
+            margin_call_enter_time: default(),
+            margin_call_extension_count: default(),
+            last_margin_call_extension_time: default(),
+            last_transaction_id: default(),
+            trades: default(),
+            positions: default(),
+            orders: default(),
+        }
+    }
 }

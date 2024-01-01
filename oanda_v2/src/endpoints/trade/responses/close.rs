@@ -1,10 +1,10 @@
 use definitions::market_order_transaction::MarketOrderTransaction;
+use endpoints::position::responses::close::Close400;
 use definitions::order_fill_transaction::OrderFillTransaction;
+use definitions::order_cancel_transaction::OrderCancelTransaction;
+use definitions::transaction_id::TransactionID;
 use definitions::market_order_reject_transaction::MarketOrderRejectTransaction;
 use endpoints::position::responses::close::Close404;
-use definitions::transaction_id::TransactionID;
-use endpoints::position::responses::close::Close400;
-use definitions::order_cancel_transaction::OrderCancelTransaction;
 use serde::{Serialize, Deserialize};
 /// The Trade has been closed as requested
 use serde::{Serialize, Deserialize};
@@ -25,6 +25,18 @@ pub struct Close200 {
     /// Account
     last_transaction_id: Option<TransactionID>,
 }
+impl Default for Close200 {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            order_create_transaction: default(),
+            order_fill_transaction: default(),
+            order_cancel_transaction: default(),
+            related_transaction_i_ds: default(),
+            last_transaction_id: default(),
+        }
+    }
+}
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Close400 {
@@ -37,6 +49,16 @@ pub struct Close400 {
     /// The human-readable description of the error that has
     /// occurred.
     error_message: String,
+}
+impl Default for Close400 {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            order_reject_transaction: default(),
+            error_code: default(),
+            error_message: default(),
+        }
+    }
 }
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
@@ -57,6 +79,18 @@ pub struct Close404 {
     /// The human-readable description of the error that has
     /// occurred.
     error_message: String,
+}
+impl Default for Close404 {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            order_reject_transaction: default(),
+            last_transaction_id: default(),
+            related_transaction_i_ds: default(),
+            error_code: default(),
+            error_message: default(),
+        }
+    }
 }
 #[derive(Debug)]
 pub enum Error {

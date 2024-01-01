@@ -12,3 +12,13 @@ pub struct LiquidityRegenerationScheduleStep {
     /// schedule.
     ask_liquidity_used: Option<DecimalNumber>,
 }
+impl Default for LiquidityRegenerationScheduleStep {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            timestamp: default(),
+            bid_liquidity_used: default(),
+            ask_liquidity_used: default(),
+        }
+    }
+}

@@ -1,16 +1,16 @@
-use definitions::client_id::ClientID;
-use definitions::decimal_number::DecimalNumber;
 use definitions::time_in_force::TimeInForce;
-use definitions::client_extensions::ClientExtensions;
+use chrono::DateTime;
+use definitions::order_id::OrderID;
+use definitions::order_trigger_condition::OrderTriggerCondition;
+use definitions::trade_id::TradeID;
+use definitions::request_id::RequestID;
 use definitions::transaction_type::TransactionType;
 use definitions::account_id::AccountID;
-use definitions::trade_id::TradeID;
-use definitions::transaction_id::TransactionID;
-use definitions::order_trigger_condition::OrderTriggerCondition;
 use definitions::trailing_stop_loss_order_reason::TrailingStopLossOrderReason;
-use definitions::order_id::OrderID;
-use definitions::request_id::RequestID;
-use chrono::DateTime;
+use definitions::client_extensions::ClientExtensions;
+use definitions::decimal_number::DecimalNumber;
+use definitions::client_id::ClientID;
+use definitions::transaction_id::TransactionID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct TrailingStopLossOrderTransaction {
@@ -33,7 +33,7 @@ pub struct TrailingStopLossOrderTransaction {
     /// The Type of the Transaction. Always
     /// set to “TRAILING_STOP_LOSS_ORDER” in a
     /// TrailingStopLossOrderTransaction.
-    #[serde(default = "TRAILING_STOP_LOSS_ORDER")]
+    #[serde_inline_default("TRAILING_STOP_LOSS_ORDER")]
     r#type: TransactionType,
     /// The ID of the Trade to close when the price threshold is
     /// breached.
@@ -47,7 +47,7 @@ pub struct TrailingStopLossOrderTransaction {
     /// The time-in-force requested for the TrailingStopLoss Order.
     /// Restricted to “GTC”, “GFD” and “GTD” for TrailingStopLoss
     /// Orders.
-    #[serde(default = "GTC")]
+    #[serde_inline_default("GTC")]
     time_in_force: TimeInForce,
     /// The date/time when the StopLoss Order will be cancelled if
     /// its timeInForce is “GTD”.
@@ -73,7 +73,7 @@ pub struct TrailingStopLossOrderTransaction {
     /// results in. So for a Guaranteed Stop Loss Order for a long
     /// trade valid values are “DEFAULT” and “BID”, and for short
     /// trades “DEFAULT” and “ASK” are valid.
-    #[serde(default = "DEFAULT")]
+    #[serde_inline_default("DEFAULT")]
     trigger_condition: OrderTriggerCondition,
     /// The reason that the Trailing Stop Loss Order was initiated
     reason: Option<TrailingStopLossOrderReason>,
@@ -90,4 +90,29 @@ pub struct TrailingStopLossOrderTransaction {
     /// The ID of the Transaction that cancels the replaced Order
     /// (only provided if this Order replaces an existing Order).
     cancelling_transaction_id: Option<TransactionID>,
+}
+impl Default for TrailingStopLossOrderTransaction {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            id: default(),
+            time: default(),
+            user_id: default(),
+            account_id: default(),
+            batch_id: default(),
+            request_id: default(),
+            r#type: "TRAILING_STOP_LOSS_ORDER",
+            trade_id: default(),
+            client_trade_id: default(),
+            distance: default(),
+            time_in_force: "GTC",
+            gtd_time: default(),
+            trigger_condition: "DEFAULT",
+            reason: default(),
+            client_extensions: default(),
+            order_fill_transaction_id: default(),
+            replaces_order_id: default(),
+            cancelling_transaction_id: default(),
+        }
+    }
 }

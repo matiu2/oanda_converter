@@ -1,8 +1,8 @@
 use definitions::price_value::PriceValue;
-use definitions::decimal_number::DecimalNumber;
-use definitions::account_units::AccountUnits;
 use definitions::client_extensions::ClientExtensions;
 use definitions::trade_id::TradeID;
+use definitions::decimal_number::DecimalNumber;
+use definitions::account_units::AccountUnits;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct TradeOpen {
@@ -30,4 +30,19 @@ pub struct TradeOpen {
     /// ‘effective’ margin used that factors in the trade risk if a
     /// GSLO is attached to the trade.
     initial_margin_required: Option<AccountUnits>,
+}
+impl Default for TradeOpen {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            trade_id: default(),
+            units: default(),
+            price: default(),
+            guaranteed_execution_fee: default(),
+            quote_guaranteed_execution_fee: default(),
+            client_extensions: default(),
+            half_spread_cost: default(),
+            initial_margin_required: default(),
+        }
+    }
 }

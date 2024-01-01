@@ -1,6 +1,6 @@
 use definitions::account_changes::AccountChanges;
-use definitions::account_changes_state::AccountChangesState;
 use definitions::transaction_id::TransactionID;
+use definitions::account_changes_state::AccountChangesState;
 use serde::{Serialize, Deserialize};
 /// The Account state and changes are provided.
 use serde::{Serialize, Deserialize};
@@ -17,4 +17,14 @@ pub struct Changes200 {
     /// as the client has already observed all changes up to and
     /// including it.
     last_transaction_id: Option<TransactionID>,
+}
+impl Default for Changes200 {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            changes: default(),
+            state: default(),
+            last_transaction_id: default(),
+        }
+    }
 }

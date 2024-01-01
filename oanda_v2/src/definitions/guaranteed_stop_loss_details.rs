@@ -1,8 +1,8 @@
-use definitions::decimal_number::DecimalNumber;
-use definitions::time_in_force::TimeInForce;
-use definitions::client_extensions::ClientExtensions;
-use definitions::price_value::PriceValue;
 use chrono::DateTime;
+use definitions::price_value::PriceValue;
+use definitions::decimal_number::DecimalNumber;
+use definitions::client_extensions::ClientExtensions;
+use definitions::time_in_force::TimeInForce;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct GuaranteedStopLossDetails {
@@ -16,7 +16,7 @@ pub struct GuaranteedStopLossDetails {
     distance: Option<DecimalNumber>,
     /// The time in force for the created Guaranteed Stop Loss
     /// Order. This may only be GTC, GTD or GFD.
-    #[serde(default = "GTC")]
+    #[serde_inline_default("GTC")]
     time_in_force: TimeInForce,
     /// The date when the Guaranteed Stop Loss Order will be
     /// cancelled on if timeInForce is GTD.
@@ -24,4 +24,16 @@ pub struct GuaranteedStopLossDetails {
     /// The Client Extensions to add to the Guaranteed Stop Loss
     /// Order when created.
     client_extensions: Option<ClientExtensions>,
+}
+impl Default for GuaranteedStopLossDetails {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            price: default(),
+            distance: default(),
+            time_in_force: "GTC",
+            gtd_time: default(),
+            client_extensions: default(),
+        }
+    }
 }

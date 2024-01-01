@@ -1,7 +1,7 @@
-use endpoints::order::Order;
-use definitions::trade_summary::TradeSummary;
-use endpoints::transaction::Transaction;
 use endpoints::position::Position;
+use endpoints::order::Order;
+use endpoints::transaction::Transaction;
+use definitions::trade_summary::TradeSummary;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct AccountChanges {
@@ -24,4 +24,20 @@ pub struct AccountChanges {
     positions: Vec<Position>,
     /// The Transactions that have been generated.
     transactions: Vec<Transaction>,
+}
+impl Default for AccountChanges {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            orders_created: default(),
+            orders_cancelled: default(),
+            orders_filled: default(),
+            orders_triggered: default(),
+            trades_opened: default(),
+            trades_reduced: default(),
+            trades_closed: default(),
+            positions: default(),
+            transactions: default(),
+        }
+    }
 }

@@ -9,3 +9,12 @@ pub struct GuaranteedStopLossOrderParameters {
     /// the Account when market is halted.
     mutability_market_halted: Option<GuaranteedStopLossOrderMutability>,
 }
+impl Default for GuaranteedStopLossOrderParameters {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            mutability_market_open: default(),
+            mutability_market_halted: default(),
+        }
+    }
+}

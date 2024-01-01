@@ -6,3 +6,12 @@ pub struct Tag {
     /// The name of the tag.
     name: Option<String>,
 }
+impl Default for Tag {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            r#type: default(),
+            name: default(),
+        }
+    }
+}

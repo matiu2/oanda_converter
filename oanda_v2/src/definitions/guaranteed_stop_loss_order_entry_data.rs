@@ -1,5 +1,5 @@
-use definitions::decimal_number::DecimalNumber;
 use definitions::guaranteed_stop_loss_order_level_restriction::GuaranteedStopLossOrderLevelRestriction;
+use definitions::decimal_number::DecimalNumber;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct GuaranteedStopLossOrderEntryData {
@@ -14,4 +14,14 @@ pub struct GuaranteedStopLossOrderEntryData {
     /// The guaranteed Stop Loss Order level restriction for this
     /// instrument.
     level_restriction: Option<GuaranteedStopLossOrderLevelRestriction>,
+}
+impl Default for GuaranteedStopLossOrderEntryData {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            minimum_distance: default(),
+            premium: default(),
+            level_restriction: default(),
+        }
+    }
 }

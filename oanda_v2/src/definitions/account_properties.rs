@@ -10,3 +10,13 @@ pub struct AccountProperties {
     /// The Account’s tags
     tags: Vec<String>,
 }
+impl Default for AccountProperties {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            id: default(),
+            mt4_account_id: default(),
+            tags: default(),
+        }
+    }
+}

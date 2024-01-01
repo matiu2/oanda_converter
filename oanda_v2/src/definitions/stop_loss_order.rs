@@ -1,15 +1,15 @@
-use definitions::order_state::OrderState;
+use chrono::DateTime;
+use definitions::client_extensions::ClientExtensions;
 use definitions::decimal_number::DecimalNumber;
 use definitions::order_id::OrderID;
-use definitions::trade_id::TradeID;
-use definitions::time_in_force::TimeInForce;
-use definitions::order_trigger_condition::OrderTriggerCondition;
-use chrono::DateTime;
-use definitions::client_id::ClientID;
-use definitions::transaction_id::TransactionID;
-use definitions::client_extensions::ClientExtensions;
 use definitions::order_type::OrderType;
 use definitions::price_value::PriceValue;
+use definitions::order_state::OrderState;
+use definitions::time_in_force::TimeInForce;
+use definitions::client_id::ClientID;
+use definitions::trade_id::TradeID;
+use definitions::transaction_id::TransactionID;
+use definitions::order_trigger_condition::OrderTriggerCondition;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct StopLossOrder {
@@ -25,7 +25,7 @@ pub struct StopLossOrder {
     client_extensions: Option<ClientExtensions>,
     /// The type of the Order. Always set to “STOP_LOSS” for Stop
     /// Loss Orders.
-    #[serde(default = "STOP_LOSS")]
+    #[serde_inline_default("STOP_LOSS")]
     r#type: OrderType,
     /// The ID of the Trade to close when the price threshold is
     /// breached.
@@ -44,7 +44,7 @@ pub struct StopLossOrder {
     distance: Option<DecimalNumber>,
     /// The time-in-force requested for the StopLoss Order.
     /// Restricted to “GTC”, “GFD” and “GTD” for StopLoss Orders.
-    #[serde(default = "GTC")]
+    #[serde_inline_default("GTC")]
     time_in_force: TimeInForce,
     /// The date/time when the StopLoss Order will be cancelled if
     /// its timeInForce is “GTD”.
@@ -70,7 +70,7 @@ pub struct StopLossOrder {
     /// results in. So for a Guaranteed Stop Loss Order for a long
     /// trade valid values are “DEFAULT” and “BID”, and for short
     /// trades “DEFAULT” and “ASK” are valid.
-    #[serde(default = "DEFAULT")]
+    #[serde_inline_default("DEFAULT")]
     trigger_condition: OrderTriggerCondition,
     /// ID of the Transaction that filled this Order (only provided
     /// when the Order’s state is FILLED)
@@ -103,4 +103,32 @@ pub struct StopLossOrder {
     /// The ID of the Order that replaced this Order (only provided
     /// if this Order was cancelled as part of a cancel/replace).
     replaced_by_order_id: Option<OrderID>,
+}
+impl Default for StopLossOrder {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            id: default(),
+            create_time: default(),
+            state: default(),
+            client_extensions: default(),
+            r#type: "STOP_LOSS",
+            trade_id: default(),
+            client_trade_id: default(),
+            price: default(),
+            distance: default(),
+            time_in_force: "GTC",
+            gtd_time: default(),
+            trigger_condition: "DEFAULT",
+            filling_transaction_id: default(),
+            filled_time: default(),
+            trade_opened_id: default(),
+            trade_reduced_id: default(),
+            trade_closed_i_ds: default(),
+            cancelling_transaction_id: default(),
+            cancelled_time: default(),
+            replaces_order_id: default(),
+            replaced_by_order_id: default(),
+        }
+    }
 }

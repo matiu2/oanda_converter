@@ -11,3 +11,12 @@ pub struct PendingOrders200 {
     /// Account
     last_transaction_id: Option<TransactionID>,
 }
+impl Default for PendingOrders200 {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            orders: default(),
+            last_transaction_id: default(),
+        }
+    }
+}

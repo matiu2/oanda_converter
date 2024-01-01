@@ -13,3 +13,13 @@ pub struct InstrumentCommission {
     /// instrument.
     minimum_commission: Option<DecimalNumber>,
 }
+impl Default for InstrumentCommission {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            commission: default(),
+            units_traded: default(),
+            minimum_commission: default(),
+        }
+    }
+}

@@ -11,3 +11,13 @@ pub struct MarketOrderDelayedTradeClose {
     /// which this Delayed Trade Close belongs to
     source_transaction_id: Option<TransactionID>,
 }
+impl Default for MarketOrderDelayedTradeClose {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            trade_id: default(),
+            client_trade_id: default(),
+            source_transaction_id: default(),
+        }
+    }
+}

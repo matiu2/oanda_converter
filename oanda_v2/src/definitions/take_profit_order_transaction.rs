@@ -1,16 +1,16 @@
-use definitions::trade_id::TradeID;
+use definitions::client_id::ClientID;
+use definitions::account_id::AccountID;
+use definitions::time_in_force::TimeInForce;
+use definitions::price_value::PriceValue;
+use definitions::transaction_id::TransactionID;
+use chrono::DateTime;
+use definitions::request_id::RequestID;
+use definitions::transaction_type::TransactionType;
 use definitions::client_extensions::ClientExtensions;
 use definitions::order_id::OrderID;
-use definitions::transaction_type::TransactionType;
-use definitions::take_profit_order_reason::TakeProfitOrderReason;
-use chrono::DateTime;
-use definitions::client_id::ClientID;
-use definitions::transaction_id::TransactionID;
-use definitions::price_value::PriceValue;
-use definitions::request_id::RequestID;
-use definitions::time_in_force::TimeInForce;
 use definitions::order_trigger_condition::OrderTriggerCondition;
-use definitions::account_id::AccountID;
+use definitions::trade_id::TradeID;
+use definitions::take_profit_order_reason::TakeProfitOrderReason;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct TakeProfitOrderTransaction {
@@ -32,7 +32,7 @@ pub struct TakeProfitOrderTransaction {
     request_id: Option<RequestID>,
     /// The Type of the Transaction. Always set to
     /// “TAKE_PROFIT_ORDER” in a TakeProfitOrderTransaction.
-    #[serde(default = "TAKE_PROFIT_ORDER")]
+    #[serde_inline_default("TAKE_PROFIT_ORDER")]
     r#type: TransactionType,
     /// The ID of the Trade to close when the price threshold is
     /// breached.
@@ -46,7 +46,7 @@ pub struct TakeProfitOrderTransaction {
     price: PriceValue,
     /// The time-in-force requested for the TakeProfit Order.
     /// Restricted to “GTC”, “GFD” and “GTD” for TakeProfit Orders.
-    #[serde(default = "GTC")]
+    #[serde_inline_default("GTC")]
     time_in_force: TimeInForce,
     /// The date/time when the TakeProfit Order will be cancelled if
     /// its timeInForce is “GTD”.
@@ -72,7 +72,7 @@ pub struct TakeProfitOrderTransaction {
     /// results in. So for a Guaranteed Stop Loss Order for a long
     /// trade valid values are “DEFAULT” and “BID”, and for short
     /// trades “DEFAULT” and “ASK” are valid.
-    #[serde(default = "DEFAULT")]
+    #[serde_inline_default("DEFAULT")]
     trigger_condition: OrderTriggerCondition,
     /// The reason that the Take Profit Order was initiated
     reason: Option<TakeProfitOrderReason>,
@@ -89,4 +89,29 @@ pub struct TakeProfitOrderTransaction {
     /// The ID of the Transaction that cancels the replaced Order
     /// (only provided if this Order replaces an existing Order).
     cancelling_transaction_id: Option<TransactionID>,
+}
+impl Default for TakeProfitOrderTransaction {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            id: default(),
+            time: default(),
+            user_id: default(),
+            account_id: default(),
+            batch_id: default(),
+            request_id: default(),
+            r#type: "TAKE_PROFIT_ORDER",
+            trade_id: default(),
+            client_trade_id: default(),
+            price: default(),
+            time_in_force: "GTC",
+            gtd_time: default(),
+            trigger_condition: "DEFAULT",
+            reason: default(),
+            client_extensions: default(),
+            order_fill_transaction_id: default(),
+            replaces_order_id: default(),
+            cancelling_transaction_id: default(),
+        }
+    }
 }

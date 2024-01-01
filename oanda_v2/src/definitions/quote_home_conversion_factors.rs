@@ -13,3 +13,12 @@ pub struct QuoteHomeConversionFactors {
     /// multiplying the quote units by the conversion factor.
     negative_units: Option<DecimalNumber>,
 }
+impl Default for QuoteHomeConversionFactors {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            positive_units: default(),
+            negative_units: default(),
+        }
+    }
+}

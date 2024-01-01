@@ -7,3 +7,12 @@ pub struct UnitsAvailableDetails {
     /// The units available for short Orders.
     short: Option<DecimalNumber>,
 }
+impl Default for UnitsAvailableDetails {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            long: default(),
+            short: default(),
+        }
+    }
+}

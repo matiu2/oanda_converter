@@ -14,3 +14,13 @@ pub struct OrderBookBucket {
     /// the short orders found in this bucket.
     short_count_percent: Option<DecimalNumber>,
 }
+impl Default for OrderBookBucket {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            price: default(),
+            long_count_percent: default(),
+            short_count_percent: default(),
+        }
+    }
+}

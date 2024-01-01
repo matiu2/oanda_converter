@@ -1,18 +1,18 @@
-use definitions::request_id::RequestID;
-use definitions::transaction_type::TransactionType;
-use definitions::price_value::PriceValue;
-use definitions::time_in_force::TimeInForce;
-use definitions::trade_id::TradeID;
-use definitions::order_trigger_condition::OrderTriggerCondition;
-use chrono::DateTime;
-use definitions::client_id::ClientID;
-use definitions::order_id::OrderID;
-use definitions::transaction_reject_reason::TransactionRejectReason;
-use definitions::decimal_number::DecimalNumber;
-use definitions::transaction_id::TransactionID;
-use definitions::stop_loss_order_reason::StopLossOrderReason;
 use definitions::client_extensions::ClientExtensions;
+use definitions::transaction_type::TransactionType;
+use definitions::stop_loss_order_reason::StopLossOrderReason;
 use definitions::account_id::AccountID;
+use definitions::time_in_force::TimeInForce;
+use chrono::DateTime;
+use definitions::order_trigger_condition::OrderTriggerCondition;
+use definitions::client_id::ClientID;
+use definitions::request_id::RequestID;
+use definitions::trade_id::TradeID;
+use definitions::order_id::OrderID;
+use definitions::transaction_id::TransactionID;
+use definitions::decimal_number::DecimalNumber;
+use definitions::price_value::PriceValue;
+use definitions::transaction_reject_reason::TransactionRejectReason;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct StopLossOrderRejectTransaction {
@@ -35,7 +35,7 @@ pub struct StopLossOrderRejectTransaction {
     /// The Type of the Transaction. Always
     /// set to “STOP_LOSS_ORDER_REJECT” in a
     /// StopLossOrderRejectTransaction.
-    #[serde(default = "STOP_LOSS_ORDER_REJECT")]
+    #[serde_inline_default("STOP_LOSS_ORDER_REJECT")]
     r#type: TransactionType,
     /// The ID of the Trade to close when the price threshold is
     /// breached.
@@ -54,7 +54,7 @@ pub struct StopLossOrderRejectTransaction {
     distance: Option<DecimalNumber>,
     /// The time-in-force requested for the StopLoss Order.
     /// Restricted to “GTC”, “GFD” and “GTD” for StopLoss Orders.
-    #[serde(default = "GTC")]
+    #[serde_inline_default("GTC")]
     time_in_force: TimeInForce,
     /// The date/time when the StopLoss Order will be cancelled if
     /// its timeInForce is “GTD”.
@@ -80,7 +80,7 @@ pub struct StopLossOrderRejectTransaction {
     /// results in. So for a Guaranteed Stop Loss Order for a long
     /// trade valid values are “DEFAULT” and “BID”, and for short
     /// trades “DEFAULT” and “ASK” are valid.
-    #[serde(default = "DEFAULT")]
+    #[serde_inline_default("DEFAULT")]
     trigger_condition: OrderTriggerCondition,
     /// The reason that the Stop Loss Order was initiated
     reason: Option<StopLossOrderReason>,
@@ -97,4 +97,30 @@ pub struct StopLossOrderRejectTransaction {
     intended_replaces_order_id: Option<OrderID>,
     /// The reason that the Reject Transaction was created
     reject_reason: Option<TransactionRejectReason>,
+}
+impl Default for StopLossOrderRejectTransaction {
+    fn default() -> Self {
+        use Default::default;
+        Self {
+            id: default(),
+            time: default(),
+            user_id: default(),
+            account_id: default(),
+            batch_id: default(),
+            request_id: default(),
+            r#type: "STOP_LOSS_ORDER_REJECT",
+            trade_id: default(),
+            client_trade_id: default(),
+            price: default(),
+            distance: default(),
+            time_in_force: "GTC",
+            gtd_time: default(),
+            trigger_condition: "DEFAULT",
+            reason: default(),
+            client_extensions: default(),
+            order_fill_transaction_id: default(),
+            intended_replaces_order_id: default(),
+            reject_reason: default(),
+        }
+    }
 }
