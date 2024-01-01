@@ -1,14 +1,14 @@
-use definitions::transaction_id::TransactionID;
-use endpoints::order::Order;
-use definitions::guaranteed_stop_loss_order_parameters::GuaranteedStopLossOrderParameters;
 use endpoints::position::Position;
+use endpoints::order::Order;
 use definitions::currency::Currency;
-use definitions::account_units::AccountUnits;
-use chrono::DateTime;
-use definitions::trade_summary::TradeSummary;
+use definitions::transaction_id::TransactionID;
 use definitions::guaranteed_stop_loss_order_mode::GuaranteedStopLossOrderMode;
 use definitions::decimal_number::DecimalNumber;
+use definitions::guaranteed_stop_loss_order_parameters::GuaranteedStopLossOrderParameters;
 use definitions::account_id::AccountID;
+use chrono::DateTime;
+use definitions::account_units::AccountUnits;
+use definitions::trade_summary::TradeSummary;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Account {

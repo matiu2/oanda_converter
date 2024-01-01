@@ -1,7 +1,7 @@
-use definitions::price_value::PriceValue;
-use definitions::trade_id::TradeID;
-use definitions::decimal_number::DecimalNumber;
 use definitions::account_units::AccountUnits;
+use definitions::price_value::PriceValue;
+use definitions::decimal_number::DecimalNumber;
+use definitions::trade_id::TradeID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct PositionSide {

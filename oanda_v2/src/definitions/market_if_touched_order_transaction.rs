@@ -1,21 +1,21 @@
 use definitions::trailing_stop_loss_details::TrailingStopLossDetails;
-use definitions::transaction_id::TransactionID;
-use definitions::market_if_touched_order_reason::MarketIfTouchedOrderReason;
-use definitions::stop_loss_details::StopLossDetails;
-use definitions::time_in_force::TimeInForce;
-use chrono::DateTime;
-use definitions::request_id::RequestID;
-use definitions::order_position_fill::OrderPositionFill;
-use definitions::decimal_number::DecimalNumber;
-use definitions::guaranteed_stop_loss_details::GuaranteedStopLossDetails;
-use definitions::account_id::AccountID;
-use definitions::price_value::PriceValue;
 use definitions::transaction_type::TransactionType;
+use definitions::transaction_id::TransactionID;
+use chrono::DateTime;
+use definitions::guaranteed_stop_loss_details::GuaranteedStopLossDetails;
+use definitions::price_value::PriceValue;
 use definitions::client_extensions::ClientExtensions;
-use definitions::take_profit_details::TakeProfitDetails;
-use definitions::order_id::OrderID;
 use definitions::instrument_name::InstrumentName;
+use definitions::order_position_fill::OrderPositionFill;
+use definitions::market_if_touched_order_reason::MarketIfTouchedOrderReason;
+use definitions::order_id::OrderID;
+use definitions::account_id::AccountID;
+use definitions::time_in_force::TimeInForce;
+use definitions::request_id::RequestID;
+use definitions::take_profit_details::TakeProfitDetails;
+use definitions::decimal_number::DecimalNumber;
 use definitions::order_trigger_condition::OrderTriggerCondition;
+use definitions::stop_loss_details::StopLossDetails;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct MarketIfTouchedOrderTransaction {

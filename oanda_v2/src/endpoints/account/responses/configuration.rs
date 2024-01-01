@@ -1,8 +1,8 @@
-use endpoints::account::responses::configuration::Configuration400;
-use endpoints::account::responses::configuration::Configuration403;
 use definitions::client_configure_transaction::ClientConfigureTransaction;
-use definitions::client_configure_reject_transaction::ClientConfigureRejectTransaction;
 use definitions::transaction_id::TransactionID;
+use endpoints::account::responses::configuration::Configuration400;
+use definitions::client_configure_reject_transaction::ClientConfigureRejectTransaction;
+use endpoints::account::responses::configuration::Configuration403;
 use serde::{Serialize, Deserialize};
 /// The Account was configured successfully.
 use serde::{Serialize, Deserialize};

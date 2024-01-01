@@ -1,16 +1,16 @@
 use definitions::time_in_force::TimeInForce;
-use chrono::DateTime;
-use definitions::order_id::OrderID;
 use definitions::order_trigger_condition::OrderTriggerCondition;
-use definitions::trade_id::TradeID;
-use definitions::request_id::RequestID;
 use definitions::transaction_type::TransactionType;
-use definitions::account_id::AccountID;
-use definitions::trailing_stop_loss_order_reason::TrailingStopLossOrderReason;
+use definitions::order_id::OrderID;
+use definitions::client_id::ClientID;
 use definitions::client_extensions::ClientExtensions;
 use definitions::decimal_number::DecimalNumber;
-use definitions::client_id::ClientID;
+use definitions::trailing_stop_loss_order_reason::TrailingStopLossOrderReason;
 use definitions::transaction_id::TransactionID;
+use definitions::request_id::RequestID;
+use definitions::trade_id::TradeID;
+use chrono::DateTime;
+use definitions::account_id::AccountID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct TrailingStopLossOrderTransaction {

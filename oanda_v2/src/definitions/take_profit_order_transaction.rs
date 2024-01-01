@@ -1,16 +1,16 @@
+use definitions::transaction_id::TransactionID;
+use definitions::price_value::PriceValue;
+use definitions::order_trigger_condition::OrderTriggerCondition;
+use definitions::take_profit_order_reason::TakeProfitOrderReason;
+use definitions::transaction_type::TransactionType;
+use definitions::trade_id::TradeID;
+use definitions::request_id::RequestID;
+use chrono::DateTime;
 use definitions::client_id::ClientID;
+use definitions::client_extensions::ClientExtensions;
 use definitions::account_id::AccountID;
 use definitions::time_in_force::TimeInForce;
-use definitions::price_value::PriceValue;
-use definitions::transaction_id::TransactionID;
-use chrono::DateTime;
-use definitions::request_id::RequestID;
-use definitions::transaction_type::TransactionType;
-use definitions::client_extensions::ClientExtensions;
 use definitions::order_id::OrderID;
-use definitions::order_trigger_condition::OrderTriggerCondition;
-use definitions::trade_id::TradeID;
-use definitions::take_profit_order_reason::TakeProfitOrderReason;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct TakeProfitOrderTransaction {

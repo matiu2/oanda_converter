@@ -1,8 +1,8 @@
-use chrono::DateTime;
+use definitions::client_extensions::ClientExtensions;
 use definitions::price_value::PriceValue;
 use definitions::decimal_number::DecimalNumber;
-use definitions::client_extensions::ClientExtensions;
 use definitions::time_in_force::TimeInForce;
+use chrono::DateTime;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct GuaranteedStopLossDetails {

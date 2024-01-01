@@ -1,8 +1,8 @@
-use endpoints::trade::responses::client_extensions::ClientExtensions404;
-use definitions::order_client_extensions_modify_reject_transaction::OrderClientExtensionsModifyRejectTransaction;
-use endpoints::trade::responses::client_extensions::ClientExtensions400;
-use definitions::order_client_extensions_modify_transaction::OrderClientExtensionsModifyTransaction;
 use definitions::transaction_id::TransactionID;
+use endpoints::trade::responses::client_extensions::ClientExtensions400;
+use definitions::order_client_extensions_modify_reject_transaction::OrderClientExtensionsModifyRejectTransaction;
+use endpoints::trade::responses::client_extensions::ClientExtensions404;
+use definitions::order_client_extensions_modify_transaction::OrderClientExtensionsModifyTransaction;
 use serde::{Serialize, Deserialize};
 /// The Order’s Client Extensions were successfully modified
 use serde::{Serialize, Deserialize};

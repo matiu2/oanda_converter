@@ -1,5 +1,5 @@
-use definitions::price_value::PriceValue;
 use definitions::decimal_number::DecimalNumber;
+use definitions::price_value::PriceValue;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct PositionBookBucket {

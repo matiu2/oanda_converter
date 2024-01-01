@@ -1,7 +1,7 @@
-use chrono::DateTime;
-use definitions::order_book_bucket::OrderBookBucket;
 use definitions::instrument_name::InstrumentName;
+use definitions::order_book_bucket::OrderBookBucket;
 use definitions::price_value::PriceValue;
+use chrono::DateTime;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct OrderBook {

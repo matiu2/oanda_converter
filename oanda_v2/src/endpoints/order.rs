@@ -1,7 +1,7 @@
 use definitions::order_specifier::OrderSpecifier;
-use definitions::accept_datetime_format::AcceptDatetimeFormat;
 use definitions::order_state_filter::OrderStateFilter;
 use definitions::instrument_name::InstrumentName;
+use definitions::accept_datetime_format::AcceptDatetimeFormat;
 use crate::{client::Client, Error, Result};
 pub mod responses;
 struct Order<'a> {
@@ -9,7 +9,7 @@ struct Order<'a> {
 }
 impl<'a> Order<'a> {
     /// Create an Order for an Account
-    pub async fn orders(
+    pub async fn post_orders(
         &self,
         authorization: String,
         accept_datetime_format: AcceptDatetimeFormat,

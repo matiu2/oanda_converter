@@ -1,15 +1,15 @@
-use chrono::DateTime;
-use definitions::client_extensions::ClientExtensions;
-use definitions::decimal_number::DecimalNumber;
 use definitions::order_id::OrderID;
-use definitions::order_type::OrderType;
-use definitions::price_value::PriceValue;
-use definitions::order_state::OrderState;
 use definitions::time_in_force::TimeInForce;
+use chrono::DateTime;
 use definitions::client_id::ClientID;
-use definitions::trade_id::TradeID;
-use definitions::transaction_id::TransactionID;
+use definitions::client_extensions::ClientExtensions;
+use definitions::price_value::PriceValue;
 use definitions::order_trigger_condition::OrderTriggerCondition;
+use definitions::decimal_number::DecimalNumber;
+use definitions::order_state::OrderState;
+use definitions::trade_id::TradeID;
+use definitions::order_type::OrderType;
+use definitions::transaction_id::TransactionID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct StopLossOrder {

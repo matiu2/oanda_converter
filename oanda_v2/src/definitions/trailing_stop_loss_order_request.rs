@@ -1,11 +1,11 @@
-use definitions::order_trigger_condition::OrderTriggerCondition;
-use chrono::DateTime;
-use definitions::trade_id::TradeID;
+use definitions::decimal_number::DecimalNumber;
 use definitions::time_in_force::TimeInForce;
 use definitions::client_id::ClientID;
+use chrono::DateTime;
 use definitions::order_type::OrderType;
-use definitions::decimal_number::DecimalNumber;
 use definitions::client_extensions::ClientExtensions;
+use definitions::trade_id::TradeID;
+use definitions::order_trigger_condition::OrderTriggerCondition;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct TrailingStopLossOrderRequest {

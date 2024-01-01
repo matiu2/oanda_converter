@@ -1,7 +1,7 @@
-use endpoints::position::Position;
 use endpoints::order::Order;
-use endpoints::transaction::Transaction;
 use definitions::trade_summary::TradeSummary;
+use endpoints::position::Position;
+use endpoints::transaction::Transaction;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct AccountChanges {

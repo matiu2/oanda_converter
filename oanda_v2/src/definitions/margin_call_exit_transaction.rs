@@ -1,8 +1,8 @@
-use definitions::request_id::RequestID;
-use definitions::account_id::AccountID;
-use definitions::transaction_id::TransactionID;
-use chrono::DateTime;
 use definitions::transaction_type::TransactionType;
+use definitions::account_id::AccountID;
+use chrono::DateTime;
+use definitions::request_id::RequestID;
+use definitions::transaction_id::TransactionID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct MarginCallExitTransaction {

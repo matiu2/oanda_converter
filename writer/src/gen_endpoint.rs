@@ -47,6 +47,8 @@ impl CallName for RestCall {
         })?;
         let s = if last_segment.starts_with('{') {
             lower_case(&self.http_method.to_string())
+        } else if self.http_method == HttpMethod::Post {
+            format!("post_{last_segment}")
         } else {
             last_segment.to_string()
         };

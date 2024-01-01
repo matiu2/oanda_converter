@@ -1,14 +1,14 @@
-use definitions::stop_loss_details::StopLossDetails;
+use definitions::instrument_name::InstrumentName;
+use definitions::order_type::OrderType;
 use definitions::price_value::PriceValue;
+use definitions::stop_loss_details::StopLossDetails;
+use definitions::guaranteed_stop_loss_details::GuaranteedStopLossDetails;
 use definitions::time_in_force::TimeInForce;
 use definitions::order_position_fill::OrderPositionFill;
 use definitions::client_extensions::ClientExtensions;
-use definitions::trailing_stop_loss_details::TrailingStopLossDetails;
-use definitions::guaranteed_stop_loss_details::GuaranteedStopLossDetails;
-use definitions::order_type::OrderType;
-use definitions::decimal_number::DecimalNumber;
-use definitions::instrument_name::InstrumentName;
 use definitions::take_profit_details::TakeProfitDetails;
+use definitions::trailing_stop_loss_details::TrailingStopLossDetails;
+use definitions::decimal_number::DecimalNumber;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct MarketOrderRequest {

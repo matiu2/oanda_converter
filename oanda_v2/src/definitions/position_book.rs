@@ -1,5 +1,5 @@
-use definitions::position_book_bucket::PositionBookBucket;
 use definitions::instrument_name::InstrumentName;
+use definitions::position_book_bucket::PositionBookBucket;
 use chrono::DateTime;
 use definitions::price_value::PriceValue;
 use serde::{Serialize, Deserialize};

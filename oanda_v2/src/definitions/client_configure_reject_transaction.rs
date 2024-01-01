@@ -1,10 +1,10 @@
+use definitions::request_id::RequestID;
 use chrono::DateTime;
+use definitions::transaction_id::TransactionID;
+use definitions::decimal_number::DecimalNumber;
+use definitions::transaction_reject_reason::TransactionRejectReason;
 use definitions::transaction_type::TransactionType;
 use definitions::account_id::AccountID;
-use definitions::request_id::RequestID;
-use definitions::transaction_id::TransactionID;
-use definitions::transaction_reject_reason::TransactionRejectReason;
-use definitions::decimal_number::DecimalNumber;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct ClientConfigureRejectTransaction {

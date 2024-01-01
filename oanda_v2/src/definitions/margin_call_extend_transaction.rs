@@ -1,8 +1,8 @@
+use chrono::DateTime;
 use definitions::request_id::RequestID;
 use definitions::account_id::AccountID;
-use definitions::transaction_type::TransactionType;
-use chrono::DateTime;
 use definitions::transaction_id::TransactionID;
+use definitions::transaction_type::TransactionType;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct MarginCallExtendTransaction {

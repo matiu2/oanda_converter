@@ -56,7 +56,7 @@ pub struct ResponseHeader {
     pub description: String,
 }
 
-#[derive(Display, Default, FromStr, PartialEq, Debug, Serialize, Deserialize)]
+#[derive(Display, Default, FromStr, PartialEq, Eq, Debug, Serialize, Deserialize)]
 #[display(style = "UPPERCASE")]
 pub enum HttpMethod {
     #[default]
