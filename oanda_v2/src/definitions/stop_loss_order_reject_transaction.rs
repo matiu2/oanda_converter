@@ -1,18 +1,18 @@
-use crate::definitions::time_in_force::TimeInForce;
-use crate::definitions::transaction_reject_reason::TransactionRejectReason;
 use crate::definitions::order_trigger_condition::OrderTriggerCondition;
-use crate::definitions::stop_loss_order_reason::StopLossOrderReason;
-use crate::definitions::transaction_id::TransactionID;
-use crate::definitions::transaction_type::TransactionType;
-use crate::chrono::DateTime;
-use crate::definitions::request_id::RequestID;
-use crate::definitions::client_extensions::ClientExtensions;
-use crate::definitions::order_id::OrderID;
-use crate::definitions::account_id::AccountID;
-use crate::definitions::trade_id::TradeID;
-use crate::definitions::price_value::PriceValue;
 use crate::definitions::client_id::ClientID;
+use chrono::DateTime;
+use crate::definitions::transaction_id::TransactionID;
+use crate::definitions::time_in_force::TimeInForce;
 use crate::definitions::decimal_number::DecimalNumber;
+use crate::definitions::transaction_reject_reason::TransactionRejectReason;
+use crate::definitions::request_id::RequestID;
+use crate::definitions::trade_id::TradeID;
+use crate::definitions::stop_loss_order_reason::StopLossOrderReason;
+use crate::definitions::price_value::PriceValue;
+use crate::definitions::client_extensions::ClientExtensions;
+use crate::definitions::transaction_type::TransactionType;
+use crate::definitions::account_id::AccountID;
+use crate::definitions::order_id::OrderID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct StopLossOrderRejectTransaction {

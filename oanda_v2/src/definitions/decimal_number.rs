@@ -3,7 +3,7 @@ use serde::{Serialize, Deserialize};
 ///
 /// A decimal number encoded as a string. The amount of
 /// precision provided depends on what the number represents.
-struct DecimalNumber(String);
+pub struct DecimalNumber(String);
 impl std::ops::Deref for DecimalNumber {
     type Target = str;
     fn deref(&self) -> &Self::Target {

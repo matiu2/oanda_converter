@@ -7,7 +7,7 @@ use serde::{Serialize, Deserialize};
 /// opened the Trade.
 ///
 /// Example: 1523
-struct TradeID(String);
+pub struct TradeID(String);
 impl std::ops::Deref for TradeID {
     type Target = str;
     fn deref(&self) -> &Self::Target {

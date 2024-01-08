@@ -1,7 +1,7 @@
-use crate::definitions::client_extensions::ClientExtensions;
-use crate::chrono::DateTime;
-use crate::definitions::order_id::OrderID;
 use crate::definitions::order_state::OrderState;
+use crate::definitions::client_extensions::ClientExtensions;
+use crate::definitions::order_id::OrderID;
+use chrono::DateTime;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Order {

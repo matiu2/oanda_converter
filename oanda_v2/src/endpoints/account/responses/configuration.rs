@@ -1,7 +1,5 @@
-use crate::definitions::client_configure_transaction::ClientConfigureTransaction;
 use crate::definitions::transaction_id::TransactionID;
-use crate::endpoints::account::responses::configuration::Configuration403;
-use crate::endpoints::account::responses::configuration::Configuration400;
+use crate::definitions::client_configure_transaction::ClientConfigureTransaction;
 use crate::definitions::client_configure_reject_transaction::ClientConfigureRejectTransaction;
 /// The Account was configured successfully.
 #[derive(Serialize, Deserialize)]
@@ -19,6 +17,7 @@ impl Default for Configuration200 {
         }
     }
 }
+use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Configuration400 {
     /// The transaction that rejects the configuration of the

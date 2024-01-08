@@ -7,7 +7,7 @@ use serde::{Serialize, Deserialize};
 /// created the Order.
 ///
 /// Example: 1523
-struct OrderID(String);
+pub struct OrderID(String);
 impl std::ops::Deref for OrderID {
     type Target = str;
     fn deref(&self) -> &Self::Target {

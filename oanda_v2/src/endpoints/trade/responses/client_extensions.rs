@@ -1,8 +1,6 @@
-use crate::definitions::trade_client_extensions_modify_reject_transaction::TradeClientExtensionsModifyRejectTransaction;
-use crate::endpoints::trade::responses::client_extensions::ClientExtensions400;
-use crate::definitions::trade_client_extensions_modify_transaction::TradeClientExtensionsModifyTransaction;
-use crate::endpoints::trade::responses::client_extensions::ClientExtensions404;
 use crate::definitions::transaction_id::TransactionID;
+use crate::definitions::trade_client_extensions_modify_transaction::TradeClientExtensionsModifyTransaction;
+use crate::definitions::trade_client_extensions_modify_reject_transaction::TradeClientExtensionsModifyRejectTransaction;
 /// The Trade’s Client Extensions have been updated as
 /// requested.
 #[derive(Serialize, Deserialize)]
@@ -27,6 +25,7 @@ impl Default for ClientExtensions200 {
         }
     }
 }
+use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct ClientExtensions400 {
     /// The Transaction that rejects the modification of the Trade’s

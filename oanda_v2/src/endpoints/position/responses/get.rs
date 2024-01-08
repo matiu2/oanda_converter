@@ -1,5 +1,5 @@
-use crate::endpoints::position::Position;
 use crate::definitions::transaction_id::TransactionID;
+use crate::endpoints::position::Position;
 /// The Position is provided.
 #[derive(Serialize, Deserialize)]
 pub struct Get200 {

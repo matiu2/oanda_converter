@@ -5,7 +5,7 @@ use serde::{Serialize, Deserialize};
 /// Order’s client-provided ClientID prefixed by the “@” symbol
 ///
 /// Example: 1523
-struct OrderSpecifier(String);
+pub struct OrderSpecifier(String);
 impl std::ops::Deref for OrderSpecifier {
     type Target = str;
     fn deref(&self) -> &Self::Target {

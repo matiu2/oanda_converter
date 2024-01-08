@@ -1,10 +1,8 @@
-use crate::definitions::market_order_transaction::MarketOrderTransaction;
-use crate::endpoints::position::responses::close::Close404;
-use crate::definitions::transaction_id::TransactionID;
 use crate::definitions::market_order_reject_transaction::MarketOrderRejectTransaction;
-use crate::definitions::order_cancel_transaction::OrderCancelTransaction;
+use crate::definitions::market_order_transaction::MarketOrderTransaction;
 use crate::definitions::order_fill_transaction::OrderFillTransaction;
-use crate::endpoints::position::responses::close::Close400;
+use crate::definitions::order_cancel_transaction::OrderCancelTransaction;
+use crate::definitions::transaction_id::TransactionID;
 /// The Trade has been closed as requested
 #[derive(Serialize, Deserialize)]
 pub struct Close200 {
@@ -34,6 +32,7 @@ impl Default for Close200 {
         }
     }
 }
+use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Close400 {
     /// The MarketOrderReject Transaction that rejects the creation

@@ -5,7 +5,7 @@ use serde::{Serialize, Deserialize};
 /// Order or Trade.
 ///
 /// This is a client comment
-struct ClientComment(String);
+pub struct ClientComment(String);
 impl std::ops::Deref for ClientComment {
     type Target = str;
     fn deref(&self) -> &Self::Target {

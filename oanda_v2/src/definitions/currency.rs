@@ -3,7 +3,7 @@ use serde::{Serialize, Deserialize};
 /// currencies.
 ///
 /// A string containing an ISO 4217 currency (
-struct Currency(String);
+pub struct Currency(String);
 impl std::ops::Deref for Currency {
     type Target = str;
     fn deref(&self) -> &Self::Target {

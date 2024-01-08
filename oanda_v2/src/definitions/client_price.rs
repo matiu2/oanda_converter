@@ -1,7 +1,7 @@
-use crate::chrono::DateTime;
-use crate::definitions::price_bucket::PriceBucket;
-use crate::definitions::instrument_name::InstrumentName;
 use crate::definitions::price_value::PriceValue;
+use crate::definitions::instrument_name::InstrumentName;
+use chrono::DateTime;
+use crate::definitions::price_bucket::PriceBucket;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct ClientPrice {

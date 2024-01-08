@@ -1,6 +1,6 @@
+use chrono::DateTime;
 use crate::definitions::client_price::ClientPrice;
 use crate::definitions::home_conversions::HomeConversions;
-use crate::chrono::DateTime;
 /// Pricing information has been successfully provided.
 #[derive(Serialize, Deserialize)]
 pub struct Pricing200 {

@@ -1,8 +1,8 @@
-use crate::definitions::transaction_id::TransactionID;
-use crate::definitions::account_id::AccountID;
-use crate::chrono::DateTime;
 use crate::definitions::request_id::RequestID;
+use chrono::DateTime;
+use crate::definitions::account_id::AccountID;
 use crate::definitions::transaction_type::TransactionType;
+use crate::definitions::transaction_id::TransactionID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct CloseTransaction {

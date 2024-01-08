@@ -5,7 +5,7 @@ use serde::{Serialize, Deserialize};
 /// Trade’s client-provided ClientID prefixed by the “@” symbol
 ///
 /// Example: @my_trade_id
-struct TradeSpecifier(String);
+pub struct TradeSpecifier(String);
 impl std::ops::Deref for TradeSpecifier {
     type Target = str;
     fn deref(&self) -> &Self::Target {

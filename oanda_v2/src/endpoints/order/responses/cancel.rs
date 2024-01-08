@@ -1,6 +1,5 @@
 use crate::definitions::transaction_id::TransactionID;
 use crate::definitions::order_cancel_transaction::OrderCancelTransaction;
-use crate::endpoints::order::responses::cancel::Cancel404;
 use crate::definitions::order_cancel_reject_transaction::OrderCancelRejectTransaction;
 /// The Order was cancelled as specified
 #[derive(Serialize, Deserialize)]
@@ -23,6 +22,7 @@ impl Default for Cancel200 {
         }
     }
 }
+use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Cancel404 {
     /// The Transaction that rejected the cancellation of the Order.

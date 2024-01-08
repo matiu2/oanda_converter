@@ -19,7 +19,7 @@ fn main() -> Result<()> {
     let mod_name = ModName::new("src").add_part("lib");
     let files_to_ignore = ["host", "error", "lib", "client"]
         .into_iter()
-        .map(|s| ModName::new(base_path).add_part(s))
+        .map(|s| ModName::new(base_path).add_part("lib").add_part(s))
         .collect();
     let known_sources = vec![
         ("DateTime", ModName::new("").add_part("chrono")),

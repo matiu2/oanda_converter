@@ -1,8 +1,6 @@
-use crate::endpoints::trade::responses::client_extensions::ClientExtensions404;
-use crate::endpoints::trade::responses::client_extensions::ClientExtensions400;
+use crate::definitions::order_client_extensions_modify_transaction::OrderClientExtensionsModifyTransaction;
 use crate::definitions::order_client_extensions_modify_reject_transaction::OrderClientExtensionsModifyRejectTransaction;
 use crate::definitions::transaction_id::TransactionID;
-use crate::definitions::order_client_extensions_modify_transaction::OrderClientExtensionsModifyTransaction;
 /// The Order’s Client Extensions were successfully modified
 #[derive(Serialize, Deserialize)]
 pub struct ClientExtensions200 {
@@ -27,6 +25,7 @@ impl Default for ClientExtensions200 {
         }
     }
 }
+use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct ClientExtensions400 {
     /// The Transaction that rejected the modification of the Client

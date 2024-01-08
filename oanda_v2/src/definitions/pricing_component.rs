@@ -3,7 +3,7 @@ use serde::{Serialize, Deserialize};
 ///
 /// Can contain any combination of the characters “M” (midpoint
 /// candles) “B” (bid candles) and “A” (ask candles).
-struct PricingComponent(String);
+pub struct PricingComponent(String);
 impl std::ops::Deref for PricingComponent {
     type Target = str;
     fn deref(&self) -> &Self::Target {

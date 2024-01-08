@@ -1,6 +1,6 @@
-use crate::definitions::candlestick_granularity::CandlestickGranularity;
 use crate::definitions::instrument_name::InstrumentName;
 use crate::definitions::candlestick::Candlestick;
+use crate::definitions::candlestick_granularity::CandlestickGranularity;
 /// Pricing information has been successfully provided.
 #[derive(Serialize, Deserialize)]
 pub struct Candles200 {

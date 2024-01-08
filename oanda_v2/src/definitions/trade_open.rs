@@ -1,8 +1,8 @@
 use crate::definitions::client_extensions::ClientExtensions;
-use crate::definitions::decimal_number::DecimalNumber;
 use crate::definitions::trade_id::TradeID;
-use crate::definitions::price_value::PriceValue;
 use crate::definitions::account_units::AccountUnits;
+use crate::definitions::decimal_number::DecimalNumber;
+use crate::definitions::price_value::PriceValue;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct TradeOpen {

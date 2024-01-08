@@ -1,8 +1,8 @@
 use crate::definitions::time_in_force::TimeInForce;
-use crate::chrono::DateTime;
+use crate::definitions::price_value::PriceValue;
 use crate::definitions::client_extensions::ClientExtensions;
 use crate::definitions::decimal_number::DecimalNumber;
-use crate::definitions::price_value::PriceValue;
+use chrono::DateTime;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct StopLossDetails {

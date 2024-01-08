@@ -47,7 +47,7 @@ pub fn gen_single_row(row: &Row, name: &str, struct_doc_string: &str) -> Result<
         pretty_doc_string(&doc_string).change_context_lazy(|| Error::new("Creating doc string"))?;
     Ok(quote! {
         #(#doc_string)*
-        struct #struct_name(#type_name);
+        pub struct #struct_name(#type_name);
 
         impl std::ops::Deref for #struct_name {
             type Target = str;

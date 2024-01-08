@@ -1,6 +1,6 @@
+use crate::definitions::account_units::AccountUnits;
 use crate::definitions::instrument_name::InstrumentName;
 use crate::definitions::position_side::PositionSide;
-use crate::definitions::account_units::AccountUnits;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Position {

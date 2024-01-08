@@ -1,16 +1,15 @@
-use crate::definitions::guaranteed_stop_loss_order_transaction::GuaranteedStopLossOrderTransaction;
-use crate::definitions::order_cancel_transaction::OrderCancelTransaction;
-use crate::definitions::order_fill_transaction::OrderFillTransaction;
+use crate::definitions::take_profit_order_reject_transaction::TakeProfitOrderRejectTransaction;
 use crate::definitions::guaranteed_stop_loss_order_reject_transaction::GuaranteedStopLossOrderRejectTransaction;
-use crate::endpoints::trade::responses::orders::Orders400;
-use crate::definitions::trailing_stop_loss_order_transaction::TrailingStopLossOrderTransaction;
-use crate::definitions::take_profit_order_transaction::TakeProfitOrderTransaction;
+use crate::definitions::guaranteed_stop_loss_order_transaction::GuaranteedStopLossOrderTransaction;
 use crate::definitions::trailing_stop_loss_order_reject_transaction::TrailingStopLossOrderRejectTransaction;
 use crate::definitions::transaction_id::TransactionID;
-use crate::definitions::take_profit_order_reject_transaction::TakeProfitOrderRejectTransaction;
-use crate::definitions::stop_loss_order_reject_transaction::StopLossOrderRejectTransaction;
 use crate::definitions::stop_loss_order_transaction::StopLossOrderTransaction;
 use crate::definitions::order_cancel_reject_transaction::OrderCancelRejectTransaction;
+use crate::definitions::trailing_stop_loss_order_transaction::TrailingStopLossOrderTransaction;
+use crate::definitions::order_fill_transaction::OrderFillTransaction;
+use crate::definitions::order_cancel_transaction::OrderCancelTransaction;
+use crate::definitions::take_profit_order_transaction::TakeProfitOrderTransaction;
+use crate::definitions::stop_loss_order_reject_transaction::StopLossOrderRejectTransaction;
 /// The Trade’s dependent Orders have been modified as
 /// requested.
 #[derive(Serialize, Deserialize)]
@@ -82,6 +81,7 @@ impl Default for Orders200 {
         }
     }
 }
+use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Orders400 {
     /// An OrderCancelRejectTransaction represents the rejection of

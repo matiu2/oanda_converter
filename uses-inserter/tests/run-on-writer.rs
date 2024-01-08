@@ -6,7 +6,7 @@ fn test_run_on_writer() {
     pretty_env_logger::init();
     let base_path = "../oanda_v2/src";
     let mod_name = ModName::new(base_path).add_part("lib");
-    let files_to_ignore = ["host"]
+    let files_to_ignore = ["host", "error", "client"]
         .into_iter()
         .map(|s| ModName::new(base_path).add_part(s))
         .collect();

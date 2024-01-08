@@ -202,7 +202,6 @@ pub fn gen_endpoint(endpoint: &Endpoint) -> Result<TokenStream> {
         .collect::<Result<Vec<TokenStream>>>()?;
 
     Ok(quote!(
-        use crate::{client::Client, Error, Result};
         use serde::{Serialize, Deserialize};
 
         pub mod responses;

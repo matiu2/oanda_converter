@@ -4,7 +4,7 @@ use serde::{Serialize, Deserialize};
 /// provided.
 ///
 /// my_order_id
-struct ClientID(String);
+pub struct ClientID(String);
 impl std::ops::Deref for ClientID {
     type Target = str;
     fn deref(&self) -> &Self::Target {

@@ -36,7 +36,6 @@ pub fn gen_client(mods: &[&str]) -> Result<TokenStream> {
         use error_stack::{report, ResultExt, Report};
         use reqwest::RequestBuilder;
         use serde::de::DeserializeOwned;
-        use crate::{Error, host::Host, Result};
         #(#mods)*
 
         #[derive(Debug, Clone)]
@@ -159,7 +158,6 @@ pub fn gen_client(mods: &[&str]) -> Result<TokenStream> {
 
         #[cfg(test)]
         mod test_utils {
-            use crate::{Client, Error};
             use error_stack::{IntoReport, Result, ResultExt};
             use lazy_static::lazy_static;
             use std::sync::Mutex;

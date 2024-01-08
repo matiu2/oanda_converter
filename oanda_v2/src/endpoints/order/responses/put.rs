@@ -1,9 +1,7 @@
-use crate::definitions::order_cancel_transaction::OrderCancelTransaction;
-use crate::definitions::transaction_id::TransactionID;
-use crate::endpoints::order::responses::put::Put400;
-use crate::endpoints::order::responses::put::Put404;
-use crate::definitions::order_fill_transaction::OrderFillTransaction;
 use crate::endpoints::transaction::Transaction;
+use crate::definitions::order_fill_transaction::OrderFillTransaction;
+use crate::definitions::transaction_id::TransactionID;
+use crate::definitions::order_cancel_transaction::OrderCancelTransaction;
 /// The Order was successfully cancelled and replaced
 #[derive(Serialize, Deserialize)]
 pub struct Put201 {
@@ -50,6 +48,7 @@ impl Default for Put201 {
         }
     }
 }
+use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Put400 {
     /// The Transaction that rejected the creation of the replacing

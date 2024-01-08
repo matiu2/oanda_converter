@@ -118,7 +118,6 @@ impl Client {
             }
         } else {
             match body {
-                // We have a good status code and a good body; parse the json
                 Ok(body) => serde_json::from_str(&body)
                     .map_err(Report::from)
                     .change_context_lazy(|| Error::new("Parsing json"))
@@ -131,32 +130,3 @@ impl Client {
         .attach_printable_lazy(|| format!("URL: {url}"))
     }
 }
-
-// TODO: Put this functionality back
-// #[cfg(test)]
-// mod test_utils {
-//     use super::Client;
-//     use crate::{Error, Result};
-//     use lazy_static::lazy_static;
-//     use std::sync::Mutex;
-//     lazy_static! {
-//         static ref ACCOUNT_ID: Mutex<Option<String>> = Mutex::new(None);
-//     }
-//     pub async fn get_account_id(client: &Client) -> Result<String> {
-//         let mut account_id = ACCOUNT_ID.lock().unwrap();
-//         if let Some(account_id) = account_id.as_ref() {
-//             Ok(account_id.clone())
-//         } else {
-//             let accounts = client.accounts().list().await?;
-//             let out = accounts
-//                 .into_iter()
-//                 .next()
-//                 .ok_or_else(|| Error::Other)
-//                 .map_err(Report::from)
-//                 .attach_printable_lazy(|| "No oanda accounts found")?
-//                 .id;
-//             *account_id = Some(out.clone());
-//             Ok(out)
-//         }
-//     }
-// }

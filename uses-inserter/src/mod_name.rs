@@ -23,6 +23,7 @@ impl<'a> ModName<'a> {
             .iter()
             .map(Cow::as_ref)
             .enumerate()
+            .filter(|(i, p)| !(*i == 0 && *p == "crate"))
             .flat_map(move |(i, p)| match (i, p) {
                 // If it's the last in the list, don't filter it
                 (i, p) if i == ln - 1 => Some(p),
@@ -54,7 +55,7 @@ impl<'a> ModName<'a> {
     /// The part to put after "uses" when you import this module
     /// eg. crate::mod1::mod2
     pub fn mod_name(&self) -> String {
-        format!("crate::{parts}", parts = self.parts_for_mod().join("::"))
+        self.mod_parts().join("::")
     }
 
     /// The mod parts split by '::'
@@ -64,8 +65,12 @@ impl<'a> ModName<'a> {
     }
 
     pub fn add_part(mut self, part: impl ToString) -> ModName<'a> {
-        // Take lib off of the end if that was a thing
-        self.parts.retain(|p| p != "lib");
+        // If the first part is "lib" change it to "crate"
+        if let Some(first) = self.parts.first_mut() {
+            if first == "lib" {
+                *first = "crate".into()
+            }
+        }
         self.parts.push(part.to_string().into());
         self
     }

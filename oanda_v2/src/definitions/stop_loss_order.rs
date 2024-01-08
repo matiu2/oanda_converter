@@ -1,15 +1,15 @@
-use crate::definitions::order_state::OrderState;
+use crate::definitions::order_id::OrderID;
+use crate::definitions::trade_id::TradeID;
+use crate::definitions::price_value::PriceValue;
+use crate::definitions::client_extensions::ClientExtensions;
+use crate::definitions::time_in_force::TimeInForce;
 use crate::definitions::decimal_number::DecimalNumber;
 use crate::definitions::order_trigger_condition::OrderTriggerCondition;
-use crate::definitions::time_in_force::TimeInForce;
-use crate::definitions::client_extensions::ClientExtensions;
-use crate::definitions::trade_id::TradeID;
-use crate::definitions::order_type::OrderType;
-use crate::definitions::client_id::ClientID;
-use crate::definitions::price_value::PriceValue;
-use crate::chrono::DateTime;
-use crate::definitions::order_id::OrderID;
+use chrono::DateTime;
 use crate::definitions::transaction_id::TransactionID;
+use crate::definitions::order_type::OrderType;
+use crate::definitions::order_state::OrderState;
+use crate::definitions::client_id::ClientID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct StopLossOrder {

@@ -1,7 +1,7 @@
-use crate::definitions::time_in_force::TimeInForce;
 use crate::definitions::price_value::PriceValue;
-use crate::chrono::DateTime;
+use chrono::DateTime;
 use crate::definitions::client_extensions::ClientExtensions;
+use crate::definitions::time_in_force::TimeInForce;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct TakeProfitDetails {

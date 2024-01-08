@@ -1,21 +1,21 @@
 use crate::definitions::time_in_force::TimeInForce;
-use crate::definitions::guaranteed_stop_loss_details::GuaranteedStopLossDetails;
-use crate::definitions::request_id::RequestID;
-use crate::definitions::account_id::AccountID;
-use crate::definitions::instrument_name::InstrumentName;
-use crate::definitions::decimal_number::DecimalNumber;
-use crate::definitions::order_trigger_condition::OrderTriggerCondition;
+use crate::definitions::market_if_touched_order_reason::MarketIfTouchedOrderReason;
+use crate::definitions::stop_loss_details::StopLossDetails;
+use crate::definitions::transaction_type::TransactionType;
 use crate::definitions::order_position_fill::OrderPositionFill;
-use crate::chrono::DateTime;
+use crate::definitions::guaranteed_stop_loss_details::GuaranteedStopLossDetails;
+use crate::definitions::order_id::OrderID;
 use crate::definitions::client_extensions::ClientExtensions;
+use chrono::DateTime;
+use crate::definitions::request_id::RequestID;
+use crate::definitions::instrument_name::InstrumentName;
 use crate::definitions::price_value::PriceValue;
-use crate::definitions::transaction_id::TransactionID;
+use crate::definitions::decimal_number::DecimalNumber;
 use crate::definitions::take_profit_details::TakeProfitDetails;
 use crate::definitions::trailing_stop_loss_details::TrailingStopLossDetails;
-use crate::definitions::order_id::OrderID;
-use crate::definitions::stop_loss_details::StopLossDetails;
-use crate::definitions::market_if_touched_order_reason::MarketIfTouchedOrderReason;
-use crate::definitions::transaction_type::TransactionType;
+use crate::definitions::order_trigger_condition::OrderTriggerCondition;
+use crate::definitions::transaction_id::TransactionID;
+use crate::definitions::account_id::AccountID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct MarketIfTouchedOrderTransaction {

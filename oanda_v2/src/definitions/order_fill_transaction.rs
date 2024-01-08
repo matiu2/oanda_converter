@@ -1,19 +1,19 @@
+use crate::definitions::order_fill_reason::OrderFillReason;
 use crate::definitions::trade_reduce::TradeReduce;
-use crate::definitions::account_units::AccountUnits;
+use crate::definitions::order_id::OrderID;
+use crate::definitions::price_value::PriceValue;
+use crate::definitions::client_id::ClientID;
+use crate::definitions::home_conversion_factors::HomeConversionFactors;
+use crate::definitions::transaction_id::TransactionID;
+use chrono::DateTime;
+use crate::definitions::trade_open::TradeOpen;
+use crate::definitions::client_price::ClientPrice;
+use crate::definitions::account_id::AccountID;
+use crate::definitions::transaction_type::TransactionType;
 use crate::definitions::request_id::RequestID;
 use crate::definitions::decimal_number::DecimalNumber;
-use crate::definitions::client_price::ClientPrice;
-use crate::definitions::trade_open::TradeOpen;
-use crate::definitions::transaction_id::TransactionID;
-use crate::definitions::home_conversion_factors::HomeConversionFactors;
-use crate::definitions::price_value::PriceValue;
-use crate::definitions::order_fill_reason::OrderFillReason;
-use crate::chrono::DateTime;
-use crate::definitions::order_id::OrderID;
-use crate::definitions::transaction_type::TransactionType;
-use crate::definitions::account_id::AccountID;
-use crate::definitions::client_id::ClientID;
 use crate::definitions::instrument_name::InstrumentName;
+use crate::definitions::account_units::AccountUnits;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct OrderFillTransaction {

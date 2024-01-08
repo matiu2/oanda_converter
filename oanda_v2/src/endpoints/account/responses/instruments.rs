@@ -1,5 +1,5 @@
-use crate::definitions::transaction_id::TransactionID;
 use crate::definitions::instrument::Instrument;
+use crate::definitions::transaction_id::TransactionID;
 /// The list of tradeable instruments for the Account has been
 /// provided.
 #[derive(Serialize, Deserialize)]

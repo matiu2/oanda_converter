@@ -61,6 +61,8 @@ pub fn gen_responses_for_call(call: &RestCall) -> Result<TokenStream> {
         };
 
         quote! {
+            use serde::{Serialize, Deserialize};
+
             #structs
 
             #error

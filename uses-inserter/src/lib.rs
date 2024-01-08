@@ -19,10 +19,7 @@ pub use mod_name::ModName;
 use proc_macro2::{Ident, Span};
 use quote::quote;
 use recurse_sub_modules::recurse_sub_modules;
-use std::{
-    borrow::Cow,
-    collections::{HashMap, HashSet},
-};
+use std::collections::{HashMap, HashSet};
 use utils::stream_to_file;
 
 /// Represents a rust module. It's file/mod name + its contents
@@ -47,21 +44,8 @@ pub struct ModInfo<'a> {
 
 /// Given a rust module address, recursively collects all type declarations and type usages (requirements).
 /// The ultimate goal is to insert the use statements at the top of each module so it'll compile
-pub fn mod_info_recursive<'a>(
-    start: ModName<'a>,
-    files_to_ignore: &HashSet<ModName<'a>>,
-) -> Result<Vec<ModInfo<'a>>> {
+pub fn mod_info_recursive(start: ModName<'_>) -> Result<Vec<ModInfo<'_>>> {
     recurse_sub_modules(start)
-        .filter(|r| match r {
-            Ok(m) => {
-                let should_ignore = files_to_ignore.contains(&m.mod_name);
-                if should_ignore {
-                    log::debug!("Ignoring file {}", &m.mod_name);
-                }
-                !should_ignore
-            }
-            Err(_) => true,
-        })
         .map(|r| {
             let m = r?;
             let declares = collect_declarations(&m.contents);
@@ -84,7 +68,7 @@ pub fn insert_uses_clauses<'a>(
     files_to_ignore: &HashSet<ModName<'a>>,
     known_sources: &HashMap<&'a str, ModName<'a>>,
 ) -> Result<()> {
-    let info = mod_info_recursive(start, files_to_ignore)?;
+    let info = mod_info_recursive(start)?;
     log::info!("info: {info:#?}");
     // Make a hashmap of which module declares which type
     let module_by_decl_type: HashMap<&str, &ModName> = info
@@ -103,9 +87,14 @@ pub fn insert_uses_clauses<'a>(
     log::info!("Things I need to be declared outside: {not_provided:#?}");
     // For each module, create the uses clause and insert it in the top of the file
     for m in &info {
+        if files_to_ignore.contains(&m.module.mod_name) {
+            continue;
+        }
         let uses = m
             .requires
             .iter()
+            // Skip if we declare the requirement ourself
+            .filter(|r| !m.declares.contains(r.as_str()))
             .inspect(|mods| {
                 log::info!("Getting: {mods:#?}");
             })
@@ -114,8 +103,8 @@ pub fn insert_uses_clauses<'a>(
                     .get(r.as_str())
                     .into_iter()
                     .map(|m| {
-                        std::iter::once(&Cow::from("crate"))
-                            .chain(m.mod_parts())
+                        m.mod_parts()
+                            .iter()
                             .map(|part| Ident::new(part, Span::call_site()))
                             .collect_vec()
                     })
