@@ -1,5 +1,5 @@
-use definitions::decimal_number::DecimalNumber;
-use definitions::financing_day_of_week::FinancingDayOfWeek;
+use crate::definitions::decimal_number::DecimalNumber;
+use crate::definitions::financing_day_of_week::FinancingDayOfWeek;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct InstrumentFinancing {
@@ -18,11 +18,10 @@ pub struct InstrumentFinancing {
 }
 impl Default for InstrumentFinancing {
     fn default() -> Self {
-        use Default::default;
         Self {
-            long_rate: default(),
-            short_rate: default(),
-            financing_days_of_week: default(),
+            long_rate: Default::default(),
+            short_rate: Default::default(),
+            financing_days_of_week: Default::default(),
         }
     }
 }

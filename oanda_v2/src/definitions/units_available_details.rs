@@ -1,4 +1,4 @@
-use definitions::decimal_number::DecimalNumber;
+use crate::definitions::decimal_number::DecimalNumber;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct UnitsAvailableDetails {
@@ -9,10 +9,9 @@ pub struct UnitsAvailableDetails {
 }
 impl Default for UnitsAvailableDetails {
     fn default() -> Self {
-        use Default::default;
         Self {
-            long: default(),
-            short: default(),
+            long: Default::default(),
+            short: Default::default(),
         }
     }
 }

@@ -1,9 +1,7 @@
-use definitions::account_changes_state::AccountChangesState;
-use definitions::transaction_id::TransactionID;
-use definitions::account_changes::AccountChanges;
-use serde::{Serialize, Deserialize};
+use crate::definitions::account_changes::AccountChanges;
+use crate::definitions::transaction_id::TransactionID;
+use crate::definitions::account_changes_state::AccountChangesState;
 /// The Account state and changes are provided.
-use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Changes200 {
     /// The changes to the Account’s Orders, Trades and Positions
@@ -20,11 +18,10 @@ pub struct Changes200 {
 }
 impl Default for Changes200 {
     fn default() -> Self {
-        use Default::default;
         Self {
-            changes: default(),
-            state: default(),
-            last_transaction_id: default(),
+            changes: Default::default(),
+            state: Default::default(),
+            last_transaction_id: Default::default(),
         }
     }
 }

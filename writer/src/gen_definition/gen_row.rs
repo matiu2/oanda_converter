@@ -80,8 +80,6 @@ pub fn gen_rows(rows: &[Row], enum_name: &str, enum_doc_string: &str) -> Result<
         })
         .collect::<Result<Vec<TokenStream>>>()?;
     Ok(quote! {
-        use serde::{Serialize, Deserialize};
-
         #(#doc_string)*
         #[derive(Deserialize, Serialize)]
         #[serde(rename_all="SCREAMING_SNAKE_CASE")]

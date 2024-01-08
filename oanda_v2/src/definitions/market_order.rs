@@ -1,23 +1,23 @@
-use definitions::instrument_name::InstrumentName;
-use definitions::decimal_number::DecimalNumber;
-use definitions::take_profit_details::TakeProfitDetails;
-use definitions::market_order_trade_close::MarketOrderTradeClose;
-use definitions::market_order_position_closeout::MarketOrderPositionCloseout;
-use definitions::price_value::PriceValue;
-use definitions::order_position_fill::OrderPositionFill;
-use definitions::client_extensions::ClientExtensions;
-use chrono::DateTime;
-use definitions::order_type::OrderType;
-use definitions::order_id::OrderID;
-use definitions::order_state::OrderState;
-use definitions::market_order_delayed_trade_close::MarketOrderDelayedTradeClose;
-use definitions::market_order_margin_closeout::MarketOrderMarginCloseout;
-use definitions::stop_loss_details::StopLossDetails;
-use definitions::guaranteed_stop_loss_details::GuaranteedStopLossDetails;
-use definitions::trailing_stop_loss_details::TrailingStopLossDetails;
-use definitions::transaction_id::TransactionID;
-use definitions::trade_id::TradeID;
-use definitions::time_in_force::TimeInForce;
+use crate::definitions::market_order_position_closeout::MarketOrderPositionCloseout;
+use crate::definitions::order_state::OrderState;
+use crate::definitions::price_value::PriceValue;
+use crate::definitions::time_in_force::TimeInForce;
+use crate::definitions::take_profit_details::TakeProfitDetails;
+use crate::definitions::stop_loss_details::StopLossDetails;
+use crate::definitions::trade_id::TradeID;
+use crate::definitions::trailing_stop_loss_details::TrailingStopLossDetails;
+use crate::definitions::client_extensions::ClientExtensions;
+use crate::definitions::guaranteed_stop_loss_details::GuaranteedStopLossDetails;
+use crate::definitions::order_type::OrderType;
+use crate::definitions::transaction_id::TransactionID;
+use crate::definitions::instrument_name::InstrumentName;
+use crate::definitions::order_position_fill::OrderPositionFill;
+use crate::definitions::market_order_delayed_trade_close::MarketOrderDelayedTradeClose;
+use crate::definitions::market_order_margin_closeout::MarketOrderMarginCloseout;
+use crate::definitions::order_id::OrderID;
+use crate::definitions::market_order_trade_close::MarketOrderTradeClose;
+use crate::chrono::DateTime;
+use crate::definitions::decimal_number::DecimalNumber;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct MarketOrder {
@@ -128,35 +128,34 @@ pub struct MarketOrder {
 }
 impl Default for MarketOrder {
     fn default() -> Self {
-        use Default::default;
         Self {
-            id: default(),
-            create_time: default(),
-            state: default(),
-            client_extensions: default(),
+            id: Default::default(),
+            create_time: Default::default(),
+            state: Default::default(),
+            client_extensions: Default::default(),
             r#type: "MARKET",
-            instrument: default(),
-            units: default(),
+            instrument: Default::default(),
+            units: Default::default(),
             time_in_force: "FOK",
-            price_bound: default(),
+            price_bound: Default::default(),
             position_fill: "DEFAULT",
-            trade_close: default(),
-            long_position_closeout: default(),
-            short_position_closeout: default(),
-            margin_closeout: default(),
-            delayed_trade_close: default(),
-            take_profit_on_fill: default(),
-            stop_loss_on_fill: default(),
-            guaranteed_stop_loss_on_fill: default(),
-            trailing_stop_loss_on_fill: default(),
-            trade_client_extensions: default(),
-            filling_transaction_id: default(),
-            filled_time: default(),
-            trade_opened_id: default(),
-            trade_reduced_id: default(),
-            trade_closed_i_ds: default(),
-            cancelling_transaction_id: default(),
-            cancelled_time: default(),
+            trade_close: Default::default(),
+            long_position_closeout: Default::default(),
+            short_position_closeout: Default::default(),
+            margin_closeout: Default::default(),
+            delayed_trade_close: Default::default(),
+            take_profit_on_fill: Default::default(),
+            stop_loss_on_fill: Default::default(),
+            guaranteed_stop_loss_on_fill: Default::default(),
+            trailing_stop_loss_on_fill: Default::default(),
+            trade_client_extensions: Default::default(),
+            filling_transaction_id: Default::default(),
+            filled_time: Default::default(),
+            trade_opened_id: Default::default(),
+            trade_reduced_id: Default::default(),
+            trade_closed_i_ds: Default::default(),
+            cancelling_transaction_id: Default::default(),
+            cancelled_time: Default::default(),
         }
     }
 }

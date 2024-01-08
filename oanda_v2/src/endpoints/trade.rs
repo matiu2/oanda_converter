@@ -1,8 +1,9 @@
-use definitions::accept_datetime_format::AcceptDatetimeFormat;
-use definitions::trade_state_filter::TradeStateFilter;
-use definitions::instrument_name::InstrumentName;
-use definitions::trade_specifier::TradeSpecifier;
+use crate::definitions::trade_specifier::TradeSpecifier;
+use crate::definitions::accept_datetime_format::AcceptDatetimeFormat;
+use crate::definitions::instrument_name::InstrumentName;
+use crate::definitions::trade_state_filter::TradeStateFilter;
 use crate::{client::Client, Error, Result};
+use serde::{Serialize, Deserialize};
 pub mod responses;
 struct Trade<'a> {
     client: &'a Client,

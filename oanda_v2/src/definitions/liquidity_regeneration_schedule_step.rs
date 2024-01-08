@@ -1,5 +1,5 @@
-use chrono::DateTime;
-use definitions::decimal_number::DecimalNumber;
+use crate::definitions::decimal_number::DecimalNumber;
+use crate::chrono::DateTime;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct LiquidityRegenerationScheduleStep {
@@ -14,11 +14,10 @@ pub struct LiquidityRegenerationScheduleStep {
 }
 impl Default for LiquidityRegenerationScheduleStep {
     fn default() -> Self {
-        use Default::default;
         Self {
-            timestamp: default(),
-            bid_liquidity_used: default(),
-            ask_liquidity_used: default(),
+            timestamp: Default::default(),
+            bid_liquidity_used: Default::default(),
+            ask_liquidity_used: Default::default(),
         }
     }
 }

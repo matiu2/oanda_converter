@@ -1,12 +1,10 @@
-use definitions::trade_client_extensions_modify_reject_transaction::TradeClientExtensionsModifyRejectTransaction;
-use endpoints::trade::responses::client_extensions::ClientExtensions404;
-use endpoints::trade::responses::client_extensions::ClientExtensions400;
-use definitions::trade_client_extensions_modify_transaction::TradeClientExtensionsModifyTransaction;
-use definitions::transaction_id::TransactionID;
-use serde::{Serialize, Deserialize};
+use crate::definitions::trade_client_extensions_modify_reject_transaction::TradeClientExtensionsModifyRejectTransaction;
+use crate::endpoints::trade::responses::client_extensions::ClientExtensions400;
+use crate::definitions::trade_client_extensions_modify_transaction::TradeClientExtensionsModifyTransaction;
+use crate::endpoints::trade::responses::client_extensions::ClientExtensions404;
+use crate::definitions::transaction_id::TransactionID;
 /// The Trade’s Client Extensions have been updated as
 /// requested.
-use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct ClientExtensions200 {
     /// The Transaction that updates the Trade’s Client Extensions.
@@ -22,15 +20,13 @@ pub struct ClientExtensions200 {
 }
 impl Default for ClientExtensions200 {
     fn default() -> Self {
-        use Default::default;
         Self {
-            trade_client_extensions_modify_transaction: default(),
-            related_transaction_i_ds: default(),
-            last_transaction_id: default(),
+            trade_client_extensions_modify_transaction: Default::default(),
+            related_transaction_i_ds: Default::default(),
+            last_transaction_id: Default::default(),
         }
     }
 }
-use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct ClientExtensions400 {
     /// The Transaction that rejects the modification of the Trade’s
@@ -53,17 +49,15 @@ pub struct ClientExtensions400 {
 }
 impl Default for ClientExtensions400 {
     fn default() -> Self {
-        use Default::default;
         Self {
-            trade_client_extensions_modify_reject_transaction: default(),
-            last_transaction_id: default(),
-            related_transaction_i_ds: default(),
-            error_code: default(),
-            error_message: default(),
+            trade_client_extensions_modify_reject_transaction: Default::default(),
+            last_transaction_id: Default::default(),
+            related_transaction_i_ds: Default::default(),
+            error_code: Default::default(),
+            error_message: Default::default(),
         }
     }
 }
-use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct ClientExtensions404 {
     /// The Transaction that rejects the modification of the Trade’s
@@ -86,13 +80,12 @@ pub struct ClientExtensions404 {
 }
 impl Default for ClientExtensions404 {
     fn default() -> Self {
-        use Default::default;
         Self {
-            trade_client_extensions_modify_reject_transaction: default(),
-            last_transaction_id: default(),
-            related_transaction_i_ds: default(),
-            error_code: default(),
-            error_message: default(),
+            trade_client_extensions_modify_reject_transaction: Default::default(),
+            last_transaction_id: Default::default(),
+            related_transaction_i_ds: Default::default(),
+            error_code: Default::default(),
+            error_message: Default::default(),
         }
     }
 }

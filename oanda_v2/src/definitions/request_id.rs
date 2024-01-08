@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// The request identifier.
 ///
 ///

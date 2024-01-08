@@ -1,5 +1,5 @@
-use definitions::account_units::AccountUnits;
-use chrono::DateTime;
+use crate::definitions::account_units::AccountUnits;
+use crate::chrono::DateTime;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct AccumulatedAccountState {
@@ -34,18 +34,17 @@ pub struct AccumulatedAccountState {
 }
 impl Default for AccumulatedAccountState {
     fn default() -> Self {
-        use Default::default;
         Self {
-            balance: default(),
-            pl: default(),
-            resettable_pl: default(),
-            financing: default(),
-            commission: default(),
-            dividend_adjustment: default(),
-            guaranteed_execution_fees: default(),
-            margin_call_enter_time: default(),
-            margin_call_extension_count: default(),
-            last_margin_call_extension_time: default(),
+            balance: Default::default(),
+            pl: Default::default(),
+            resettable_pl: Default::default(),
+            financing: Default::default(),
+            commission: Default::default(),
+            dividend_adjustment: Default::default(),
+            guaranteed_execution_fees: Default::default(),
+            margin_call_enter_time: Default::default(),
+            margin_call_extension_count: Default::default(),
+            last_margin_call_extension_time: Default::default(),
         }
     }
 }

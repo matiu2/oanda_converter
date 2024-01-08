@@ -1,7 +1,7 @@
-use chrono::DateTime;
-use definitions::client_extensions::ClientExtensions;
-use definitions::price_value::PriceValue;
-use definitions::time_in_force::TimeInForce;
+use crate::definitions::time_in_force::TimeInForce;
+use crate::definitions::price_value::PriceValue;
+use crate::chrono::DateTime;
+use crate::definitions::client_extensions::ClientExtensions;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct TakeProfitDetails {
@@ -21,12 +21,11 @@ pub struct TakeProfitDetails {
 }
 impl Default for TakeProfitDetails {
     fn default() -> Self {
-        use Default::default;
         Self {
-            price: default(),
+            price: Default::default(),
             time_in_force: "GTC",
-            gtd_time: default(),
-            client_extensions: default(),
+            gtd_time: Default::default(),
+            client_extensions: Default::default(),
         }
     }
 }

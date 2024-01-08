@@ -18,8 +18,6 @@ pub fn gen_struct(s: &Struct, name: &str) -> Result<TokenStream> {
     let name = Ident::new(name, proc_macro2::Span::call_site());
     let defaults = gen_defaults(&s.fields, &name);
     Ok(quote! {
-        use serde::{Serialize, Deserialize};
-
         #[derive(Serialize, Deserialize)]
         pub struct #name {
             #(#fields)*
@@ -33,8 +31,6 @@ pub fn gen_struct(s: &Struct, name: &str) -> Result<TokenStream> {
 pub fn gen_typed_string(name: &str) -> Result<TokenStream> {
     let name = Ident::new(name, proc_macro2::Span::call_site());
     Ok(quote! {
-        use serde::{Serialize, Deserialize};
-
         #[derive(Serialize, Deserialize)]
         pub struct #name (String);
 
@@ -107,7 +103,7 @@ fn gen_defaults(fields: &[Field], name: &Ident) -> TokenStream {
         let default = default
             .as_deref()
             .map(|v| quote! { #v })
-            .unwrap_or_else(|| quote! { default() });
+            .unwrap_or_else(|| quote! { Default::default() });
         quote! {
             #name: #default
         }
@@ -116,7 +112,6 @@ fn gen_defaults(fields: &[Field], name: &Ident) -> TokenStream {
     quote! {
         impl Default for #name {
             fn default() -> Self {
-                use Default::default;
                 Self{
                     #(#fields),*
                 }

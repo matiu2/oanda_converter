@@ -1,4 +1,4 @@
-use definitions::guaranteed_stop_loss_order_mutability::GuaranteedStopLossOrderMutability;
+use crate::definitions::guaranteed_stop_loss_order_mutability::GuaranteedStopLossOrderMutability;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct GuaranteedStopLossOrderParameters {
@@ -11,10 +11,9 @@ pub struct GuaranteedStopLossOrderParameters {
 }
 impl Default for GuaranteedStopLossOrderParameters {
     fn default() -> Self {
-        use Default::default;
         Self {
-            mutability_market_open: default(),
-            mutability_market_halted: default(),
+            mutability_market_open: Default::default(),
+            mutability_market_halted: Default::default(),
         }
     }
 }

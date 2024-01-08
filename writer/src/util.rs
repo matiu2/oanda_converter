@@ -82,7 +82,7 @@ pub fn write_endpoints<'a>(
 
 /// Generate all the source code
 pub fn generate_source(base_path: &str, contents: &[Content]) -> Result<()> {
-    let mut mods = vec!["host"];
+    let mut mods = vec!["host", "error", "client"];
 
     write_definitions(base_path, &mut mods, contents)?;
     write_endpoints(base_path, &mut mods, contents)?;

@@ -1,8 +1,6 @@
-use endpoints::order::Order;
-use definitions::transaction_id::TransactionID;
-use serde::{Serialize, Deserialize};
+use crate::endpoints::order::Order;
+use crate::definitions::transaction_id::TransactionID;
 /// The list of Orders requested
-use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Orders200 {
     /// The list of Order detail objects
@@ -13,10 +11,9 @@ pub struct Orders200 {
 }
 impl Default for Orders200 {
     fn default() -> Self {
-        use Default::default;
         Self {
-            orders: default(),
-            last_transaction_id: default(),
+            orders: Default::default(),
+            last_transaction_id: Default::default(),
         }
     }
 }

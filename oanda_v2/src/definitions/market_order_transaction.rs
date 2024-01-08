@@ -1,23 +1,23 @@
-use definitions::request_id::RequestID;
-use definitions::decimal_number::DecimalNumber;
-use definitions::price_value::PriceValue;
-use definitions::market_order_reason::MarketOrderReason;
-use definitions::trailing_stop_loss_details::TrailingStopLossDetails;
-use definitions::market_order_trade_close::MarketOrderTradeClose;
-use definitions::market_order_delayed_trade_close::MarketOrderDelayedTradeClose;
-use definitions::guaranteed_stop_loss_details::GuaranteedStopLossDetails;
-use definitions::order_position_fill::OrderPositionFill;
-use definitions::market_order_margin_closeout::MarketOrderMarginCloseout;
-use definitions::transaction_type::TransactionType;
-use definitions::instrument_name::InstrumentName;
-use definitions::time_in_force::TimeInForce;
-use chrono::DateTime;
-use definitions::transaction_id::TransactionID;
-use definitions::account_id::AccountID;
-use definitions::market_order_position_closeout::MarketOrderPositionCloseout;
-use definitions::client_extensions::ClientExtensions;
-use definitions::take_profit_details::TakeProfitDetails;
-use definitions::stop_loss_details::StopLossDetails;
+use crate::definitions::time_in_force::TimeInForce;
+use crate::definitions::order_position_fill::OrderPositionFill;
+use crate::chrono::DateTime;
+use crate::definitions::market_order_reason::MarketOrderReason;
+use crate::definitions::transaction_id::TransactionID;
+use crate::definitions::price_value::PriceValue;
+use crate::definitions::market_order_margin_closeout::MarketOrderMarginCloseout;
+use crate::definitions::request_id::RequestID;
+use crate::definitions::transaction_type::TransactionType;
+use crate::definitions::market_order_position_closeout::MarketOrderPositionCloseout;
+use crate::definitions::account_id::AccountID;
+use crate::definitions::stop_loss_details::StopLossDetails;
+use crate::definitions::trailing_stop_loss_details::TrailingStopLossDetails;
+use crate::definitions::take_profit_details::TakeProfitDetails;
+use crate::definitions::market_order_delayed_trade_close::MarketOrderDelayedTradeClose;
+use crate::definitions::guaranteed_stop_loss_details::GuaranteedStopLossDetails;
+use crate::definitions::market_order_trade_close::MarketOrderTradeClose;
+use crate::definitions::decimal_number::DecimalNumber;
+use crate::definitions::instrument_name::InstrumentName;
+use crate::definitions::client_extensions::ClientExtensions;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct MarketOrderTransaction {
@@ -105,32 +105,31 @@ pub struct MarketOrderTransaction {
 }
 impl Default for MarketOrderTransaction {
     fn default() -> Self {
-        use Default::default;
         Self {
-            id: default(),
-            time: default(),
-            user_id: default(),
-            account_id: default(),
-            batch_id: default(),
-            request_id: default(),
+            id: Default::default(),
+            time: Default::default(),
+            user_id: Default::default(),
+            account_id: Default::default(),
+            batch_id: Default::default(),
+            request_id: Default::default(),
             r#type: "MARKET_ORDER",
-            instrument: default(),
-            units: default(),
+            instrument: Default::default(),
+            units: Default::default(),
             time_in_force: "FOK",
-            price_bound: default(),
+            price_bound: Default::default(),
             position_fill: "DEFAULT",
-            trade_close: default(),
-            long_position_closeout: default(),
-            short_position_closeout: default(),
-            margin_closeout: default(),
-            delayed_trade_close: default(),
-            reason: default(),
-            client_extensions: default(),
-            take_profit_on_fill: default(),
-            stop_loss_on_fill: default(),
-            trailing_stop_loss_on_fill: default(),
-            guaranteed_stop_loss_on_fill: default(),
-            trade_client_extensions: default(),
+            trade_close: Default::default(),
+            long_position_closeout: Default::default(),
+            short_position_closeout: Default::default(),
+            margin_closeout: Default::default(),
+            delayed_trade_close: Default::default(),
+            reason: Default::default(),
+            client_extensions: Default::default(),
+            take_profit_on_fill: Default::default(),
+            stop_loss_on_fill: Default::default(),
+            trailing_stop_loss_on_fill: Default::default(),
+            guaranteed_stop_loss_on_fill: Default::default(),
+            trade_client_extensions: Default::default(),
         }
     }
 }

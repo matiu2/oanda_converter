@@ -1,4 +1,4 @@
-use definitions::units_available_details::UnitsAvailableDetails;
+use crate::definitions::units_available_details::UnitsAvailableDetails;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct UnitsAvailable {
@@ -21,12 +21,11 @@ pub struct UnitsAvailable {
 }
 impl Default for UnitsAvailable {
     fn default() -> Self {
-        use Default::default;
         Self {
-            default: default(),
-            reduce_first: default(),
-            reduce_only: default(),
-            open_only: default(),
+            default: Default::default(),
+            reduce_first: Default::default(),
+            reduce_only: Default::default(),
+            open_only: Default::default(),
         }
     }
 }

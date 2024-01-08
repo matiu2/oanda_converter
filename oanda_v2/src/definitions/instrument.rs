@@ -1,11 +1,11 @@
-use definitions::guaranteed_stop_loss_order_mode_for_instrument::GuaranteedStopLossOrderModeForInstrument;
-use definitions::decimal_number::DecimalNumber;
-use definitions::instrument_commission::InstrumentCommission;
-use definitions::instrument_type::InstrumentType;
-use definitions::guaranteed_stop_loss_order_level_restriction::GuaranteedStopLossOrderLevelRestriction;
-use definitions::instrument_financing::InstrumentFinancing;
-use definitions::tag::Tag;
-use definitions::instrument_name::InstrumentName;
+use crate::definitions::instrument_financing::InstrumentFinancing;
+use crate::definitions::decimal_number::DecimalNumber;
+use crate::definitions::tag::Tag;
+use crate::definitions::instrument_name::InstrumentName;
+use crate::definitions::guaranteed_stop_loss_order_mode_for_instrument::GuaranteedStopLossOrderModeForInstrument;
+use crate::definitions::guaranteed_stop_loss_order_level_restriction::GuaranteedStopLossOrderLevelRestriction;
+use crate::definitions::instrument_commission::InstrumentCommission;
+use crate::definitions::instrument_type::InstrumentType;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Instrument {
@@ -76,27 +76,26 @@ pub struct Instrument {
 }
 impl Default for Instrument {
     fn default() -> Self {
-        use Default::default;
         Self {
-            name: default(),
-            r#type: default(),
-            display_name: default(),
-            pip_location: default(),
-            display_precision: default(),
-            trade_units_precision: default(),
-            minimum_trade_size: default(),
-            maximum_trailing_stop_distance: default(),
-            minimum_guaranteed_stop_loss_distance: default(),
-            minimum_trailing_stop_distance: default(),
-            maximum_position_size: default(),
-            maximum_order_units: default(),
-            margin_rate: default(),
-            commission: default(),
-            guaranteed_stop_loss_order_mode: default(),
-            guaranteed_stop_loss_order_execution_premium: default(),
-            guaranteed_stop_loss_order_level_restriction: default(),
-            financing: default(),
-            tags: default(),
+            name: Default::default(),
+            r#type: Default::default(),
+            display_name: Default::default(),
+            pip_location: Default::default(),
+            display_precision: Default::default(),
+            trade_units_precision: Default::default(),
+            minimum_trade_size: Default::default(),
+            maximum_trailing_stop_distance: Default::default(),
+            minimum_guaranteed_stop_loss_distance: Default::default(),
+            minimum_trailing_stop_distance: Default::default(),
+            maximum_position_size: Default::default(),
+            maximum_order_units: Default::default(),
+            margin_rate: Default::default(),
+            commission: Default::default(),
+            guaranteed_stop_loss_order_mode: Default::default(),
+            guaranteed_stop_loss_order_execution_premium: Default::default(),
+            guaranteed_stop_loss_order_level_restriction: Default::default(),
+            financing: Default::default(),
+            tags: Default::default(),
         }
     }
 }

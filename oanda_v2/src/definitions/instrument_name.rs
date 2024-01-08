@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// Instrument name identifier. Used by clients to refer to
 /// an Instrument.
 ///

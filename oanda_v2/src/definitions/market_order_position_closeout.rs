@@ -1,4 +1,4 @@
-use definitions::instrument_name::InstrumentName;
+use crate::definitions::instrument_name::InstrumentName;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct MarketOrderPositionCloseout {
@@ -13,10 +13,9 @@ pub struct MarketOrderPositionCloseout {
 }
 impl Default for MarketOrderPositionCloseout {
     fn default() -> Self {
-        use Default::default;
         Self {
-            instrument: default(),
-            units: default(),
+            instrument: Default::default(),
+            units: Default::default(),
         }
     }
 }

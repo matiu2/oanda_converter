@@ -1,5 +1,5 @@
-use definitions::order_id::OrderID;
-use definitions::price_value::PriceValue;
+use crate::definitions::price_value::PriceValue;
+use crate::definitions::order_id::OrderID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct DynamicOrderState {
@@ -21,12 +21,11 @@ pub struct DynamicOrderState {
 }
 impl Default for DynamicOrderState {
     fn default() -> Self {
-        use Default::default;
         Self {
-            id: default(),
-            trailing_stop_value: default(),
-            trigger_distance: default(),
-            is_trigger_distance_exact: default(),
+            id: Default::default(),
+            trailing_stop_value: Default::default(),
+            trigger_distance: Default::default(),
+            is_trigger_distance_exact: Default::default(),
         }
     }
 }

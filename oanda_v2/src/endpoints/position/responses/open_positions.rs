@@ -1,8 +1,6 @@
-use definitions::transaction_id::TransactionID;
-use endpoints::position::Position;
-use serde::{Serialize, Deserialize};
+use crate::definitions::transaction_id::TransactionID;
+use crate::endpoints::position::Position;
 /// The Account’s open Positions are provided.
-use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct OpenPositions200 {
     /// The list of open Positions in the Account.
@@ -13,10 +11,9 @@ pub struct OpenPositions200 {
 }
 impl Default for OpenPositions200 {
     fn default() -> Self {
-        use Default::default;
         Self {
-            positions: default(),
-            last_transaction_id: default(),
+            positions: Default::default(),
+            last_transaction_id: Default::default(),
         }
     }
 }

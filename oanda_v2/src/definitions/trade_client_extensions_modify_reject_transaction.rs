@@ -1,12 +1,12 @@
-use chrono::DateTime;
-use definitions::account_id::AccountID;
-use definitions::transaction_id::TransactionID;
-use definitions::request_id::RequestID;
-use definitions::trade_id::TradeID;
-use definitions::client_id::ClientID;
-use definitions::client_extensions::ClientExtensions;
-use definitions::transaction_reject_reason::TransactionRejectReason;
-use definitions::transaction_type::TransactionType;
+use crate::definitions::transaction_id::TransactionID;
+use crate::chrono::DateTime;
+use crate::definitions::trade_id::TradeID;
+use crate::definitions::client_extensions::ClientExtensions;
+use crate::definitions::transaction_reject_reason::TransactionRejectReason;
+use crate::definitions::request_id::RequestID;
+use crate::definitions::transaction_type::TransactionType;
+use crate::definitions::client_id::ClientID;
+use crate::definitions::account_id::AccountID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct TradeClientExtensionsModifyRejectTransaction {
@@ -44,19 +44,18 @@ pub struct TradeClientExtensionsModifyRejectTransaction {
 }
 impl Default for TradeClientExtensionsModifyRejectTransaction {
     fn default() -> Self {
-        use Default::default;
         Self {
-            id: default(),
-            time: default(),
-            user_id: default(),
-            account_id: default(),
-            batch_id: default(),
-            request_id: default(),
+            id: Default::default(),
+            time: Default::default(),
+            user_id: Default::default(),
+            account_id: Default::default(),
+            batch_id: Default::default(),
+            request_id: Default::default(),
             r#type: "TRADE_CLIENT_EXTENSIONS_MODIFY_REJECT",
-            trade_id: default(),
-            client_trade_id: default(),
-            trade_client_extensions_modify: default(),
-            reject_reason: default(),
+            trade_id: Default::default(),
+            client_trade_id: Default::default(),
+            trade_client_extensions_modify: Default::default(),
+            reject_reason: Default::default(),
         }
     }
 }

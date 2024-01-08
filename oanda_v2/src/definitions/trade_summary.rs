@@ -1,13 +1,13 @@
-use definitions::transaction_id::TransactionID;
-use definitions::order_id::OrderID;
-use definitions::instrument_name::InstrumentName;
-use definitions::account_units::AccountUnits;
-use definitions::trade_state::TradeState;
-use definitions::client_extensions::ClientExtensions;
-use definitions::decimal_number::DecimalNumber;
-use definitions::trade_id::TradeID;
-use definitions::price_value::PriceValue;
-use chrono::DateTime;
+use crate::chrono::DateTime;
+use crate::definitions::price_value::PriceValue;
+use crate::definitions::trade_id::TradeID;
+use crate::definitions::order_id::OrderID;
+use crate::definitions::account_units::AccountUnits;
+use crate::definitions::decimal_number::DecimalNumber;
+use crate::definitions::instrument_name::InstrumentName;
+use crate::definitions::trade_state::TradeState;
+use crate::definitions::client_extensions::ClientExtensions;
+use crate::definitions::transaction_id::TransactionID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct TradeSummary {
@@ -69,29 +69,28 @@ pub struct TradeSummary {
 }
 impl Default for TradeSummary {
     fn default() -> Self {
-        use Default::default;
         Self {
-            id: default(),
-            instrument: default(),
-            price: default(),
-            open_time: default(),
-            state: default(),
-            initial_units: default(),
-            initial_margin_required: default(),
-            current_units: default(),
-            realized_pl: default(),
-            unrealized_pl: default(),
-            margin_used: default(),
-            average_close_price: default(),
-            closing_transaction_i_ds: default(),
-            financing: default(),
-            dividend_adjustment: default(),
-            close_time: default(),
-            client_extensions: default(),
-            take_profit_order_id: default(),
-            stop_loss_order_id: default(),
-            guaranteed_stop_loss_order_id: default(),
-            trailing_stop_loss_order_id: default(),
+            id: Default::default(),
+            instrument: Default::default(),
+            price: Default::default(),
+            open_time: Default::default(),
+            state: Default::default(),
+            initial_units: Default::default(),
+            initial_margin_required: Default::default(),
+            current_units: Default::default(),
+            realized_pl: Default::default(),
+            unrealized_pl: Default::default(),
+            margin_used: Default::default(),
+            average_close_price: Default::default(),
+            closing_transaction_i_ds: Default::default(),
+            financing: Default::default(),
+            dividend_adjustment: Default::default(),
+            close_time: Default::default(),
+            client_extensions: Default::default(),
+            take_profit_order_id: Default::default(),
+            stop_loss_order_id: Default::default(),
+            guaranteed_stop_loss_order_id: Default::default(),
+            trailing_stop_loss_order_id: Default::default(),
         }
     }
 }

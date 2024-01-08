@@ -1,12 +1,12 @@
-use chrono::DateTime;
-use definitions::order_id::OrderID;
-use definitions::client_id::ClientID;
-use definitions::transaction_reject_reason::TransactionRejectReason;
-use definitions::transaction_id::TransactionID;
-use definitions::request_id::RequestID;
-use definitions::account_id::AccountID;
-use definitions::client_extensions::ClientExtensions;
-use definitions::transaction_type::TransactionType;
+use crate::definitions::client_extensions::ClientExtensions;
+use crate::definitions::transaction_reject_reason::TransactionRejectReason;
+use crate::definitions::account_id::AccountID;
+use crate::definitions::transaction_type::TransactionType;
+use crate::definitions::client_id::ClientID;
+use crate::definitions::transaction_id::TransactionID;
+use crate::definitions::request_id::RequestID;
+use crate::definitions::order_id::OrderID;
+use crate::chrono::DateTime;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct OrderClientExtensionsModifyRejectTransaction {
@@ -46,20 +46,19 @@ pub struct OrderClientExtensionsModifyRejectTransaction {
 }
 impl Default for OrderClientExtensionsModifyRejectTransaction {
     fn default() -> Self {
-        use Default::default;
         Self {
-            id: default(),
-            time: default(),
-            user_id: default(),
-            account_id: default(),
-            batch_id: default(),
-            request_id: default(),
+            id: Default::default(),
+            time: Default::default(),
+            user_id: Default::default(),
+            account_id: Default::default(),
+            batch_id: Default::default(),
+            request_id: Default::default(),
             r#type: "ORDER_CLIENT_EXTENSIONS_MODIFY_REJECT",
-            order_id: default(),
-            client_order_id: default(),
-            client_extensions_modify: default(),
-            trade_client_extensions_modify: default(),
-            reject_reason: default(),
+            order_id: Default::default(),
+            client_order_id: Default::default(),
+            client_extensions_modify: Default::default(),
+            trade_client_extensions_modify: Default::default(),
+            reject_reason: Default::default(),
         }
     }
 }

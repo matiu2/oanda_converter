@@ -1,5 +1,5 @@
-use definitions::trade_id::TradeID;
-use definitions::account_units::AccountUnits;
+use crate::definitions::trade_id::TradeID;
+use crate::definitions::account_units::AccountUnits;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct CalculatedTradeState {
@@ -12,11 +12,10 @@ pub struct CalculatedTradeState {
 }
 impl Default for CalculatedTradeState {
     fn default() -> Self {
-        use Default::default;
         Self {
-            id: default(),
-            unrealized_pl: default(),
-            margin_used: default(),
+            id: Default::default(),
+            unrealized_pl: Default::default(),
+            margin_used: Default::default(),
         }
     }
 }

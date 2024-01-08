@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// The specification of an Order as referred to by clients
 ///
 /// Format: Either the Order’s OANDA-assigned OrderID or the

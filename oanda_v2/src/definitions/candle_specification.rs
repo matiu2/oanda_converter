@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// An instrument name, a granularity, and a price component to
 /// get candlestick data for.
 ///

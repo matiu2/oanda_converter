@@ -1,5 +1,5 @@
-use definitions::currency::Currency;
-use definitions::decimal_number::DecimalNumber;
+use crate::definitions::currency::Currency;
+use crate::definitions::decimal_number::DecimalNumber;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct HomeConversions {
@@ -25,12 +25,11 @@ pub struct HomeConversions {
 }
 impl Default for HomeConversions {
     fn default() -> Self {
-        use Default::default;
         Self {
-            currency: default(),
-            account_gain: default(),
-            account_loss: default(),
-            position_value: default(),
+            currency: Default::default(),
+            account_gain: Default::default(),
+            account_loss: Default::default(),
+            position_value: Default::default(),
         }
     }
 }

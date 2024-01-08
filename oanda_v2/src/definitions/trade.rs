@@ -1,15 +1,15 @@
-use definitions::trade_state::TradeState;
-use definitions::stop_loss_order::StopLossOrder;
-use definitions::trailing_stop_loss_order::TrailingStopLossOrder;
-use definitions::transaction_id::TransactionID;
-use definitions::client_extensions::ClientExtensions;
-use definitions::trade_id::TradeID;
-use definitions::decimal_number::DecimalNumber;
-use chrono::DateTime;
-use definitions::price_value::PriceValue;
-use definitions::take_profit_order::TakeProfitOrder;
-use definitions::instrument_name::InstrumentName;
-use definitions::account_units::AccountUnits;
+use crate::definitions::trade_id::TradeID;
+use crate::chrono::DateTime;
+use crate::definitions::trailing_stop_loss_order::TrailingStopLossOrder;
+use crate::definitions::instrument_name::InstrumentName;
+use crate::definitions::stop_loss_order::StopLossOrder;
+use crate::definitions::client_extensions::ClientExtensions;
+use crate::definitions::decimal_number::DecimalNumber;
+use crate::definitions::account_units::AccountUnits;
+use crate::definitions::transaction_id::TransactionID;
+use crate::definitions::price_value::PriceValue;
+use crate::definitions::trade_state::TradeState;
+use crate::definitions::take_profit_order::TakeProfitOrder;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Trade {
@@ -68,28 +68,27 @@ pub struct Trade {
 }
 impl Default for Trade {
     fn default() -> Self {
-        use Default::default;
         Self {
-            id: default(),
-            instrument: default(),
-            price: default(),
-            open_time: default(),
-            state: default(),
-            initial_units: default(),
-            initial_margin_required: default(),
-            current_units: default(),
-            realized_pl: default(),
-            unrealized_pl: default(),
-            margin_used: default(),
-            average_close_price: default(),
-            closing_transaction_i_ds: default(),
-            financing: default(),
-            dividend_adjustment: default(),
-            close_time: default(),
-            client_extensions: default(),
-            take_profit_order: default(),
-            stop_loss_order: default(),
-            trailing_stop_loss_order: default(),
+            id: Default::default(),
+            instrument: Default::default(),
+            price: Default::default(),
+            open_time: Default::default(),
+            state: Default::default(),
+            initial_units: Default::default(),
+            initial_margin_required: Default::default(),
+            current_units: Default::default(),
+            realized_pl: Default::default(),
+            unrealized_pl: Default::default(),
+            margin_used: Default::default(),
+            average_close_price: Default::default(),
+            closing_transaction_i_ds: Default::default(),
+            financing: Default::default(),
+            dividend_adjustment: Default::default(),
+            close_time: Default::default(),
+            client_extensions: Default::default(),
+            take_profit_order: Default::default(),
+            stop_loss_order: Default::default(),
+            trailing_stop_loss_order: Default::default(),
         }
     }
 }

@@ -1,4 +1,4 @@
-use chrono::DateTime;
+use crate::chrono::DateTime;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct PricingHeartbeat {
@@ -10,10 +10,9 @@ pub struct PricingHeartbeat {
 }
 impl Default for PricingHeartbeat {
     fn default() -> Self {
-        use Default::default;
         Self {
             r#type: "HEARTBEAT",
-            time: default(),
+            time: Default::default(),
         }
     }
 }

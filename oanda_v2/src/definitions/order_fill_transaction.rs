@@ -1,19 +1,19 @@
-use definitions::transaction_id::TransactionID;
-use definitions::decimal_number::DecimalNumber;
-use definitions::price_value::PriceValue;
-use definitions::order_fill_reason::OrderFillReason;
-use definitions::transaction_type::TransactionType;
-use definitions::trade_open::TradeOpen;
-use definitions::account_units::AccountUnits;
-use chrono::DateTime;
-use definitions::request_id::RequestID;
-use definitions::order_id::OrderID;
-use definitions::instrument_name::InstrumentName;
-use definitions::client_price::ClientPrice;
-use definitions::home_conversion_factors::HomeConversionFactors;
-use definitions::client_id::ClientID;
-use definitions::trade_reduce::TradeReduce;
-use definitions::account_id::AccountID;
+use crate::definitions::trade_reduce::TradeReduce;
+use crate::definitions::account_units::AccountUnits;
+use crate::definitions::request_id::RequestID;
+use crate::definitions::decimal_number::DecimalNumber;
+use crate::definitions::client_price::ClientPrice;
+use crate::definitions::trade_open::TradeOpen;
+use crate::definitions::transaction_id::TransactionID;
+use crate::definitions::home_conversion_factors::HomeConversionFactors;
+use crate::definitions::price_value::PriceValue;
+use crate::definitions::order_fill_reason::OrderFillReason;
+use crate::chrono::DateTime;
+use crate::definitions::order_id::OrderID;
+use crate::definitions::transaction_type::TransactionType;
+use crate::definitions::account_id::AccountID;
+use crate::definitions::client_id::ClientID;
+use crate::definitions::instrument_name::InstrumentName;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct OrderFillTransaction {
@@ -110,36 +110,35 @@ pub struct OrderFillTransaction {
 }
 impl Default for OrderFillTransaction {
     fn default() -> Self {
-        use Default::default;
         Self {
-            id: default(),
-            time: default(),
-            user_id: default(),
-            account_id: default(),
-            batch_id: default(),
-            request_id: default(),
+            id: Default::default(),
+            time: Default::default(),
+            user_id: Default::default(),
+            account_id: Default::default(),
+            batch_id: Default::default(),
+            request_id: Default::default(),
             r#type: "ORDER_FILL",
-            order_id: default(),
-            client_order_id: default(),
-            instrument: default(),
-            units: default(),
-            home_conversion_factors: default(),
-            full_vwap: default(),
-            full_price: default(),
-            reason: default(),
-            pl: default(),
-            quote_pl: default(),
-            financing: default(),
-            base_financing: default(),
-            quote_financing: default(),
-            commission: default(),
-            guaranteed_execution_fee: default(),
-            quote_guaranteed_execution_fee: default(),
-            account_balance: default(),
-            trade_opened: default(),
-            trades_closed: default(),
-            trade_reduced: default(),
-            half_spread_cost: default(),
+            order_id: Default::default(),
+            client_order_id: Default::default(),
+            instrument: Default::default(),
+            units: Default::default(),
+            home_conversion_factors: Default::default(),
+            full_vwap: Default::default(),
+            full_price: Default::default(),
+            reason: Default::default(),
+            pl: Default::default(),
+            quote_pl: Default::default(),
+            financing: Default::default(),
+            base_financing: Default::default(),
+            quote_financing: Default::default(),
+            commission: Default::default(),
+            guaranteed_execution_fee: Default::default(),
+            quote_guaranteed_execution_fee: Default::default(),
+            account_balance: Default::default(),
+            trade_opened: Default::default(),
+            trades_closed: Default::default(),
+            trade_reduced: Default::default(),
+            half_spread_cost: Default::default(),
         }
     }
 }

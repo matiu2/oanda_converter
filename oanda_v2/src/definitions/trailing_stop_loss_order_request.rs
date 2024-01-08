@@ -1,11 +1,11 @@
-use definitions::decimal_number::DecimalNumber;
-use definitions::order_trigger_condition::OrderTriggerCondition;
-use definitions::time_in_force::TimeInForce;
-use definitions::client_extensions::ClientExtensions;
-use definitions::order_type::OrderType;
-use definitions::client_id::ClientID;
-use definitions::trade_id::TradeID;
-use chrono::DateTime;
+use crate::definitions::decimal_number::DecimalNumber;
+use crate::definitions::time_in_force::TimeInForce;
+use crate::definitions::client_id::ClientID;
+use crate::definitions::client_extensions::ClientExtensions;
+use crate::definitions::order_trigger_condition::OrderTriggerCondition;
+use crate::definitions::order_type::OrderType;
+use crate::chrono::DateTime;
+use crate::definitions::trade_id::TradeID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct TrailingStopLossOrderRequest {
@@ -61,16 +61,15 @@ pub struct TrailingStopLossOrderRequest {
 }
 impl Default for TrailingStopLossOrderRequest {
     fn default() -> Self {
-        use Default::default;
         Self {
             r#type: "TRAILING_STOP_LOSS",
-            trade_id: default(),
-            client_trade_id: default(),
-            distance: default(),
+            trade_id: Default::default(),
+            client_trade_id: Default::default(),
+            distance: Default::default(),
             time_in_force: "GTC",
-            gtd_time: default(),
+            gtd_time: Default::default(),
             trigger_condition: "DEFAULT",
-            client_extensions: default(),
+            client_extensions: Default::default(),
         }
     }
 }

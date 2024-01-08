@@ -1,8 +1,8 @@
-use definitions::decimal_number::DecimalNumber;
-use definitions::time_in_force::TimeInForce;
-use definitions::price_value::PriceValue;
-use chrono::DateTime;
-use definitions::client_extensions::ClientExtensions;
+use crate::definitions::time_in_force::TimeInForce;
+use crate::definitions::decimal_number::DecimalNumber;
+use crate::chrono::DateTime;
+use crate::definitions::client_extensions::ClientExtensions;
+use crate::definitions::price_value::PriceValue;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct GuaranteedStopLossDetails {
@@ -27,13 +27,12 @@ pub struct GuaranteedStopLossDetails {
 }
 impl Default for GuaranteedStopLossDetails {
     fn default() -> Self {
-        use Default::default;
         Self {
-            price: default(),
-            distance: default(),
+            price: Default::default(),
+            distance: Default::default(),
             time_in_force: "GTC",
-            gtd_time: default(),
-            client_extensions: default(),
+            gtd_time: Default::default(),
+            client_extensions: Default::default(),
         }
     }
 }

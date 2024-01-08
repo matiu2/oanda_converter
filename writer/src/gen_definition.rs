@@ -7,6 +7,7 @@ use crate::error::Result;
 pub use gen_struct::gen_struct;
 use model::{definition_docs::Value, Definition};
 use proc_macro2::TokenStream;
+use quote::quote;
 
 mod gen_row;
 mod gen_struct;
@@ -18,14 +19,20 @@ pub fn gen_definition(
         value,
     }: &Definition,
 ) -> Result<TokenStream> {
-    match value {
+    let definition = match value {
         Value::Table(rows) => match rows.as_slice() {
             [row] => gen_single_row(row, name, doc_string),
             rows => gen_rows(rows, name, doc_string),
         },
         Value::Struct(s) => gen_struct(s, name),
         Value::Empty => gen_typed_string(name),
-    }
+    }?;
+
+    Ok(quote! {
+        use serde::{Serialize, Deserialize};
+
+        #definition
+    })
 }
 
 #[cfg(test)]

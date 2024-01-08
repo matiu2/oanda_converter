@@ -1,11 +1,9 @@
-use endpoints::account::responses::configuration::Configuration403;
-use endpoints::account::responses::configuration::Configuration400;
-use definitions::transaction_id::TransactionID;
-use definitions::client_configure_reject_transaction::ClientConfigureRejectTransaction;
-use definitions::client_configure_transaction::ClientConfigureTransaction;
-use serde::{Serialize, Deserialize};
+use crate::definitions::client_configure_transaction::ClientConfigureTransaction;
+use crate::definitions::transaction_id::TransactionID;
+use crate::endpoints::account::responses::configuration::Configuration403;
+use crate::endpoints::account::responses::configuration::Configuration400;
+use crate::definitions::client_configure_reject_transaction::ClientConfigureRejectTransaction;
 /// The Account was configured successfully.
-use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Configuration200 {
     /// The transaction that configures the Account.
@@ -15,14 +13,12 @@ pub struct Configuration200 {
 }
 impl Default for Configuration200 {
     fn default() -> Self {
-        use Default::default;
         Self {
-            client_configure_transaction: default(),
-            last_transaction_id: default(),
+            client_configure_transaction: Default::default(),
+            last_transaction_id: Default::default(),
         }
     }
 }
-use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Configuration400 {
     /// The transaction that rejects the configuration of the
@@ -39,16 +35,14 @@ pub struct Configuration400 {
 }
 impl Default for Configuration400 {
     fn default() -> Self {
-        use Default::default;
         Self {
-            client_configure_reject_transaction: default(),
-            last_transaction_id: default(),
-            error_code: default(),
-            error_message: default(),
+            client_configure_reject_transaction: Default::default(),
+            last_transaction_id: Default::default(),
+            error_code: Default::default(),
+            error_message: Default::default(),
         }
     }
 }
-use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Configuration403 {
     /// The transaction that rejects the configuration of the
@@ -65,12 +59,11 @@ pub struct Configuration403 {
 }
 impl Default for Configuration403 {
     fn default() -> Self {
-        use Default::default;
         Self {
-            client_configure_reject_transaction: default(),
-            last_transaction_id: default(),
-            error_code: default(),
-            error_message: default(),
+            client_configure_reject_transaction: Default::default(),
+            last_transaction_id: Default::default(),
+            error_code: Default::default(),
+            error_message: Default::default(),
         }
     }
 }

@@ -1,13 +1,11 @@
-use endpoints::position::responses::close::Close400;
-use definitions::transaction_id::TransactionID;
-use definitions::order_fill_transaction::OrderFillTransaction;
-use endpoints::position::responses::close::Close404;
-use definitions::order_cancel_transaction::OrderCancelTransaction;
-use definitions::market_order_reject_transaction::MarketOrderRejectTransaction;
-use definitions::market_order_transaction::MarketOrderTransaction;
-use serde::{Serialize, Deserialize};
+use crate::definitions::market_order_transaction::MarketOrderTransaction;
+use crate::endpoints::position::responses::close::Close404;
+use crate::definitions::transaction_id::TransactionID;
+use crate::definitions::market_order_reject_transaction::MarketOrderRejectTransaction;
+use crate::definitions::order_cancel_transaction::OrderCancelTransaction;
+use crate::definitions::order_fill_transaction::OrderFillTransaction;
+use crate::endpoints::position::responses::close::Close400;
 /// The Trade has been closed as requested
-use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Close200 {
     /// The MarketOrder Transaction created to close the Trade.
@@ -27,17 +25,15 @@ pub struct Close200 {
 }
 impl Default for Close200 {
     fn default() -> Self {
-        use Default::default;
         Self {
-            order_create_transaction: default(),
-            order_fill_transaction: default(),
-            order_cancel_transaction: default(),
-            related_transaction_i_ds: default(),
-            last_transaction_id: default(),
+            order_create_transaction: Default::default(),
+            order_fill_transaction: Default::default(),
+            order_cancel_transaction: Default::default(),
+            related_transaction_i_ds: Default::default(),
+            last_transaction_id: Default::default(),
         }
     }
 }
-use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Close400 {
     /// The MarketOrderReject Transaction that rejects the creation
@@ -52,15 +48,13 @@ pub struct Close400 {
 }
 impl Default for Close400 {
     fn default() -> Self {
-        use Default::default;
         Self {
-            order_reject_transaction: default(),
-            error_code: default(),
-            error_message: default(),
+            order_reject_transaction: Default::default(),
+            error_code: Default::default(),
+            error_message: Default::default(),
         }
     }
 }
-use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Close404 {
     /// The MarketOrderReject Transaction that rejects the creation
@@ -82,13 +76,12 @@ pub struct Close404 {
 }
 impl Default for Close404 {
     fn default() -> Self {
-        use Default::default;
         Self {
-            order_reject_transaction: default(),
-            last_transaction_id: default(),
-            related_transaction_i_ds: default(),
-            error_code: default(),
-            error_message: default(),
+            order_reject_transaction: Default::default(),
+            last_transaction_id: Default::default(),
+            related_transaction_i_ds: Default::default(),
+            error_code: Default::default(),
+            error_message: Default::default(),
         }
     }
 }

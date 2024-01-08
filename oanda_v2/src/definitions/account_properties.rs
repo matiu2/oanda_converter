@@ -1,4 +1,4 @@
-use definitions::account_id::AccountID;
+use crate::definitions::account_id::AccountID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct AccountProperties {
@@ -12,11 +12,10 @@ pub struct AccountProperties {
 }
 impl Default for AccountProperties {
     fn default() -> Self {
-        use Default::default;
         Self {
-            id: default(),
-            mt4_account_id: default(),
-            tags: default(),
+            id: Default::default(),
+            mt4_account_id: Default::default(),
+            tags: Default::default(),
         }
     }
 }

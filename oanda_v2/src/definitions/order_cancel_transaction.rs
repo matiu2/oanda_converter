@@ -1,10 +1,10 @@
-use chrono::DateTime;
-use definitions::order_id::OrderID;
-use definitions::order_cancel_reason::OrderCancelReason;
-use definitions::transaction_id::TransactionID;
-use definitions::account_id::AccountID;
-use definitions::request_id::RequestID;
-use definitions::transaction_type::TransactionType;
+use crate::definitions::transaction_id::TransactionID;
+use crate::definitions::order_cancel_reason::OrderCancelReason;
+use crate::definitions::request_id::RequestID;
+use crate::chrono::DateTime;
+use crate::definitions::account_id::AccountID;
+use crate::definitions::order_id::OrderID;
+use crate::definitions::transaction_type::TransactionType;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct OrderCancelTransaction {
@@ -41,19 +41,18 @@ pub struct OrderCancelTransaction {
 }
 impl Default for OrderCancelTransaction {
     fn default() -> Self {
-        use Default::default;
         Self {
-            id: default(),
-            time: default(),
-            user_id: default(),
-            account_id: default(),
-            batch_id: default(),
-            request_id: default(),
+            id: Default::default(),
+            time: Default::default(),
+            user_id: Default::default(),
+            account_id: Default::default(),
+            batch_id: Default::default(),
+            request_id: Default::default(),
             r#type: "ORDER_CANCEL",
-            order_id: default(),
-            client_order_id: default(),
-            reason: default(),
-            replaced_by_order_id: default(),
+            order_id: Default::default(),
+            client_order_id: Default::default(),
+            reason: Default::default(),
+            replaced_by_order_id: Default::default(),
         }
     }
 }

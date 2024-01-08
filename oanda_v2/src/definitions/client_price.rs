@@ -1,7 +1,7 @@
-use definitions::price_bucket::PriceBucket;
-use definitions::price_value::PriceValue;
-use chrono::DateTime;
-use definitions::instrument_name::InstrumentName;
+use crate::chrono::DateTime;
+use crate::definitions::price_bucket::PriceBucket;
+use crate::definitions::instrument_name::InstrumentName;
+use crate::definitions::price_value::PriceValue;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct ClientPrice {
@@ -38,16 +38,15 @@ pub struct ClientPrice {
 }
 impl Default for ClientPrice {
     fn default() -> Self {
-        use Default::default;
         Self {
             r#type: "PRICE",
-            instrument: default(),
-            time: default(),
-            tradeable: default(),
-            bids: default(),
-            asks: default(),
-            closeout_bid: default(),
-            closeout_ask: default(),
+            instrument: Default::default(),
+            time: Default::default(),
+            tradeable: Default::default(),
+            bids: Default::default(),
+            asks: Default::default(),
+            closeout_bid: Default::default(),
+            closeout_ask: Default::default(),
         }
     }
 }

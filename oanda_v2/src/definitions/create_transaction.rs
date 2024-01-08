@@ -1,9 +1,9 @@
-use definitions::transaction_type::TransactionType;
-use chrono::DateTime;
-use definitions::currency::Currency;
-use definitions::request_id::RequestID;
-use definitions::transaction_id::TransactionID;
-use definitions::account_id::AccountID;
+use crate::definitions::request_id::RequestID;
+use crate::chrono::DateTime;
+use crate::definitions::transaction_type::TransactionType;
+use crate::definitions::currency::Currency;
+use crate::definitions::account_id::AccountID;
+use crate::definitions::transaction_id::TransactionID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct CreateTransaction {
@@ -40,20 +40,19 @@ pub struct CreateTransaction {
 }
 impl Default for CreateTransaction {
     fn default() -> Self {
-        use Default::default;
         Self {
-            id: default(),
-            time: default(),
-            user_id: default(),
-            account_id: default(),
-            batch_id: default(),
-            request_id: default(),
+            id: Default::default(),
+            time: Default::default(),
+            user_id: Default::default(),
+            account_id: Default::default(),
+            batch_id: Default::default(),
+            request_id: Default::default(),
             r#type: "CREATE",
-            division_id: default(),
-            site_id: default(),
-            account_user_id: default(),
-            account_number: default(),
-            home_currency: default(),
+            division_id: Default::default(),
+            site_id: Default::default(),
+            account_user_id: Default::default(),
+            account_number: Default::default(),
+            home_currency: Default::default(),
         }
     }
 }

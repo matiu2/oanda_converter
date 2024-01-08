@@ -1,4 +1,4 @@
-use definitions::conversion_factor::ConversionFactor;
+use crate::definitions::conversion_factor::ConversionFactor;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct HomeConversionFactors {
@@ -21,12 +21,11 @@ pub struct HomeConversionFactors {
 }
 impl Default for HomeConversionFactors {
     fn default() -> Self {
-        use Default::default;
         Self {
-            gain_quote_home: default(),
-            loss_quote_home: default(),
-            gain_base_home: default(),
-            loss_base_home: default(),
+            gain_quote_home: Default::default(),
+            loss_quote_home: Default::default(),
+            gain_base_home: Default::default(),
+            loss_base_home: Default::default(),
         }
     }
 }

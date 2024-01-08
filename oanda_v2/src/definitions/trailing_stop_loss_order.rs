@@ -1,15 +1,15 @@
-use definitions::trade_id::TradeID;
-use definitions::time_in_force::TimeInForce;
-use definitions::order_state::OrderState;
-use definitions::order_type::OrderType;
-use definitions::transaction_id::TransactionID;
-use definitions::client_id::ClientID;
-use definitions::price_value::PriceValue;
-use definitions::order_id::OrderID;
-use definitions::client_extensions::ClientExtensions;
-use definitions::decimal_number::DecimalNumber;
-use chrono::DateTime;
-use definitions::order_trigger_condition::OrderTriggerCondition;
+use crate::definitions::transaction_id::TransactionID;
+use crate::definitions::trade_id::TradeID;
+use crate::definitions::client_extensions::ClientExtensions;
+use crate::chrono::DateTime;
+use crate::definitions::decimal_number::DecimalNumber;
+use crate::definitions::price_value::PriceValue;
+use crate::definitions::time_in_force::TimeInForce;
+use crate::definitions::order_id::OrderID;
+use crate::definitions::order_state::OrderState;
+use crate::definitions::order_type::OrderType;
+use crate::definitions::client_id::ClientID;
+use crate::definitions::order_trigger_condition::OrderTriggerCondition;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct TrailingStopLossOrder {
@@ -109,29 +109,28 @@ pub struct TrailingStopLossOrder {
 }
 impl Default for TrailingStopLossOrder {
     fn default() -> Self {
-        use Default::default;
         Self {
-            id: default(),
-            create_time: default(),
-            state: default(),
-            client_extensions: default(),
+            id: Default::default(),
+            create_time: Default::default(),
+            state: Default::default(),
+            client_extensions: Default::default(),
             r#type: "TRAILING_STOP_LOSS",
-            trade_id: default(),
-            client_trade_id: default(),
-            distance: default(),
+            trade_id: Default::default(),
+            client_trade_id: Default::default(),
+            distance: Default::default(),
             time_in_force: "GTC",
-            gtd_time: default(),
+            gtd_time: Default::default(),
             trigger_condition: "DEFAULT",
-            trailing_stop_value: default(),
-            filling_transaction_id: default(),
-            filled_time: default(),
-            trade_opened_id: default(),
-            trade_reduced_id: default(),
-            trade_closed_i_ds: default(),
-            cancelling_transaction_id: default(),
-            cancelled_time: default(),
-            replaces_order_id: default(),
-            replaced_by_order_id: default(),
+            trailing_stop_value: Default::default(),
+            filling_transaction_id: Default::default(),
+            filled_time: Default::default(),
+            trade_opened_id: Default::default(),
+            trade_reduced_id: Default::default(),
+            trade_closed_i_ds: Default::default(),
+            cancelling_transaction_id: Default::default(),
+            cancelled_time: Default::default(),
+            replaces_order_id: Default::default(),
+            replaced_by_order_id: Default::default(),
         }
     }
 }

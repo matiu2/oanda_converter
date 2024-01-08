@@ -1,8 +1,6 @@
-use definitions::transaction_id::TransactionID;
-use endpoints::trade::Trade;
-use serde::{Serialize, Deserialize};
+use crate::definitions::transaction_id::TransactionID;
+use crate::endpoints::trade::Trade;
 /// The details for the requested Trade is provided
-use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Get200 {
     /// The details of the requested trade
@@ -13,10 +11,9 @@ pub struct Get200 {
 }
 impl Default for Get200 {
     fn default() -> Self {
-        use Default::default;
         Self {
-            trade: default(),
-            last_transaction_id: default(),
+            trade: Default::default(),
+            last_transaction_id: Default::default(),
         }
     }
 }

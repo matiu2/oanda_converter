@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// The Price component(s) to get candlestick data for.
 ///
 /// Can contain any combination of the characters “M” (midpoint

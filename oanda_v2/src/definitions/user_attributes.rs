@@ -1,4 +1,4 @@
-use definitions::currency::Currency;
+use crate::definitions::currency::Currency;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct UserAttributes {
@@ -21,16 +21,15 @@ pub struct UserAttributes {
 }
 impl Default for UserAttributes {
     fn default() -> Self {
-        use Default::default;
         Self {
-            user_id: default(),
-            username: default(),
-            title: default(),
-            name: default(),
-            email: default(),
-            division_abbreviation: default(),
-            language_abbreviation: default(),
-            home_currency: default(),
+            user_id: Default::default(),
+            username: Default::default(),
+            title: Default::default(),
+            name: Default::default(),
+            email: Default::default(),
+            division_abbreviation: Default::default(),
+            language_abbreviation: Default::default(),
+            home_currency: Default::default(),
         }
     }
 }

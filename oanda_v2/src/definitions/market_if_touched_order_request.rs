@@ -1,16 +1,16 @@
-use definitions::stop_loss_details::StopLossDetails;
-use definitions::order_type::OrderType;
-use definitions::time_in_force::TimeInForce;
-use definitions::price_value::PriceValue;
-use definitions::order_trigger_condition::OrderTriggerCondition;
-use definitions::instrument_name::InstrumentName;
-use definitions::order_position_fill::OrderPositionFill;
-use definitions::trailing_stop_loss_details::TrailingStopLossDetails;
-use definitions::guaranteed_stop_loss_details::GuaranteedStopLossDetails;
-use definitions::decimal_number::DecimalNumber;
-use chrono::DateTime;
-use definitions::client_extensions::ClientExtensions;
-use definitions::take_profit_details::TakeProfitDetails;
+use crate::definitions::guaranteed_stop_loss_details::GuaranteedStopLossDetails;
+use crate::definitions::price_value::PriceValue;
+use crate::definitions::decimal_number::DecimalNumber;
+use crate::chrono::DateTime;
+use crate::definitions::instrument_name::InstrumentName;
+use crate::definitions::order_trigger_condition::OrderTriggerCondition;
+use crate::definitions::client_extensions::ClientExtensions;
+use crate::definitions::trailing_stop_loss_details::TrailingStopLossDetails;
+use crate::definitions::take_profit_details::TakeProfitDetails;
+use crate::definitions::order_position_fill::OrderPositionFill;
+use crate::definitions::order_type::OrderType;
+use crate::definitions::stop_loss_details::StopLossDetails;
+use crate::definitions::time_in_force::TimeInForce;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct MarketIfTouchedOrderRequest {
@@ -108,23 +108,22 @@ pub struct MarketIfTouchedOrderRequest {
 }
 impl Default for MarketIfTouchedOrderRequest {
     fn default() -> Self {
-        use Default::default;
         Self {
             r#type: "MARKET_IF_TOUCHED",
-            instrument: default(),
-            units: default(),
-            price: default(),
-            price_bound: default(),
+            instrument: Default::default(),
+            units: Default::default(),
+            price: Default::default(),
+            price_bound: Default::default(),
             time_in_force: "GTC",
-            gtd_time: default(),
+            gtd_time: Default::default(),
             position_fill: "DEFAULT",
             trigger_condition: "DEFAULT",
-            client_extensions: default(),
-            take_profit_on_fill: default(),
-            stop_loss_on_fill: default(),
-            guaranteed_stop_loss_on_fill: default(),
-            trailing_stop_loss_on_fill: default(),
-            trade_client_extensions: default(),
+            client_extensions: Default::default(),
+            take_profit_on_fill: Default::default(),
+            stop_loss_on_fill: Default::default(),
+            guaranteed_stop_loss_on_fill: Default::default(),
+            trailing_stop_loss_on_fill: Default::default(),
+            trade_client_extensions: Default::default(),
         }
     }
 }

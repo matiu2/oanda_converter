@@ -19,7 +19,10 @@ pub use mod_name::ModName;
 use proc_macro2::{Ident, Span};
 use quote::quote;
 use recurse_sub_modules::recurse_sub_modules;
-use std::collections::{HashMap, HashSet};
+use std::{
+    borrow::Cow,
+    collections::{HashMap, HashSet},
+};
 use utils::stream_to_file;
 
 /// Represents a rust module. It's file/mod name + its contents
@@ -111,8 +114,8 @@ pub fn insert_uses_clauses<'a>(
                     .get(r.as_str())
                     .into_iter()
                     .map(|m| {
-                        m.mod_parts()
-                            .iter()
+                        std::iter::once(&Cow::from("crate"))
+                            .chain(m.mod_parts())
                             .map(|part| Ident::new(part, Span::call_site()))
                             .collect_vec()
                     })

@@ -1,7 +1,7 @@
-use definitions::instrument_name::InstrumentName;
-use definitions::price_value::PriceValue;
-use definitions::order_book_bucket::OrderBookBucket;
-use chrono::DateTime;
+use crate::definitions::price_value::PriceValue;
+use crate::definitions::order_book_bucket::OrderBookBucket;
+use crate::definitions::instrument_name::InstrumentName;
+use crate::chrono::DateTime;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct OrderBook {
@@ -23,13 +23,12 @@ pub struct OrderBook {
 }
 impl Default for OrderBook {
     fn default() -> Self {
-        use Default::default;
         Self {
-            instrument: default(),
-            time: default(),
-            price: default(),
-            bucket_width: default(),
-            buckets: default(),
+            instrument: Default::default(),
+            time: Default::default(),
+            price: Default::default(),
+            bucket_width: Default::default(),
+            buckets: Default::default(),
         }
     }
 }

@@ -1,7 +1,7 @@
-use definitions::account_units::AccountUnits;
-use definitions::trade_id::TradeID;
-use definitions::decimal_number::DecimalNumber;
-use definitions::price_value::PriceValue;
+use crate::definitions::price_value::PriceValue;
+use crate::definitions::decimal_number::DecimalNumber;
+use crate::definitions::trade_id::TradeID;
+use crate::definitions::account_units::AccountUnits;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct PositionSide {
@@ -36,17 +36,16 @@ pub struct PositionSide {
 }
 impl Default for PositionSide {
     fn default() -> Self {
-        use Default::default;
         Self {
-            units: default(),
-            average_price: default(),
-            trade_i_ds: default(),
-            pl: default(),
-            unrealized_pl: default(),
-            resettable_pl: default(),
-            financing: default(),
-            dividend_adjustment: default(),
-            guaranteed_execution_fees: default(),
+            units: Default::default(),
+            average_price: Default::default(),
+            trade_i_ds: Default::default(),
+            pl: Default::default(),
+            unrealized_pl: Default::default(),
+            resettable_pl: Default::default(),
+            financing: Default::default(),
+            dividend_adjustment: Default::default(),
+            guaranteed_execution_fees: Default::default(),
         }
     }
 }

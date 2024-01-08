@@ -1,8 +1,6 @@
-use definitions::transaction_id::TransactionID;
-use endpoints::order::Order;
-use serde::{Serialize, Deserialize};
+use crate::endpoints::order::Order;
+use crate::definitions::transaction_id::TransactionID;
 /// List of pending Orders for the Account
-use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct PendingOrders200 {
     /// The list of pending Order details
@@ -13,10 +11,9 @@ pub struct PendingOrders200 {
 }
 impl Default for PendingOrders200 {
     fn default() -> Self {
-        use Default::default;
         Self {
-            orders: default(),
-            last_transaction_id: default(),
+            orders: Default::default(),
+            last_transaction_id: Default::default(),
         }
     }
 }

@@ -1,9 +1,7 @@
-use definitions::candlestick_granularity::CandlestickGranularity;
-use definitions::instrument_name::InstrumentName;
-use definitions::candlestick::Candlestick;
-use serde::{Serialize, Deserialize};
+use crate::definitions::candlestick_granularity::CandlestickGranularity;
+use crate::definitions::instrument_name::InstrumentName;
+use crate::definitions::candlestick::Candlestick;
 /// Pricing information has been successfully provided.
-use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Candles200 {
     /// The instrument whose Prices are represented by the
@@ -16,11 +14,10 @@ pub struct Candles200 {
 }
 impl Default for Candles200 {
     fn default() -> Self {
-        use Default::default;
         Self {
-            instrument: default(),
-            granularity: default(),
-            candles: default(),
+            instrument: Default::default(),
+            granularity: Default::default(),
+            candles: Default::default(),
         }
     }
 }

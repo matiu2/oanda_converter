@@ -8,10 +8,9 @@ pub struct Tag {
 }
 impl Default for Tag {
     fn default() -> Self {
-        use Default::default;
         Self {
-            r#type: default(),
-            name: default(),
+            r#type: Default::default(),
+            name: Default::default(),
         }
     }
 }

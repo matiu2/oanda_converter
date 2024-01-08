@@ -1,13 +1,13 @@
-use definitions::decimal_number::DecimalNumber;
-use definitions::open_trade_dividend_adjustment::OpenTradeDividendAdjustment;
-use definitions::home_conversion_factors::HomeConversionFactors;
-use definitions::account_id::AccountID;
-use definitions::request_id::RequestID;
-use chrono::DateTime;
-use definitions::instrument_name::InstrumentName;
-use definitions::transaction_id::TransactionID;
-use definitions::transaction_type::TransactionType;
-use definitions::account_units::AccountUnits;
+use crate::definitions::account_id::AccountID;
+use crate::definitions::transaction_type::TransactionType;
+use crate::definitions::decimal_number::DecimalNumber;
+use crate::definitions::home_conversion_factors::HomeConversionFactors;
+use crate::definitions::open_trade_dividend_adjustment::OpenTradeDividendAdjustment;
+use crate::definitions::transaction_id::TransactionID;
+use crate::definitions::instrument_name::InstrumentName;
+use crate::definitions::request_id::RequestID;
+use crate::definitions::account_units::AccountUnits;
+use crate::chrono::DateTime;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct DividendAdjustmentTransaction {
@@ -60,21 +60,20 @@ pub struct DividendAdjustmentTransaction {
 }
 impl Default for DividendAdjustmentTransaction {
     fn default() -> Self {
-        use Default::default;
         Self {
-            id: default(),
-            time: default(),
-            user_id: default(),
-            account_id: default(),
-            batch_id: default(),
-            request_id: default(),
+            id: Default::default(),
+            time: Default::default(),
+            user_id: Default::default(),
+            account_id: Default::default(),
+            batch_id: Default::default(),
+            request_id: Default::default(),
             r#type: "DIVIDEND_ADJUSTMENT",
-            instrument: default(),
-            dividend_adjustment: default(),
-            quote_dividend_adjustment: default(),
-            home_conversion_factors: default(),
-            account_balance: default(),
-            open_trade_dividend_adjustments: default(),
+            instrument: Default::default(),
+            dividend_adjustment: Default::default(),
+            quote_dividend_adjustment: Default::default(),
+            home_conversion_factors: Default::default(),
+            account_balance: Default::default(),
+            open_trade_dividend_adjustments: Default::default(),
         }
     }
 }

@@ -1,10 +1,8 @@
-use definitions::order_cancel_transaction::OrderCancelTransaction;
-use definitions::order_cancel_reject_transaction::OrderCancelRejectTransaction;
-use definitions::transaction_id::TransactionID;
-use endpoints::order::responses::cancel::Cancel404;
-use serde::{Serialize, Deserialize};
+use crate::definitions::transaction_id::TransactionID;
+use crate::definitions::order_cancel_transaction::OrderCancelTransaction;
+use crate::endpoints::order::responses::cancel::Cancel404;
+use crate::definitions::order_cancel_reject_transaction::OrderCancelRejectTransaction;
 /// The Order was cancelled as specified
-use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Cancel200 {
     /// The Transaction that cancelled the Order
@@ -18,15 +16,13 @@ pub struct Cancel200 {
 }
 impl Default for Cancel200 {
     fn default() -> Self {
-        use Default::default;
         Self {
-            order_cancel_transaction: default(),
-            related_transaction_i_ds: default(),
-            last_transaction_id: default(),
+            order_cancel_transaction: Default::default(),
+            related_transaction_i_ds: Default::default(),
+            last_transaction_id: Default::default(),
         }
     }
 }
-use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Cancel404 {
     /// The Transaction that rejected the cancellation of the Order.
@@ -47,13 +43,12 @@ pub struct Cancel404 {
 }
 impl Default for Cancel404 {
     fn default() -> Self {
-        use Default::default;
         Self {
-            order_cancel_reject_transaction: default(),
-            related_transaction_i_ds: default(),
-            last_transaction_id: default(),
-            error_code: default(),
-            error_message: default(),
+            order_cancel_reject_transaction: Default::default(),
+            related_transaction_i_ds: Default::default(),
+            last_transaction_id: Default::default(),
+            error_code: Default::default(),
+            error_message: Default::default(),
         }
     }
 }

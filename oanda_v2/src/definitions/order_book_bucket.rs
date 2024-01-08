@@ -1,5 +1,5 @@
-use definitions::price_value::PriceValue;
-use definitions::decimal_number::DecimalNumber;
+use crate::definitions::decimal_number::DecimalNumber;
+use crate::definitions::price_value::PriceValue;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct OrderBookBucket {
@@ -16,11 +16,10 @@ pub struct OrderBookBucket {
 }
 impl Default for OrderBookBucket {
     fn default() -> Self {
-        use Default::default;
         Self {
-            price: default(),
-            long_count_percent: default(),
-            short_count_percent: default(),
+            price: Default::default(),
+            long_count_percent: Default::default(),
+            short_count_percent: Default::default(),
         }
     }
 }

@@ -1,7 +1,7 @@
-use chrono::DateTime;
-use definitions::decimal_number::DecimalNumber;
-use definitions::time_in_force::TimeInForce;
-use definitions::client_extensions::ClientExtensions;
+use crate::chrono::DateTime;
+use crate::definitions::time_in_force::TimeInForce;
+use crate::definitions::client_extensions::ClientExtensions;
+use crate::definitions::decimal_number::DecimalNumber;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct TrailingStopLossDetails {
@@ -21,12 +21,11 @@ pub struct TrailingStopLossDetails {
 }
 impl Default for TrailingStopLossDetails {
     fn default() -> Self {
-        use Default::default;
         Self {
-            distance: default(),
+            distance: Default::default(),
             time_in_force: "GTC",
-            gtd_time: default(),
-            client_extensions: default(),
+            gtd_time: Default::default(),
+            client_extensions: Default::default(),
         }
     }
 }

@@ -1,5 +1,5 @@
-use definitions::account_units::AccountUnits;
-use definitions::decimal_number::DecimalNumber;
+use crate::definitions::decimal_number::DecimalNumber;
+use crate::definitions::account_units::AccountUnits;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct CalculatedAccountState {
@@ -41,21 +41,20 @@ pub struct CalculatedAccountState {
 }
 impl Default for CalculatedAccountState {
     fn default() -> Self {
-        use Default::default;
         Self {
-            unrealized_pl: default(),
-            nav: default(),
-            margin_used: default(),
-            margin_available: default(),
-            position_value: default(),
-            margin_closeout_unrealized_pl: default(),
-            margin_closeout_nav: default(),
-            margin_closeout_margin_used: default(),
-            margin_closeout_percent: default(),
-            margin_closeout_position_value: default(),
-            withdrawal_limit: default(),
-            margin_call_margin_used: default(),
-            margin_call_percent: default(),
+            unrealized_pl: Default::default(),
+            nav: Default::default(),
+            margin_used: Default::default(),
+            margin_available: Default::default(),
+            position_value: Default::default(),
+            margin_closeout_unrealized_pl: Default::default(),
+            margin_closeout_nav: Default::default(),
+            margin_closeout_margin_used: Default::default(),
+            margin_closeout_percent: Default::default(),
+            margin_closeout_position_value: Default::default(),
+            withdrawal_limit: Default::default(),
+            margin_call_margin_used: Default::default(),
+            margin_call_percent: Default::default(),
         }
     }
 }

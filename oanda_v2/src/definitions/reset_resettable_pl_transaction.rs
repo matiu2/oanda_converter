@@ -1,8 +1,8 @@
-use chrono::DateTime;
-use definitions::transaction_type::TransactionType;
-use definitions::transaction_id::TransactionID;
-use definitions::account_id::AccountID;
-use definitions::request_id::RequestID;
+use crate::definitions::account_id::AccountID;
+use crate::definitions::request_id::RequestID;
+use crate::chrono::DateTime;
+use crate::definitions::transaction_id::TransactionID;
+use crate::definitions::transaction_type::TransactionType;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct ResetResettablePLTransaction {
@@ -29,14 +29,13 @@ pub struct ResetResettablePLTransaction {
 }
 impl Default for ResetResettablePLTransaction {
     fn default() -> Self {
-        use Default::default;
         Self {
-            id: default(),
-            time: default(),
-            user_id: default(),
-            account_id: default(),
-            batch_id: default(),
-            request_id: default(),
+            id: Default::default(),
+            time: Default::default(),
+            user_id: Default::default(),
+            account_id: Default::default(),
+            batch_id: Default::default(),
+            request_id: Default::default(),
             r#type: "RESET_RESETTABLE_PL",
         }
     }

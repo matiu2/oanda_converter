@@ -1,7 +1,5 @@
-use definitions::account_properties::AccountProperties;
-use serde::{Serialize, Deserialize};
+use crate::definitions::account_properties::AccountProperties;
 /// The list of authorized Accounts has been provided.
-use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Accounts200 {
     /// The list of Accounts the client is authorized to access and
@@ -10,7 +8,8 @@ pub struct Accounts200 {
 }
 impl Default for Accounts200 {
     fn default() -> Self {
-        use Default::default;
-        Self { accounts: default() }
+        Self {
+            accounts: Default::default(),
+        }
     }
 }

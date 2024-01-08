@@ -1,12 +1,12 @@
-use definitions::client_id::ClientID;
-use definitions::order_type::OrderType;
-use definitions::decimal_number::DecimalNumber;
-use definitions::price_value::PriceValue;
-use definitions::time_in_force::TimeInForce;
-use chrono::DateTime;
-use definitions::trade_id::TradeID;
-use definitions::order_trigger_condition::OrderTriggerCondition;
-use definitions::client_extensions::ClientExtensions;
+use crate::chrono::DateTime;
+use crate::definitions::order_trigger_condition::OrderTriggerCondition;
+use crate::definitions::client_extensions::ClientExtensions;
+use crate::definitions::decimal_number::DecimalNumber;
+use crate::definitions::order_type::OrderType;
+use crate::definitions::client_id::ClientID;
+use crate::definitions::time_in_force::TimeInForce;
+use crate::definitions::trade_id::TradeID;
+use crate::definitions::price_value::PriceValue;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct StopLossOrderRequest {
@@ -66,17 +66,16 @@ pub struct StopLossOrderRequest {
 }
 impl Default for StopLossOrderRequest {
     fn default() -> Self {
-        use Default::default;
         Self {
             r#type: "STOP_LOSS",
-            trade_id: default(),
-            client_trade_id: default(),
-            price: default(),
-            distance: default(),
+            trade_id: Default::default(),
+            client_trade_id: Default::default(),
+            price: Default::default(),
+            distance: Default::default(),
             time_in_force: "GTC",
-            gtd_time: default(),
+            gtd_time: Default::default(),
             trigger_condition: "DEFAULT",
-            client_extensions: default(),
+            client_extensions: Default::default(),
         }
     }
 }

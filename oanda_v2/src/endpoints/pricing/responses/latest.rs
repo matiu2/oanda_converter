@@ -1,7 +1,5 @@
-use definitions::candlestick_response::CandlestickResponse;
-use serde::{Serialize, Deserialize};
+use crate::definitions::candlestick_response::CandlestickResponse;
 /// Pricing information has been successfully provided.
-use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Latest200 {
     /// The latest candle sticks.
@@ -9,7 +7,8 @@ pub struct Latest200 {
 }
 impl Default for Latest200 {
     fn default() -> Self {
-        use Default::default;
-        Self { latest_candles: default() }
+        Self {
+            latest_candles: Default::default(),
+        }
     }
 }

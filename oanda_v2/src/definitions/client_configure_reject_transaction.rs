@@ -1,10 +1,10 @@
-use definitions::transaction_id::TransactionID;
-use chrono::DateTime;
-use definitions::transaction_type::TransactionType;
-use definitions::request_id::RequestID;
-use definitions::transaction_reject_reason::TransactionRejectReason;
-use definitions::decimal_number::DecimalNumber;
-use definitions::account_id::AccountID;
+use crate::definitions::transaction_type::TransactionType;
+use crate::definitions::transaction_id::TransactionID;
+use crate::definitions::account_id::AccountID;
+use crate::definitions::request_id::RequestID;
+use crate::definitions::transaction_reject_reason::TransactionRejectReason;
+use crate::chrono::DateTime;
+use crate::definitions::decimal_number::DecimalNumber;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct ClientConfigureRejectTransaction {
@@ -38,18 +38,17 @@ pub struct ClientConfigureRejectTransaction {
 }
 impl Default for ClientConfigureRejectTransaction {
     fn default() -> Self {
-        use Default::default;
         Self {
-            id: default(),
-            time: default(),
-            user_id: default(),
-            account_id: default(),
-            batch_id: default(),
-            request_id: default(),
+            id: Default::default(),
+            time: Default::default(),
+            user_id: Default::default(),
+            account_id: Default::default(),
+            batch_id: Default::default(),
+            request_id: Default::default(),
             r#type: "CLIENT_CONFIGURE_REJECT",
-            alias: default(),
-            margin_rate: default(),
-            reject_reason: default(),
+            alias: Default::default(),
+            margin_rate: Default::default(),
+            reject_reason: Default::default(),
         }
     }
 }

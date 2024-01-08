@@ -1,12 +1,10 @@
-use endpoints::order::responses::put::Put400;
-use endpoints::transaction::Transaction;
-use definitions::order_cancel_transaction::OrderCancelTransaction;
-use definitions::order_fill_transaction::OrderFillTransaction;
-use endpoints::order::responses::put::Put404;
-use definitions::transaction_id::TransactionID;
-use serde::{Serialize, Deserialize};
+use crate::definitions::order_cancel_transaction::OrderCancelTransaction;
+use crate::definitions::transaction_id::TransactionID;
+use crate::endpoints::order::responses::put::Put400;
+use crate::endpoints::order::responses::put::Put404;
+use crate::definitions::order_fill_transaction::OrderFillTransaction;
+use crate::endpoints::transaction::Transaction;
 /// The Order was successfully cancelled and replaced
-use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Put201 {
     /// The Transaction that cancelled the Order to be replaced.
@@ -40,20 +38,18 @@ pub struct Put201 {
 }
 impl Default for Put201 {
     fn default() -> Self {
-        use Default::default;
         Self {
-            order_cancel_transaction: default(),
-            order_create_transaction: default(),
-            order_fill_transaction: default(),
-            order_reissue_transaction: default(),
-            order_reissue_reject_transaction: default(),
-            replacing_order_cancel_transaction: default(),
-            related_transaction_i_ds: default(),
-            last_transaction_id: default(),
+            order_cancel_transaction: Default::default(),
+            order_create_transaction: Default::default(),
+            order_fill_transaction: Default::default(),
+            order_reissue_transaction: Default::default(),
+            order_reissue_reject_transaction: Default::default(),
+            replacing_order_cancel_transaction: Default::default(),
+            related_transaction_i_ds: Default::default(),
+            last_transaction_id: Default::default(),
         }
     }
 }
-use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Put400 {
     /// The Transaction that rejected the creation of the replacing
@@ -74,17 +70,15 @@ pub struct Put400 {
 }
 impl Default for Put400 {
     fn default() -> Self {
-        use Default::default;
         Self {
-            order_reject_transaction: default(),
-            related_transaction_i_ds: default(),
-            last_transaction_id: default(),
-            error_code: default(),
-            error_message: default(),
+            order_reject_transaction: Default::default(),
+            related_transaction_i_ds: Default::default(),
+            last_transaction_id: Default::default(),
+            error_code: Default::default(),
+            error_message: Default::default(),
         }
     }
 }
-use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Put404 {
     /// The Transaction that rejected the cancellation of the Order
@@ -105,13 +99,12 @@ pub struct Put404 {
 }
 impl Default for Put404 {
     fn default() -> Self {
-        use Default::default;
         Self {
-            order_cancel_reject_transaction: default(),
-            related_transaction_i_ds: default(),
-            last_transaction_id: default(),
-            error_code: default(),
-            error_message: default(),
+            order_cancel_reject_transaction: Default::default(),
+            related_transaction_i_ds: Default::default(),
+            last_transaction_id: Default::default(),
+            error_code: Default::default(),
+            error_message: Default::default(),
         }
     }
 }

@@ -1,4 +1,4 @@
-use definitions::day_of_week::DayOfWeek;
+use crate::definitions::day_of_week::DayOfWeek;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct FinancingDayOfWeek {
@@ -10,10 +10,9 @@ pub struct FinancingDayOfWeek {
 }
 impl Default for FinancingDayOfWeek {
     fn default() -> Self {
-        use Default::default;
         Self {
-            day_of_week: default(),
-            days_charged: default(),
+            day_of_week: Default::default(),
+            days_charged: Default::default(),
         }
     }
 }

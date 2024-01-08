@@ -1,4 +1,4 @@
-use definitions::liquidity_regeneration_schedule_step::LiquidityRegenerationScheduleStep;
+use crate::definitions::liquidity_regeneration_schedule_step::LiquidityRegenerationScheduleStep;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct LiquidityRegenerationSchedule {
@@ -7,7 +7,6 @@ pub struct LiquidityRegenerationSchedule {
 }
 impl Default for LiquidityRegenerationSchedule {
     fn default() -> Self {
-        use Default::default;
-        Self { steps: default() }
+        Self { steps: Default::default() }
     }
 }

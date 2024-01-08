@@ -1,8 +1,6 @@
-use definitions::transaction_id::TransactionID;
-use endpoints::trade::Trade;
-use serde::{Serialize, Deserialize};
+use crate::endpoints::trade::Trade;
+use crate::definitions::transaction_id::TransactionID;
 /// The Account’s list of open Trades is provided
-use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct OpenTrades200 {
     /// The Account’s list of open Trades
@@ -13,10 +11,9 @@ pub struct OpenTrades200 {
 }
 impl Default for OpenTrades200 {
     fn default() -> Self {
-        use Default::default;
         Self {
-            trades: default(),
-            last_transaction_id: default(),
+            trades: Default::default(),
+            last_transaction_id: Default::default(),
         }
     }
 }

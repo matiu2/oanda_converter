@@ -1,18 +1,18 @@
-use definitions::order_type::OrderType;
-use definitions::guaranteed_stop_loss_details::GuaranteedStopLossDetails;
-use definitions::order_position_fill::OrderPositionFill;
-use definitions::price_value::PriceValue;
-use definitions::decimal_number::DecimalNumber;
-use definitions::order_id::OrderID;
-use definitions::stop_loss_details::StopLossDetails;
-use definitions::trade_id::TradeID;
-use definitions::order_state::OrderState;
-use definitions::trailing_stop_loss_details::TrailingStopLossDetails;
-use definitions::client_extensions::ClientExtensions;
-use definitions::transaction_id::TransactionID;
-use definitions::take_profit_details::TakeProfitDetails;
-use definitions::instrument_name::InstrumentName;
-use chrono::DateTime;
+use crate::definitions::order_id::OrderID;
+use crate::definitions::transaction_id::TransactionID;
+use crate::definitions::guaranteed_stop_loss_details::GuaranteedStopLossDetails;
+use crate::definitions::order_state::OrderState;
+use crate::chrono::DateTime;
+use crate::definitions::stop_loss_details::StopLossDetails;
+use crate::definitions::decimal_number::DecimalNumber;
+use crate::definitions::order_position_fill::OrderPositionFill;
+use crate::definitions::trailing_stop_loss_details::TrailingStopLossDetails;
+use crate::definitions::take_profit_details::TakeProfitDetails;
+use crate::definitions::client_extensions::ClientExtensions;
+use crate::definitions::instrument_name::InstrumentName;
+use crate::definitions::price_value::PriceValue;
+use crate::definitions::trade_id::TradeID;
+use crate::definitions::order_type::OrderType;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct FixedPriceOrder {
@@ -105,30 +105,29 @@ pub struct FixedPriceOrder {
 }
 impl Default for FixedPriceOrder {
     fn default() -> Self {
-        use Default::default;
         Self {
-            id: default(),
-            create_time: default(),
-            state: default(),
-            client_extensions: default(),
+            id: Default::default(),
+            create_time: Default::default(),
+            state: Default::default(),
+            client_extensions: Default::default(),
             r#type: "FIXED_PRICE",
-            instrument: default(),
-            units: default(),
-            price: default(),
+            instrument: Default::default(),
+            units: Default::default(),
+            price: Default::default(),
             position_fill: "DEFAULT",
-            trade_state: default(),
-            take_profit_on_fill: default(),
-            stop_loss_on_fill: default(),
-            guaranteed_stop_loss_on_fill: default(),
-            trailing_stop_loss_on_fill: default(),
-            trade_client_extensions: default(),
-            filling_transaction_id: default(),
-            filled_time: default(),
-            trade_opened_id: default(),
-            trade_reduced_id: default(),
-            trade_closed_i_ds: default(),
-            cancelling_transaction_id: default(),
-            cancelled_time: default(),
+            trade_state: Default::default(),
+            take_profit_on_fill: Default::default(),
+            stop_loss_on_fill: Default::default(),
+            guaranteed_stop_loss_on_fill: Default::default(),
+            trailing_stop_loss_on_fill: Default::default(),
+            trade_client_extensions: Default::default(),
+            filling_transaction_id: Default::default(),
+            filled_time: Default::default(),
+            trade_opened_id: Default::default(),
+            trade_reduced_id: Default::default(),
+            trade_closed_i_ds: Default::default(),
+            cancelling_transaction_id: Default::default(),
+            cancelled_time: Default::default(),
         }
     }
 }

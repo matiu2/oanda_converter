@@ -1,5 +1,5 @@
-use definitions::account_units::AccountUnits;
-use definitions::instrument_name::InstrumentName;
+use crate::definitions::instrument_name::InstrumentName;
+use crate::definitions::account_units::AccountUnits;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct CalculatedPositionState {
@@ -18,13 +18,12 @@ pub struct CalculatedPositionState {
 }
 impl Default for CalculatedPositionState {
     fn default() -> Self {
-        use Default::default;
         Self {
-            instrument: default(),
-            net_unrealized_pl: default(),
-            long_unrealized_pl: default(),
-            short_unrealized_pl: default(),
-            margin_used: default(),
+            instrument: Default::default(),
+            net_unrealized_pl: Default::default(),
+            long_unrealized_pl: Default::default(),
+            short_unrealized_pl: Default::default(),
+            margin_used: Default::default(),
         }
     }
 }

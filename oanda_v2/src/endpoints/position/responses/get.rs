@@ -1,8 +1,6 @@
-use endpoints::position::Position;
-use definitions::transaction_id::TransactionID;
-use serde::{Serialize, Deserialize};
+use crate::endpoints::position::Position;
+use crate::definitions::transaction_id::TransactionID;
 /// The Position is provided.
-use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Get200 {
     /// The requested Position.
@@ -13,10 +11,9 @@ pub struct Get200 {
 }
 impl Default for Get200 {
     fn default() -> Self {
-        use Default::default;
         Self {
-            position: default(),
-            last_transaction_id: default(),
+            position: Default::default(),
+            last_transaction_id: Default::default(),
         }
     }
 }

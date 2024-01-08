@@ -1,11 +1,12 @@
-use definitions::decimal_number::DecimalNumber;
-use definitions::pricing_component::PricingComponent;
-use definitions::accept_datetime_format::AcceptDatetimeFormat;
-use definitions::weekly_alignment::WeeklyAlignment;
-use definitions::candlestick_granularity::CandlestickGranularity;
-use chrono::DateTime;
-use definitions::instrument_name::InstrumentName;
+use crate::definitions::weekly_alignment::WeeklyAlignment;
+use crate::definitions::accept_datetime_format::AcceptDatetimeFormat;
+use crate::definitions::instrument_name::InstrumentName;
+use crate::definitions::decimal_number::DecimalNumber;
+use crate::definitions::pricing_component::PricingComponent;
+use crate::definitions::candlestick_granularity::CandlestickGranularity;
+use crate::chrono::DateTime;
 use crate::{client::Client, Error, Result};
+use serde::{Serialize, Deserialize};
 pub mod responses;
 struct Pricing<'a> {
     client: &'a Client,

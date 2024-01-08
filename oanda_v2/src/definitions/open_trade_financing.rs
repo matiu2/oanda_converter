@@ -1,6 +1,6 @@
-use definitions::trade_id::TradeID;
-use definitions::decimal_number::DecimalNumber;
-use definitions::account_units::AccountUnits;
+use crate::definitions::account_units::AccountUnits;
+use crate::definitions::decimal_number::DecimalNumber;
+use crate::definitions::trade_id::TradeID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct OpenTradeFinancing {
@@ -26,13 +26,12 @@ pub struct OpenTradeFinancing {
 }
 impl Default for OpenTradeFinancing {
     fn default() -> Self {
-        use Default::default;
         Self {
-            trade_id: default(),
-            financing: default(),
-            base_financing: default(),
-            quote_financing: default(),
-            financing_rate: default(),
+            trade_id: Default::default(),
+            financing: Default::default(),
+            base_financing: Default::default(),
+            quote_financing: Default::default(),
+            financing_rate: Default::default(),
         }
     }
 }

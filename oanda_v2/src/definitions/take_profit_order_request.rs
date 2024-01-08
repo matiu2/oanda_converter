@@ -1,11 +1,11 @@
-use definitions::client_id::ClientID;
-use definitions::client_extensions::ClientExtensions;
-use definitions::order_trigger_condition::OrderTriggerCondition;
-use chrono::DateTime;
-use definitions::time_in_force::TimeInForce;
-use definitions::price_value::PriceValue;
-use definitions::order_type::OrderType;
-use definitions::trade_id::TradeID;
+use crate::definitions::price_value::PriceValue;
+use crate::definitions::client_id::ClientID;
+use crate::chrono::DateTime;
+use crate::definitions::order_type::OrderType;
+use crate::definitions::order_trigger_condition::OrderTriggerCondition;
+use crate::definitions::trade_id::TradeID;
+use crate::definitions::time_in_force::TimeInForce;
+use crate::definitions::client_extensions::ClientExtensions;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct TakeProfitOrderRequest {
@@ -60,16 +60,15 @@ pub struct TakeProfitOrderRequest {
 }
 impl Default for TakeProfitOrderRequest {
     fn default() -> Self {
-        use Default::default;
         Self {
             r#type: "TAKE_PROFIT",
-            trade_id: default(),
-            client_trade_id: default(),
-            price: default(),
+            trade_id: Default::default(),
+            client_trade_id: Default::default(),
+            price: Default::default(),
             time_in_force: "GTC",
-            gtd_time: default(),
+            gtd_time: Default::default(),
             trigger_condition: "DEFAULT",
-            client_extensions: default(),
+            client_extensions: Default::default(),
         }
     }
 }

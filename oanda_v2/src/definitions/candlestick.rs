@@ -1,5 +1,5 @@
-use chrono::DateTime;
-use definitions::candlestick_data::CandlestickData;
+use crate::definitions::candlestick_data::CandlestickData;
+use crate::chrono::DateTime;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Candlestick {
@@ -23,14 +23,13 @@ pub struct Candlestick {
 }
 impl Default for Candlestick {
     fn default() -> Self {
-        use Default::default;
         Self {
-            time: default(),
-            bid: default(),
-            ask: default(),
-            mid: default(),
-            volume: default(),
-            complete: default(),
+            time: Default::default(),
+            bid: Default::default(),
+            ask: Default::default(),
+            mid: Default::default(),
+            volume: Default::default(),
+            complete: Default::default(),
         }
     }
 }

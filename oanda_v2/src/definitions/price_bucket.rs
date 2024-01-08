@@ -1,4 +1,4 @@
-use definitions::price_value::PriceValue;
+use crate::definitions::price_value::PriceValue;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct PriceBucket {
@@ -9,10 +9,9 @@ pub struct PriceBucket {
 }
 impl Default for PriceBucket {
     fn default() -> Self {
-        use Default::default;
         Self {
-            price: default(),
-            liquidity: default(),
+            price: Default::default(),
+            liquidity: Default::default(),
         }
     }
 }

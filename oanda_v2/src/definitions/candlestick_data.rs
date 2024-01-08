@@ -1,4 +1,4 @@
-use definitions::price_value::PriceValue;
+use crate::definitions::price_value::PriceValue;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct CandlestickData {
@@ -17,12 +17,11 @@ pub struct CandlestickData {
 }
 impl Default for CandlestickData {
     fn default() -> Self {
-        use Default::default;
         Self {
-            o: default(),
-            h: default(),
-            l: default(),
-            c: default(),
+            o: Default::default(),
+            h: Default::default(),
+            l: Default::default(),
+            c: Default::default(),
         }
     }
 }

@@ -1,6 +1,6 @@
-use definitions::instrument_name::InstrumentName;
-use definitions::candlestick_granularity::CandlestickGranularity;
-use definitions::candlestick::Candlestick;
+use crate::definitions::candlestick_granularity::CandlestickGranularity;
+use crate::definitions::instrument_name::InstrumentName;
+use crate::definitions::candlestick::Candlestick;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct CandlestickResponse {
@@ -14,11 +14,10 @@ pub struct CandlestickResponse {
 }
 impl Default for CandlestickResponse {
     fn default() -> Self {
-        use Default::default;
         Self {
-            instrument: default(),
-            granularity: default(),
-            candles: default(),
+            instrument: Default::default(),
+            granularity: Default::default(),
+            candles: Default::default(),
         }
     }
 }

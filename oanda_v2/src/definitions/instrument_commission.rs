@@ -1,4 +1,4 @@
-use definitions::decimal_number::DecimalNumber;
+use crate::definitions::decimal_number::DecimalNumber;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct InstrumentCommission {
@@ -15,11 +15,10 @@ pub struct InstrumentCommission {
 }
 impl Default for InstrumentCommission {
     fn default() -> Self {
-        use Default::default;
         Self {
-            commission: default(),
-            units_traded: default(),
-            minimum_commission: default(),
+            commission: Default::default(),
+            units_traded: Default::default(),
+            minimum_commission: Default::default(),
         }
     }
 }

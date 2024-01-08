@@ -1,18 +1,18 @@
-use definitions::transaction_id::TransactionID;
-use chrono::DateTime;
-use definitions::decimal_number::DecimalNumber;
-use definitions::request_id::RequestID;
-use definitions::client_extensions::ClientExtensions;
-use definitions::time_in_force::TimeInForce;
-use definitions::price_value::PriceValue;
-use definitions::stop_loss_order_reason::StopLossOrderReason;
-use definitions::transaction_type::TransactionType;
-use definitions::transaction_reject_reason::TransactionRejectReason;
-use definitions::trade_id::TradeID;
-use definitions::account_id::AccountID;
-use definitions::order_trigger_condition::OrderTriggerCondition;
-use definitions::order_id::OrderID;
-use definitions::client_id::ClientID;
+use crate::definitions::time_in_force::TimeInForce;
+use crate::definitions::transaction_reject_reason::TransactionRejectReason;
+use crate::definitions::order_trigger_condition::OrderTriggerCondition;
+use crate::definitions::stop_loss_order_reason::StopLossOrderReason;
+use crate::definitions::transaction_id::TransactionID;
+use crate::definitions::transaction_type::TransactionType;
+use crate::chrono::DateTime;
+use crate::definitions::request_id::RequestID;
+use crate::definitions::client_extensions::ClientExtensions;
+use crate::definitions::order_id::OrderID;
+use crate::definitions::account_id::AccountID;
+use crate::definitions::trade_id::TradeID;
+use crate::definitions::price_value::PriceValue;
+use crate::definitions::client_id::ClientID;
+use crate::definitions::decimal_number::DecimalNumber;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct StopLossOrderRejectTransaction {
@@ -100,27 +100,26 @@ pub struct StopLossOrderRejectTransaction {
 }
 impl Default for StopLossOrderRejectTransaction {
     fn default() -> Self {
-        use Default::default;
         Self {
-            id: default(),
-            time: default(),
-            user_id: default(),
-            account_id: default(),
-            batch_id: default(),
-            request_id: default(),
+            id: Default::default(),
+            time: Default::default(),
+            user_id: Default::default(),
+            account_id: Default::default(),
+            batch_id: Default::default(),
+            request_id: Default::default(),
             r#type: "STOP_LOSS_ORDER_REJECT",
-            trade_id: default(),
-            client_trade_id: default(),
-            price: default(),
-            distance: default(),
+            trade_id: Default::default(),
+            client_trade_id: Default::default(),
+            price: Default::default(),
+            distance: Default::default(),
             time_in_force: "GTC",
-            gtd_time: default(),
+            gtd_time: Default::default(),
             trigger_condition: "DEFAULT",
-            reason: default(),
-            client_extensions: default(),
-            order_fill_transaction_id: default(),
-            intended_replaces_order_id: default(),
-            reject_reason: default(),
+            reason: Default::default(),
+            client_extensions: Default::default(),
+            order_fill_transaction_id: Default::default(),
+            intended_replaces_order_id: Default::default(),
+            reject_reason: Default::default(),
         }
     }
 }

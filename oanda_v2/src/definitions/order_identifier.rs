@@ -1,5 +1,5 @@
-use definitions::client_id::ClientID;
-use definitions::order_id::OrderID;
+use crate::definitions::order_id::OrderID;
+use crate::definitions::client_id::ClientID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct OrderIdentifier {
@@ -10,10 +10,9 @@ pub struct OrderIdentifier {
 }
 impl Default for OrderIdentifier {
     fn default() -> Self {
-        use Default::default;
         Self {
-            order_id: default(),
-            client_order_id: default(),
+            order_id: Default::default(),
+            client_order_id: Default::default(),
         }
     }
 }

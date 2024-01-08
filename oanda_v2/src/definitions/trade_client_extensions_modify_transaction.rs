@@ -1,11 +1,11 @@
-use definitions::trade_id::TradeID;
-use definitions::transaction_id::TransactionID;
-use definitions::transaction_type::TransactionType;
-use chrono::DateTime;
-use definitions::account_id::AccountID;
-use definitions::client_extensions::ClientExtensions;
-use definitions::client_id::ClientID;
-use definitions::request_id::RequestID;
+use crate::definitions::client_id::ClientID;
+use crate::definitions::account_id::AccountID;
+use crate::definitions::transaction_id::TransactionID;
+use crate::definitions::transaction_type::TransactionType;
+use crate::definitions::trade_id::TradeID;
+use crate::chrono::DateTime;
+use crate::definitions::client_extensions::ClientExtensions;
+use crate::definitions::request_id::RequestID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct TradeClientExtensionsModifyTransaction {
@@ -41,18 +41,17 @@ pub struct TradeClientExtensionsModifyTransaction {
 }
 impl Default for TradeClientExtensionsModifyTransaction {
     fn default() -> Self {
-        use Default::default;
         Self {
-            id: default(),
-            time: default(),
-            user_id: default(),
-            account_id: default(),
-            batch_id: default(),
-            request_id: default(),
+            id: Default::default(),
+            time: Default::default(),
+            user_id: Default::default(),
+            account_id: Default::default(),
+            batch_id: Default::default(),
+            request_id: Default::default(),
             r#type: "TRADE_CLIENT_EXTENSIONS_MODIFY",
-            trade_id: default(),
-            client_trade_id: default(),
-            trade_client_extensions_modify: default(),
+            trade_id: Default::default(),
+            client_trade_id: Default::default(),
+            trade_client_extensions_modify: Default::default(),
         }
     }
 }

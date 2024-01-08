@@ -1,7 +1,7 @@
-use definitions::account_units::AccountUnits;
-use definitions::decimal_number::DecimalNumber;
-use definitions::trade_id::TradeID;
-use definitions::price_value::PriceValue;
+use crate::definitions::decimal_number::DecimalNumber;
+use crate::definitions::price_value::PriceValue;
+use crate::definitions::account_units::AccountUnits;
+use crate::definitions::trade_id::TradeID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct TradeReduce {
@@ -41,19 +41,18 @@ pub struct TradeReduce {
 }
 impl Default for TradeReduce {
     fn default() -> Self {
-        use Default::default;
         Self {
-            trade_id: default(),
-            units: default(),
-            price: default(),
-            realized_pl: default(),
-            financing: default(),
-            base_financing: default(),
-            quote_financing: default(),
-            financing_rate: default(),
-            guaranteed_execution_fee: default(),
-            quote_guaranteed_execution_fee: default(),
-            half_spread_cost: default(),
+            trade_id: Default::default(),
+            units: Default::default(),
+            price: Default::default(),
+            realized_pl: Default::default(),
+            financing: Default::default(),
+            base_financing: Default::default(),
+            quote_financing: Default::default(),
+            financing_rate: Default::default(),
+            guaranteed_execution_fee: Default::default(),
+            quote_guaranteed_execution_fee: Default::default(),
+            half_spread_cost: Default::default(),
         }
     }
 }

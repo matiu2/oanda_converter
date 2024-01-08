@@ -1,11 +1,9 @@
-use endpoints::trade::responses::client_extensions::ClientExtensions400;
-use definitions::order_client_extensions_modify_transaction::OrderClientExtensionsModifyTransaction;
-use definitions::order_client_extensions_modify_reject_transaction::OrderClientExtensionsModifyRejectTransaction;
-use endpoints::trade::responses::client_extensions::ClientExtensions404;
-use definitions::transaction_id::TransactionID;
-use serde::{Serialize, Deserialize};
+use crate::endpoints::trade::responses::client_extensions::ClientExtensions404;
+use crate::endpoints::trade::responses::client_extensions::ClientExtensions400;
+use crate::definitions::order_client_extensions_modify_reject_transaction::OrderClientExtensionsModifyRejectTransaction;
+use crate::definitions::transaction_id::TransactionID;
+use crate::definitions::order_client_extensions_modify_transaction::OrderClientExtensionsModifyTransaction;
 /// The Order’s Client Extensions were successfully modified
-use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct ClientExtensions200 {
     /// The Transaction that modified the Client Extensions for
@@ -22,15 +20,13 @@ pub struct ClientExtensions200 {
 }
 impl Default for ClientExtensions200 {
     fn default() -> Self {
-        use Default::default;
         Self {
-            order_client_extensions_modify_transaction: default(),
-            last_transaction_id: default(),
-            related_transaction_i_ds: default(),
+            order_client_extensions_modify_transaction: Default::default(),
+            last_transaction_id: Default::default(),
+            related_transaction_i_ds: Default::default(),
         }
     }
 }
-use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct ClientExtensions400 {
     /// The Transaction that rejected the modification of the Client
@@ -53,17 +49,15 @@ pub struct ClientExtensions400 {
 }
 impl Default for ClientExtensions400 {
     fn default() -> Self {
-        use Default::default;
         Self {
-            order_client_extensions_modify_reject_transaction: default(),
-            last_transaction_id: default(),
-            related_transaction_i_ds: default(),
-            error_code: default(),
-            error_message: default(),
+            order_client_extensions_modify_reject_transaction: Default::default(),
+            last_transaction_id: Default::default(),
+            related_transaction_i_ds: Default::default(),
+            error_code: Default::default(),
+            error_message: Default::default(),
         }
     }
 }
-use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct ClientExtensions404 {
     /// The Transaction that rejected the modification of the
@@ -87,13 +81,12 @@ pub struct ClientExtensions404 {
 }
 impl Default for ClientExtensions404 {
     fn default() -> Self {
-        use Default::default;
         Self {
-            order_client_extensions_modify_reject_transaction: default(),
-            last_transaction_id: default(),
-            related_transaction_i_ds: default(),
-            error_code: default(),
-            error_message: default(),
+            order_client_extensions_modify_reject_transaction: Default::default(),
+            last_transaction_id: Default::default(),
+            related_transaction_i_ds: Default::default(),
+            error_code: Default::default(),
+            error_message: Default::default(),
         }
     }
 }

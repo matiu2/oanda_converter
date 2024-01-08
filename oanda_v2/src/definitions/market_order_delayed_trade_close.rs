@@ -1,5 +1,5 @@
-use definitions::trade_id::TradeID;
-use definitions::transaction_id::TransactionID;
+use crate::definitions::transaction_id::TransactionID;
+use crate::definitions::trade_id::TradeID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct MarketOrderDelayedTradeClose {
@@ -13,11 +13,10 @@ pub struct MarketOrderDelayedTradeClose {
 }
 impl Default for MarketOrderDelayedTradeClose {
     fn default() -> Self {
-        use Default::default;
         Self {
-            trade_id: default(),
-            client_trade_id: default(),
-            source_transaction_id: default(),
+            trade_id: Default::default(),
+            client_trade_id: Default::default(),
+            source_transaction_id: Default::default(),
         }
     }
 }

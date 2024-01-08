@@ -1,9 +1,7 @@
-use definitions::transaction_id::TransactionID;
-use chrono::DateTime;
-use definitions::transaction_filter::TransactionFilter;
-use serde::{Serialize, Deserialize};
+use crate::definitions::transaction_filter::TransactionFilter;
+use crate::chrono::DateTime;
+use crate::definitions::transaction_id::TransactionID;
 /// The requested time range of Transaction pages are provided.
-use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Transactions200 {
     /// The starting time provided in the request.
@@ -26,15 +24,14 @@ pub struct Transactions200 {
 }
 impl Default for Transactions200 {
     fn default() -> Self {
-        use Default::default;
         Self {
-            from: default(),
-            to: default(),
-            page_size: default(),
-            r#type: default(),
-            count: default(),
-            pages: default(),
-            last_transaction_id: default(),
+            from: Default::default(),
+            to: Default::default(),
+            page_size: Default::default(),
+            r#type: Default::default(),
+            count: Default::default(),
+            pages: Default::default(),
+            last_transaction_id: Default::default(),
         }
     }
 }

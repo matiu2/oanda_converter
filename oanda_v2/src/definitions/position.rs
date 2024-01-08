@@ -1,6 +1,6 @@
-use definitions::instrument_name::InstrumentName;
-use definitions::position_side::PositionSide;
-use definitions::account_units::AccountUnits;
+use crate::definitions::instrument_name::InstrumentName;
+use crate::definitions::position_side::PositionSide;
+use crate::definitions::account_units::AccountUnits;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Position {
@@ -37,19 +37,18 @@ pub struct Position {
 }
 impl Default for Position {
     fn default() -> Self {
-        use Default::default;
         Self {
-            instrument: default(),
-            pl: default(),
-            unrealized_pl: default(),
-            margin_used: default(),
-            resettable_pl: default(),
-            financing: default(),
-            commission: default(),
-            dividend_adjustment: default(),
-            guaranteed_execution_fees: default(),
-            long: default(),
-            short: default(),
+            instrument: Default::default(),
+            pl: Default::default(),
+            unrealized_pl: Default::default(),
+            margin_used: Default::default(),
+            resettable_pl: Default::default(),
+            financing: Default::default(),
+            commission: Default::default(),
+            dividend_adjustment: Default::default(),
+            guaranteed_execution_fees: Default::default(),
+            long: Default::default(),
+            short: Default::default(),
         }
     }
 }

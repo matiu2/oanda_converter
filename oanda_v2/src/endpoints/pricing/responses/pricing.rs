@@ -1,9 +1,7 @@
-use definitions::client_price::ClientPrice;
-use chrono::DateTime;
-use definitions::home_conversions::HomeConversions;
-use serde::{Serialize, Deserialize};
+use crate::definitions::client_price::ClientPrice;
+use crate::definitions::home_conversions::HomeConversions;
+use crate::chrono::DateTime;
 /// Pricing information has been successfully provided.
-use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Pricing200 {
     /// The list of Price objects requested.
@@ -18,11 +16,10 @@ pub struct Pricing200 {
 }
 impl Default for Pricing200 {
     fn default() -> Self {
-        use Default::default;
         Self {
-            prices: default(),
-            home_conversions: default(),
-            time: default(),
+            prices: Default::default(),
+            home_conversions: Default::default(),
+            time: Default::default(),
         }
     }
 }

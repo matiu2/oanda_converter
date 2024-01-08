@@ -1,20 +1,18 @@
-use definitions::trailing_stop_loss_order_transaction::TrailingStopLossOrderTransaction;
-use definitions::take_profit_order_transaction::TakeProfitOrderTransaction;
-use definitions::order_cancel_transaction::OrderCancelTransaction;
-use definitions::trailing_stop_loss_order_reject_transaction::TrailingStopLossOrderRejectTransaction;
-use definitions::order_fill_transaction::OrderFillTransaction;
-use definitions::order_cancel_reject_transaction::OrderCancelRejectTransaction;
-use definitions::take_profit_order_reject_transaction::TakeProfitOrderRejectTransaction;
-use definitions::stop_loss_order_reject_transaction::StopLossOrderRejectTransaction;
-use definitions::guaranteed_stop_loss_order_reject_transaction::GuaranteedStopLossOrderRejectTransaction;
-use definitions::stop_loss_order_transaction::StopLossOrderTransaction;
-use definitions::transaction_id::TransactionID;
-use definitions::guaranteed_stop_loss_order_transaction::GuaranteedStopLossOrderTransaction;
-use endpoints::trade::responses::orders::Orders400;
-use serde::{Serialize, Deserialize};
+use crate::definitions::guaranteed_stop_loss_order_transaction::GuaranteedStopLossOrderTransaction;
+use crate::definitions::order_cancel_transaction::OrderCancelTransaction;
+use crate::definitions::order_fill_transaction::OrderFillTransaction;
+use crate::definitions::guaranteed_stop_loss_order_reject_transaction::GuaranteedStopLossOrderRejectTransaction;
+use crate::endpoints::trade::responses::orders::Orders400;
+use crate::definitions::trailing_stop_loss_order_transaction::TrailingStopLossOrderTransaction;
+use crate::definitions::take_profit_order_transaction::TakeProfitOrderTransaction;
+use crate::definitions::trailing_stop_loss_order_reject_transaction::TrailingStopLossOrderRejectTransaction;
+use crate::definitions::transaction_id::TransactionID;
+use crate::definitions::take_profit_order_reject_transaction::TakeProfitOrderRejectTransaction;
+use crate::definitions::stop_loss_order_reject_transaction::StopLossOrderRejectTransaction;
+use crate::definitions::stop_loss_order_transaction::StopLossOrderTransaction;
+use crate::definitions::order_cancel_reject_transaction::OrderCancelRejectTransaction;
 /// The Trade’s dependent Orders have been modified as
 /// requested.
-use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Orders200 {
     /// The Transaction created that cancels the Trade’s existing
@@ -66,26 +64,24 @@ pub struct Orders200 {
 }
 impl Default for Orders200 {
     fn default() -> Self {
-        use Default::default;
         Self {
-            take_profit_order_cancel_transaction: default(),
-            take_profit_order_transaction: default(),
-            take_profit_order_fill_transaction: default(),
-            take_profit_order_created_cancel_transaction: default(),
-            stop_loss_order_cancel_transaction: default(),
-            stop_loss_order_transaction: default(),
-            stop_loss_order_fill_transaction: default(),
-            stop_loss_order_created_cancel_transaction: default(),
-            trailing_stop_loss_order_cancel_transaction: default(),
-            trailing_stop_loss_order_transaction: default(),
-            guaranteed_stop_loss_order_cancel_transaction: default(),
-            guaranteed_stop_loss_order_transaction: default(),
-            related_transaction_i_ds: default(),
-            last_transaction_id: default(),
+            take_profit_order_cancel_transaction: Default::default(),
+            take_profit_order_transaction: Default::default(),
+            take_profit_order_fill_transaction: Default::default(),
+            take_profit_order_created_cancel_transaction: Default::default(),
+            stop_loss_order_cancel_transaction: Default::default(),
+            stop_loss_order_transaction: Default::default(),
+            stop_loss_order_fill_transaction: Default::default(),
+            stop_loss_order_created_cancel_transaction: Default::default(),
+            trailing_stop_loss_order_cancel_transaction: Default::default(),
+            trailing_stop_loss_order_transaction: Default::default(),
+            guaranteed_stop_loss_order_cancel_transaction: Default::default(),
+            guaranteed_stop_loss_order_transaction: Default::default(),
+            related_transaction_i_ds: Default::default(),
+            last_transaction_id: Default::default(),
         }
     }
 }
-use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Orders400 {
     /// An OrderCancelRejectTransaction represents the rejection of
@@ -135,20 +131,19 @@ pub struct Orders400 {
 }
 impl Default for Orders400 {
     fn default() -> Self {
-        use Default::default;
         Self {
-            take_profit_order_cancel_reject_transaction: default(),
-            take_profit_order_reject_transaction: default(),
-            stop_loss_order_cancel_reject_transaction: default(),
-            stop_loss_order_reject_transaction: default(),
-            trailing_stop_loss_order_cancel_reject_transaction: default(),
-            trailing_stop_loss_order_reject_transaction: default(),
-            guaranteed_stop_loss_order_cancel_reject_transaction: default(),
-            guaranteed_stop_loss_order_reject_transaction: default(),
-            last_transaction_id: default(),
-            related_transaction_i_ds: default(),
-            error_code: default(),
-            error_message: default(),
+            take_profit_order_cancel_reject_transaction: Default::default(),
+            take_profit_order_reject_transaction: Default::default(),
+            stop_loss_order_cancel_reject_transaction: Default::default(),
+            stop_loss_order_reject_transaction: Default::default(),
+            trailing_stop_loss_order_cancel_reject_transaction: Default::default(),
+            trailing_stop_loss_order_reject_transaction: Default::default(),
+            guaranteed_stop_loss_order_cancel_reject_transaction: Default::default(),
+            guaranteed_stop_loss_order_reject_transaction: Default::default(),
+            last_transaction_id: Default::default(),
+            related_transaction_i_ds: Default::default(),
+            error_code: Default::default(),
+            error_message: Default::default(),
         }
     }
 }

@@ -1,5 +1,5 @@
-use definitions::decimal_number::DecimalNumber;
-use definitions::guaranteed_stop_loss_order_level_restriction::GuaranteedStopLossOrderLevelRestriction;
+use crate::definitions::guaranteed_stop_loss_order_level_restriction::GuaranteedStopLossOrderLevelRestriction;
+use crate::definitions::decimal_number::DecimalNumber;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct GuaranteedStopLossOrderEntryData {
@@ -17,11 +17,10 @@ pub struct GuaranteedStopLossOrderEntryData {
 }
 impl Default for GuaranteedStopLossOrderEntryData {
     fn default() -> Self {
-        use Default::default;
         Self {
-            minimum_distance: default(),
-            premium: default(),
-            level_restriction: default(),
+            minimum_distance: Default::default(),
+            premium: Default::default(),
+            level_restriction: Default::default(),
         }
     }
 }

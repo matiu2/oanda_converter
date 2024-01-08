@@ -1,21 +1,21 @@
-use definitions::client_extensions::ClientExtensions;
-use definitions::order_position_fill::OrderPositionFill;
-use definitions::guaranteed_stop_loss_details::GuaranteedStopLossDetails;
-use definitions::instrument_name::InstrumentName;
-use definitions::transaction_id::TransactionID;
-use definitions::decimal_number::DecimalNumber;
-use definitions::account_id::AccountID;
-use definitions::order_id::OrderID;
-use definitions::order_trigger_condition::OrderTriggerCondition;
-use definitions::transaction_type::TransactionType;
-use chrono::DateTime;
-use definitions::request_id::RequestID;
-use definitions::market_if_touched_order_reason::MarketIfTouchedOrderReason;
-use definitions::stop_loss_details::StopLossDetails;
-use definitions::time_in_force::TimeInForce;
-use definitions::trailing_stop_loss_details::TrailingStopLossDetails;
-use definitions::take_profit_details::TakeProfitDetails;
-use definitions::price_value::PriceValue;
+use crate::definitions::time_in_force::TimeInForce;
+use crate::definitions::guaranteed_stop_loss_details::GuaranteedStopLossDetails;
+use crate::definitions::request_id::RequestID;
+use crate::definitions::account_id::AccountID;
+use crate::definitions::instrument_name::InstrumentName;
+use crate::definitions::decimal_number::DecimalNumber;
+use crate::definitions::order_trigger_condition::OrderTriggerCondition;
+use crate::definitions::order_position_fill::OrderPositionFill;
+use crate::chrono::DateTime;
+use crate::definitions::client_extensions::ClientExtensions;
+use crate::definitions::price_value::PriceValue;
+use crate::definitions::transaction_id::TransactionID;
+use crate::definitions::take_profit_details::TakeProfitDetails;
+use crate::definitions::trailing_stop_loss_details::TrailingStopLossDetails;
+use crate::definitions::order_id::OrderID;
+use crate::definitions::stop_loss_details::StopLossDetails;
+use crate::definitions::market_if_touched_order_reason::MarketIfTouchedOrderReason;
+use crate::definitions::transaction_type::TransactionType;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct MarketIfTouchedOrderTransaction {
@@ -127,32 +127,31 @@ pub struct MarketIfTouchedOrderTransaction {
 }
 impl Default for MarketIfTouchedOrderTransaction {
     fn default() -> Self {
-        use Default::default;
         Self {
-            id: default(),
-            time: default(),
-            user_id: default(),
-            account_id: default(),
-            batch_id: default(),
-            request_id: default(),
+            id: Default::default(),
+            time: Default::default(),
+            user_id: Default::default(),
+            account_id: Default::default(),
+            batch_id: Default::default(),
+            request_id: Default::default(),
             r#type: "MARKET_IF_TOUCHED_ORDER",
-            instrument: default(),
-            units: default(),
-            price: default(),
-            price_bound: default(),
+            instrument: Default::default(),
+            units: Default::default(),
+            price: Default::default(),
+            price_bound: Default::default(),
             time_in_force: "GTC",
-            gtd_time: default(),
+            gtd_time: Default::default(),
             position_fill: "DEFAULT",
             trigger_condition: "DEFAULT",
-            reason: default(),
-            client_extensions: default(),
-            take_profit_on_fill: default(),
-            stop_loss_on_fill: default(),
-            trailing_stop_loss_on_fill: default(),
-            guaranteed_stop_loss_on_fill: default(),
-            trade_client_extensions: default(),
-            replaces_order_id: default(),
-            cancelling_transaction_id: default(),
+            reason: Default::default(),
+            client_extensions: Default::default(),
+            take_profit_on_fill: Default::default(),
+            stop_loss_on_fill: Default::default(),
+            trailing_stop_loss_on_fill: Default::default(),
+            guaranteed_stop_loss_on_fill: Default::default(),
+            trade_client_extensions: Default::default(),
+            replaces_order_id: Default::default(),
+            cancelling_transaction_id: Default::default(),
         }
     }
 }

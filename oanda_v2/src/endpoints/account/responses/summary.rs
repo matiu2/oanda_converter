@@ -1,8 +1,6 @@
-use definitions::transaction_id::TransactionID;
-use definitions::account_summary::AccountSummary;
-use serde::{Serialize, Deserialize};
+use crate::definitions::transaction_id::TransactionID;
+use crate::definitions::account_summary::AccountSummary;
 /// The Account summary are provided
-use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Summary200 {
     /// The summary of the requested Account.
@@ -13,10 +11,9 @@ pub struct Summary200 {
 }
 impl Default for Summary200 {
     fn default() -> Self {
-        use Default::default;
         Self {
-            account: default(),
-            last_transaction_id: default(),
+            account: Default::default(),
+            last_transaction_id: Default::default(),
         }
     }
 }

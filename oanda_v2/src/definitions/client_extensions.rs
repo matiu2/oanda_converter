@@ -1,6 +1,6 @@
-use definitions::client_id::ClientID;
-use definitions::client_tag::ClientTag;
-use definitions::client_comment::ClientComment;
+use crate::definitions::client_id::ClientID;
+use crate::definitions::client_tag::ClientTag;
+use crate::definitions::client_comment::ClientComment;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct ClientExtensions {
@@ -13,11 +13,10 @@ pub struct ClientExtensions {
 }
 impl Default for ClientExtensions {
     fn default() -> Self {
-        use Default::default;
         Self {
-            id: default(),
-            tag: default(),
-            comment: default(),
+            id: Default::default(),
+            tag: Default::default(),
+            comment: Default::default(),
         }
     }
 }

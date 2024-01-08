@@ -1,4 +1,4 @@
-use definitions::trade_id::TradeID;
+use crate::definitions::trade_id::TradeID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct MarketOrderTradeClose {
@@ -12,11 +12,10 @@ pub struct MarketOrderTradeClose {
 }
 impl Default for MarketOrderTradeClose {
     fn default() -> Self {
-        use Default::default;
         Self {
-            trade_id: default(),
-            client_trade_id: default(),
-            units: default(),
+            trade_id: Default::default(),
+            client_trade_id: Default::default(),
+            units: Default::default(),
         }
     }
 }

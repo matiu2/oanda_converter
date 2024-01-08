@@ -1,14 +1,12 @@
-use endpoints::position::responses::close::Close404;
-use definitions::transaction_id::TransactionID;
-use definitions::order_cancel_transaction::OrderCancelTransaction;
-use definitions::order_fill_transaction::OrderFillTransaction;
-use definitions::market_order_transaction::MarketOrderTransaction;
-use definitions::market_order_reject_transaction::MarketOrderRejectTransaction;
-use endpoints::position::responses::close::Close400;
-use serde::{Serialize, Deserialize};
+use crate::definitions::order_cancel_transaction::OrderCancelTransaction;
+use crate::endpoints::position::responses::close::Close404;
+use crate::definitions::transaction_id::TransactionID;
+use crate::definitions::market_order_transaction::MarketOrderTransaction;
+use crate::definitions::order_fill_transaction::OrderFillTransaction;
+use crate::definitions::market_order_reject_transaction::MarketOrderRejectTransaction;
+use crate::endpoints::position::responses::close::Close400;
 /// The Position closeout request has been successfully
 /// processed.
-use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Close200 {
     /// The MarketOrderTransaction created to close the long
@@ -36,20 +34,18 @@ pub struct Close200 {
 }
 impl Default for Close200 {
     fn default() -> Self {
-        use Default::default;
         Self {
-            long_order_create_transaction: default(),
-            long_order_fill_transaction: default(),
-            long_order_cancel_transaction: default(),
-            short_order_create_transaction: default(),
-            short_order_fill_transaction: default(),
-            short_order_cancel_transaction: default(),
-            related_transaction_i_ds: default(),
-            last_transaction_id: default(),
+            long_order_create_transaction: Default::default(),
+            long_order_fill_transaction: Default::default(),
+            long_order_cancel_transaction: Default::default(),
+            short_order_create_transaction: Default::default(),
+            short_order_fill_transaction: Default::default(),
+            short_order_cancel_transaction: Default::default(),
+            related_transaction_i_ds: Default::default(),
+            last_transaction_id: Default::default(),
         }
     }
 }
-use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Close400 {
     /// The Transaction created that rejects the creation of a
@@ -73,18 +69,16 @@ pub struct Close400 {
 }
 impl Default for Close400 {
     fn default() -> Self {
-        use Default::default;
         Self {
-            long_order_reject_transaction: default(),
-            short_order_reject_transaction: default(),
-            related_transaction_i_ds: default(),
-            last_transaction_id: default(),
-            error_code: default(),
-            error_message: default(),
+            long_order_reject_transaction: Default::default(),
+            short_order_reject_transaction: Default::default(),
+            related_transaction_i_ds: Default::default(),
+            last_transaction_id: Default::default(),
+            error_code: Default::default(),
+            error_message: Default::default(),
         }
     }
 }
-use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Close404 {
     /// The Transaction created that rejects the creation of a
@@ -110,14 +104,13 @@ pub struct Close404 {
 }
 impl Default for Close404 {
     fn default() -> Self {
-        use Default::default;
         Self {
-            long_order_reject_transaction: default(),
-            short_order_reject_transaction: default(),
-            related_transaction_i_ds: default(),
-            last_transaction_id: default(),
-            error_code: default(),
-            error_message: default(),
+            long_order_reject_transaction: Default::default(),
+            short_order_reject_transaction: Default::default(),
+            related_transaction_i_ds: Default::default(),
+            last_transaction_id: Default::default(),
+            error_code: Default::default(),
+            error_message: Default::default(),
         }
     }
 }

@@ -79,8 +79,6 @@ pub fn gen_responses_for_call(call: &RestCall) -> Result<TokenStream> {
     //     .collect();
 
     Ok(quote! {
-        use serde::{Serialize, Deserialize};
-
         #good_response
 
         #bad_responses

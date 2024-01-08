@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 /// The unique Transaction identifier within each Account.
 ///
 /// Format: String representation of the numerical OANDA-

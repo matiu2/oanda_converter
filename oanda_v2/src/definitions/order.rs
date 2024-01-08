@@ -1,7 +1,7 @@
-use definitions::order_state::OrderState;
-use definitions::client_extensions::ClientExtensions;
-use definitions::order_id::OrderID;
-use chrono::DateTime;
+use crate::definitions::client_extensions::ClientExtensions;
+use crate::chrono::DateTime;
+use crate::definitions::order_id::OrderID;
+use crate::definitions::order_state::OrderState;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Order {
@@ -18,12 +18,11 @@ pub struct Order {
 }
 impl Default for Order {
     fn default() -> Self {
-        use Default::default;
         Self {
-            id: default(),
-            create_time: default(),
-            state: default(),
-            client_extensions: default(),
+            id: Default::default(),
+            create_time: Default::default(),
+            state: Default::default(),
+            client_extensions: Default::default(),
         }
     }
 }
