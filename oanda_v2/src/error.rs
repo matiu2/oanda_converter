@@ -1,13 +1,33 @@
+use error_stack::{Report, ResultExt};
 use parse_display::Display;
-use thiserror::Error as ThisError;
 use reqwest::StatusCode;
 use serde::Deserialize;
-#[derive(Display, Debug, ThisError)]
+
+#[derive(Display, Debug, Default)]
 #[display(style = "snake_case")]
 pub enum Error {
-    #[display("reqwest error: {0}")]
-    Reqwest(#[from] reqwest::Error),
-    #[display("Unexpected http error: {code} {body}")]
-    UnexpectedHttp { code: u16, body: String },
+    /// Most errors come from this category
+    #[default]
+    General,
+    #[display("Message: {}")]
+    Message(String),
 }
+
+impl Error {
+    pub fn new(msg: impl ToString) -> Error {
+        Error::Message(msg.to_string())
+    }
+}
+
+impl std::error::Error for Error {}
 pub type Result<T> = error_stack::Result<T, Error>;
+
+pub trait Take {
+    fn take(self, msg: impl ToString) -> impl ResultExt;
+}
+
+impl<R: ResultExt> Take for R {
+    fn take(self, msg: impl ToString) -> impl ResultExt {
+        self.change_context_lazy(|| Error::new(msg.to_string()))
+    }
+}
