@@ -30,12 +30,13 @@ pub fn gen_client(mods: &[&str]) -> Result<TokenStream> {
             }
         })
     }).collect::<Result<Vec<TokenStream>>>()?;
+
     Ok(quote!(
         use std::borrow::ToOwned;
-        use error_stack::{report, IntoReport, ResultExt};
+        use error_stack::{report, ResultExt, Report};
         use reqwest::RequestBuilder;
         use serde::de::DeserializeOwned;
-        use crate::{error::Error, host::Host};
+        use crate::{Error, host::Host, Result};
         #(#mods)*
 
         #[derive(Debug, Clone)]
@@ -56,7 +57,7 @@ pub fn gen_client(mods: &[&str]) -> Result<TokenStream> {
                     .gzip(true)
                     .brotli(true)
                     .build()
-                    .into_report()
+                    .map_err(Report::from)
                     .unwrap();
                 Client {
                     token,
@@ -77,7 +78,7 @@ pub fn gen_client(mods: &[&str]) -> Result<TokenStream> {
                 &self,
                 request: RequestBuilder,
             ) -> error_stack::Result<T, Error> {
-                let request = request.build().map_err(Error::from).into_report()?;
+                let request = request.build().map_err(Error::from).map_err(Report::from)?;
                 let url = request.url().to_owned();
 
                 let response = self
@@ -85,65 +86,74 @@ pub fn gen_client(mods: &[&str]) -> Result<TokenStream> {
                     .execute(request)
                     .await
                     .map_err(Error::from)
-                    .into_report()
+                    .map_err(Report::from)
                     .attach_printable_lazy(|| format!("URL: {url}"))?;
 
                 let status = response.status();
-                if status.is_success() {
-                    let body: String = response
-                        .text()
-                        .await
-                        .map_err(Error::from)
-                        .into_report()
-                        .attach_printable_lazy(|| format!("URL: {url}"))
-                        .attach_printable_lazy(|| format!("HTTP status code: {status}"))?;
-                    serde_json::from_str(&body)
-                        .map_err(|err| Error::JsonParse {
-                            err,
-                            input: body.to_owned(),
+
+                // Try and get the body, regardless if there was a bad status code
+                let body: Result<String> = response
+                    .text()
+                    .await
+                    .map_err(Error::from)
+                    .map_err(Report::from)
+                    .attach_printable_lazy(|| format!("URL: {url}"))
+                    .attach_printable_lazy(|| format!("HTTP status code: {status}"));
+
+                match response.error_for_status_ref() {
+                    Ok(response) => {
+                        let body = body?;
+                        // Try to parse the json separetely from reqwest
+                        serde_json::from_str(&body)
+                            .map_err(|err| Error::JsonParse {
+                                err,
+                                input: body.to_owned(),
+                            })
+                            .map_err(Report::from)
+                            .attach_printable_lazy(|| format!("HTTP status code: {status}"))
+                            .attach_printable_lazy(|| format!("url: {url}"))
+                    }
+                    Err(err) => {
+                        let err = Err(Error::from(err))
+                            .map_err(Report::from)
+                            .attach_printable_lazy(|| format!("HTTP status code: {status}"))
+                            .attach_printable_lazy(|| format!("url: {url}"));
+                        Err(match body {
+                            Ok(body) => {
+                                err.attach_printable(format!("Body: {body}"));
+                                err
+                            }
+                            Err(body_err) => {
+                                err.change_context(body_err);
+                                err
+                            }
                         })
-                        .into_report()
-                        .attach_printable_lazy(|| format!("url: {url}"))
-                } else {
-                    // If we get a bad http status
-                    // try to get and add the body for more context
-                    let body = response.text().await.map_err(Error::from);
-                    let mut err = report!(Error::Status(status)).attach_printable(format!("URL: {url}"));
-                    Err(match body {
-                        Ok(body) => err.attach_printable(format!("Body: {body}")),
-                        Err(body_err) => {
-                            err.extend_one(report!(body_err));
-                            err
-                        }
-                    })
+                    }
                 }
             }
 
+            // /// Rest API for anything account related
+            // pub fn accounts(&self) -> Accounts {
+            //     Accounts { client: self }
+            // }
 
-            /// Rest API for anything account related
-            pub fn accounts(&self) -> Accounts {
-                Accounts { client: self }
-            }
+            // /// Rest API for anything instrument related
+            // pub fn instrument(&self, instrument: impl ToString) -> Instrument {
+            //     Instrument {
+            //         client: self,
+            //         instrument: instrument.to_string(),
+            //     }
+            // }
 
-            /// Rest API for anything instrument related
-            pub fn instrument(&self, instrument: impl ToString) -> Instrument {
-                Instrument {
-                    client: self,
-                    instrument: instrument.to_string(),
-                }
-            }
+            // /// Rest API for anything trade related including closing an existing Trade
+            // pub fn trade(&self, account_id: impl ToString) -> Trade {
+            //     Trade::new(self, account_id.to_string())
+            // }
 
-
-            /// Rest API for anything trade related including closing an existing Trade
-            pub fn trade(&self, account_id: impl ToString) -> Trade {
-                Trade::new(self, account_id.to_string())
-            }
-
-
-            // Rest API for anything order related including openning a new position
-            pub fn order(&self, account_id: impl ToString) -> Order {
-                Order::new(self, account_id.to_string())
-            }
+            // // Rest API for anything order related including openning a new position
+            // pub fn order(&self, account_id: impl ToString) -> Order {
+            //     Order::new(self, account_id.to_string())
+            // }
         }
 
 
@@ -170,7 +180,7 @@ pub fn gen_client(mods: &[&str]) -> Result<TokenStream> {
                         .into_iter()
                         .next()
                         .ok_or_else(|| Error::Other)
-                        .into_report()
+                        .map_err(Report::from)
                         .attach_printable_lazy(|| "No oanda accounts found")?
                         .id;
                     *account_id = Some(out.clone());

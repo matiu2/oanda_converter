@@ -1,6 +1,6 @@
-use chrono::DateTime;
 use definitions::instrument_name::InstrumentName;
 use definitions::price_value::PriceValue;
+use chrono::DateTime;
 use definitions::position_book_bucket::PositionBookBucket;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]

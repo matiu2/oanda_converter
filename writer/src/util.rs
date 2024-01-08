@@ -1,8 +1,8 @@
 use crate::error::Result;
-use crate::gen_client::gen_client;
+// use crate::gen_client::gen_client;
 use crate::gen_definition::gen_definition;
 use crate::gen_endpoint::{gen_endpoint, gen_endpoint_responses};
-use crate::gen_error::gen_error;
+// use crate::gen_error::gen_error;
 use crate::gen_mods::gen_mods;
 use crate::Error;
 use error_stack::ResultExt;
@@ -11,14 +11,12 @@ use proc_macro2::{Ident, TokenStream};
 use quote::{format_ident, quote};
 use utils::stream_to_file;
 
-/// Generate all the source code
-pub fn generate_source(base_path: &str, contents: &[Content]) -> Result<()> {
-    let mut mods = vec!["host"];
-    // let mut endpoints = Vec::new();
-    // Generate the error.rs
-    mods.push("error");
-    stream_to_file(gen_error(), &format!("{base_path}/error.rs"))
-        .change_context(Error::new("Writing error.rs"))?;
+/// Writes the Rest client definitions (json types) in rust
+pub fn write_definitions(
+    base_path: &str,
+    mods: &mut Vec<&str>,
+    contents: &[Content],
+) -> Result<()> {
     // Generate all the definitions we need
     mods.push("definitions");
     let mut definition_mods = Vec::new();
@@ -40,7 +38,16 @@ pub fn generate_source(base_path: &str, contents: &[Content]) -> Result<()> {
         &format!("{base_path}/definitions.rs"),
     )
     .change_context_lazy(|| Error::new("Generating lib.rs"))?;
+    Ok(())
+}
 
+/// Writes the source code for all the Rest API endpoints
+/// Returns a list of endpoint names
+pub fn write_endpoints<'a>(
+    base_path: &'a str,
+    mods: &mut Vec<&str>,
+    contents: &'a [Content],
+) -> Result<Vec<&'a str>> {
     // Just list the endpoint names
     let endpoints: Vec<&str> = contents
         .iter()
@@ -69,20 +76,17 @@ pub fn generate_source(base_path: &str, contents: &[Content]) -> Result<()> {
         stream_to_file(tokens, &filename)
             .change_context_lazy(|| Error::new(format!("Saving endpoint to {filename}")))?;
     }
-    // Generate client.rs
-    mods.push("client");
-    stream_to_file(gen_client(&endpoints)?, &format!("{base_path}/client.rs"))
-        .change_context_lazy(|| Error::new("Writing client.rs"))?;
-    // for endpoint in contents {
-    //     stream_to_file(
-    //         gen_endpoint::gen_endpoint(&endpoint),
-    //         &format!("{base_path}/{}.rs", &endpoint.name()),
-    //     )
-    //     .attach_printable_lazy(|| format!("Endpoint {}", &endpoint.name()))?;
-    // }
-    // // We use the endpoints here
-    // stream_to_file(gen_client::gen_client(), &format!("{base_path}/client.rs"))
-    //     .attach_printable("Generating client.rs")?;
+
+    Ok(endpoints)
+}
+
+/// Generate all the source code
+pub fn generate_source(base_path: &str, contents: &[Content]) -> Result<()> {
+    let mut mods = vec!["host"];
+
+    write_definitions(base_path, &mut mods, contents)?;
+    write_endpoints(base_path, &mut mods, contents)?;
+
     // We use the mods here
     let mods = gen_mods(mods.as_slice());
     let lib = quote! {

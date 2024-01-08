@@ -1,6 +1,6 @@
-use definitions::candlestick::Candlestick;
-use definitions::candlestick_granularity::CandlestickGranularity;
 use definitions::instrument_name::InstrumentName;
+use definitions::candlestick_granularity::CandlestickGranularity;
+use definitions::candlestick::Candlestick;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct CandlestickResponse {

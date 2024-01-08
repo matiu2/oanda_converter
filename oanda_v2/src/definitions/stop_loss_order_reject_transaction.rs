@@ -1,18 +1,18 @@
-use definitions::account_id::AccountID;
-use definitions::request_id::RequestID;
-use definitions::trade_id::TradeID;
-use definitions::transaction_reject_reason::TransactionRejectReason;
-use definitions::time_in_force::TimeInForce;
 use definitions::transaction_id::TransactionID;
-use definitions::stop_loss_order_reason::StopLossOrderReason;
-use definitions::price_value::PriceValue;
-use definitions::transaction_type::TransactionType;
-use definitions::client_id::ClientID;
-use definitions::decimal_number::DecimalNumber;
-use definitions::client_extensions::ClientExtensions;
-use definitions::order_id::OrderID;
-use definitions::order_trigger_condition::OrderTriggerCondition;
 use chrono::DateTime;
+use definitions::decimal_number::DecimalNumber;
+use definitions::request_id::RequestID;
+use definitions::client_extensions::ClientExtensions;
+use definitions::time_in_force::TimeInForce;
+use definitions::price_value::PriceValue;
+use definitions::stop_loss_order_reason::StopLossOrderReason;
+use definitions::transaction_type::TransactionType;
+use definitions::transaction_reject_reason::TransactionRejectReason;
+use definitions::trade_id::TradeID;
+use definitions::account_id::AccountID;
+use definitions::order_trigger_condition::OrderTriggerCondition;
+use definitions::order_id::OrderID;
+use definitions::client_id::ClientID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct StopLossOrderRejectTransaction {

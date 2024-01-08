@@ -1,5 +1,5 @@
-use definitions::instrument_name::InstrumentName;
 use definitions::candlestick_granularity::CandlestickGranularity;
+use definitions::instrument_name::InstrumentName;
 use definitions::candlestick::Candlestick;
 use serde::{Serialize, Deserialize};
 /// Pricing information has been successfully provided.

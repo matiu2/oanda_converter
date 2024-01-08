@@ -1,7 +1,7 @@
-use endpoints::order::responses::cancel::Cancel404;
 use definitions::order_cancel_transaction::OrderCancelTransaction;
-use definitions::transaction_id::TransactionID;
 use definitions::order_cancel_reject_transaction::OrderCancelRejectTransaction;
+use definitions::transaction_id::TransactionID;
+use endpoints::order::responses::cancel::Cancel404;
 use serde::{Serialize, Deserialize};
 /// The Order was cancelled as specified
 use serde::{Serialize, Deserialize};

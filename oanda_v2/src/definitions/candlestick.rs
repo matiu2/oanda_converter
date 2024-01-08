@@ -1,5 +1,5 @@
-use definitions::candlestick_data::CandlestickData;
 use chrono::DateTime;
+use definitions::candlestick_data::CandlestickData;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Candlestick {

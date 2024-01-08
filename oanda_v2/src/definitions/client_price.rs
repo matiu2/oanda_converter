@@ -1,7 +1,7 @@
 use definitions::price_bucket::PriceBucket;
-use definitions::instrument_name::InstrumentName;
-use chrono::DateTime;
 use definitions::price_value::PriceValue;
+use chrono::DateTime;
+use definitions::instrument_name::InstrumentName;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct ClientPrice {

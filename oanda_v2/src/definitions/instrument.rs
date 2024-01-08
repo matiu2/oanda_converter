@@ -1,11 +1,11 @@
-use definitions::instrument_type::InstrumentType;
 use definitions::guaranteed_stop_loss_order_mode_for_instrument::GuaranteedStopLossOrderModeForInstrument;
-use definitions::instrument_commission::InstrumentCommission;
-use definitions::guaranteed_stop_loss_order_level_restriction::GuaranteedStopLossOrderLevelRestriction;
 use definitions::decimal_number::DecimalNumber;
-use definitions::instrument_name::InstrumentName;
+use definitions::instrument_commission::InstrumentCommission;
+use definitions::instrument_type::InstrumentType;
+use definitions::guaranteed_stop_loss_order_level_restriction::GuaranteedStopLossOrderLevelRestriction;
 use definitions::instrument_financing::InstrumentFinancing;
 use definitions::tag::Tag;
+use definitions::instrument_name::InstrumentName;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Instrument {

@@ -1,11 +1,11 @@
 use definitions::transaction_reject_reason::TransactionRejectReason;
-use chrono::DateTime;
-use definitions::account_id::AccountID;
 use definitions::transaction_id::TransactionID;
-use definitions::account_units::AccountUnits;
-use definitions::funding_reason::FundingReason;
+use definitions::account_id::AccountID;
 use definitions::request_id::RequestID;
+use definitions::funding_reason::FundingReason;
+use definitions::account_units::AccountUnits;
 use definitions::transaction_type::TransactionType;
+use chrono::DateTime;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct TransferFundsRejectTransaction {

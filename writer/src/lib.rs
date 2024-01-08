@@ -1,5 +1,5 @@
 pub mod error;
-mod gen_client;
+// mod gen_client;
 pub mod gen_definition;
 mod gen_endpoint;
 mod gen_error;

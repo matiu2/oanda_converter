@@ -6,7 +6,7 @@ use crate::{
 };
 use error_stack::ResultExt;
 use model::definition_docs::{Field, Struct};
-use proc_macro2::{Span, TokenStream};
+use proc_macro2::TokenStream;
 use quote::quote;
 use syn::Ident;
 use utils::pretty_doc_string;

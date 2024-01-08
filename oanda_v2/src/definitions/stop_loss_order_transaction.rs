@@ -1,17 +1,17 @@
-use definitions::transaction_type::TransactionType;
-use definitions::order_trigger_condition::OrderTriggerCondition;
-use definitions::client_id::ClientID;
 use definitions::client_extensions::ClientExtensions;
-use definitions::order_id::OrderID;
-use definitions::price_value::PriceValue;
-use definitions::transaction_id::TransactionID;
-use definitions::request_id::RequestID;
-use definitions::decimal_number::DecimalNumber;
 use definitions::time_in_force::TimeInForce;
-use definitions::stop_loss_order_reason::StopLossOrderReason;
+use definitions::transaction_id::TransactionID;
+use definitions::order_trigger_condition::OrderTriggerCondition;
+use definitions::transaction_type::TransactionType;
+use definitions::trade_id::TradeID;
 use chrono::DateTime;
 use definitions::account_id::AccountID;
-use definitions::trade_id::TradeID;
+use definitions::client_id::ClientID;
+use definitions::request_id::RequestID;
+use definitions::price_value::PriceValue;
+use definitions::order_id::OrderID;
+use definitions::stop_loss_order_reason::StopLossOrderReason;
+use definitions::decimal_number::DecimalNumber;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct StopLossOrderTransaction {

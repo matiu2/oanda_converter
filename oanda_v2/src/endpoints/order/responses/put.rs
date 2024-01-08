@@ -1,9 +1,9 @@
-use definitions::order_cancel_transaction::OrderCancelTransaction;
-use endpoints::transaction::Transaction;
-use definitions::transaction_id::TransactionID;
-use endpoints::order::responses::put::Put404;
-use definitions::order_fill_transaction::OrderFillTransaction;
 use endpoints::order::responses::put::Put400;
+use endpoints::transaction::Transaction;
+use definitions::order_cancel_transaction::OrderCancelTransaction;
+use definitions::order_fill_transaction::OrderFillTransaction;
+use endpoints::order::responses::put::Put404;
+use definitions::transaction_id::TransactionID;
 use serde::{Serialize, Deserialize};
 /// The Order was successfully cancelled and replaced
 use serde::{Serialize, Deserialize};

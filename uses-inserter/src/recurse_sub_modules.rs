@@ -34,8 +34,13 @@ impl<'a> Iterator for RecurseSubModules<'a> {
         debug!("getting data for {mod_name}");
         match std::fs::read_to_string(mod_name.file_name())
             .map_err(Report::from)
-            .change_context_lazy(|| Error::new(format!("Reading {}", mod_name.file_name())))
-        {
+            .change_context_lazy(|| {
+                Error::new(format!(
+                    "Reading {} / {}",
+                    mod_name.mod_name(),
+                    mod_name.file_name()
+                ))
+            }) {
             Ok(s) => match syn::parse_str(&s)
                 .map_err(Report::from)
                 .change_context_lazy(|| {

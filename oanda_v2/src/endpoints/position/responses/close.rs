@@ -1,10 +1,10 @@
-use definitions::market_order_reject_transaction::MarketOrderRejectTransaction;
-use definitions::transaction_id::TransactionID;
-use definitions::order_fill_transaction::OrderFillTransaction;
-use endpoints::position::responses::close::Close400;
-use definitions::order_cancel_transaction::OrderCancelTransaction;
 use endpoints::position::responses::close::Close404;
+use definitions::transaction_id::TransactionID;
+use definitions::order_cancel_transaction::OrderCancelTransaction;
+use definitions::order_fill_transaction::OrderFillTransaction;
 use definitions::market_order_transaction::MarketOrderTransaction;
+use definitions::market_order_reject_transaction::MarketOrderRejectTransaction;
+use endpoints::position::responses::close::Close400;
 use serde::{Serialize, Deserialize};
 /// The Position closeout request has been successfully
 /// processed.

@@ -1,7 +1,7 @@
 use definitions::accept_datetime_format::AcceptDatetimeFormat;
-use definitions::trade_specifier::TradeSpecifier;
 use definitions::trade_state_filter::TradeStateFilter;
 use definitions::instrument_name::InstrumentName;
+use definitions::trade_specifier::TradeSpecifier;
 use crate::{client::Client, Error, Result};
 pub mod responses;
 struct Trade<'a> {

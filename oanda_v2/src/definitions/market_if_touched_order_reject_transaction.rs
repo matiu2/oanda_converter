@@ -1,22 +1,22 @@
-use definitions::transaction_id::TransactionID;
-use definitions::take_profit_details::TakeProfitDetails;
-use definitions::transaction_type::TransactionType;
-use definitions::order_id::OrderID;
-use definitions::transaction_reject_reason::TransactionRejectReason;
-use definitions::instrument_name::InstrumentName;
-use definitions::account_id::AccountID;
-use definitions::price_value::PriceValue;
-use definitions::trailing_stop_loss_details::TrailingStopLossDetails;
-use definitions::stop_loss_details::StopLossDetails;
-use definitions::guaranteed_stop_loss_details::GuaranteedStopLossDetails;
-use definitions::decimal_number::DecimalNumber;
-use definitions::client_extensions::ClientExtensions;
 use chrono::DateTime;
-use definitions::market_if_touched_order_reason::MarketIfTouchedOrderReason;
-use definitions::order_trigger_condition::OrderTriggerCondition;
+use definitions::trailing_stop_loss_details::TrailingStopLossDetails;
+use definitions::transaction_type::TransactionType;
+use definitions::client_extensions::ClientExtensions;
 use definitions::time_in_force::TimeInForce;
+use definitions::instrument_name::InstrumentName;
+use definitions::price_value::PriceValue;
+use definitions::stop_loss_details::StopLossDetails;
+use definitions::transaction_reject_reason::TransactionRejectReason;
 use definitions::order_position_fill::OrderPositionFill;
+use definitions::order_trigger_condition::OrderTriggerCondition;
+use definitions::transaction_id::TransactionID;
+use definitions::account_id::AccountID;
 use definitions::request_id::RequestID;
+use definitions::decimal_number::DecimalNumber;
+use definitions::market_if_touched_order_reason::MarketIfTouchedOrderReason;
+use definitions::take_profit_details::TakeProfitDetails;
+use definitions::guaranteed_stop_loss_details::GuaranteedStopLossDetails;
+use definitions::order_id::OrderID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct MarketIfTouchedOrderRejectTransaction {

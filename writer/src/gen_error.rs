@@ -16,6 +16,11 @@ pub fn gen_error() -> TokenStream {
             Reqwest(#[from] reqwest::Error),
             #[display("Unexpected http error: {code} {body}")]
             UnexpectedHttp { code: u16, body: String },
+            #[dispaly("Unable to parse json: {json} {err}")]
+            JsonParse {
+                err: serde_json::Error,
+                input: String,
+            },
         }
 
         pub type Result<T> = error_stack::Result<T, Error>;
