@@ -1,14 +1,10 @@
-use crate::definitions::position_book_bucket::PositionBookBucket;
-use crate::definitions::instrument_name::InstrumentName;
-use crate::definitions::price_value::PriceValue;
-use chrono::DateTime;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct PositionBook {
     /// The position book’s instrument
     instrument: Option<InstrumentName>,
     /// The time when the position book snapshot was created
-    time: Option<DateTime>,
+    time: Option<DateTime<Utc>>,
     /// The price (midpoint) for the position book’s instrument at
     /// the time of the position book snapshot
     price: Option<PriceValue>,

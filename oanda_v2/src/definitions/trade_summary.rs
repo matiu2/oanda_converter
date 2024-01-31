@@ -1,13 +1,3 @@
-use crate::definitions::instrument_name::InstrumentName;
-use crate::definitions::price_value::PriceValue;
-use crate::definitions::trade_state::TradeState;
-use chrono::DateTime;
-use crate::definitions::transaction_id::TransactionID;
-use crate::definitions::client_extensions::ClientExtensions;
-use crate::definitions::trade_id::TradeID;
-use crate::definitions::account_units::AccountUnits;
-use crate::definitions::decimal_number::DecimalNumber;
-use crate::definitions::order_id::OrderID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct TradeSummary {
@@ -18,7 +8,7 @@ pub struct TradeSummary {
     /// The execution price of the Trade.
     price: Option<PriceValue>,
     /// The date/time when the Trade was opened.
-    open_time: Option<DateTime>,
+    open_time: Option<DateTime<Utc>>,
     /// The current state of the Trade.
     state: Option<TradeState>,
     /// The initial size of the Trade. Negative values indicate a
@@ -51,7 +41,7 @@ pub struct TradeSummary {
     dividend_adjustment: Option<AccountUnits>,
     /// The date/time when the Trade was fully closed. Only provided
     /// for Trades whose state is CLOSED.
-    close_time: Option<DateTime>,
+    close_time: Option<DateTime<Utc>>,
     /// The client extensions of the Trade.
     client_extensions: Option<ClientExtensions>,
     /// ID of the Trade’s Take Profit Order, only provided if such

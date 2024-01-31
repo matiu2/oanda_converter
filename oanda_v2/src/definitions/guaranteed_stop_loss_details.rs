@@ -1,8 +1,3 @@
-use crate::definitions::client_extensions::ClientExtensions;
-use crate::definitions::price_value::PriceValue;
-use crate::definitions::decimal_number::DecimalNumber;
-use crate::definitions::time_in_force::TimeInForce;
-use chrono::DateTime;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct GuaranteedStopLossDetails {
@@ -20,7 +15,7 @@ pub struct GuaranteedStopLossDetails {
     time_in_force: TimeInForce,
     /// The date when the Guaranteed Stop Loss Order will be
     /// cancelled on if timeInForce is GTD.
-    gtd_time: Option<DateTime>,
+    gtd_time: Option<DateTime<Utc>>,
     /// The Client Extensions to add to the Guaranteed Stop Loss
     /// Order when created.
     client_extensions: Option<ClientExtensions>,

@@ -3,8 +3,8 @@ use serde::{Serialize, Deserialize};
 /// representation.
 ///
 /// The RFC 3339 representation is a string conforming to
-pub struct DateTime(String);
-impl std::ops::Deref for DateTime {
+pub struct DateTime<Utc>(String);
+impl std::ops::Deref for DateTime<Utc> {
     type Target = str;
     fn deref(&self) -> &Self::Target {
         self.0.as_str()

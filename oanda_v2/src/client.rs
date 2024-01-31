@@ -24,11 +24,7 @@ impl Client {
             .build()
             .map_err(Report::from)
             .unwrap();
-        Client {
-            token,
-            host,
-            rest_client,
-        }
+        Client { token, host, rest_client }
     }
 
     /// Given a URL path, inserts the part before it
@@ -42,7 +38,7 @@ impl Client {
         use reqwest::header::{ACCEPT, AUTHORIZATION};
         self.rest_client
             .get(url)
-            .header(AUTHORIZATION, format!("Bearer {}", &self.token))
+            .header(AUTHORIZATION, format!("Bearer {}", & self.token))
             .header(ACCEPT, "application/json")
     }
 
@@ -52,7 +48,7 @@ impl Client {
         use reqwest::header::{ACCEPT, AUTHORIZATION};
         self.rest_client
             .put(url)
-            .header(AUTHORIZATION, format!("Bearer {}", &self.token))
+            .header(AUTHORIZATION, format!("Bearer {}", & self.token))
             .header(ACCEPT, "application/json")
     }
 
@@ -62,17 +58,17 @@ impl Client {
         use reqwest::header::{ACCEPT, AUTHORIZATION};
         self.rest_client
             .patch(url)
-            .header(AUTHORIZATION, format!("Bearer {}", &self.token))
+            .header(AUTHORIZATION, format!("Bearer {}", & self.token))
             .header(ACCEPT, "application/json")
     }
-
+    
     /// Given a URL path, creates a post request builder with the
     /// correct host and authentication token
     pub fn post(&self, url: &str) -> RequestBuilder {
         use reqwest::header::{ACCEPT, AUTHORIZATION};
         self.rest_client
             .post(url)
-            .header(AUTHORIZATION, format!("Bearer {}", &self.token))
+            .header(AUTHORIZATION, format!("Bearer {}", & self.token))
             .header(ACCEPT, "application/json")
     }
 
@@ -82,7 +78,7 @@ impl Client {
         use reqwest::header::{ACCEPT, AUTHORIZATION};
         self.rest_client
             .delete(url)
-            .header(AUTHORIZATION, format!("Bearer {}", &self.token))
+            .header(AUTHORIZATION, format!("Bearer {}", & self.token))
             .header(ACCEPT, "application/json")
     }
 
@@ -108,25 +104,36 @@ impl Client {
             let result = Err(Error::new("HTTP Status code indicates client error"));
             match body {
                 Ok(body) => result.attach_printable_lazy(|| format!("Body: {body}")),
-                Err(body) => result.attach_printable_lazy(|| format!("Error getting body: {body}")),
+                Err(body) => {
+                    result
+                        .attach_printable_lazy(|| format!("Error getting body: {body}"))
+                }
             }
         } else if status.is_server_error() {
             let result = Err(Error::new("HTTP Status code indicates server error"));
             match body {
                 Ok(body) => result.attach_printable_lazy(|| format!("Body: {body}")),
-                Err(body) => result.attach_printable_lazy(|| format!("Error getting body: {body}")),
+                Err(body) => {
+                    result
+                        .attach_printable_lazy(|| format!("Error getting body: {body}"))
+                }
             }
         } else {
             match body {
-                Ok(body) => serde_json::from_str(&body)
-                    .map_err(Report::from)
-                    .change_context_lazy(|| Error::new("Parsing json"))
-                    .attach_printable_lazy(|| format!("Body: {body}")),
-                Err(err) => Err(Report::from(err))
-                    .change_context_lazy(|| Error::new("Retrieving HTTP body")),
+                Ok(body) => {
+                    serde_json::from_str(&body)
+                        .map_err(Report::from)
+                        .change_context_lazy(|| Error::new("Parsing json"))
+                        .attach_printable_lazy(|| format!("Body: {body}"))
+                }
+                Err(err) => {
+                    Err(Report::from(err))
+                        .change_context_lazy(|| Error::new("Retrieving HTTP body"))
+                }
             }
         }
-        .attach_printable_lazy(|| format!("HTTP status code: {status:#?}"))
-        .attach_printable_lazy(|| format!("URL: {url}"))
+            .attach_printable_lazy(|| format!("HTTP status code: {status:#?}"))
+            .attach_printable_lazy(|| format!("URL: {url}"))
     }
+
 }

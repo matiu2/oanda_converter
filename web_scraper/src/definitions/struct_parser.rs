@@ -2,7 +2,7 @@ use model::definition_docs::{Field, Struct};
 use pest::Parser;
 use pest_derive::Parser;
 
-use crate::{bail, Error, Result, IntoReport};
+use crate::{bail, Error, IntoReport, Result};
 use error_stack::ResultExt;
 
 #[derive(Parser)]
@@ -13,7 +13,9 @@ struct FieldsParser;
 /// json from the oanda docs and gives you a nice rust representation
 pub fn parse_struct(input: &str) -> Result<Struct> {
     let mut fields = Vec::new();
-    let pairs = FieldsParser::parse(Rule::data, input).into_report().attach_printable_lazy(|| "While parsing {input}")?;
+    let pairs = FieldsParser::parse(Rule::data, input)
+        .into_report()
+        .attach_printable_lazy(|| "While parsing {input}")?;
 
     for pair in pairs.into_iter() {
         let (line, col) = pair.line_col();
@@ -28,8 +30,9 @@ pub fn parse_struct(input: &str) -> Result<Struct> {
                     .collect();
                 let doc_string = doc_string_lines.join(" ");
                 let mut rest = inner.skip(doc_string_lines.len());
-                let Some(name) = rest.next().map(|pair| pair.as_str().to_string()) else 
-                    { bail!("No field_name found while parsing field starting at {line}:{col} ({span}) in struct data: {input}")};
+                let Some(name) = rest.next().map(|pair| pair.as_str().to_string()) else {
+                    bail!("No field_name found while parsing field starting at {line}:{col} ({span}) in struct data: {input}")
+                };
                 let deprecated = rest.clone().any(|pair| pair.as_rule() == Rule::deprecated);
                 if deprecated {
                     continue;
@@ -82,7 +85,7 @@ pub fn parse_struct(input: &str) -> Result<Struct> {
 mod unit_tests {
     use error_stack::ResultExt;
 
-    use crate::{Error, Result, IntoReport};
+    use crate::{Error, IntoReport, Result};
 
     #[test]
     fn parse_field() {
@@ -186,9 +189,21 @@ mod unit_tests {
 }"#;
         let got = super::parse_struct(input)?;
         println!("{got:#?}");
-        let error_message = got.fields.iter().find(|field| field.name == "errorMessage").ok_or_else(|| Error::default()).into_report().attach_printable("No errorMessage field found")?;
+        let error_message = got
+            .fields
+            .iter()
+            .find(|field| field.name == "errorMessage")
+            .ok_or_else(Error::default)
+            .into_report()
+            .attach_printable("No errorMessage field found")?;
         assert!(error_message.required);
-        let last_transaction_id = got.fields.iter().find(|field| field.name == "lastTransactionID").ok_or_else(|| Error::default()).into_report().attach_printable("No lastTransactionID field found")?;
+        let last_transaction_id = got
+            .fields
+            .iter()
+            .find(|field| field.name == "lastTransactionID")
+            .ok_or_else(Error::default)
+            .into_report()
+            .attach_printable("No lastTransactionID field found")?;
         assert!(!last_transaction_id.required);
         Ok(())
     }

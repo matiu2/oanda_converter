@@ -1,8 +1,3 @@
-use crate::definitions::order_specifier::OrderSpecifier;
-use crate::definitions::order_state_filter::OrderStateFilter;
-use crate::client::Client;
-use crate::definitions::accept_datetime_format::AcceptDatetimeFormat;
-use crate::definitions::instrument_name::InstrumentName;
 use serde::{Serialize, Deserialize};
 pub mod responses;
 struct Order<'a> {
@@ -17,7 +12,7 @@ impl<'a> Order<'a> {
         account_id: AccountId,
     ) -> Result<()> {
         let url = "/v3/accounts/{accountID}/orders";
-        let url = url.replace("{" + "accountID" + "}");
+        let url = url.replace("{" + "accountID" + "}", "account_id");
         let url = self.client.url(url);
         let query = [];
         let response = self
@@ -43,7 +38,7 @@ impl<'a> Order<'a> {
         before_id: OrderId,
     ) -> Result<()> {
         let url = "/v3/accounts/{accountID}/orders";
-        let url = url.replace("{" + "accountID" + "}");
+        let url = url.replace("{" + "accountID" + "}", "account_id");
         let url = self.client.url(url);
         let query = [
             ("ids", ids),
@@ -71,7 +66,7 @@ impl<'a> Order<'a> {
         account_id: AccountId,
     ) -> Result<()> {
         let url = "/v3/accounts/{accountID}/pendingOrders";
-        let url = url.replace("{" + "accountID" + "}");
+        let url = url.replace("{" + "accountID" + "}", "account_id");
         let url = self.client.url(url);
         let query = [];
         let response = self
@@ -94,8 +89,8 @@ impl<'a> Order<'a> {
         order_specifier: OrderSpecifier,
     ) -> Result<()> {
         let url = "/v3/accounts/{accountID}/orders/{orderSpecifier}";
-        let url = url.replace("{" + "accountID" + "}");
-        let url = url.replace("{" + "orderSpecifier" + "}");
+        let url = url.replace("{" + "accountID" + "}", "account_id");
+        let url = url.replace("{" + "orderSpecifier" + "}", "order_specifier");
         let url = self.client.url(url);
         let query = [];
         let response = self
@@ -120,8 +115,8 @@ impl<'a> Order<'a> {
         order_specifier: OrderSpecifier,
     ) -> Result<()> {
         let url = "/v3/accounts/{accountID}/orders/{orderSpecifier}";
-        let url = url.replace("{" + "accountID" + "}");
-        let url = url.replace("{" + "orderSpecifier" + "}");
+        let url = url.replace("{" + "accountID" + "}", "account_id");
+        let url = url.replace("{" + "orderSpecifier" + "}", "order_specifier");
         let url = self.client.url(url);
         let query = [];
         let response = self
@@ -145,8 +140,8 @@ impl<'a> Order<'a> {
         order_specifier: OrderSpecifier,
     ) -> Result<()> {
         let url = "/v3/accounts/{accountID}/orders/{orderSpecifier}/cancel";
-        let url = url.replace("{" + "accountID" + "}");
-        let url = url.replace("{" + "orderSpecifier" + "}");
+        let url = url.replace("{" + "accountID" + "}", "account_id");
+        let url = url.replace("{" + "orderSpecifier" + "}", "order_specifier");
         let url = self.client.url(url);
         let query = [];
         let response = self
@@ -171,8 +166,8 @@ impl<'a> Order<'a> {
         order_specifier: OrderSpecifier,
     ) -> Result<()> {
         let url = "/v3/accounts/{accountID}/orders/{orderSpecifier}/clientExtensions";
-        let url = url.replace("{" + "accountID" + "}");
-        let url = url.replace("{" + "orderSpecifier" + "}");
+        let url = url.replace("{" + "accountID" + "}", "account_id");
+        let url = url.replace("{" + "orderSpecifier" + "}", "order_specifier");
         let url = self.client.url(url);
         let query = [];
         let response = self

@@ -1,17 +1,10 @@
-use crate::definitions::position_financing::PositionFinancing;
-use crate::definitions::account_units::AccountUnits;
-use crate::definitions::transaction_type::TransactionType;
-use crate::definitions::request_id::RequestID;
-use crate::definitions::transaction_id::TransactionID;
-use crate::definitions::account_id::AccountID;
-use chrono::DateTime;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct DailyFinancingTransaction {
     /// The Transaction’s Identifier.
     id: Option<TransactionID>,
     /// The date/time when the Transaction was created.
-    time: Option<DateTime>,
+    time: Option<DateTime<Utc>>,
     /// The ID of the user that initiated the creation of the
     /// Transaction.
     user_id: Option<integer>,

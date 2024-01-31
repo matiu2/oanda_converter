@@ -1,5 +1,3 @@
-use crate::definitions::accept_datetime_format::AcceptDatetimeFormat;
-use crate::client::Client;
 use serde::{Serialize, Deserialize};
 pub mod responses;
 struct Account<'a> {
@@ -32,7 +30,7 @@ impl<'a> Account<'a> {
         account_id: AccountId,
     ) -> Result<()> {
         let url = "/v3/accounts/{accountID}";
-        let url = url.replace("{" + "accountID" + "}");
+        let url = url.replace("{" + "accountID" + "}", "account_id");
         let url = self.client.url(url);
         let query = [];
         let response = self
@@ -55,7 +53,7 @@ impl<'a> Account<'a> {
         account_id: AccountId,
     ) -> Result<()> {
         let url = "/v3/accounts/{accountID}/summary";
-        let url = url.replace("{" + "accountID" + "}");
+        let url = url.replace("{" + "accountID" + "}", "account_id");
         let url = self.client.url(url);
         let query = [];
         let response = self
@@ -80,7 +78,7 @@ impl<'a> Account<'a> {
         instruments: ListOf,
     ) -> Result<()> {
         let url = "/v3/accounts/{accountID}/instruments";
-        let url = url.replace("{" + "accountID" + "}");
+        let url = url.replace("{" + "accountID" + "}", "account_id");
         let url = self.client.url(url);
         let query = [("instruments", instruments)];
         let response = self
@@ -101,7 +99,7 @@ impl<'a> Account<'a> {
         account_id: AccountId,
     ) -> Result<()> {
         let url = "/v3/accounts/{accountID}/configuration";
-        let url = url.replace("{" + "accountID" + "}");
+        let url = url.replace("{" + "accountID" + "}", "account_id");
         let url = self.client.url(url);
         let query = [];
         let response = self
@@ -124,7 +122,7 @@ impl<'a> Account<'a> {
         since_transaction_id: TransactionId,
     ) -> Result<()> {
         let url = "/v3/accounts/{accountID}/changes";
-        let url = url.replace("{" + "accountID" + "}");
+        let url = url.replace("{" + "accountID" + "}", "account_id");
         let url = self.client.url(url);
         let query = [("sinceTransactionID", since_transaction_id)];
         let response = self

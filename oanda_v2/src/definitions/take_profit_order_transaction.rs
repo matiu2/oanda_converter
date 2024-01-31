@@ -1,23 +1,10 @@
-use chrono::DateTime;
-use crate::definitions::client_extensions::ClientExtensions;
-use crate::definitions::trade_id::TradeID;
-use crate::definitions::request_id::RequestID;
-use crate::definitions::client_id::ClientID;
-use crate::definitions::price_value::PriceValue;
-use crate::definitions::account_id::AccountID;
-use crate::definitions::take_profit_order_reason::TakeProfitOrderReason;
-use crate::definitions::time_in_force::TimeInForce;
-use crate::definitions::transaction_type::TransactionType;
-use crate::definitions::order_trigger_condition::OrderTriggerCondition;
-use crate::definitions::order_id::OrderID;
-use crate::definitions::transaction_id::TransactionID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct TakeProfitOrderTransaction {
     /// The Transaction’s Identifier.
     id: Option<TransactionID>,
     /// The date/time when the Transaction was created.
-    time: Option<DateTime>,
+    time: Option<DateTime<Utc>>,
     /// The ID of the user that initiated the creation of the
     /// Transaction.
     user_id: Option<integer>,
@@ -50,7 +37,7 @@ pub struct TakeProfitOrderTransaction {
     time_in_force: TimeInForce,
     /// The date/time when the TakeProfit Order will be cancelled if
     /// its timeInForce is “GTD”.
-    gtd_time: Option<DateTime>,
+    gtd_time: Option<DateTime<Utc>>,
     /// Specification of which price component should be used when
     /// determining if an Order should be triggered and filled.
     /// This allows Orders to be triggered based on the bid, ask,

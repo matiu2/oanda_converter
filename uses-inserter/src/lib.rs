@@ -76,7 +76,7 @@ pub fn insert_uses_clauses<'a>(
         .flat_map(|i| i.declares.iter().map(|d| (d.as_str(), &i.module.mod_name)))
         .chain(known_sources.iter().map(|(&decl, module)| (decl, module)))
         .collect();
-    log::info!("declarations by module: {module_by_decl_type:#?}");
+    // log::info!("declarations by module: {module_by_decl_type:#?}");
     // Find a list of requires that are not in declared
     let not_provided: HashSet<&str> = info
         .iter()
@@ -95,9 +95,7 @@ pub fn insert_uses_clauses<'a>(
             .iter()
             // Skip if we declare the requirement ourself
             .filter(|r| !m.declares.contains(r.as_str()))
-            .inspect(|mods| {
-                log::info!("Getting: {mods:#?}");
-            })
+            // .inspect(|mods| { log::info!("Getting: {mods:#?}"); })
             .map(|r| {
                 module_by_decl_type
                     .get(r.as_str())
@@ -116,7 +114,7 @@ pub fn insert_uses_clauses<'a>(
             })
             .filter(|mods| !mods.is_empty())
             .map(|m| quote! {use #(#m;)*})
-            .inspect(|m| log::info!("Sending: {m}"))
+            // .inspect(|m| log::info!("Sending: {m}"))
             .collect_vec();
         let contents = std::fs::read_to_string(m.module.mod_name.file_name())
             .map_err(Report::from)
@@ -134,6 +132,10 @@ pub fn insert_uses_clauses<'a>(
         let new_contents = quote!(
             #(#uses)*
             #contents
+        );
+        log::info!(
+            "Top level pushing {new_contents:#?} to {}",
+            m.module.mod_name.file_name()
         );
         stream_to_file(new_contents, m.module.mod_name.file_name().as_str())
             .map_err(Report::from)

@@ -1,5 +1,5 @@
-use crate::endpoints::transaction::Transaction;
 use crate::definitions::transaction_id::TransactionID;
+use crate::endpoints::transaction::Transaction;
 /// The details of the requested Transaction are provided.
 #[derive(Serialize, Deserialize)]
 pub struct Get200 {

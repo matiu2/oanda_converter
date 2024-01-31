@@ -1,4 +1,3 @@
-use crate::definitions::guaranteed_stop_loss_order_mutability::GuaranteedStopLossOrderMutability;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct GuaranteedStopLossOrderParameters {

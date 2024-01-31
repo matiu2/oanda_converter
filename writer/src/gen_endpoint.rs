@@ -1,12 +1,15 @@
 //! Generates all the code for a single endpoint
 mod gen_responses;
 
-use self::gen_responses::gen_responses_for_call;
-use crate::{util::field_name, Error, Result};
+pub use self::gen_responses::gen_responses_for_call;
+use crate::{
+    util::{field_name, ResponsesInfo},
+    Error, Result,
+};
 use change_case::{lower_case, pascal_case, snake_case};
 use error_stack::ResultExt;
 use model::{
-    endpoint_docs::{HttpMethod, RestCall},
+    endpoint_docs::{HttpMethod, Response, RestCall},
     Endpoint,
 };
 use proc_macro2::{Ident, Span, TokenStream};
@@ -15,7 +18,10 @@ use std::collections::HashMap;
 use tracing::{info, instrument};
 use utils::{pretty_doc_string, stream_to_file};
 
-pub trait CallName {
+/// Because the model crate doesn't have an error type, and we want
+/// consistent methods that return errors on those types, we created
+/// this local trait that can be applied to `model::RestCall`
+pub trait CallNames {
     /// Basic method name - don't convert it to an Ident
     fn method_name_as_string(&self) -> Result<String>;
     /// Given self as a RestCall returns the method_name you should use
@@ -27,9 +33,40 @@ pub trait CallName {
     fn response_struct_prefix(&self) -> Result<String> {
         Ok(pascal_case(&self.method_name_as_string()?))
     }
+    /// Returns the parts (from base_path) of the filename where the code for the response structs is stored
+    /// eg. a filename for the `account` enpdoint and the `instruments` could be:
+    /// format!("{base_path}/endpoints/account/responses/instruments.rs");
+    /// .. In that case the reply to this call would be:
+    /// ```rust
+    /// vec!["endpoints", "account", "responses", "instruments"]
+    ///     .into_iter()
+    ///     .map(str::ToString);
+    /// ```
+    fn responses_module_parts(&self) -> Result<Vec<String>> {
+        Ok(vec![
+            "endpoints".to_string(),
+            self.endpoint_name(),
+            "responses".to_string(),
+            self.method_name_as_string()?,
+        ])
+    }
+
+    /// Returns the name of the endpoint that the Restcall is for
+    fn endpoint_name(&self) -> String;
+
+    /// All the responses possible
+    /// The good response and a vec of all the bad responses
+    fn good_and_bad_responses(&self) -> Result<(&Response, Vec<&Response>)>;
+
+    /// The type name of the good response
+    /// (All other responses will be turned into Errors)
+    fn good_response_type_code(&self) -> Result<u16> {
+        let (good_response, _bad_responses) = self.good_and_bad_responses()?;
+        Ok(good_response.code)
+    }
 }
 
-impl CallName for RestCall {
+impl CallNames for RestCall {
     /// Returns the method_name without converting it to an Ident
     /// Generates a rust name for the method to trigger the Rest api call.
     ///
@@ -53,6 +90,49 @@ impl CallName for RestCall {
             last_segment.to_string()
         };
         Ok(snake_case(s.as_str()))
+    }
+
+    /// All the responses possible
+    /// The good response and a vec of all the bad responses
+    fn good_and_bad_responses(&self) -> Result<(&Response, Vec<&Response>)> {
+        let (good_responses, bad_responses): (Vec<&Response>, Vec<&Response>) = self
+            .responses
+            .iter()
+            .partition(|r| (200..300).contains(&r.code));
+        let Some(good_response) = good_responses.first() else {
+            return Err(Error::new(format!(
+                "Expected a single good response for {self:#?} but got zero"
+            ))
+            .into());
+        };
+        if good_responses.len() != 1 {
+            return Err(Error::new(format!("Expected a single good response for {self:#?} but got all of these: {good_responses:#?}")).into());
+        }
+        Ok((good_response, bad_responses))
+    }
+
+    fn endpoint_name(&self) -> String {
+        self.endpoint.to_string()
+    }
+}
+
+pub trait ResponseNames {
+    /// A centralized place to get the prefix for all the type names
+    /// of the possible responses to a REST cal
+    fn struct_prefix(call: &RestCall) -> Result<String> {
+        call.response_struct_prefix()
+    }
+    /// Needs to be implemented to get the code
+    fn code(&self) -> u16;
+    /// Generates the type name for a certain response
+    fn type_name(&self, prefix: &str) -> String {
+        format!("{prefix}{code}", code = self.code())
+    }
+}
+
+impl ResponseNames for Response {
+    fn code(&self) -> u16 {
+        self.code
     }
 }
 
@@ -94,8 +174,9 @@ fn gen_query_param(name: &str) -> Result<TokenStream> {
 /// Generates code that passes a parameter in the path through reqwest
 fn gen_path_param(name: &str) -> TokenStream {
     let to_replace = quote! {"{" + #name + "}"};
+    let with = snake_case(name);
     quote! {
-        let url = url.replace(#to_replace);
+        let url = url.replace(#to_replace, #with);
     }
 }
 
@@ -142,7 +223,8 @@ fn gen_call(call: &RestCall, endpoint_name: &str) -> Result<TokenStream> {
             .send()
             .await?;
             let status_code = response.status_code();
-            // TODO: Convert the response into the right thing
+
+
         }
     ))
 }
@@ -161,28 +243,32 @@ fn gen_params(call: &RestCall) -> Result<TokenStream> {
     Ok(quote! {#(#params),*})
 }
 
-#[instrument(skip(calls))]
+#[instrument(skip(response_map))]
 pub fn gen_endpoint_responses(
     base_path: &str,
-    Endpoint {
-        name: endpoint_name,
-        calls,
-    }: &Endpoint,
+    endpoint_name: &str,
+    response_map: &HashMap<String, ResponsesInfo>,
 ) -> Result<TokenStream> {
     info!("Generating responses for endpoint");
+    // A map of call names to all the info about their responses
+    // Used to generate the response structs, and then again to call them
     // Make the Response type for each call
-    let response_map = calls
-        .iter()
-        .map(|call| Ok((call.method_name_as_string()?, gen_responses_for_call(call)?)))
-        .collect::<Result<HashMap<String, TokenStream>>>()?;
     let modules = response_map
         .keys()
-        .map(|key| Ident::new(key.as_str(), Span::call_site()))
+        .map(|key| Ident::new(key, Span::call_site()))
         .collect::<Vec<Ident>>();
     // Generate each of the responses sub-modules
-    for (name, tokens) in response_map {
-        let filename = format!("{base_path}/endpoints/{endpoint_name}/responses/{name}.rs");
-        stream_to_file(tokens, &filename)
+    for ResponsesInfo {
+        responses_module_parts,
+        token_stream,
+        ..
+    } in response_map.values()
+    {
+        let filename = format!(
+            "{base_path}/{parts}",
+            parts = responses_module_parts.join("/")
+        );
+        stream_to_file(token_stream.clone(), &filename)
             .attach_printable_lazy(|| format!("Saving endpoint to {filename}"))
             .change_context_lazy(Error::default)?;
     }
@@ -218,7 +304,10 @@ pub fn gen_endpoint(endpoint: &Endpoint) -> Result<TokenStream> {
 
 #[cfg(test)]
 mod unit_test {
-    use crate::{gen_endpoint::gen_responses::gen_response, Error, Result};
+    use crate::{
+        gen_endpoint::{gen_responses::gen_response, ResponseNames},
+        Error, Result,
+    };
     use error_stack::ResultExt;
     use model::{
         definition_docs::{Field, Schema, Struct},
@@ -228,7 +317,7 @@ mod unit_test {
     use utils::stream_to_string;
 
     #[test]
-    fn test_gen_test_response() -> Result<()> {
+    fn test_gen_response() -> Result<()> {
         let response = Response {
             code: 200,
             description: "Pricing information has been successfully provided.".to_string(),
@@ -247,16 +336,24 @@ mod unit_test {
                 }],
             }),
         };
-        let struct_prefix = "MyCall";
-        let ts = gen_response(struct_prefix, &response)?;
+        let prefix = "MyCall";
+        let type_name = response.type_name(prefix);
+        let ts = gen_response(&type_name, &response)?;
         let s = stream_to_string(&ts).change_context_lazy(Error::default)?;
         assert_eq!(
             s,
             r#"/// Pricing information has been successfully provided.
 #[derive(Serialize, Deserialize)]
-struct MyCall200 {
+pub struct MyCall200 {
     /// The latest candle sticks.
     latest_candles: Vec<CandlestickResponse>,
+}
+impl Default for MyCall200 {
+    fn default() -> Self {
+        Self {
+            latest_candles: Default::default(),
+        }
+    }
 }
 "#
         );

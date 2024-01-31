@@ -1,14 +1,10 @@
-use crate::definitions::order_book_bucket::OrderBookBucket;
-use chrono::DateTime;
-use crate::definitions::price_value::PriceValue;
-use crate::definitions::instrument_name::InstrumentName;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct OrderBook {
     /// The order book’s instrument
     instrument: Option<InstrumentName>,
     /// The time when the order book snapshot was created.
-    time: Option<DateTime>,
+    time: Option<DateTime<Utc>>,
     /// The price (midpoint) for the order book’s instrument at the
     /// time of the order book snapshot
     price: Option<PriceValue>,

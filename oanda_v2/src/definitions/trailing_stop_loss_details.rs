@@ -1,7 +1,3 @@
-use crate::definitions::client_extensions::ClientExtensions;
-use crate::definitions::time_in_force::TimeInForce;
-use chrono::DateTime;
-use crate::definitions::decimal_number::DecimalNumber;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct TrailingStopLossDetails {
@@ -14,7 +10,7 @@ pub struct TrailingStopLossDetails {
     time_in_force: TimeInForce,
     /// The date when the Trailing Stop Loss Order will be cancelled
     /// on if timeInForce is GTD.
-    gtd_time: Option<DateTime>,
+    gtd_time: Option<DateTime<Utc>>,
     /// The Client Extensions to add to the Trailing Stop Loss Order
     /// when created.
     client_extensions: Option<ClientExtensions>,

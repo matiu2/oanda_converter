@@ -1,28 +1,10 @@
-use crate::definitions::time_in_force::TimeInForce;
-use crate::definitions::market_if_touched_order_reason::MarketIfTouchedOrderReason;
-use crate::definitions::stop_loss_details::StopLossDetails;
-use crate::definitions::transaction_type::TransactionType;
-use crate::definitions::order_position_fill::OrderPositionFill;
-use crate::definitions::guaranteed_stop_loss_details::GuaranteedStopLossDetails;
-use crate::definitions::order_id::OrderID;
-use crate::definitions::client_extensions::ClientExtensions;
-use chrono::DateTime;
-use crate::definitions::request_id::RequestID;
-use crate::definitions::instrument_name::InstrumentName;
-use crate::definitions::price_value::PriceValue;
-use crate::definitions::decimal_number::DecimalNumber;
-use crate::definitions::take_profit_details::TakeProfitDetails;
-use crate::definitions::trailing_stop_loss_details::TrailingStopLossDetails;
-use crate::definitions::order_trigger_condition::OrderTriggerCondition;
-use crate::definitions::transaction_id::TransactionID;
-use crate::definitions::account_id::AccountID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct MarketIfTouchedOrderTransaction {
     /// The Transaction’s Identifier.
     id: Option<TransactionID>,
     /// The date/time when the Transaction was created.
-    time: Option<DateTime>,
+    time: Option<DateTime<Utc>>,
     /// The ID of the user that initiated the creation of the
     /// Transaction.
     user_id: Option<integer>,
@@ -64,7 +46,7 @@ pub struct MarketIfTouchedOrderTransaction {
     time_in_force: TimeInForce,
     /// The date/time when the MarketIfTouched Order will be
     /// cancelled if its timeInForce is “GTD”.
-    gtd_time: Option<DateTime>,
+    gtd_time: Option<DateTime<Utc>>,
     /// Specification of how Positions in the Account are modified
     /// when the Order is filled.
     #[serde_inline_default("DEFAULT")]

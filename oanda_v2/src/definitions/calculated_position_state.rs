@@ -1,5 +1,3 @@
-use crate::definitions::instrument_name::InstrumentName;
-use crate::definitions::account_units::AccountUnits;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct CalculatedPositionState {

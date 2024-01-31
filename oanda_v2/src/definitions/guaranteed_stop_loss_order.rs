@@ -1,22 +1,10 @@
-use crate::definitions::client_id::ClientID;
-use crate::definitions::order_type::OrderType;
-use chrono::DateTime;
-use crate::definitions::trade_id::TradeID;
-use crate::definitions::order_state::OrderState;
-use crate::definitions::price_value::PriceValue;
-use crate::definitions::client_extensions::ClientExtensions;
-use crate::definitions::transaction_id::TransactionID;
-use crate::definitions::decimal_number::DecimalNumber;
-use crate::definitions::order_trigger_condition::OrderTriggerCondition;
-use crate::definitions::order_id::OrderID;
-use crate::definitions::time_in_force::TimeInForce;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct GuaranteedStopLossOrder {
     /// The Order’s identifier, unique within the Order’s Account.
     id: Option<OrderID>,
     /// The time when the Order was created.
-    create_time: Option<DateTime>,
+    create_time: Option<DateTime<Utc>>,
     /// The current state of the Order.
     state: Option<OrderState>,
     /// The client extensions of the Order. Do not set, modify, or
@@ -52,7 +40,7 @@ pub struct GuaranteedStopLossOrder {
     time_in_force: TimeInForce,
     /// The date/time when the GuaranteedStopLoss Order will be
     /// cancelled if its timeInForce is “GTD”.
-    gtd_time: Option<DateTime>,
+    gtd_time: Option<DateTime<Utc>>,
     /// Specification of which price component should be used when
     /// determining if an Order should be triggered and filled.
     /// This allows Orders to be triggered based on the bid, ask,
@@ -81,7 +69,7 @@ pub struct GuaranteedStopLossOrder {
     filling_transaction_id: Option<TransactionID>,
     /// Date/time when the Order was filled (only provided when the
     /// Order’s state is FILLED)
-    filled_time: Option<DateTime>,
+    filled_time: Option<DateTime<Utc>>,
     /// Trade ID of Trade opened when the Order was filled (only
     /// provided when the Order’s state is FILLED and a Trade was
     /// opened as a result of the fill)
@@ -99,7 +87,7 @@ pub struct GuaranteedStopLossOrder {
     cancelling_transaction_id: Option<TransactionID>,
     /// Date/time when the Order was cancelled (only provided when
     /// the state of the Order is CANCELLED)
-    cancelled_time: Option<DateTime>,
+    cancelled_time: Option<DateTime<Utc>>,
     /// The ID of the Order that was replaced by this Order (only
     /// provided if this Order was created as part of a cancel/
     /// replace).

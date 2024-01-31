@@ -1,17 +1,10 @@
-use crate::definitions::transaction_type::TransactionType;
-use crate::definitions::trade_id::TradeID;
-use crate::definitions::market_order_reason::MarketOrderReason;
-use crate::definitions::transaction_id::TransactionID;
-use crate::definitions::account_id::AccountID;
-use chrono::DateTime;
-use crate::definitions::request_id::RequestID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct DelayedTradeClosureTransaction {
     /// The Transaction’s Identifier.
     id: Option<TransactionID>,
     /// The date/time when the Transaction was created.
-    time: Option<DateTime>,
+    time: Option<DateTime<Utc>>,
     /// The ID of the user that initiated the creation of the
     /// Transaction.
     user_id: Option<integer>,

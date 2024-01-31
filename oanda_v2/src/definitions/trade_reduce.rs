@@ -1,7 +1,3 @@
-use crate::definitions::price_value::PriceValue;
-use crate::definitions::account_units::AccountUnits;
-use crate::definitions::trade_id::TradeID;
-use crate::definitions::decimal_number::DecimalNumber;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct TradeReduce {

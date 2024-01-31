@@ -1,7 +1,3 @@
-use crate::definitions::price_value::PriceValue;
-use crate::definitions::instrument_name::InstrumentName;
-use chrono::DateTime;
-use crate::definitions::price_bucket::PriceBucket;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct ClientPrice {
@@ -12,7 +8,7 @@ pub struct ClientPrice {
     /// The Price’s Instrument.
     instrument: Option<InstrumentName>,
     /// The date/time when the Price was created
-    time: Option<DateTime>,
+    time: Option<DateTime<Utc>>,
     /// Flag indicating if the Price is tradeable or not
     tradeable: Option<boolean>,
     /// The list of prices and liquidity available on the

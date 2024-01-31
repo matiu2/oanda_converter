@@ -4,7 +4,7 @@ use uses_inserter::ModName;
 
 fn main() -> uses_inserter::Result<()> {
     pretty_env_logger::init();
-    let base_path = "../oanda_v2/src";
+    let base_path = "oanda_v2/src";
     let mod_name = ModName::new(base_path).add_part("lib");
     let files_to_ignore = ["host", "error", "lib", "client"]
         .into_iter()

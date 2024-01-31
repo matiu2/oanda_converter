@@ -1,8 +1,3 @@
-use crate::definitions::trade_specifier::TradeSpecifier;
-use crate::definitions::trade_state_filter::TradeStateFilter;
-use crate::client::Client;
-use crate::definitions::accept_datetime_format::AcceptDatetimeFormat;
-use crate::definitions::instrument_name::InstrumentName;
 use serde::{Serialize, Deserialize};
 pub mod responses;
 struct Trade<'a> {
@@ -22,7 +17,7 @@ impl<'a> Trade<'a> {
         before_id: TradeId,
     ) -> Result<()> {
         let url = "/v3/accounts/{accountID}/trades";
-        let url = url.replace("{" + "accountID" + "}");
+        let url = url.replace("{" + "accountID" + "}", "account_id");
         let url = self.client.url(url);
         let query = [
             ("ids", ids),
@@ -50,7 +45,7 @@ impl<'a> Trade<'a> {
         account_id: AccountId,
     ) -> Result<()> {
         let url = "/v3/accounts/{accountID}/openTrades";
-        let url = url.replace("{" + "accountID" + "}");
+        let url = url.replace("{" + "accountID" + "}", "account_id");
         let url = self.client.url(url);
         let query = [];
         let response = self
@@ -73,8 +68,8 @@ impl<'a> Trade<'a> {
         trade_specifier: TradeSpecifier,
     ) -> Result<()> {
         let url = "/v3/accounts/{accountID}/trades/{tradeSpecifier}";
-        let url = url.replace("{" + "accountID" + "}");
-        let url = url.replace("{" + "tradeSpecifier" + "}");
+        let url = url.replace("{" + "accountID" + "}", "account_id");
+        let url = url.replace("{" + "tradeSpecifier" + "}", "trade_specifier");
         let url = self.client.url(url);
         let query = [];
         let response = self
@@ -98,8 +93,8 @@ impl<'a> Trade<'a> {
         trade_specifier: TradeSpecifier,
     ) -> Result<()> {
         let url = "/v3/accounts/{accountID}/trades/{tradeSpecifier}/close";
-        let url = url.replace("{" + "accountID" + "}");
-        let url = url.replace("{" + "tradeSpecifier" + "}");
+        let url = url.replace("{" + "accountID" + "}", "account_id");
+        let url = url.replace("{" + "tradeSpecifier" + "}", "trade_specifier");
         let url = self.client.url(url);
         let query = [];
         let response = self
@@ -123,8 +118,8 @@ impl<'a> Trade<'a> {
         trade_specifier: TradeSpecifier,
     ) -> Result<()> {
         let url = "/v3/accounts/{accountID}/trades/{tradeSpecifier}/clientExtensions";
-        let url = url.replace("{" + "accountID" + "}");
-        let url = url.replace("{" + "tradeSpecifier" + "}");
+        let url = url.replace("{" + "accountID" + "}", "account_id");
+        let url = url.replace("{" + "tradeSpecifier" + "}", "trade_specifier");
         let url = self.client.url(url);
         let query = [];
         let response = self
@@ -148,8 +143,8 @@ impl<'a> Trade<'a> {
         trade_specifier: TradeSpecifier,
     ) -> Result<()> {
         let url = "/v3/accounts/{accountID}/trades/{tradeSpecifier}/orders";
-        let url = url.replace("{" + "accountID" + "}");
-        let url = url.replace("{" + "tradeSpecifier" + "}");
+        let url = url.replace("{" + "accountID" + "}", "account_id");
+        let url = url.replace("{" + "tradeSpecifier" + "}", "trade_specifier");
         let url = self.client.url(url);
         let query = [];
         let response = self

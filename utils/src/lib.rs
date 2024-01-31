@@ -26,6 +26,8 @@ pub fn stream_to_file(stream: TokenStream, path: &str) -> Result<()> {
             format!("{stream}")
         }
     };
+
+    tracing::info!("Pushing {formatted_code} to {path:#?}");
     std::fs::write(path, formatted_code)
         .annotate_lazy(|| format!("Unable to write to \"{path:#?}\""))?;
     Ok(())
@@ -39,20 +41,36 @@ pub fn stream_to_string(stream: &TokenStream) -> Result<String> {
         .annotate_lazy(|| format!("Converting code to string {stream:#?}"))
 }
 
-/// Takes a raw doc string and returns a pretty token_stream
-/// Example usage: `#(#doc_string)*`
-pub fn pretty_doc_string(input: &str) -> Result<Vec<TokenStream>> {
+/// Make a comment pretty. Wraps to 60 chars width
+///
+/// ## Arguments
+///
+/// * `input`: The comment text
+/// * `prefix`: The prefix, eg. `//` or `///`
+pub fn pretty_comment_basic(input: &str, prefix: &str) -> Result<Vec<TokenStream>> {
     let lines = textwrap::wrap(input, 60);
     lines
         .iter()
         .map(|line| {
-            let line = format!("/// {line}");
+            let line = format!("{prefix} {line}");
             line.parse()
                 .map_err(|err| Error::Message(format!("{err:#?}")))
                 .annotate_lazy(|| format!("While quoting docstring line: {line}"))
         })
         .collect::<Result<Vec<proc_macro2::TokenStream>>>()
         .attach_printable_lazy(|| format!("Trying to prettyize: {input}"))
+}
+
+/// Takes a raw doc string and returns a pretty token_stream
+/// Example usage: `#(#doc_string)*`
+pub fn pretty_doc_string(input: &str) -> Result<Vec<TokenStream>> {
+    pretty_comment_basic(input, "///")
+}
+
+/// Takes a raw comment text, and returns it as a vec of token streams
+/// It wraps them to 60 character widths
+pub fn pretty_comment(input: &str) -> Result<Vec<TokenStream>> {
+    pretty_comment_basic(input, "//")
 }
 
 #[macro_export]

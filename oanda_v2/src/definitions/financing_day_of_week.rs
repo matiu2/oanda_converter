@@ -1,4 +1,3 @@
-use crate::definitions::day_of_week::DayOfWeek;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct FinancingDayOfWeek {

@@ -1,11 +1,3 @@
-use crate::definitions::account_id::AccountID;
-use crate::definitions::guaranteed_stop_loss_order_mode::GuaranteedStopLossOrderMode;
-use crate::definitions::transaction_id::TransactionID;
-use chrono::DateTime;
-use crate::definitions::currency::Currency;
-use crate::definitions::decimal_number::DecimalNumber;
-use crate::definitions::guaranteed_stop_loss_order_parameters::GuaranteedStopLossOrderParameters;
-use crate::definitions::account_units::AccountUnits;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct AccountSummary {
@@ -19,7 +11,7 @@ pub struct AccountSummary {
     /// ID of the user that created the Account.
     created_by_user_id: Option<integer>,
     /// The date/time when the Account was created.
-    created_time: Option<DateTime>,
+    created_time: Option<DateTime<Utc>>,
     /// The current guaranteed Stop Loss Order settings of
     /// the Account. This field will only be present if the
     /// guaranteedStopLossOrderMode is not ‘DISABLED’.
@@ -28,7 +20,7 @@ pub struct AccountSummary {
     guaranteed_stop_loss_order_mode: Option<GuaranteedStopLossOrderMode>,
     /// The date/time that the Account’s resettablePL was last
     /// reset.
-    resettable_pl_time: Option<DateTime>,
+    resettable_pl_time: Option<DateTime<Utc>>,
     /// Client-provided margin rate override for the Account. The
     /// effective margin rate of the Account is the lesser of this
     /// value and the OANDA margin rate for the Account’s division.
@@ -100,12 +92,12 @@ pub struct AccountSummary {
     guaranteed_execution_fees: Option<AccountUnits>,
     /// The date/time when the Account entered a margin call state.
     /// Only provided if the Account is in a margin call.
-    margin_call_enter_time: Option<DateTime>,
+    margin_call_enter_time: Option<DateTime<Utc>>,
     /// The number of times that the Account’s current margin call
     /// was extended.
     margin_call_extension_count: Option<integer>,
     /// The date/time of the Account’s last margin call extension.
-    last_margin_call_extension_time: Option<DateTime>,
+    last_margin_call_extension_time: Option<DateTime<Utc>>,
     /// The ID of the last Transaction created for the Account.
     last_transaction_id: Option<TransactionID>,
 }

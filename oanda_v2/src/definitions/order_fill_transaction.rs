@@ -1,26 +1,10 @@
-use crate::definitions::order_fill_reason::OrderFillReason;
-use crate::definitions::trade_reduce::TradeReduce;
-use crate::definitions::order_id::OrderID;
-use crate::definitions::price_value::PriceValue;
-use crate::definitions::client_id::ClientID;
-use crate::definitions::home_conversion_factors::HomeConversionFactors;
-use crate::definitions::transaction_id::TransactionID;
-use chrono::DateTime;
-use crate::definitions::trade_open::TradeOpen;
-use crate::definitions::client_price::ClientPrice;
-use crate::definitions::account_id::AccountID;
-use crate::definitions::transaction_type::TransactionType;
-use crate::definitions::request_id::RequestID;
-use crate::definitions::decimal_number::DecimalNumber;
-use crate::definitions::instrument_name::InstrumentName;
-use crate::definitions::account_units::AccountUnits;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct OrderFillTransaction {
     /// The Transaction’s Identifier.
     id: Option<TransactionID>,
     /// The date/time when the Transaction was created.
-    time: Option<DateTime>,
+    time: Option<DateTime<Utc>>,
     /// The ID of the user that initiated the creation of the
     /// Transaction.
     user_id: Option<integer>,

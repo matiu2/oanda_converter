@@ -170,21 +170,30 @@ mod test {
         let code = stream_to_string(&tokens)
             .change_context_lazy(Error::default)
             .trace()?;
-        println!("{code}");
         assert_eq!(
             code.to_string(),
             indoc! {r#"
                 #[derive(Serialize, Deserialize)]
-                struct TestStruct {
+                pub struct TestStruct {
                     /// Field 1
                     field1: String,
                     /// Field 2
                     field2: Vec<u32>,
                     /// Don't get too close
-                    #[serde(default = "Mister Fartsy")]
+                    #[serde_inline_default("Mister Fartsy")]
                     name: String,
                     /// Optional
                     age: Option<u32>,
+                }
+                impl Default for TestStruct {
+                    fn default() -> Self {
+                        Self {
+                            field1: Default::default(),
+                            field2: Default::default(),
+                            name: "Mister Fartsy",
+                            age: Default::default(),
+                        }
+                    }
                 }
                 "#
             }
@@ -269,7 +278,7 @@ mod test {
             indoc! {r#"
                 struct Tmp {
                     /// A vec of names
-                    #[serde(default = "Mister Joe")]
+                    #[serde_inline_default("Mister Joe")]
                     names: String,
                 }
             "#}
@@ -317,7 +326,7 @@ mod test {
             indoc! {r#"
                 struct Tmp {
                     /// You don't really need a name
-                    #[serde(default = "Master Blaster")]
+                    #[serde_inline_default("Master Blaster")]
                     optional_name: String,
                 }
             "#}

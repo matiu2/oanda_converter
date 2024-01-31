@@ -59,7 +59,7 @@ pub fn get_definitions(document: &Html) -> Result<Vec<Definition>> {
     }
     Ok(headers
         .into_iter()
-        .zip(bodies.into_iter())
+        .zip(bodies)
         .map(|(header, value)| Definition {
             name: header.type_name,
             doc_string: header.description,
@@ -352,7 +352,7 @@ mod test {
         // Check the first enum
         let granularity = definitions
             .first()
-            .ok_or_else(|| Error::default())
+            .ok_or_else(Error::default)
             .into_report()
             .attach_printable("No definitions")?;
         assert_eq!(&granularity.name, "CandlestickGranularity");
@@ -360,7 +360,7 @@ mod test {
         let Value::Table(values) = &granularity.value else {bail!("bad granularity")};
         let s5 = values
             .first()
-            .ok_or_else(|| Error::default())
+            .ok_or_else(Error::default)
             .into_report()
         .attach_printable("No entries in granularities enum")?;
         match s5 {
@@ -372,7 +372,7 @@ mod test {
         };
         let m = values
             .last()
-            .ok_or_else(|| Error::default())
+            .ok_or_else(Error::default)
             .into_report()
             .attach_printable("Couldn't get last granularity")?;
         match m {

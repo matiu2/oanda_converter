@@ -1,5 +1,5 @@
-use crate::definitions::transaction_id::TransactionID;
 use crate::definitions::client_configure_transaction::ClientConfigureTransaction;
+use crate::definitions::transaction_id::TransactionID;
 use crate::definitions::client_configure_reject_transaction::ClientConfigureRejectTransaction;
 /// The Account was configured successfully.
 #[derive(Serialize, Deserialize)]

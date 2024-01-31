@@ -1,6 +1,3 @@
-use crate::client::Client;
-use crate::definitions::instrument_name::InstrumentName;
-use crate::definitions::accept_datetime_format::AcceptDatetimeFormat;
 use serde::{Serialize, Deserialize};
 pub mod responses;
 struct Position<'a> {
@@ -16,7 +13,7 @@ impl<'a> Position<'a> {
         account_id: AccountId,
     ) -> Result<()> {
         let url = "/v3/accounts/{accountID}/positions";
-        let url = url.replace("{" + "accountID" + "}");
+        let url = url.replace("{" + "accountID" + "}", "account_id");
         let url = self.client.url(url);
         let query = [];
         let response = self
@@ -38,7 +35,7 @@ impl<'a> Position<'a> {
         account_id: AccountId,
     ) -> Result<()> {
         let url = "/v3/accounts/{accountID}/openPositions";
-        let url = url.replace("{" + "accountID" + "}");
+        let url = url.replace("{" + "accountID" + "}", "account_id");
         let url = self.client.url(url);
         let query = [];
         let response = self
@@ -60,8 +57,8 @@ impl<'a> Position<'a> {
         instrument: InstrumentName,
     ) -> Result<()> {
         let url = "/v3/accounts/{accountID}/positions/{instrument}";
-        let url = url.replace("{" + "accountID" + "}");
-        let url = url.replace("{" + "instrument" + "}");
+        let url = url.replace("{" + "accountID" + "}", "account_id");
+        let url = url.replace("{" + "instrument" + "}", "instrument");
         let url = self.client.url(url);
         let query = [];
         let response = self
@@ -84,8 +81,8 @@ impl<'a> Position<'a> {
         instrument: InstrumentName,
     ) -> Result<()> {
         let url = "/v3/accounts/{accountID}/positions/{instrument}/close";
-        let url = url.replace("{" + "accountID" + "}");
-        let url = url.replace("{" + "instrument" + "}");
+        let url = url.replace("{" + "accountID" + "}", "account_id");
+        let url = url.replace("{" + "instrument" + "}", "instrument");
         let url = self.client.url(url);
         let query = [];
         let response = self

@@ -1,30 +1,10 @@
-use crate::definitions::trade_id::TradeID;
-use crate::definitions::order_state::OrderState;
-use crate::definitions::take_profit_details::TakeProfitDetails;
-use chrono::DateTime;
-use crate::definitions::transaction_id::TransactionID;
-use crate::definitions::price_value::PriceValue;
-use crate::definitions::stop_loss_details::StopLossDetails;
-use crate::definitions::order_position_fill::OrderPositionFill;
-use crate::definitions::decimal_number::DecimalNumber;
-use crate::definitions::market_order_position_closeout::MarketOrderPositionCloseout;
-use crate::definitions::guaranteed_stop_loss_details::GuaranteedStopLossDetails;
-use crate::definitions::market_order_trade_close::MarketOrderTradeClose;
-use crate::definitions::trailing_stop_loss_details::TrailingStopLossDetails;
-use crate::definitions::client_extensions::ClientExtensions;
-use crate::definitions::order_id::OrderID;
-use crate::definitions::instrument_name::InstrumentName;
-use crate::definitions::time_in_force::TimeInForce;
-use crate::definitions::market_order_delayed_trade_close::MarketOrderDelayedTradeClose;
-use crate::definitions::market_order_margin_closeout::MarketOrderMarginCloseout;
-use crate::definitions::order_type::OrderType;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct MarketOrder {
     /// The Order’s identifier, unique within the Order’s Account.
     id: Option<OrderID>,
     /// The time when the Order was created.
-    create_time: Option<DateTime>,
+    create_time: Option<DateTime<Utc>>,
     /// The current state of the Order.
     state: Option<OrderState>,
     /// The client extensions of the Order. Do not set, modify, or
@@ -106,7 +86,7 @@ pub struct MarketOrder {
     filling_transaction_id: Option<TransactionID>,
     /// Date/time when the Order was filled (only provided when the
     /// Order’s state is FILLED)
-    filled_time: Option<DateTime>,
+    filled_time: Option<DateTime<Utc>>,
     /// Trade ID of Trade opened when the Order was filled (only
     /// provided when the Order’s state is FILLED and a Trade was
     /// opened as a result of the fill)
@@ -124,7 +104,7 @@ pub struct MarketOrder {
     cancelling_transaction_id: Option<TransactionID>,
     /// Date/time when the Order was cancelled (only provided when
     /// the state of the Order is CANCELLED)
-    cancelled_time: Option<DateTime>,
+    cancelled_time: Option<DateTime<Utc>>,
 }
 impl Default for MarketOrder {
     fn default() -> Self {

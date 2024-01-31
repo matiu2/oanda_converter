@@ -1,4 +1,3 @@
-use crate::definitions::conversion_factor::ConversionFactor;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct HomeConversionFactors {

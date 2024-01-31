@@ -1,4 +1,3 @@
-use crate::definitions::liquidity_regeneration_schedule_step::LiquidityRegenerationScheduleStep;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct LiquidityRegenerationSchedule {

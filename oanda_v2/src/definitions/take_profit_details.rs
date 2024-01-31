@@ -1,7 +1,3 @@
-use crate::definitions::price_value::PriceValue;
-use chrono::DateTime;
-use crate::definitions::client_extensions::ClientExtensions;
-use crate::definitions::time_in_force::TimeInForce;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct TakeProfitDetails {
@@ -14,7 +10,7 @@ pub struct TakeProfitDetails {
     time_in_force: TimeInForce,
     /// The date when the Take Profit Order will be cancelled on if
     /// timeInForce is GTD.
-    gtd_time: Option<DateTime>,
+    gtd_time: Option<DateTime<Utc>>,
     /// The Client Extensions to add to the Take Profit Order when
     /// created.
     client_extensions: Option<ClientExtensions>,

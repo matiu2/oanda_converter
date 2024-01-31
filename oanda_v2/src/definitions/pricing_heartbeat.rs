@@ -1,4 +1,3 @@
-use chrono::DateTime;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct PricingHeartbeat {
@@ -6,7 +5,7 @@ pub struct PricingHeartbeat {
     #[serde_inline_default("HEARTBEAT")]
     r#type: String,
     /// The date/time when the Heartbeat was created.
-    time: Option<DateTime>,
+    time: Option<DateTime<Utc>>,
 }
 impl Default for PricingHeartbeat {
     fn default() -> Self {

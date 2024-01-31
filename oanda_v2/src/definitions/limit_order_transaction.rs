@@ -1,28 +1,10 @@
-use crate::definitions::limit_order_reason::LimitOrderReason;
-use crate::definitions::order_id::OrderID;
-use crate::definitions::account_id::AccountID;
-use crate::definitions::client_extensions::ClientExtensions;
-use crate::definitions::guaranteed_stop_loss_details::GuaranteedStopLossDetails;
-use crate::definitions::decimal_number::DecimalNumber;
-use chrono::DateTime;
-use crate::definitions::price_value::PriceValue;
-use crate::definitions::transaction_id::TransactionID;
-use crate::definitions::instrument_name::InstrumentName;
-use crate::definitions::trailing_stop_loss_details::TrailingStopLossDetails;
-use crate::definitions::transaction_type::TransactionType;
-use crate::definitions::request_id::RequestID;
-use crate::definitions::order_trigger_condition::OrderTriggerCondition;
-use crate::definitions::time_in_force::TimeInForce;
-use crate::definitions::take_profit_details::TakeProfitDetails;
-use crate::definitions::stop_loss_details::StopLossDetails;
-use crate::definitions::order_position_fill::OrderPositionFill;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct LimitOrderTransaction {
     /// The Transaction’s Identifier.
     id: Option<TransactionID>,
     /// The date/time when the Transaction was created.
-    time: Option<DateTime>,
+    time: Option<DateTime<Utc>>,
     /// The ID of the user that initiated the creation of the
     /// Transaction.
     user_id: Option<integer>,
@@ -54,7 +36,7 @@ pub struct LimitOrderTransaction {
     time_in_force: TimeInForce,
     /// The date/time when the Limit Order will be cancelled if its
     /// timeInForce is “GTD”.
-    gtd_time: Option<DateTime>,
+    gtd_time: Option<DateTime<Utc>>,
     /// Specification of how Positions in the Account are modified
     /// when the Order is filled.
     #[serde_inline_default("DEFAULT")]

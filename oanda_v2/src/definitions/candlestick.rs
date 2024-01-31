@@ -1,10 +1,8 @@
-use chrono::DateTime;
-use crate::definitions::candlestick_data::CandlestickData;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Candlestick {
     /// The start time of the candlestick
-    time: Option<DateTime>,
+    time: Option<DateTime<Utc>>,
     /// The candlestick data based on bids. Only provided if bid-
     /// based candles were requested.
     bid: Option<CandlestickData>,

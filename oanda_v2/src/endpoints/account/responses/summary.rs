@@ -1,5 +1,5 @@
-use crate::definitions::transaction_id::TransactionID;
 use crate::definitions::account_summary::AccountSummary;
+use crate::definitions::transaction_id::TransactionID;
 /// The Account summary are provided
 #[derive(Serialize, Deserialize)]
 pub struct Summary200 {

@@ -1,7 +1,7 @@
+use crate::definitions::order_cancel_transaction::OrderCancelTransaction;
 use crate::endpoints::transaction::Transaction;
 use crate::definitions::order_fill_transaction::OrderFillTransaction;
 use crate::definitions::transaction_id::TransactionID;
-use crate::definitions::order_cancel_transaction::OrderCancelTransaction;
 /// The Order was successfully cancelled and replaced
 #[derive(Serialize, Deserialize)]
 pub struct Put201 {

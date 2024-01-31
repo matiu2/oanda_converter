@@ -1,8 +1,8 @@
-use crate::definitions::order_cancel_transaction::OrderCancelTransaction;
 use crate::definitions::market_order_reject_transaction::MarketOrderRejectTransaction;
+use crate::definitions::order_cancel_transaction::OrderCancelTransaction;
 use crate::definitions::order_fill_transaction::OrderFillTransaction;
-use crate::definitions::transaction_id::TransactionID;
 use crate::definitions::market_order_transaction::MarketOrderTransaction;
+use crate::definitions::transaction_id::TransactionID;
 /// The Position closeout request has been successfully
 /// processed.
 #[derive(Serialize, Deserialize)]

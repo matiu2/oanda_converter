@@ -1,11 +1,16 @@
+use std::collections::HashMap;
+
 use crate::error::Result;
 // use crate::gen_client::gen_client;
 use crate::gen_definition::gen_definition;
-use crate::gen_endpoint::{gen_endpoint, gen_endpoint_responses};
-// use crate::gen_error::gen_error;
+use crate::gen_endpoint::{
+    gen_endpoint, gen_endpoint_responses, gen_responses_for_call, CallNames,
+};
+use crate::gen_error::gen_error;
 use crate::gen_mods::gen_mods;
 use crate::Error;
 use error_stack::ResultExt;
+use model::endpoint_docs::{Response, RestCall};
 use model::{Content, Endpoint};
 use proc_macro2::{Ident, TokenStream};
 use quote::{format_ident, quote};
@@ -70,7 +75,8 @@ pub fn write_endpoints<'a>(
         stream_to_file(tokens, &filename)
             .change_context_lazy(|| Error::new(format!("Saving endpoint to {filename}")))?;
         // Generate the responses in a sub module
-        let tokens = gen_endpoint_responses(base_path, endpoint)
+        let responses_info = get_responses_info(&endpoint.calls)?;
+        let tokens = gen_endpoint_responses(base_path, &endpoint.name, &responses_info)
             .attach_printable_lazy(|| format!("Generating endpoint for {}", endpoint.name))?;
         let filename = format!("{base_path}/endpoints/{}/responses.rs", endpoint.name);
         stream_to_file(tokens, &filename)
@@ -78,6 +84,37 @@ pub fn write_endpoints<'a>(
     }
 
     Ok(endpoints)
+}
+
+pub struct ResponsesInfo<'a> {
+    pub responses_module_parts: Vec<String>,
+    pub struct_prefix: String,
+    pub good_response: &'a Response,
+    pub bad_responses: Vec<&'a Response>,
+    pub token_stream: TokenStream,
+}
+
+fn get_responses_info(calls: &[RestCall]) -> Result<HashMap<String, ResponsesInfo>> {
+    calls
+        .iter()
+        .map(|call| {
+            let struct_prefix = call.response_struct_prefix()?;
+            let responses_module_parts = call.responses_module_parts()?;
+            let (good_response, bad_responses) = call.good_and_bad_responses()?;
+            let token_stream =
+                gen_responses_for_call(&struct_prefix, good_response, bad_responses.as_slice())?;
+            Ok((
+                call.method_name_as_string()?,
+                ResponsesInfo {
+                    responses_module_parts,
+                    struct_prefix,
+                    good_response,
+                    bad_responses,
+                    token_stream,
+                },
+            ))
+        })
+        .collect::<Result<HashMap<String, ResponsesInfo>>>()
 }
 
 /// Generate all the source code

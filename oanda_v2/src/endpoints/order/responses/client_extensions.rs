@@ -1,6 +1,6 @@
+use crate::definitions::transaction_id::TransactionID;
 use crate::definitions::order_client_extensions_modify_transaction::OrderClientExtensionsModifyTransaction;
 use crate::definitions::order_client_extensions_modify_reject_transaction::OrderClientExtensionsModifyRejectTransaction;
-use crate::definitions::transaction_id::TransactionID;
 /// The Order’s Client Extensions were successfully modified
 #[derive(Serialize, Deserialize)]
 pub struct ClientExtensions200 {

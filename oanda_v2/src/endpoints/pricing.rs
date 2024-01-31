@@ -1,11 +1,3 @@
-use crate::definitions::candlestick_granularity::CandlestickGranularity;
-use crate::definitions::decimal_number::DecimalNumber;
-use crate::definitions::pricing_component::PricingComponent;
-use chrono::DateTime;
-use crate::definitions::instrument_name::InstrumentName;
-use crate::client::Client;
-use crate::definitions::weekly_alignment::WeeklyAlignment;
-use crate::definitions::accept_datetime_format::AcceptDatetimeFormat;
 use serde::{Serialize, Deserialize};
 pub mod responses;
 struct Pricing<'a> {
@@ -22,13 +14,13 @@ impl<'a> Pricing<'a> {
         account_id: AccountId,
         candle_specifications: ListOf,
         units: DecimalNumber,
-        smooth: Boolean,
+        smooth: bool,
         daily_alignment: Integer,
         alignment_timezone: String,
         weekly_alignment: WeeklyAlignment,
     ) -> Result<()> {
         let url = "/v3/accounts/{accountID}/candles/latest";
-        let url = url.replace("{" + "accountID" + "}");
+        let url = url.replace("{" + "accountID" + "}", "account_id");
         let url = self.client.url(url);
         let query = [
             ("candleSpecifications", candle_specifications),
@@ -57,12 +49,12 @@ impl<'a> Pricing<'a> {
         accept_datetime_format: AcceptDatetimeFormat,
         account_id: AccountId,
         instruments: ListOf,
-        since: DateTime,
-        include_units_available: Boolean,
-        include_home_conversions: Boolean,
+        since: DateTime<Utc>,
+        include_units_available: bool,
+        include_home_conversions: bool,
     ) -> Result<()> {
         let url = "/v3/accounts/{accountID}/pricing";
-        let url = url.replace("{" + "accountID" + "}");
+        let url = url.replace("{" + "accountID" + "}", "account_id");
         let url = self.client.url(url);
         let query = [
             ("instruments", instruments),
@@ -104,11 +96,11 @@ impl<'a> Pricing<'a> {
         accept_datetime_format: AcceptDatetimeFormat,
         account_id: AccountId,
         instruments: ListOf,
-        snapshot: Boolean,
-        include_home_conversions: Boolean,
+        snapshot: bool,
+        include_home_conversions: bool,
     ) -> Result<()> {
         let url = "/v3/accounts/{accountID}/pricing/stream";
-        let url = url.replace("{" + "accountID" + "}");
+        let url = url.replace("{" + "accountID" + "}", "account_id");
         let url = self.client.url(url);
         let query = [
             ("instruments", instruments),
@@ -136,18 +128,18 @@ impl<'a> Pricing<'a> {
         price: PricingComponent,
         granularity: CandlestickGranularity,
         count: Integer,
-        from: DateTime,
-        to: DateTime,
-        smooth: Boolean,
-        include_first: Boolean,
+        from: DateTime<Utc>,
+        to: DateTime<Utc>,
+        smooth: bool,
+        include_first: bool,
         daily_alignment: Integer,
         alignment_timezone: String,
         weekly_alignment: WeeklyAlignment,
         units: DecimalNumber,
     ) -> Result<()> {
         let url = "/v3/accounts/{accountID}/instruments/{instrument}/candles";
-        let url = url.replace("{" + "accountID" + "}");
-        let url = url.replace("{" + "instrument" + "}");
+        let url = url.replace("{" + "accountID" + "}", "account_id");
+        let url = url.replace("{" + "instrument" + "}", "instrument");
         let url = self.client.url(url);
         let query = [
             ("price", price),

@@ -1,5 +1,3 @@
-use chrono::DateTime;
-use crate::definitions::transaction_id::TransactionID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct TransactionHeartbeat {
@@ -10,7 +8,7 @@ pub struct TransactionHeartbeat {
     /// Account
     last_transaction_id: Option<TransactionID>,
     /// The date/time when the TransactionHeartbeat was created.
-    time: Option<DateTime>,
+    time: Option<DateTime<Utc>>,
 }
 impl Default for TransactionHeartbeat {
     fn default() -> Self {

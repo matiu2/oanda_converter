@@ -1,9 +1,3 @@
-use chrono::DateTime;
-use crate::definitions::dynamic_order_state::DynamicOrderState;
-use crate::definitions::decimal_number::DecimalNumber;
-use crate::definitions::calculated_position_state::CalculatedPositionState;
-use crate::definitions::account_units::AccountUnits;
-use crate::definitions::calculated_trade_state::CalculatedTradeState;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct AccountChangesState {
@@ -64,12 +58,12 @@ pub struct AccountChangesState {
     guaranteed_execution_fees: Option<AccountUnits>,
     /// The date/time when the Account entered a margin call state.
     /// Only provided if the Account is in a margin call.
-    margin_call_enter_time: Option<DateTime>,
+    margin_call_enter_time: Option<DateTime<Utc>>,
     /// The number of times that the Account’s current margin call
     /// was extended.
     margin_call_extension_count: Option<integer>,
     /// The date/time of the Account’s last margin call extension.
-    last_margin_call_extension_time: Option<DateTime>,
+    last_margin_call_extension_time: Option<DateTime<Utc>>,
     /// The price-dependent state of each pending Order in the
     /// Account.
     orders: Vec<DynamicOrderState>,

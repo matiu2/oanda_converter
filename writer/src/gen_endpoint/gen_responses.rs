@@ -1,9 +1,8 @@
-use super::CallName;
 use crate::{gen_definition::gen_struct, Error, Result};
 use error_stack::ResultExt;
 use model::{
     definition_docs::{Schema, Stream},
-    endpoint_docs::{Response, RestCall},
+    endpoint_docs::Response,
 };
 use proc_macro2::{Ident, Span, TokenStream};
 use quote::quote;
@@ -11,22 +10,16 @@ use tracing::{info, instrument};
 use utils::pretty_doc_string;
 
 /// Generates all the possible responses for a particular API call endpoint
-#[instrument(skip(call))]
-pub fn gen_responses_for_call(call: &RestCall) -> Result<TokenStream> {
-    info!("Generating responses for: {}", &call.path);
-    let struct_prefix = call.response_struct_prefix()?;
+#[instrument(skip(good_response, bad_responses))]
+pub fn gen_responses_for_call(
+    struct_prefix: &str,
+    good_response: &Response,
+    bad_responses: &[&Response],
+) -> Result<TokenStream> {
+    info!("Generating responses for: {struct_prefix}");
     let span = tracing::Span::current();
     // Get the good response (always 200 or 201)
-    let (good_responses, bad_responses): (Vec<&Response>, Vec<&Response>) = call
-        .responses
-        .iter()
-        .partition(|r| (200..300).contains(&r.code));
-    let good_response = good_responses
-        .first()
-        .cloned()
-        .map(|r| gen_response(&struct_prefix, r))
-        .ok_or_else(|| Error::new("Expected at least one good response"))
-        .attach_printable_lazy(|| format!("Generating good responses: {span:#?}"))??;
+    let good_response = gen_response(struct_prefix, good_response)?;
     let bad_responses = if !bad_responses.is_empty() {
         // Bad response names
         let bad_response_names: Vec<String> = bad_responses
@@ -37,7 +30,7 @@ pub fn gen_responses_for_call(call: &RestCall) -> Result<TokenStream> {
         let bad_response_structs = bad_response_names
             .iter()
             .zip(bad_responses.iter().cloned())
-            .map(|(name, r)| gen_response_schema(&r.schema, name))
+            .map(|(name, r)| gen_response(name, r))
             .collect::<Result<Vec<TokenStream>>>()
             .attach_printable_lazy(|| format!("Generating bad responses: {span:#?}"))?;
         let structs = quote! { #(#bad_response_structs)* };
@@ -87,13 +80,16 @@ pub fn gen_responses_for_call(call: &RestCall) -> Result<TokenStream> {
     })
 }
 
-/// Generates the type that contents for response to ?
+/// Generates the type / struct that this response will return, including the docstring
+#[instrument(skip(response))]
 pub fn gen_response(struct_prefix: &str, response: &Response) -> Result<TokenStream> {
-    let name = format!("{struct_prefix}{}", response.code);
     // let ident = Ident::new(&name, Span::call_site());
     let doc_string =
         pretty_doc_string(&response.description).change_context_lazy(Error::default)?;
-    let schema = gen_response_schema(&response.schema, &name)?;
+    let schema = match &response.schema {
+        Schema::Struct(r#struct) => gen_struct(r#struct, struct_prefix)?,
+        Schema::Stream(stream) => gen_response_stream(stream, struct_prefix)?,
+    };
     // Make
     Ok(quote! {
         #(#doc_string)*
@@ -101,16 +97,7 @@ pub fn gen_response(struct_prefix: &str, response: &Response) -> Result<TokenStr
     })
 }
 
-#[instrument(skip(schema))]
-pub fn gen_response_schema(schema: &Schema, name: &str) -> Result<TokenStream> {
-    info!("Generating response schema");
-    match schema {
-        Schema::Struct(r#struct) => gen_struct(r#struct, name),
-        Schema::Stream(stream) => gen_response_stream(stream),
-    }
-}
-
-fn gen_response_stream(_stream: &Stream) -> Result<TokenStream> {
+fn gen_response_stream(_stream: &Stream, _name: &str) -> Result<TokenStream> {
     // TODO: Make this work
     Ok(quote!(
         struct Stream();

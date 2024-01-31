@@ -1,10 +1,8 @@
-use chrono::DateTime;
-use crate::definitions::decimal_number::DecimalNumber;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct LiquidityRegenerationScheduleStep {
     /// The timestamp of the schedule step.
-    timestamp: Option<DateTime>,
+    timestamp: Option<DateTime<Utc>>,
     /// The amount of bid liquidity used at this step in the
     /// schedule.
     bid_liquidity_used: Option<DecimalNumber>,

@@ -1,6 +1,3 @@
-use crate::client::Client;
-use crate::definitions::accept_datetime_format::AcceptDatetimeFormat;
-use chrono::DateTime;
 use serde::{Serialize, Deserialize};
 pub mod responses;
 struct Transaction<'a> {
@@ -14,13 +11,13 @@ impl<'a> Transaction<'a> {
         authorization: String,
         accept_datetime_format: AcceptDatetimeFormat,
         account_id: AccountId,
-        from: DateTime,
-        to: DateTime,
+        from: DateTime<Utc>,
+        to: DateTime<Utc>,
         page_size: Integer,
         r#type: ListOf,
     ) -> Result<()> {
         let url = "/v3/accounts/{accountID}/transactions";
-        let url = url.replace("{" + "accountID" + "}");
+        let url = url.replace("{" + "accountID" + "}", "account_id");
         let url = self.client.url(url);
         let query = [
             ("from", from),
@@ -48,8 +45,8 @@ impl<'a> Transaction<'a> {
         transaction_id: TransactionId,
     ) -> Result<()> {
         let url = "/v3/accounts/{accountID}/transactions/{transactionID}";
-        let url = url.replace("{" + "accountID" + "}");
-        let url = url.replace("{" + "transactionID" + "}");
+        let url = url.replace("{" + "accountID" + "}", "account_id");
+        let url = url.replace("{" + "transactionID" + "}", "transaction_id");
         let url = self.client.url(url);
         let query = [];
         let response = self
@@ -75,7 +72,7 @@ impl<'a> Transaction<'a> {
         r#type: ListOf,
     ) -> Result<()> {
         let url = "/v3/accounts/{accountID}/transactions/idrange";
-        let url = url.replace("{" + "accountID" + "}");
+        let url = url.replace("{" + "accountID" + "}", "account_id");
         let url = self.client.url(url);
         let query = [("from", from), ("to", to), ("type", r#type)];
         let response = self
@@ -100,7 +97,7 @@ impl<'a> Transaction<'a> {
         r#type: ListOf,
     ) -> Result<()> {
         let url = "/v3/accounts/{accountID}/transactions/sinceid";
-        let url = url.replace("{" + "accountID" + "}");
+        let url = url.replace("{" + "accountID" + "}", "account_id");
         let url = self.client.url(url);
         let query = [("id", id), ("type", r#type)];
         let response = self
@@ -122,7 +119,7 @@ impl<'a> Transaction<'a> {
         account_id: AccountId,
     ) -> Result<()> {
         let url = "/v3/accounts/{accountID}/transactions/stream";
-        let url = url.replace("{" + "accountID" + "}");
+        let url = url.replace("{" + "accountID" + "}", "account_id");
         let url = self.client.url(url);
         let query = [];
         let response = self

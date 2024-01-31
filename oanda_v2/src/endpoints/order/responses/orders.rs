@@ -1,5 +1,5 @@
-use crate::definitions::transaction_id::TransactionID;
 use crate::endpoints::order::Order;
+use crate::definitions::transaction_id::TransactionID;
 /// The list of Orders requested
 #[derive(Serialize, Deserialize)]
 pub struct Orders200 {
