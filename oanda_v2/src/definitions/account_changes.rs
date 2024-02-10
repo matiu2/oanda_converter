@@ -1,8 +1,8 @@
+use crate::definitions::trade_summary::TradeSummary;
 use crate::endpoints::transaction::Transaction;
+use crate::endpoints::position::Position;
 use crate::endpoints::order::Order;
 use serde_inline_default::serde_inline_default;
-use crate::definitions::trade_summary::TradeSummary;
-use crate::endpoints::position::Position;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 #[serde_inline_default]

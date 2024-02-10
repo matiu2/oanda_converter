@@ -1,6 +1,6 @@
+use crate::definitions::trade_client_extensions_modify_transaction::TradeClientExtensionsModifyTransaction;
 use crate::definitions::transaction_id::TransactionID;
 use crate::definitions::trade_client_extensions_modify_reject_transaction::TradeClientExtensionsModifyRejectTransaction;
-use crate::definitions::trade_client_extensions_modify_transaction::TradeClientExtensionsModifyTransaction;
 use serde_inline_default::serde_inline_default;
 /// The Trade’s Client Extensions have been updated as
 /// requested.

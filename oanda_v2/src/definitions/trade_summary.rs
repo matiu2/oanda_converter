@@ -1,15 +1,15 @@
-use crate::endpoints::trade::responses::client_extensions::ClientExtensions;
-use chrono::Utc;
-use crate::definitions::decimal_number::DecimalNumber;
-use crate::definitions::transaction_id::TransactionID;
-use chrono::DateTime;
-use crate::definitions::order_id::OrderID;
 use crate::definitions::instrument_name::InstrumentName;
-use crate::definitions::account_units::AccountUnits;
-use serde_inline_default::serde_inline_default;
-use crate::definitions::trade_id::TradeID;
 use crate::definitions::price_value::PriceValue;
+use crate::definitions::trade_id::TradeID;
 use crate::definitions::trade_state::TradeState;
+use crate::definitions::decimal_number::DecimalNumber;
+use chrono::Utc;
+use serde_inline_default::serde_inline_default;
+use chrono::DateTime;
+use crate::definitions::transaction_id::TransactionID;
+use crate::endpoints::trade::responses::client_extensions::ClientExtensions;
+use crate::definitions::account_units::AccountUnits;
+use crate::definitions::order_id::OrderID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 #[serde_inline_default]

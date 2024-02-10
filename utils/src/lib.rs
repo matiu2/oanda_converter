@@ -27,7 +27,6 @@ pub fn stream_to_file(stream: TokenStream, path: &str) -> Result<()> {
         }
     };
 
-    tracing::info!("Pushing {formatted_code} to {path:#?}");
     std::fs::write(path, formatted_code)
         .annotate_lazy(|| format!("Unable to write to \"{path:#?}\""))?;
     Ok(())

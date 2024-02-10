@@ -1,8 +1,8 @@
-use serde_inline_default::serde_inline_default;
-use crate::definitions::time_in_force::TimeInForce;
 use chrono::DateTime;
+use serde_inline_default::serde_inline_default;
 use crate::endpoints::trade::responses::client_extensions::ClientExtensions;
 use chrono::Utc;
+use crate::definitions::time_in_force::TimeInForce;
 use crate::definitions::price_value::PriceValue;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]

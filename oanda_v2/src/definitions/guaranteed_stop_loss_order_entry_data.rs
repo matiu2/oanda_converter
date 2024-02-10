@@ -1,6 +1,6 @@
 use serde_inline_default::serde_inline_default;
-use crate::definitions::guaranteed_stop_loss_order_level_restriction::GuaranteedStopLossOrderLevelRestriction;
 use crate::definitions::decimal_number::DecimalNumber;
+use crate::definitions::guaranteed_stop_loss_order_level_restriction::GuaranteedStopLossOrderLevelRestriction;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 #[serde_inline_default]

@@ -1,8 +1,8 @@
-use crate::definitions::client_price::ClientPrice;
-use crate::definitions::home_conversions::HomeConversions;
-use chrono::Utc;
 use chrono::DateTime;
 use serde_inline_default::serde_inline_default;
+use crate::definitions::home_conversions::HomeConversions;
+use crate::definitions::client_price::ClientPrice;
+use chrono::Utc;
 /// Pricing information has been successfully provided.
 #[derive(Serialize, Deserialize)]
 #[serde_inline_default]

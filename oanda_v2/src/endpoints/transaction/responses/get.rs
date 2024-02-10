@@ -1,6 +1,6 @@
-use crate::definitions::transaction_id::TransactionID;
-use crate::endpoints::transaction::Transaction;
 use serde_inline_default::serde_inline_default;
+use crate::endpoints::transaction::Transaction;
+use crate::definitions::transaction_id::TransactionID;
 /// The details of the requested Transaction are provided.
 #[derive(Serialize, Deserialize)]
 #[serde_inline_default]

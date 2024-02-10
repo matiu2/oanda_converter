@@ -10,7 +10,13 @@ use writer::{util::generate_source, EasyError, Error};
 pub type Result<T> = error_stack::Result<T, Error>;
 
 fn main() -> Result<()> {
-    tracing_subscriber::fmt::init();
+    tracing_subscriber::fmt()
+        .event_format(
+            tracing_subscriber::fmt::format()
+                .with_file(true)
+                .with_line_number(true),
+        )
+        .init();
     let base_path = "src";
     // You will have already run 'serialize_all' and generated a content.yaml. Now we'll read it in
     let yaml = read_to_string("content.yaml")
@@ -60,4 +66,5 @@ fn main() -> Result<()> {
     .collect();
     insert_uses_clauses(mod_name, &files_to_ignore, &known_sources)
         .change_context_lazy(|| Error::new("Inserting uses clauses"))
+    // panic!("Stopping here to see output messages");
 }

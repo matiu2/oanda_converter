@@ -1,6 +1,6 @@
-use crate::definitions::transaction_id::TransactionID;
-use serde_inline_default::serde_inline_default;
 use crate::endpoints::trade::Trade;
+use serde_inline_default::serde_inline_default;
+use crate::definitions::transaction_id::TransactionID;
 /// The list of Trades requested
 #[derive(Serialize, Deserialize)]
 #[serde_inline_default]

@@ -1,6 +1,6 @@
-use serde_inline_default::serde_inline_default;
 use chrono::DateTime;
 use chrono::Utc;
+use serde_inline_default::serde_inline_default;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 #[serde_inline_default]

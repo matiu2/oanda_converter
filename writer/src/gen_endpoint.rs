@@ -15,7 +15,7 @@ use model::{
 use proc_macro2::{Ident, Span, TokenStream};
 use quote::quote;
 use std::collections::HashMap;
-use tracing::{info, instrument};
+use tracing::instrument;
 use utils::{pretty_doc_string, stream_to_file};
 
 /// Because the model crate doesn't have an error type, and we want
@@ -249,7 +249,6 @@ pub fn gen_endpoint_responses(
     endpoint_name: &str,
     response_map: &HashMap<String, ResponsesInfo>,
 ) -> Result<TokenStream> {
-    info!("Generating responses for endpoint");
     // A map of call names to all the info about their responses
     // Used to generate the response structs, and then again to call them
     // Make the Response type for each call

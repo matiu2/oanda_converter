@@ -70,23 +70,14 @@ pub fn insert_uses_clauses<'a>(
     files_to_ignore: &HashSet<ModName<'a>>,
     known_sources: &HashMap<&'a str, ModName<'a>>,
 ) -> Result<()> {
+    // Gather declarations and requirements for all modules
     let info = mod_info_recursive(start)?;
-    log::info!("info: {info:#?}");
     // Make a hashmap of which module declares which type
     let module_by_decl_type: HashMap<&str, &ModName> = info
         .iter()
         .flat_map(|i| i.declares.iter().map(|d| (d.as_str(), &i.module.mod_name)))
         .chain(known_sources.iter().map(|(&decl, module)| (decl, module)))
         .collect();
-    // log::info!("declarations by module: {module_by_decl_type:#?}");
-    // Find a list of requires that are not in declared
-    let not_provided: HashSet<&str> = info
-        .iter()
-        .flat_map(|m| m.requires.iter())
-        .map(|t| t.as_str())
-        .filter(|t| !module_by_decl_type.contains_key(t))
-        .collect();
-    log::info!("Things I need to be declared outside: {not_provided:#?}");
     // For each module, create the uses clause and insert it in the top of the file
     for m in &info {
         if files_to_ignore.contains(&m.module.mod_name) {
@@ -134,10 +125,6 @@ pub fn insert_uses_clauses<'a>(
         let new_contents = quote!(
             #(#uses)*
             #contents
-        );
-        log::info!(
-            "Top level pushing {new_contents:#?} to {}",
-            m.module.mod_name.file_name()
         );
         stream_to_file(new_contents, m.module.mod_name.file_name().as_str())
             .map_err(Report::from)

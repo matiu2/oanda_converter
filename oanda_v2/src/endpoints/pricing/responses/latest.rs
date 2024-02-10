@@ -1,5 +1,5 @@
-use crate::definitions::candlestick_response::CandlestickResponse;
 use serde_inline_default::serde_inline_default;
+use crate::definitions::candlestick_response::CandlestickResponse;
 /// Pricing information has been successfully provided.
 #[derive(Serialize, Deserialize)]
 #[serde_inline_default]

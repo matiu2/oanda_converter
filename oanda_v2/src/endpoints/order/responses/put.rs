@@ -1,8 +1,8 @@
 use crate::definitions::order_cancel_transaction::OrderCancelTransaction;
-use crate::definitions::order_fill_transaction::OrderFillTransaction;
-use crate::endpoints::transaction::Transaction;
 use crate::definitions::transaction_id::TransactionID;
 use serde_inline_default::serde_inline_default;
+use crate::endpoints::transaction::Transaction;
+use crate::definitions::order_fill_transaction::OrderFillTransaction;
 /// The Order was successfully cancelled and replaced
 #[derive(Serialize, Deserialize)]
 #[serde_inline_default]

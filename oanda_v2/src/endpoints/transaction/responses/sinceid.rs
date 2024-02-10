@@ -1,6 +1,6 @@
 use crate::definitions::transaction_id::TransactionID;
-use serde_inline_default::serde_inline_default;
 use crate::endpoints::transaction::Transaction;
+use serde_inline_default::serde_inline_default;
 /// The requested time range of Transactions are provided.
 #[derive(Serialize, Deserialize)]
 #[serde_inline_default]

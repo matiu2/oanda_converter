@@ -1,7 +1,7 @@
 use crate::definitions::instrument_name::InstrumentName;
-use serde_inline_default::serde_inline_default;
 use crate::definitions::candlestick_granularity::CandlestickGranularity;
 use crate::definitions::candlestick::Candlestick;
+use serde_inline_default::serde_inline_default;
 /// Pricing information has been successfully provided.
 #[derive(Serialize, Deserialize)]
 #[serde_inline_default]

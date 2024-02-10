@@ -1,9 +1,9 @@
-use serde_inline_default::serde_inline_default;
-use chrono::DateTime;
-use crate::definitions::price_value::PriceValue;
-use crate::definitions::instrument_name::InstrumentName;
 use crate::definitions::price_bucket::PriceBucket;
+use crate::definitions::price_value::PriceValue;
+use chrono::DateTime;
+use serde_inline_default::serde_inline_default;
 use chrono::Utc;
+use crate::definitions::instrument_name::InstrumentName;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 #[serde_inline_default]

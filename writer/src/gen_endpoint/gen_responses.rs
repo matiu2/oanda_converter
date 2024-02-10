@@ -6,7 +6,7 @@ use model::{
 };
 use proc_macro2::{Ident, Span, TokenStream};
 use quote::quote;
-use tracing::{info, instrument};
+use tracing::instrument;
 use utils::pretty_doc_string;
 
 /// Generates all the possible responses for a particular API call endpoint
@@ -16,7 +16,6 @@ pub fn gen_responses_for_call(
     good_response: &Response,
     bad_responses: &[&Response],
 ) -> Result<TokenStream> {
-    info!("Generating responses for: {struct_prefix}");
     let span = tracing::Span::current();
     // Get the good response (always 200 or 201)
     let good_response = gen_response(struct_prefix, good_response)?;

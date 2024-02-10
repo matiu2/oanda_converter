@@ -1,13 +1,13 @@
-use chrono::Utc;
-use crate::definitions::transaction_type::TransactionType;
-use crate::definitions::trade_id::TradeID;
-use crate::endpoints::trade::responses::client_extensions::ClientExtensions;
-use crate::definitions::client_id::ClientID;
-use serde_inline_default::serde_inline_default;
-use crate::definitions::transaction_id::TransactionID;
 use crate::definitions::account_id::AccountID;
 use crate::definitions::request_id::RequestID;
+use crate::definitions::transaction_id::TransactionID;
+use chrono::Utc;
+use crate::definitions::trade_id::TradeID;
+use crate::definitions::transaction_type::TransactionType;
+use crate::endpoints::trade::responses::client_extensions::ClientExtensions;
+use crate::definitions::client_id::ClientID;
 use chrono::DateTime;
+use serde_inline_default::serde_inline_default;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 #[serde_inline_default]

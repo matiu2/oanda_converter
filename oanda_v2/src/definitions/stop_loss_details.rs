@@ -1,10 +1,10 @@
-use crate::endpoints::trade::responses::client_extensions::ClientExtensions;
-use chrono::DateTime;
-use crate::definitions::decimal_number::DecimalNumber;
-use serde_inline_default::serde_inline_default;
 use crate::definitions::time_in_force::TimeInForce;
-use chrono::Utc;
 use crate::definitions::price_value::PriceValue;
+use chrono::DateTime;
+use crate::endpoints::trade::responses::client_extensions::ClientExtensions;
+use serde_inline_default::serde_inline_default;
+use crate::definitions::decimal_number::DecimalNumber;
+use chrono::Utc;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 #[serde_inline_default]

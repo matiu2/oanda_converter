@@ -1,9 +1,9 @@
-use crate::definitions::order_state_filter::OrderStateFilter;
-use crate::definitions::order_specifier::OrderSpecifier;
-use crate::client::Client;
 use crate::definitions::accept_datetime_format::AcceptDatetimeFormat;
+use crate::client::Client;
+use crate::definitions::order_state_filter::OrderStateFilter;
 use crate::Result;
 use crate::definitions::instrument_name::InstrumentName;
+use crate::definitions::order_specifier::OrderSpecifier;
 use serde::{Serialize, Deserialize};
 pub mod responses;
 struct Order<'a> {

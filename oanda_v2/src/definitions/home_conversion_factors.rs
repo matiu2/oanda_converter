@@ -1,5 +1,5 @@
-use crate::definitions::conversion_factor::ConversionFactor;
 use serde_inline_default::serde_inline_default;
+use crate::definitions::conversion_factor::ConversionFactor;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 #[serde_inline_default]

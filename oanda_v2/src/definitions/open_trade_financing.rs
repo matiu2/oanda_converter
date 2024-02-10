@@ -1,6 +1,6 @@
 use crate::definitions::account_units::AccountUnits;
-use crate::definitions::decimal_number::DecimalNumber;
 use serde_inline_default::serde_inline_default;
+use crate::definitions::decimal_number::DecimalNumber;
 use crate::definitions::trade_id::TradeID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]

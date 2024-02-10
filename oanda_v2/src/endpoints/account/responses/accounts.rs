@@ -1,5 +1,5 @@
-use crate::definitions::account_properties::AccountProperties;
 use serde_inline_default::serde_inline_default;
+use crate::definitions::account_properties::AccountProperties;
 /// The list of authorized Accounts has been provided.
 #[derive(Serialize, Deserialize)]
 #[serde_inline_default]

@@ -1,7 +1,7 @@
-use serde_inline_default::serde_inline_default;
 use crate::definitions::transaction_id::TransactionID;
 use chrono::Utc;
 use chrono::DateTime;
+use serde_inline_default::serde_inline_default;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 #[serde_inline_default]
