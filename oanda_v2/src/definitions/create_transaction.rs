@@ -1,12 +1,14 @@
-use chrono::Utc;
-use crate::definitions::currency::Currency;
-use crate::definitions::request_id::RequestID;
-use chrono::DateTime;
+use serde_inline_default::serde_inline_default;
 use crate::definitions::transaction_id::TransactionID;
+use chrono::Utc;
 use crate::definitions::account_id::AccountID;
+use crate::definitions::request_id::RequestID;
 use crate::definitions::transaction_type::TransactionType;
+use crate::definitions::currency::Currency;
+use chrono::DateTime;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct CreateTransaction {
     /// The Transaction’s Identifier.
     id: Option<TransactionID>,

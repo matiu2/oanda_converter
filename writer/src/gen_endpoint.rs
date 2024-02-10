@@ -344,6 +344,7 @@ mod unit_test {
             s,
             r#"/// Pricing information has been successfully provided.
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct MyCall200 {
     /// The latest candle sticks.
     latest_candles: Vec<CandlestickResponse>,

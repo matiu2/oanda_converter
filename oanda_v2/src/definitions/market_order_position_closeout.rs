@@ -1,6 +1,8 @@
+use serde_inline_default::serde_inline_default;
 use crate::definitions::instrument_name::InstrumentName;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct MarketOrderPositionCloseout {
     /// The instrument of the Position being closed out.
     instrument: Option<InstrumentName>,

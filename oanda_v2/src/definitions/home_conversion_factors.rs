@@ -1,6 +1,8 @@
 use crate::definitions::conversion_factor::ConversionFactor;
+use serde_inline_default::serde_inline_default;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct HomeConversionFactors {
     /// The ConversionFactor in effect for the Account for
     /// converting any gains realized in Instrument quote units into

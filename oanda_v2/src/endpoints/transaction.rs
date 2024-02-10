@@ -1,8 +1,8 @@
-use crate::client::Client;
+use crate::Result;
+use chrono::Utc;
 use crate::definitions::accept_datetime_format::AcceptDatetimeFormat;
 use chrono::DateTime;
-use chrono::Utc;
-use crate::Result;
+use crate::client::Client;
 use serde::{Serialize, Deserialize};
 pub mod responses;
 struct Transaction<'a> {

@@ -1,14 +1,16 @@
-use crate::definitions::transaction_reject_reason::TransactionRejectReason;
-use chrono::Utc;
-use crate::definitions::transaction_id::TransactionID;
-use crate::definitions::request_id::RequestID;
 use chrono::DateTime;
 use crate::definitions::account_id::AccountID;
-use crate::definitions::transaction_type::TransactionType;
 use crate::definitions::account_units::AccountUnits;
+use crate::definitions::transaction_type::TransactionType;
+use chrono::Utc;
+use crate::definitions::request_id::RequestID;
+use crate::definitions::transaction_id::TransactionID;
 use crate::definitions::funding_reason::FundingReason;
+use serde_inline_default::serde_inline_default;
+use crate::definitions::transaction_reject_reason::TransactionRejectReason;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct TransferFundsRejectTransaction {
     /// The Transaction’s Identifier.
     id: Option<TransactionID>,

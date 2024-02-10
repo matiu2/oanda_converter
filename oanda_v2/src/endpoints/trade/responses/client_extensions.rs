@@ -1,9 +1,11 @@
-use crate::definitions::trade_client_extensions_modify_transaction::TradeClientExtensionsModifyTransaction;
-use crate::definitions::trade_client_extensions_modify_reject_transaction::TradeClientExtensionsModifyRejectTransaction;
 use crate::definitions::transaction_id::TransactionID;
+use crate::definitions::trade_client_extensions_modify_reject_transaction::TradeClientExtensionsModifyRejectTransaction;
+use crate::definitions::trade_client_extensions_modify_transaction::TradeClientExtensionsModifyTransaction;
+use serde_inline_default::serde_inline_default;
 /// The Trade’s Client Extensions have been updated as
 /// requested.
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct ClientExtensions {
     /// The Transaction that updates the Trade’s Client Extensions.
     trade_client_extensions_modify_transaction: Option<
@@ -29,6 +31,7 @@ use serde::{Serialize, Deserialize};
 /// The Trade’s Client Extensions cannot be modified as
 /// requested.
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct ClientExtensions400 {
     /// The Transaction that rejects the modification of the Trade’s
     /// Client Extensions.
@@ -61,6 +64,7 @@ impl Default for ClientExtensions400 {
 }
 /// The Account or Trade specified does not exist.
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct ClientExtensions404 {
     /// The Transaction that rejects the modification of the Trade’s
     /// Client Extensions. Only present if the Account exists.

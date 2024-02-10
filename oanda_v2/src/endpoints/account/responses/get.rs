@@ -1,7 +1,9 @@
+use serde_inline_default::serde_inline_default;
 use crate::endpoints::account::Account;
 use crate::definitions::transaction_id::TransactionID;
 /// The full Account details are provided
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct Get {
     /// The full details of the requested Account.
     account: Option<Account>,

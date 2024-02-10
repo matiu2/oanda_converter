@@ -1,15 +1,17 @@
-use crate::definitions::transaction_id::TransactionID;
-use crate::definitions::client_id::ClientID;
-use crate::definitions::request_id::RequestID;
-use crate::definitions::transaction_reject_reason::TransactionRejectReason;
-use chrono::Utc;
-use crate::definitions::account_id::AccountID;
-use crate::endpoints::trade::responses::client_extensions::ClientExtensions;
 use crate::definitions::trade_id::TradeID;
+use chrono::Utc;
+use crate::definitions::request_id::RequestID;
 use crate::definitions::transaction_type::TransactionType;
+use crate::endpoints::trade::responses::client_extensions::ClientExtensions;
+use crate::definitions::client_id::ClientID;
+use crate::definitions::transaction_reject_reason::TransactionRejectReason;
+use crate::definitions::account_id::AccountID;
+use crate::definitions::transaction_id::TransactionID;
 use chrono::DateTime;
+use serde_inline_default::serde_inline_default;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct TradeClientExtensionsModifyRejectTransaction {
     /// The Transaction’s Identifier.
     id: Option<TransactionID>,

@@ -1,8 +1,10 @@
 use crate::definitions::transaction_id::TransactionID;
 use crate::definitions::order_client_extensions_modify_reject_transaction::OrderClientExtensionsModifyRejectTransaction;
 use crate::definitions::order_client_extensions_modify_transaction::OrderClientExtensionsModifyTransaction;
+use serde_inline_default::serde_inline_default;
 /// The Order’s Client Extensions were successfully modified
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct ClientExtensions {
     /// The Transaction that modified the Client Extensions for
     /// the Order
@@ -28,6 +30,7 @@ impl Default for ClientExtensions {
 use serde::{Serialize, Deserialize};
 /// The Order Client Extensions specification was invalid
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct ClientExtensions400 {
     /// The Transaction that rejected the modification of the Client
     /// Extensions for the Order
@@ -60,6 +63,7 @@ impl Default for ClientExtensions400 {
 }
 /// The Account or Order specified does not exist.
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct ClientExtensions404 {
     /// The Transaction that rejected the modification of the
     /// Client Extensions for the Order. Only present if the Account

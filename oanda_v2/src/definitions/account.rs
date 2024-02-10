@@ -1,17 +1,19 @@
-use crate::definitions::decimal_number::DecimalNumber;
 use crate::definitions::currency::Currency;
 use crate::definitions::trade_summary::TradeSummary;
-use crate::definitions::guaranteed_stop_loss_order_mode::GuaranteedStopLossOrderMode;
 use crate::endpoints::position::Position;
-use crate::definitions::account_units::AccountUnits;
-use chrono::DateTime;
+use crate::definitions::decimal_number::DecimalNumber;
 use crate::endpoints::order::Order;
-use crate::definitions::transaction_id::TransactionID;
-use chrono::Utc;
+use serde_inline_default::serde_inline_default;
+use crate::definitions::account_units::AccountUnits;
 use crate::definitions::account_id::AccountID;
+use chrono::DateTime;
+use chrono::Utc;
 use crate::definitions::guaranteed_stop_loss_order_parameters::GuaranteedStopLossOrderParameters;
+use crate::definitions::guaranteed_stop_loss_order_mode::GuaranteedStopLossOrderMode;
+use crate::definitions::transaction_id::TransactionID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct Account {
     /// The Account’s identifier
     id: Option<AccountID>,

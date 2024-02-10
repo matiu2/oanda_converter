@@ -1,12 +1,14 @@
-use crate::definitions::account_id::AccountID;
 use crate::definitions::decimal_number::DecimalNumber;
-use crate::definitions::transaction_id::TransactionID;
+use serde_inline_default::serde_inline_default;
+use crate::definitions::request_id::RequestID;
+use crate::definitions::account_id::AccountID;
 use chrono::Utc;
 use crate::definitions::transaction_type::TransactionType;
-use crate::definitions::request_id::RequestID;
+use crate::definitions::transaction_id::TransactionID;
 use chrono::DateTime;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct ClientConfigureTransaction {
     /// The Transaction’s Identifier.
     id: Option<TransactionID>,

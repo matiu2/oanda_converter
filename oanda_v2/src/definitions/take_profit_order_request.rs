@@ -1,14 +1,16 @@
-use crate::endpoints::trade::responses::client_extensions::ClientExtensions;
-use crate::definitions::order_trigger_condition::OrderTriggerCondition;
-use crate::definitions::order_type::OrderType;
-use crate::definitions::price_value::PriceValue;
-use crate::definitions::time_in_force::TimeInForce;
 use crate::definitions::trade_id::TradeID;
-use chrono::Utc;
-use crate::definitions::client_id::ClientID;
+use crate::definitions::price_value::PriceValue;
 use chrono::DateTime;
+use serde_inline_default::serde_inline_default;
+use crate::definitions::order_trigger_condition::OrderTriggerCondition;
+use crate::endpoints::trade::responses::client_extensions::ClientExtensions;
+use crate::definitions::client_id::ClientID;
+use crate::definitions::order_type::OrderType;
+use crate::definitions::time_in_force::TimeInForce;
+use chrono::Utc;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct TakeProfitOrderRequest {
     /// The type of the Order to Create. Must be set to
     /// “TAKE_PROFIT” when creating a Take Profit Order.

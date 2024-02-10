@@ -1,6 +1,8 @@
+use serde_inline_default::serde_inline_default;
 use crate::definitions::day_of_week::DayOfWeek;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct FinancingDayOfWeek {
     /// The day of the week to charge the financing.
     day_of_week: Option<DayOfWeek>,

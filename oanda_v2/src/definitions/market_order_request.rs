@@ -1,16 +1,18 @@
-use crate::definitions::decimal_number::DecimalNumber;
-use crate::definitions::instrument_name::InstrumentName;
-use crate::endpoints::trade::responses::client_extensions::ClientExtensions;
-use crate::definitions::price_value::PriceValue;
 use crate::definitions::order_position_fill::OrderPositionFill;
+use crate::definitions::decimal_number::DecimalNumber;
+use serde_inline_default::serde_inline_default;
+use crate::definitions::time_in_force::TimeInForce;
 use crate::definitions::take_profit_details::TakeProfitDetails;
 use crate::definitions::guaranteed_stop_loss_details::GuaranteedStopLossDetails;
-use crate::definitions::time_in_force::TimeInForce;
-use crate::definitions::order_type::OrderType;
 use crate::definitions::stop_loss_details::StopLossDetails;
+use crate::definitions::order_type::OrderType;
+use crate::definitions::instrument_name::InstrumentName;
+use crate::definitions::price_value::PriceValue;
+use crate::endpoints::trade::responses::client_extensions::ClientExtensions;
 use crate::definitions::trailing_stop_loss_details::TrailingStopLossDetails;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct MarketOrderRequest {
     /// The type of the Order to Create. Must be set to “MARKET”
     /// when creating a Market Order.

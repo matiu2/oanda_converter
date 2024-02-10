@@ -1,11 +1,13 @@
-use crate::definitions::order_cancel_transaction::OrderCancelTransaction;
-use crate::definitions::market_order_transaction::MarketOrderTransaction;
 use crate::definitions::order_fill_transaction::OrderFillTransaction;
 use crate::definitions::transaction_id::TransactionID;
+use crate::definitions::order_cancel_transaction::OrderCancelTransaction;
 use crate::definitions::market_order_reject_transaction::MarketOrderRejectTransaction;
+use crate::definitions::market_order_transaction::MarketOrderTransaction;
+use serde_inline_default::serde_inline_default;
 /// The Position closeout request has been successfully
 /// processed.
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct Close {
     /// The MarketOrderTransaction created to close the long
     /// Position.
@@ -48,6 +50,7 @@ use serde::{Serialize, Deserialize};
 /// The Parameters provided that describe the Position closeout
 /// are invalid.
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct Close400 {
     /// The Transaction created that rejects the creation of a
     /// MarketOrder to close the long Position.
@@ -83,6 +86,7 @@ impl Default for Close400 {
 /// The Account or one or more of the Positions specified does
 /// not exist.
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct Close404 {
     /// The Transaction created that rejects the creation of a
     /// MarketOrder to close the long Position. Only present if the

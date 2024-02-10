@@ -1,7 +1,9 @@
-use crate::definitions::transaction_id::TransactionID;
 use crate::endpoints::order::Order;
+use serde_inline_default::serde_inline_default;
+use crate::definitions::transaction_id::TransactionID;
 /// List of pending Orders for the Account
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct PendingOrders {
     /// The list of pending Order details
     orders: Vec<Order>,

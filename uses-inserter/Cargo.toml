@@ -12,6 +12,7 @@ log = { version = "0.4.20", features = ["std"] }
 proc-macro2 = { version = "1.0.66", features = ["span-locations"] }
 quote = "1.0.29"
 syn = { version = "2.0.26", features = ["full"] }
+tracing = "0.1.40"
 utils = { version = "0.1.0", path = "../utils" }
 
 [dev-dependencies]

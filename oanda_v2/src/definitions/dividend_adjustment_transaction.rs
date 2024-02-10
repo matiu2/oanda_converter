@@ -1,16 +1,18 @@
-use crate::definitions::account_units::AccountUnits;
 use crate::definitions::open_trade_dividend_adjustment::OpenTradeDividendAdjustment;
-use crate::definitions::transaction_id::TransactionID;
-use chrono::DateTime;
+use crate::definitions::account_units::AccountUnits;
 use crate::definitions::account_id::AccountID;
-use crate::definitions::request_id::RequestID;
+use serde_inline_default::serde_inline_default;
+use chrono::Utc;
 use crate::definitions::transaction_type::TransactionType;
 use crate::definitions::instrument_name::InstrumentName;
+use crate::definitions::request_id::RequestID;
 use crate::definitions::decimal_number::DecimalNumber;
-use chrono::Utc;
 use crate::definitions::home_conversion_factors::HomeConversionFactors;
+use crate::definitions::transaction_id::TransactionID;
+use chrono::DateTime;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct DividendAdjustmentTransaction {
     /// The Transaction’s Identifier.
     id: Option<TransactionID>,

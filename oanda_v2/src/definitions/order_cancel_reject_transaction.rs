@@ -1,13 +1,15 @@
-use chrono::Utc;
 use crate::definitions::request_id::RequestID;
-use crate::definitions::order_id::OrderID;
-use crate::definitions::transaction_reject_reason::TransactionRejectReason;
-use crate::definitions::transaction_type::TransactionType;
-use crate::definitions::transaction_id::TransactionID;
 use chrono::DateTime;
+use chrono::Utc;
+use crate::definitions::transaction_type::TransactionType;
+use crate::definitions::order_id::OrderID;
 use crate::definitions::account_id::AccountID;
+use crate::definitions::transaction_reject_reason::TransactionRejectReason;
+use serde_inline_default::serde_inline_default;
+use crate::definitions::transaction_id::TransactionID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct OrderCancelRejectTransaction {
     /// The Transaction’s Identifier.
     id: Option<TransactionID>,

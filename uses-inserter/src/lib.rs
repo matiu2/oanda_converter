@@ -49,7 +49,9 @@ pub fn mod_info_recursive(start: ModName<'_>) -> Result<Vec<ModInfo<'_>>> {
         .map(|r| {
             let m = r?;
             let declares = collect_declarations(&m.contents);
-            let requires = collect_requirements(&m.contents);
+            let mut requires = collect_requirements(&m.contents);
+            let attributes = collect_attributes(&m.contents);
+            requires.extend(attributes);
             Ok(ModInfo {
                 module: m,
                 declares,
@@ -172,6 +174,27 @@ pub fn collect_declarations(code: &syn::File) -> HashSet<String> {
             Enum(e) => Some(e.ident.to_string()),
             _ => None,
         })
+        .collect()
+}
+
+/// Collects all the struct and enum attributes from a TokenStream
+pub fn collect_attributes(code: &syn::File) -> HashSet<String> {
+    // We need to pick up on #[serde_inline_default] in a struct attributes so we can add it to the uses clause
+    use syn::Item::{Enum, Struct};
+    code.items
+        .iter()
+        .flat_map(|i| match i {
+            Struct(s) => Some(&s.attrs),
+            Enum(e) => Some(&e.attrs),
+            _ => None,
+        })
+        .flatten()
+        .flat_map(|attr| match &attr.meta {
+            syn::Meta::Path(path) => &path.segments,
+            syn::Meta::List(list) => &list.path.segments,
+            syn::Meta::NameValue(nv) => &nv.path.segments,
+        })
+        .map(|segment| segment.ident.to_string())
         .collect()
 }
 

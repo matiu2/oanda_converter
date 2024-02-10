@@ -1,20 +1,22 @@
-use chrono::DateTime;
-use crate::definitions::order_trigger_condition::OrderTriggerCondition;
-use crate::definitions::price_value::PriceValue;
-use crate::definitions::take_profit_order_reason::TakeProfitOrderReason;
-use crate::endpoints::trade::responses::client_extensions::ClientExtensions;
-use crate::definitions::order_id::OrderID;
-use crate::definitions::transaction_reject_reason::TransactionRejectReason;
-use crate::definitions::request_id::RequestID;
-use crate::definitions::client_id::ClientID;
-use crate::definitions::account_id::AccountID;
 use chrono::Utc;
-use crate::definitions::transaction_id::TransactionID;
-use crate::definitions::transaction_type::TransactionType;
+use crate::definitions::price_value::PriceValue;
+use crate::definitions::client_id::ClientID;
 use crate::definitions::time_in_force::TimeInForce;
+use crate::definitions::transaction_type::TransactionType;
+use crate::definitions::request_id::RequestID;
+use crate::endpoints::trade::responses::client_extensions::ClientExtensions;
+use crate::definitions::take_profit_order_reason::TakeProfitOrderReason;
+use crate::definitions::account_id::AccountID;
 use crate::definitions::trade_id::TradeID;
+use crate::definitions::order_id::OrderID;
+use chrono::DateTime;
+use crate::definitions::transaction_reject_reason::TransactionRejectReason;
+use crate::definitions::transaction_id::TransactionID;
+use serde_inline_default::serde_inline_default;
+use crate::definitions::order_trigger_condition::OrderTriggerCondition;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct TakeProfitOrderRejectTransaction {
     /// The Transaction’s Identifier.
     id: Option<TransactionID>,

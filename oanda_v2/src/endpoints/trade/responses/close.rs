@@ -1,10 +1,12 @@
-use crate::definitions::market_order_transaction::MarketOrderTransaction;
-use crate::definitions::transaction_id::TransactionID;
 use crate::definitions::order_cancel_transaction::OrderCancelTransaction;
+use crate::definitions::transaction_id::TransactionID;
+use serde_inline_default::serde_inline_default;
+use crate::definitions::market_order_transaction::MarketOrderTransaction;
 use crate::definitions::order_fill_transaction::OrderFillTransaction;
 use crate::definitions::market_order_reject_transaction::MarketOrderRejectTransaction;
 /// The Trade has been closed as requested
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct Close {
     /// The MarketOrder Transaction created to close the Trade.
     order_create_transaction: Option<MarketOrderTransaction>,
@@ -35,6 +37,7 @@ impl Default for Close {
 use serde::{Serialize, Deserialize};
 /// The Trade cannot be closed as requested.
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct Close400 {
     /// The MarketOrderReject Transaction that rejects the creation
     /// of the Trade- closing MarketOrder.
@@ -57,6 +60,7 @@ impl Default for Close400 {
 }
 /// The Account or Trade specified does not exist.
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct Close404 {
     /// The MarketOrderReject Transaction that rejects the creation
     /// of the Trade- closing MarketOrder. Only present if the

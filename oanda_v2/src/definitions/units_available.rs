@@ -1,6 +1,8 @@
 use crate::definitions::units_available_details::UnitsAvailableDetails;
+use serde_inline_default::serde_inline_default;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct UnitsAvailable {
     /// The number of units that are available to be traded using
     /// an Order with a positionFill option of “DEFAULT”. For an

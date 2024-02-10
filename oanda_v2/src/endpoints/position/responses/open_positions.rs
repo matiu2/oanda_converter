@@ -1,7 +1,9 @@
-use crate::endpoints::position::Position;
 use crate::definitions::transaction_id::TransactionID;
+use serde_inline_default::serde_inline_default;
+use crate::endpoints::position::Position;
 /// The Account’s open Positions are provided.
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct OpenPositions {
     /// The list of open Positions in the Account.
     positions: Vec<Position>,

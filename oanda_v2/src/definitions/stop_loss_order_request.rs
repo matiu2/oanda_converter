@@ -1,15 +1,17 @@
-use crate::definitions::client_id::ClientID;
-use crate::definitions::trade_id::TradeID;
+use serde_inline_default::serde_inline_default;
 use crate::definitions::time_in_force::TimeInForce;
-use crate::endpoints::trade::responses::client_extensions::ClientExtensions;
-use crate::definitions::price_value::PriceValue;
-use chrono::Utc;
-use crate::definitions::decimal_number::DecimalNumber;
+use crate::definitions::trade_id::TradeID;
+use crate::definitions::order_trigger_condition::OrderTriggerCondition;
 use crate::definitions::order_type::OrderType;
 use chrono::DateTime;
-use crate::definitions::order_trigger_condition::OrderTriggerCondition;
+use crate::definitions::price_value::PriceValue;
+use crate::definitions::client_id::ClientID;
+use chrono::Utc;
+use crate::definitions::decimal_number::DecimalNumber;
+use crate::endpoints::trade::responses::client_extensions::ClientExtensions;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct StopLossOrderRequest {
     /// The type of the Order to Create. Must be set to “STOP_LOSS”
     /// when creating a Stop Loss Order.

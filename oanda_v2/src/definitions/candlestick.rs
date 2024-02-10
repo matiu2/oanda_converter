@@ -1,8 +1,10 @@
 use crate::definitions::candlestick_data::CandlestickData;
 use chrono::Utc;
 use chrono::DateTime;
+use serde_inline_default::serde_inline_default;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct Candlestick {
     /// The start time of the candlestick
     time: Option<DateTime<Utc>>,

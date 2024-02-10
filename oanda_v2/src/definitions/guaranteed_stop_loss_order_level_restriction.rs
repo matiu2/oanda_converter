@@ -1,6 +1,8 @@
+use serde_inline_default::serde_inline_default;
 use crate::definitions::decimal_number::DecimalNumber;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct GuaranteedStopLossOrderLevelRestriction {
     /// Applies to Trades with a guaranteed Stop Loss Order attached
     /// for the specified Instrument. This is the total allowed

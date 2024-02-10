@@ -51,6 +51,10 @@ fn main() -> Result<()> {
         ("Utc", ModName::new("").add_part("chrono")),
         ("Serialize", ModName::new("").add_part("serde")),
         ("Deserialize", ModName::new("").add_part("serde")),
+        (
+            "serde_inline_default",
+            ModName::new("").add_part("serde_inline_default"),
+        ),
     ]
     .into_iter()
     .collect();

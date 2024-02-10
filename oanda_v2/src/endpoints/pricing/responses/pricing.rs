@@ -1,9 +1,11 @@
-use chrono::Utc;
 use crate::definitions::client_price::ClientPrice;
-use chrono::DateTime;
 use crate::definitions::home_conversions::HomeConversions;
+use chrono::Utc;
+use chrono::DateTime;
+use serde_inline_default::serde_inline_default;
 /// Pricing information has been successfully provided.
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct Pricing {
     /// The list of Price objects requested.
     prices: Vec<ClientPrice>,

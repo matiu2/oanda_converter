@@ -1,11 +1,13 @@
-use crate::definitions::decimal_number::DecimalNumber;
-use chrono::DateTime;
 use crate::endpoints::trade::responses::client_extensions::ClientExtensions;
+use chrono::DateTime;
+use crate::definitions::decimal_number::DecimalNumber;
+use serde_inline_default::serde_inline_default;
+use crate::definitions::time_in_force::TimeInForce;
 use chrono::Utc;
 use crate::definitions::price_value::PriceValue;
-use crate::definitions::time_in_force::TimeInForce;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct StopLossDetails {
     /// The price that the Stop Loss Order will be triggered at.
     /// Only one of the price and distance fields may be specified.

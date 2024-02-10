@@ -1,7 +1,9 @@
-use crate::endpoints::trade::Trade;
 use crate::definitions::transaction_id::TransactionID;
+use serde_inline_default::serde_inline_default;
+use crate::endpoints::trade::Trade;
 /// The Account’s list of open Trades is provided
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct OpenTrades {
     /// The Account’s list of open Trades
     trades: Vec<Trade>,

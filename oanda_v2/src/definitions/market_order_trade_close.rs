@@ -1,6 +1,8 @@
 use crate::definitions::trade_id::TradeID;
+use serde_inline_default::serde_inline_default;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct MarketOrderTradeClose {
     /// The ID of the Trade requested to be closed
     trade_id: Option<TradeID>,

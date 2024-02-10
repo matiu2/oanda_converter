@@ -1,10 +1,12 @@
-use crate::endpoints::trade::responses::client_extensions::ClientExtensions;
 use crate::definitions::time_in_force::TimeInForce;
-use crate::definitions::decimal_number::DecimalNumber;
+use crate::endpoints::trade::responses::client_extensions::ClientExtensions;
+use serde_inline_default::serde_inline_default;
 use chrono::DateTime;
+use crate::definitions::decimal_number::DecimalNumber;
 use chrono::Utc;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct TrailingStopLossDetails {
     /// The distance (in price units) from the Trade’s fill price
     /// that the Trailing Stop Loss Order will be triggered at.

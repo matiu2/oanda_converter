@@ -1,9 +1,11 @@
 use crate::definitions::transaction_id::TransactionID;
-use chrono::DateTime;
-use crate::definitions::transaction_filter::TransactionFilter;
 use chrono::Utc;
+use chrono::DateTime;
+use serde_inline_default::serde_inline_default;
+use crate::definitions::transaction_filter::TransactionFilter;
 /// The requested time range of Transaction pages are provided.
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct Transactions {
     /// The starting time provided in the request.
     from: Option<DateTime<Utc>>,

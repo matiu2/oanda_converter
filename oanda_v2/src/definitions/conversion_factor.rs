@@ -1,6 +1,8 @@
+use serde_inline_default::serde_inline_default;
 use crate::definitions::decimal_number::DecimalNumber;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct ConversionFactor {
     /// The factor by which to multiply the amount in the given
     /// currency to obtain the amount in the home currency of the

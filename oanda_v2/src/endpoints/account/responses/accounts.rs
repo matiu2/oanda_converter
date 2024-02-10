@@ -1,6 +1,8 @@
 use crate::definitions::account_properties::AccountProperties;
+use serde_inline_default::serde_inline_default;
 /// The list of authorized Accounts has been provided.
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct Accounts {
     /// The list of Accounts the client is authorized to access and
     /// their associated properties.

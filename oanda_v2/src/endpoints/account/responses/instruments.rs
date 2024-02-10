@@ -1,8 +1,10 @@
-use crate::definitions::instrument::Instrument;
 use crate::definitions::transaction_id::TransactionID;
+use crate::definitions::instrument::Instrument;
+use serde_inline_default::serde_inline_default;
 /// The list of tradeable instruments for the Account has been
 /// provided.
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct Instruments {
     /// The requested list of instruments.
     instruments: Vec<Instrument>,

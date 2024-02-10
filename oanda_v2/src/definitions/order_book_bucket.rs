@@ -1,7 +1,9 @@
 use crate::definitions::decimal_number::DecimalNumber;
 use crate::definitions::price_value::PriceValue;
+use serde_inline_default::serde_inline_default;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct OrderBookBucket {
     /// The lowest price (inclusive) covered by the bucket. The
     /// bucket covers the price range from the price to price + the

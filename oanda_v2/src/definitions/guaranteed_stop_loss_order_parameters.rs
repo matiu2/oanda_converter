@@ -1,6 +1,8 @@
+use serde_inline_default::serde_inline_default;
 use crate::definitions::guaranteed_stop_loss_order_mutability::GuaranteedStopLossOrderMutability;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct GuaranteedStopLossOrderParameters {
     /// The current guaranteed Stop Loss Order mutability setting of
     /// the Account when market is open.

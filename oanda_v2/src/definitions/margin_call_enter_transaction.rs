@@ -1,11 +1,13 @@
-use chrono::Utc;
 use crate::definitions::transaction_id::TransactionID;
 use crate::definitions::transaction_type::TransactionType;
-use chrono::DateTime;
 use crate::definitions::request_id::RequestID;
+use chrono::DateTime;
+use serde_inline_default::serde_inline_default;
+use chrono::Utc;
 use crate::definitions::account_id::AccountID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct MarginCallEnterTransaction {
     /// The Transaction’s Identifier.
     id: Option<TransactionID>,

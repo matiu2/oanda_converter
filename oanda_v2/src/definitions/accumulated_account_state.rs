@@ -1,8 +1,10 @@
+use serde_inline_default::serde_inline_default;
 use chrono::Utc;
-use crate::definitions::account_units::AccountUnits;
 use chrono::DateTime;
+use crate::definitions::account_units::AccountUnits;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct AccumulatedAccountState {
     /// The current balance of the account.
     balance: Option<AccountUnits>,

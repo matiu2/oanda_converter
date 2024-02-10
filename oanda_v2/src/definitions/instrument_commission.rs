@@ -1,6 +1,8 @@
+use serde_inline_default::serde_inline_default;
 use crate::definitions::decimal_number::DecimalNumber;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct InstrumentCommission {
     /// The commission amount (in the Account’s home currency)
     /// charged per unitsTraded of the instrument

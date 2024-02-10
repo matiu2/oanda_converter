@@ -19,6 +19,7 @@ pub fn gen_struct(s: &Struct, name: &str) -> Result<TokenStream> {
     let defaults = gen_defaults(&s.fields, &name);
     Ok(quote! {
         #[derive(Serialize, Deserialize)]
+        #[serde_inline_default]
         pub struct #name {
             #(#fields)*
         }
@@ -174,6 +175,7 @@ mod test {
             code.to_string(),
             indoc! {r#"
                 #[derive(Serialize, Deserialize)]
+                #[serde_inline_default]
                 pub struct TestStruct {
                     /// Field 1
                     field1: String,

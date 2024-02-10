@@ -1,7 +1,9 @@
-use crate::endpoints::order::Order;
+use serde_inline_default::serde_inline_default;
 use crate::definitions::transaction_id::TransactionID;
+use crate::endpoints::order::Order;
 /// The list of Orders requested
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct Orders {
     /// The list of Order detail objects
     orders: Vec<Order>,

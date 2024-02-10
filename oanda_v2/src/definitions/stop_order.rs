@@ -1,23 +1,25 @@
-use crate::definitions::order_type::OrderType;
-use crate::definitions::instrument_name::InstrumentName;
-use chrono::DateTime;
-use crate::definitions::stop_loss_details::StopLossDetails;
-use crate::definitions::trailing_stop_loss_details::TrailingStopLossDetails;
-use crate::definitions::price_value::PriceValue;
+use crate::definitions::order_trigger_condition::OrderTriggerCondition;
+use crate::definitions::order_state::OrderState;
+use crate::definitions::trade_id::TradeID;
 use crate::definitions::order_position_fill::OrderPositionFill;
-use chrono::Utc;
+use crate::endpoints::trade::responses::client_extensions::ClientExtensions;
+use serde_inline_default::serde_inline_default;
+use crate::definitions::time_in_force::TimeInForce;
+use crate::definitions::instrument_name::InstrumentName;
+use crate::definitions::stop_loss_details::StopLossDetails;
+use crate::definitions::guaranteed_stop_loss_details::GuaranteedStopLossDetails;
 use crate::definitions::take_profit_details::TakeProfitDetails;
 use crate::definitions::transaction_id::TransactionID;
-use crate::definitions::decimal_number::DecimalNumber;
-use crate::definitions::time_in_force::TimeInForce;
-use crate::definitions::order_trigger_condition::OrderTriggerCondition;
 use crate::definitions::order_id::OrderID;
-use crate::endpoints::trade::responses::client_extensions::ClientExtensions;
-use crate::definitions::order_state::OrderState;
-use crate::definitions::guaranteed_stop_loss_details::GuaranteedStopLossDetails;
-use crate::definitions::trade_id::TradeID;
+use chrono::Utc;
+use crate::definitions::price_value::PriceValue;
+use chrono::DateTime;
+use crate::definitions::decimal_number::DecimalNumber;
+use crate::definitions::order_type::OrderType;
+use crate::definitions::trailing_stop_loss_details::TrailingStopLossDetails;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct StopOrder {
     /// The Order’s identifier, unique within the Order’s Account.
     id: Option<OrderID>,

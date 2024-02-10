@@ -1,8 +1,10 @@
-use crate::definitions::position_side::PositionSide;
 use crate::definitions::account_units::AccountUnits;
+use crate::definitions::position_side::PositionSide;
 use crate::definitions::instrument_name::InstrumentName;
+use serde_inline_default::serde_inline_default;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct Position {
     /// The Position’s Instrument.
     instrument: Option<InstrumentName>,

@@ -1,6 +1,8 @@
 use crate::definitions::decimal_number::DecimalNumber;
+use serde_inline_default::serde_inline_default;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct QuoteHomeConversionFactors {
     /// The factor used to convert a positive amount of the Price’s
     /// Instrument’s quote currency into a positive amount of

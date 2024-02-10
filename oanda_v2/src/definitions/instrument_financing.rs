@@ -1,7 +1,9 @@
+use serde_inline_default::serde_inline_default;
 use crate::definitions::decimal_number::DecimalNumber;
 use crate::definitions::financing_day_of_week::FinancingDayOfWeek;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct InstrumentFinancing {
     /// The financing rate to be used for a long position for the
     /// instrument. The value is in decimal rather than percentage

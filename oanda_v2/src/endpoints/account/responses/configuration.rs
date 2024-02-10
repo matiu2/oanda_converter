@@ -1,8 +1,10 @@
 use crate::definitions::client_configure_reject_transaction::ClientConfigureRejectTransaction;
-use crate::definitions::client_configure_transaction::ClientConfigureTransaction;
 use crate::definitions::transaction_id::TransactionID;
+use crate::definitions::client_configure_transaction::ClientConfigureTransaction;
+use serde_inline_default::serde_inline_default;
 /// The Account was configured successfully.
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct Configuration {
     /// The transaction that configures the Account.
     client_configure_transaction: Option<ClientConfigureTransaction>,
@@ -20,6 +22,7 @@ impl Default for Configuration {
 use serde::{Serialize, Deserialize};
 /// The configuration specification was invalid.
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct Configuration400 {
     /// The transaction that rejects the configuration of the
     /// Account.
@@ -45,6 +48,7 @@ impl Default for Configuration400 {
 }
 /// The configuration operation was forbidden on the Account.
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct Configuration403 {
     /// The transaction that rejects the configuration of the
     /// Account.

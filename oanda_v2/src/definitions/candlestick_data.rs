@@ -1,6 +1,8 @@
 use crate::definitions::price_value::PriceValue;
+use serde_inline_default::serde_inline_default;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct CandlestickData {
     /// The first (open) price in the time-range represented by
     /// the candlestick.

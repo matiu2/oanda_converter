@@ -1,10 +1,12 @@
-use crate::definitions::instrument_name::InstrumentName;
-use crate::definitions::price_value::PriceValue;
-use crate::definitions::price_bucket::PriceBucket;
+use serde_inline_default::serde_inline_default;
 use chrono::DateTime;
+use crate::definitions::price_value::PriceValue;
+use crate::definitions::instrument_name::InstrumentName;
+use crate::definitions::price_bucket::PriceBucket;
 use chrono::Utc;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct ClientPrice {
     /// The string “PRICE”. Used to identify the a Price object when
     /// found in a stream.

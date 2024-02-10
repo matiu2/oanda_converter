@@ -1,8 +1,10 @@
-use crate::definitions::account_changes_state::AccountChangesState;
-use crate::definitions::account_changes::AccountChanges;
 use crate::definitions::transaction_id::TransactionID;
+use serde_inline_default::serde_inline_default;
+use crate::definitions::account_changes::AccountChanges;
+use crate::definitions::account_changes_state::AccountChangesState;
 /// The Account state and changes are provided.
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct Changes {
     /// The changes to the Account’s Orders, Trades and Positions
     /// since the specified Transaction ID. Only provided if the

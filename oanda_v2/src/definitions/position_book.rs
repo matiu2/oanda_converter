@@ -1,10 +1,12 @@
-use chrono::DateTime;
 use crate::definitions::price_value::PriceValue;
-use crate::definitions::position_book_bucket::PositionBookBucket;
-use crate::definitions::instrument_name::InstrumentName;
 use chrono::Utc;
+use crate::definitions::position_book_bucket::PositionBookBucket;
+use chrono::DateTime;
+use serde_inline_default::serde_inline_default;
+use crate::definitions::instrument_name::InstrumentName;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct PositionBook {
     /// The position book’s instrument
     instrument: Option<InstrumentName>,

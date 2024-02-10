@@ -1,8 +1,10 @@
-use crate::definitions::transaction_id::TransactionID;
-use crate::definitions::order_cancel_transaction::OrderCancelTransaction;
 use crate::definitions::order_cancel_reject_transaction::OrderCancelRejectTransaction;
+use crate::definitions::transaction_id::TransactionID;
+use serde_inline_default::serde_inline_default;
+use crate::definitions::order_cancel_transaction::OrderCancelTransaction;
 /// The Order was cancelled as specified
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct Cancel {
     /// The Transaction that cancelled the Order
     order_cancel_transaction: Option<OrderCancelTransaction>,
@@ -25,6 +27,7 @@ impl Default for Cancel {
 use serde::{Serialize, Deserialize};
 /// The Account or Order specified does not exist.
 #[derive(Serialize, Deserialize)]
+#[serde_inline_default]
 pub struct Cancel404 {
     /// The Transaction that rejected the cancellation of the Order.
     /// Only present if the Account exists.
