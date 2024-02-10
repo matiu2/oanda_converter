@@ -1,3 +1,18 @@
+use crate::definitions::time_in_force::TimeInForce;
+use crate::definitions::guaranteed_stop_loss_order_reason::GuaranteedStopLossOrderReason;
+use chrono::DateTime;
+use crate::definitions::account_id::AccountID;
+use crate::definitions::trade_id::TradeID;
+use crate::definitions::price_value::PriceValue;
+use crate::definitions::client_id::ClientID;
+use crate::definitions::decimal_number::DecimalNumber;
+use crate::definitions::order_trigger_condition::OrderTriggerCondition;
+use chrono::Utc;
+use crate::definitions::transaction_type::TransactionType;
+use crate::definitions::request_id::RequestID;
+use crate::endpoints::trade::responses::client_extensions::ClientExtensions;
+use crate::definitions::transaction_id::TransactionID;
+use crate::definitions::order_id::OrderID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct GuaranteedStopLossOrderTransaction {

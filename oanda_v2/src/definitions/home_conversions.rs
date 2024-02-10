@@ -1,3 +1,5 @@
+use crate::definitions::decimal_number::DecimalNumber;
+use crate::definitions::currency::Currency;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct HomeConversions {

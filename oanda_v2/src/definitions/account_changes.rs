@@ -1,3 +1,7 @@
+use crate::definitions::trade_summary::TradeSummary;
+use crate::endpoints::position::Position;
+use crate::endpoints::transaction::Transaction;
+use crate::endpoints::order::Order;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct AccountChanges {

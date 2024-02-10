@@ -1,3 +1,6 @@
+use crate::definitions::client_comment::ClientComment;
+use crate::definitions::client_id::ClientID;
+use crate::definitions::client_tag::ClientTag;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct ClientExtensions {

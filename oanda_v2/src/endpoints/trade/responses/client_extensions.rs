@@ -1,10 +1,10 @@
 use crate::definitions::trade_client_extensions_modify_transaction::TradeClientExtensionsModifyTransaction;
-use crate::definitions::transaction_id::TransactionID;
 use crate::definitions::trade_client_extensions_modify_reject_transaction::TradeClientExtensionsModifyRejectTransaction;
+use crate::definitions::transaction_id::TransactionID;
 /// The Trade’s Client Extensions have been updated as
 /// requested.
 #[derive(Serialize, Deserialize)]
-pub struct ClientExtensions200 {
+pub struct ClientExtensions {
     /// The Transaction that updates the Trade’s Client Extensions.
     trade_client_extensions_modify_transaction: Option<
         TradeClientExtensionsModifyTransaction,
@@ -16,7 +16,7 @@ pub struct ClientExtensions200 {
     /// Account
     last_transaction_id: Option<TransactionID>,
 }
-impl Default for ClientExtensions200 {
+impl Default for ClientExtensions {
     fn default() -> Self {
         Self {
             trade_client_extensions_modify_transaction: Default::default(),
@@ -26,6 +26,8 @@ impl Default for ClientExtensions200 {
     }
 }
 use serde::{Serialize, Deserialize};
+/// The Trade’s Client Extensions cannot be modified as
+/// requested.
 #[derive(Serialize, Deserialize)]
 pub struct ClientExtensions400 {
     /// The Transaction that rejects the modification of the Trade’s
@@ -57,6 +59,7 @@ impl Default for ClientExtensions400 {
         }
     }
 }
+/// The Account or Trade specified does not exist.
 #[derive(Serialize, Deserialize)]
 pub struct ClientExtensions404 {
     /// The Transaction that rejects the modification of the Trade’s

@@ -1,14 +1,14 @@
 use crate::definitions::transaction_id::TransactionID;
-use chrono::DateTime<Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc>;
-use chrono::Utc;
+use chrono::DateTime;
 use crate::definitions::transaction_filter::TransactionFilter;
+use chrono::Utc;
 /// The requested time range of Transaction pages are provided.
 #[derive(Serialize, Deserialize)]
-pub struct Transactions200 {
+pub struct Transactions {
     /// The starting time provided in the request.
-    from: Option<DateTime<Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc>>,
+    from: Option<DateTime<Utc>>,
     /// The ending time provided in the request.
-    to: Option<DateTime<Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc>>,
+    to: Option<DateTime<Utc>>,
     /// The pageSize provided in the request
     page_size: Option<integer>,
     /// The Transaction-type filter provided in the request
@@ -23,7 +23,7 @@ pub struct Transactions200 {
     /// Account
     last_transaction_id: Option<TransactionID>,
 }
-impl Default for Transactions200 {
+impl Default for Transactions {
     fn default() -> Self {
         Self {
             from: Default::default(),

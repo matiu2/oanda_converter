@@ -1,3 +1,4 @@
+use crate::definitions::market_order_margin_closeout_reason::MarketOrderMarginCloseoutReason;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct MarketOrderMarginCloseout {

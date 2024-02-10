@@ -1,3 +1,6 @@
+use crate::definitions::candlestick_data::CandlestickData;
+use chrono::Utc;
+use chrono::DateTime;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Candlestick {

@@ -1,19 +1,19 @@
 use crate::definitions::trailing_stop_loss_order_reject_transaction::TrailingStopLossOrderRejectTransaction;
+use crate::definitions::take_profit_order_transaction::TakeProfitOrderTransaction;
 use crate::definitions::order_cancel_transaction::OrderCancelTransaction;
+use crate::definitions::take_profit_order_reject_transaction::TakeProfitOrderRejectTransaction;
+use crate::definitions::order_fill_transaction::OrderFillTransaction;
+use crate::definitions::trailing_stop_loss_order_transaction::TrailingStopLossOrderTransaction;
 use crate::definitions::order_cancel_reject_transaction::OrderCancelRejectTransaction;
+use crate::definitions::stop_loss_order_transaction::StopLossOrderTransaction;
+use crate::definitions::stop_loss_order_reject_transaction::StopLossOrderRejectTransaction;
 use crate::definitions::guaranteed_stop_loss_order_reject_transaction::GuaranteedStopLossOrderRejectTransaction;
 use crate::definitions::transaction_id::TransactionID;
-use crate::definitions::stop_loss_order_reject_transaction::StopLossOrderRejectTransaction;
-use crate::definitions::take_profit_order_reject_transaction::TakeProfitOrderRejectTransaction;
-use crate::definitions::trailing_stop_loss_order_transaction::TrailingStopLossOrderTransaction;
-use crate::definitions::order_fill_transaction::OrderFillTransaction;
 use crate::definitions::guaranteed_stop_loss_order_transaction::GuaranteedStopLossOrderTransaction;
-use crate::definitions::stop_loss_order_transaction::StopLossOrderTransaction;
-use crate::definitions::take_profit_order_transaction::TakeProfitOrderTransaction;
 /// The Trade’s dependent Orders have been modified as
 /// requested.
 #[derive(Serialize, Deserialize)]
-pub struct Orders200 {
+pub struct Orders {
     /// The Transaction created that cancels the Trade’s existing
     /// Take Profit Order.
     take_profit_order_cancel_transaction: Option<OrderCancelTransaction>,
@@ -61,7 +61,7 @@ pub struct Orders200 {
     /// Account
     last_transaction_id: Option<TransactionID>,
 }
-impl Default for Orders200 {
+impl Default for Orders {
     fn default() -> Self {
         Self {
             take_profit_order_cancel_transaction: Default::default(),
@@ -82,6 +82,8 @@ impl Default for Orders200 {
     }
 }
 use serde::{Serialize, Deserialize};
+/// The Trade’s dependent Orders cannot be modified as
+/// requested.
 #[derive(Serialize, Deserialize)]
 pub struct Orders400 {
     /// An OrderCancelRejectTransaction represents the rejection of

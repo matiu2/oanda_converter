@@ -27,6 +27,10 @@ fn main() -> Result<()> {
                 .annotate_lazy(|| format!("Reading file {entry:#?}"))?;
             let replaced_content = content
                 .replace("DateTime", "DateTime<Utc>")
+                // This may be run on code that already contains <Utc>
+                // - this next line stops us continually appending <Utc>
+                .replace("DateTime<Utc><Utc>", "DateTime<Utc>")
+                .replace("use chrono::DateTime<Utc>", "use chrono::DateTime")
                 .replace("Boolean", "bool");
             let mut file = std::fs::File::create(entry.path())
                 .annotate_lazy(|| format!("Writing file {entry:#?}"))?;

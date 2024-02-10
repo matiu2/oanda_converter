@@ -1,3 +1,5 @@
+use crate::definitions::trade_id::TradeID;
+use crate::definitions::transaction_id::TransactionID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct MarketOrderDelayedTradeClose {

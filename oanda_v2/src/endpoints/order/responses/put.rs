@@ -1,10 +1,10 @@
+use crate::definitions::transaction_id::TransactionID;
 use crate::definitions::order_cancel_transaction::OrderCancelTransaction;
 use crate::endpoints::transaction::Transaction;
 use crate::definitions::order_fill_transaction::OrderFillTransaction;
-use crate::definitions::transaction_id::TransactionID;
 /// The Order was successfully cancelled and replaced
 #[derive(Serialize, Deserialize)]
-pub struct Put201 {
+pub struct Put {
     /// The Transaction that cancelled the Order to be replaced.
     order_cancel_transaction: Option<OrderCancelTransaction>,
     /// The Transaction that created the replacing Order as
@@ -34,7 +34,7 @@ pub struct Put201 {
     /// Account
     last_transaction_id: Option<TransactionID>,
 }
-impl Default for Put201 {
+impl Default for Put {
     fn default() -> Self {
         Self {
             order_cancel_transaction: Default::default(),
@@ -49,6 +49,7 @@ impl Default for Put201 {
     }
 }
 use serde::{Serialize, Deserialize};
+/// The Order specification was invalid
 #[derive(Serialize, Deserialize)]
 pub struct Put400 {
     /// The Transaction that rejected the creation of the replacing
@@ -78,6 +79,7 @@ impl Default for Put400 {
         }
     }
 }
+/// The Account or Order specified does not exist.
 #[derive(Serialize, Deserialize)]
 pub struct Put404 {
     /// The Transaction that rejected the cancellation of the Order

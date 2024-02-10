@@ -1,3 +1,12 @@
+use crate::definitions::client_id::ClientID;
+use crate::definitions::trade_id::TradeID;
+use crate::endpoints::trade::responses::client_extensions::ClientExtensions;
+use crate::definitions::order_trigger_condition::OrderTriggerCondition;
+use crate::definitions::decimal_number::DecimalNumber;
+use chrono::DateTime;
+use chrono::Utc;
+use crate::definitions::time_in_force::TimeInForce;
+use crate::definitions::order_type::OrderType;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct TrailingStopLossOrderRequest {

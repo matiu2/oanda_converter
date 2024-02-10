@@ -1,3 +1,9 @@
+use crate::definitions::decimal_number::DecimalNumber;
+use chrono::DateTime;
+use crate::endpoints::trade::responses::client_extensions::ClientExtensions;
+use chrono::Utc;
+use crate::definitions::price_value::PriceValue;
+use crate::definitions::time_in_force::TimeInForce;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct StopLossDetails {

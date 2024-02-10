@@ -1,9 +1,9 @@
-use crate::definitions::instrument_name::InstrumentName;
 use crate::definitions::candlestick_granularity::CandlestickGranularity;
 use crate::definitions::candlestick::Candlestick;
+use crate::definitions::instrument_name::InstrumentName;
 /// Pricing information has been successfully provided.
 #[derive(Serialize, Deserialize)]
-pub struct Candles200 {
+pub struct Candles {
     /// The instrument whose Prices are represented by the
     /// candlesticks.
     instrument: Option<InstrumentName>,
@@ -12,7 +12,7 @@ pub struct Candles200 {
     /// The list of candlesticks that satisfy the request.
     candles: Vec<Candlestick>,
 }
-impl Default for Candles200 {
+impl Default for Candles {
     fn default() -> Self {
         Self {
             instrument: Default::default(),

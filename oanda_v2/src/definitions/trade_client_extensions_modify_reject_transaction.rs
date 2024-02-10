@@ -1,3 +1,13 @@
+use crate::definitions::transaction_id::TransactionID;
+use crate::definitions::client_id::ClientID;
+use crate::definitions::request_id::RequestID;
+use crate::definitions::transaction_reject_reason::TransactionRejectReason;
+use chrono::Utc;
+use crate::definitions::account_id::AccountID;
+use crate::endpoints::trade::responses::client_extensions::ClientExtensions;
+use crate::definitions::trade_id::TradeID;
+use crate::definitions::transaction_type::TransactionType;
+use chrono::DateTime;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct TradeClientExtensionsModifyRejectTransaction {

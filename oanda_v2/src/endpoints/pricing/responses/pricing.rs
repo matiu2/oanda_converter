@@ -1,21 +1,21 @@
-use chrono::DateTime<Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc>;
-use crate::definitions::client_price::ClientPrice;
 use chrono::Utc;
+use crate::definitions::client_price::ClientPrice;
+use chrono::DateTime;
 use crate::definitions::home_conversions::HomeConversions;
 /// Pricing information has been successfully provided.
 #[derive(Serialize, Deserialize)]
-pub struct Pricing200 {
+pub struct Pricing {
     /// The list of Price objects requested.
     prices: Vec<ClientPrice>,
     /// The list of home currency conversion factors requested. This
     /// field will only be present if includeHomeConversions was set
     /// to true in the request.
     home_conversions: Vec<HomeConversions>,
-    /// The DateTime<Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc> value to use for the “since” parameter in the
+    /// The DateTime<Utc> value to use for the “since” parameter in the
     /// next poll request.
-    time: Option<DateTime<Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc><Utc>>,
+    time: Option<DateTime<Utc>>,
 }
-impl Default for Pricing200 {
+impl Default for Pricing {
     fn default() -> Self {
         Self {
             prices: Default::default(),

@@ -1,3 +1,14 @@
+use crate::endpoints::trade::responses::client_extensions::ClientExtensions;
+use crate::definitions::trade_state::TradeState;
+use crate::definitions::decimal_number::DecimalNumber;
+use chrono::Utc;
+use crate::definitions::order_id::OrderID;
+use crate::definitions::account_units::AccountUnits;
+use crate::definitions::trade_id::TradeID;
+use crate::definitions::price_value::PriceValue;
+use crate::definitions::instrument_name::InstrumentName;
+use chrono::DateTime;
+use crate::definitions::transaction_id::TransactionID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct TradeSummary {

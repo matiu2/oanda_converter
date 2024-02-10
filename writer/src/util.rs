@@ -6,7 +6,6 @@ use crate::gen_definition::gen_definition;
 use crate::gen_endpoint::{
     gen_endpoint, gen_endpoint_responses, gen_responses_for_call, CallNames,
 };
-use crate::gen_error::gen_error;
 use crate::gen_mods::gen_mods;
 use crate::Error;
 use error_stack::ResultExt;

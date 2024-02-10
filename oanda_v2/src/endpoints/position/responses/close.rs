@@ -1,12 +1,12 @@
-use crate::definitions::market_order_reject_transaction::MarketOrderRejectTransaction;
 use crate::definitions::order_cancel_transaction::OrderCancelTransaction;
-use crate::definitions::order_fill_transaction::OrderFillTransaction;
 use crate::definitions::market_order_transaction::MarketOrderTransaction;
+use crate::definitions::order_fill_transaction::OrderFillTransaction;
 use crate::definitions::transaction_id::TransactionID;
+use crate::definitions::market_order_reject_transaction::MarketOrderRejectTransaction;
 /// The Position closeout request has been successfully
 /// processed.
 #[derive(Serialize, Deserialize)]
-pub struct Close200 {
+pub struct Close {
     /// The MarketOrderTransaction created to close the long
     /// Position.
     long_order_create_transaction: Option<MarketOrderTransaction>,
@@ -30,7 +30,7 @@ pub struct Close200 {
     /// Account
     last_transaction_id: Option<TransactionID>,
 }
-impl Default for Close200 {
+impl Default for Close {
     fn default() -> Self {
         Self {
             long_order_create_transaction: Default::default(),
@@ -45,6 +45,8 @@ impl Default for Close200 {
     }
 }
 use serde::{Serialize, Deserialize};
+/// The Parameters provided that describe the Position closeout
+/// are invalid.
 #[derive(Serialize, Deserialize)]
 pub struct Close400 {
     /// The Transaction created that rejects the creation of a
@@ -78,6 +80,8 @@ impl Default for Close400 {
         }
     }
 }
+/// The Account or one or more of the Positions specified does
+/// not exist.
 #[derive(Serialize, Deserialize)]
 pub struct Close404 {
     /// The Transaction created that rejects the creation of a

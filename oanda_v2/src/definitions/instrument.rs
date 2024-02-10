@@ -1,3 +1,11 @@
+use crate::definitions::instrument_type::InstrumentType;
+use crate::definitions::instrument_commission::InstrumentCommission;
+use crate::definitions::guaranteed_stop_loss_order_mode_for_instrument::GuaranteedStopLossOrderModeForInstrument;
+use crate::definitions::decimal_number::DecimalNumber;
+use crate::definitions::guaranteed_stop_loss_order_level_restriction::GuaranteedStopLossOrderLevelRestriction;
+use crate::definitions::instrument_financing::InstrumentFinancing;
+use crate::definitions::instrument_name::InstrumentName;
+use crate::definitions::tag::Tag;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Instrument {

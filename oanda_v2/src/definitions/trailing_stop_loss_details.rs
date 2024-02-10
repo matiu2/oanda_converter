@@ -1,3 +1,8 @@
+use crate::endpoints::trade::responses::client_extensions::ClientExtensions;
+use crate::definitions::time_in_force::TimeInForce;
+use crate::definitions::decimal_number::DecimalNumber;
+use chrono::DateTime;
+use chrono::Utc;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct TrailingStopLossDetails {

@@ -265,7 +265,7 @@ pub fn gen_endpoint_responses(
     } in response_map.values()
     {
         let filename = format!(
-            "{base_path}/{parts}",
+            "{base_path}/{parts}.rs",
             parts = responses_module_parts.join("/")
         );
         stream_to_file(token_stream.clone(), &filename)

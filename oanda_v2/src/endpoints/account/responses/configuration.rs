@@ -1,15 +1,15 @@
+use crate::definitions::client_configure_reject_transaction::ClientConfigureRejectTransaction;
 use crate::definitions::client_configure_transaction::ClientConfigureTransaction;
 use crate::definitions::transaction_id::TransactionID;
-use crate::definitions::client_configure_reject_transaction::ClientConfigureRejectTransaction;
 /// The Account was configured successfully.
 #[derive(Serialize, Deserialize)]
-pub struct Configuration200 {
+pub struct Configuration {
     /// The transaction that configures the Account.
     client_configure_transaction: Option<ClientConfigureTransaction>,
     /// The ID of the last Transaction created for the Account.
     last_transaction_id: Option<TransactionID>,
 }
-impl Default for Configuration200 {
+impl Default for Configuration {
     fn default() -> Self {
         Self {
             client_configure_transaction: Default::default(),
@@ -18,6 +18,7 @@ impl Default for Configuration200 {
     }
 }
 use serde::{Serialize, Deserialize};
+/// The configuration specification was invalid.
 #[derive(Serialize, Deserialize)]
 pub struct Configuration400 {
     /// The transaction that rejects the configuration of the
@@ -42,6 +43,7 @@ impl Default for Configuration400 {
         }
     }
 }
+/// The configuration operation was forbidden on the Account.
 #[derive(Serialize, Deserialize)]
 pub struct Configuration403 {
     /// The transaction that rejects the configuration of the

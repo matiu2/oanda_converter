@@ -1,3 +1,5 @@
+use crate::definitions::price_value::PriceValue;
+use crate::definitions::order_id::OrderID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct DynamicOrderState {

@@ -1,3 +1,16 @@
+use chrono::DateTime;
+use crate::endpoints::trade::responses::client_extensions::ClientExtensions;
+use crate::definitions::trade_id::TradeID;
+use chrono::Utc;
+use crate::definitions::trailing_stop_loss_order::TrailingStopLossOrder;
+use crate::definitions::trade_state::TradeState;
+use crate::definitions::price_value::PriceValue;
+use crate::definitions::transaction_id::TransactionID;
+use crate::definitions::instrument_name::InstrumentName;
+use crate::definitions::stop_loss_order::StopLossOrder;
+use crate::definitions::decimal_number::DecimalNumber;
+use crate::definitions::account_units::AccountUnits;
+use crate::definitions::take_profit_order::TakeProfitOrder;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct Trade {

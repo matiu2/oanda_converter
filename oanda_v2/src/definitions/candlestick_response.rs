@@ -1,3 +1,6 @@
+use crate::definitions::candlestick::Candlestick;
+use crate::definitions::candlestick_granularity::CandlestickGranularity;
+use crate::definitions::instrument_name::InstrumentName;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 pub struct CandlestickResponse {

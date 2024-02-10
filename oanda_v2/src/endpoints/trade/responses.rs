@@ -1,6 +1,6 @@
-pub mod trades;
-pub mod client_extensions;
 pub mod close;
-pub mod open_trades;
-pub mod orders;
+pub mod client_extensions;
 pub mod get;
+pub mod orders;
+pub mod trades;
+pub mod open_trades;
