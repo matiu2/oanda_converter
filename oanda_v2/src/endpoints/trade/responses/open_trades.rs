@@ -1,5 +1,5 @@
-use crate::endpoints::trade::Trade;
 use crate::definitions::transaction_id::TransactionID;
+use crate::endpoints::trade::Trade;
 use serde_inline_default::serde_inline_default;
 /// The Account’s list of open Trades is provided
 #[derive(Serialize, Deserialize)]

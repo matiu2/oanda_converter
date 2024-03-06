@@ -1,7 +1,7 @@
-use crate::definitions::instrument_name::InstrumentName;
-use serde_inline_default::serde_inline_default;
 use crate::definitions::candlestick_granularity::CandlestickGranularity;
+use crate::definitions::instrument_name::InstrumentName;
 use crate::definitions::candlestick::Candlestick;
+use serde_inline_default::serde_inline_default;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 #[serde_inline_default]

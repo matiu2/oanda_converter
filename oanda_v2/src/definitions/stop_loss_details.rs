@@ -1,8 +1,8 @@
-use crate::definitions::time_in_force::TimeInForce;
-use crate::definitions::price_value::PriceValue;
+use serde_inline_default::serde_inline_default;
 use chrono::DateTime;
 use crate::endpoints::trade::responses::client_extensions::ClientExtensions;
-use serde_inline_default::serde_inline_default;
+use crate::definitions::time_in_force::TimeInForce;
+use crate::definitions::price_value::PriceValue;
 use crate::definitions::decimal_number::DecimalNumber;
 use chrono::Utc;
 use serde::{Serialize, Deserialize};

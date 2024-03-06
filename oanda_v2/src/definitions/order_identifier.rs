@@ -1,5 +1,5 @@
-use crate::definitions::order_id::OrderID;
 use serde_inline_default::serde_inline_default;
+use crate::definitions::order_id::OrderID;
 use crate::definitions::client_id::ClientID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]

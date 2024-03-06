@@ -1,20 +1,20 @@
-use crate::definitions::take_profit_details::TakeProfitDetails;
-use crate::endpoints::trade::responses::client_extensions::ClientExtensions;
 use crate::definitions::order_id::OrderID;
-use crate::definitions::instrument_name::InstrumentName;
-use crate::definitions::stop_loss_details::StopLossDetails;
-use crate::definitions::transaction_id::TransactionID;
-use chrono::Utc;
 use crate::definitions::order_position_fill::OrderPositionFill;
-use crate::definitions::trade_id::TradeID;
-use crate::definitions::decimal_number::DecimalNumber;
-use crate::definitions::order_type::OrderType;
 use crate::definitions::guaranteed_stop_loss_details::GuaranteedStopLossDetails;
-use crate::definitions::trailing_stop_loss_details::TrailingStopLossDetails;
+use crate::endpoints::trade::responses::client_extensions::ClientExtensions;
 use crate::definitions::order_state::OrderState;
-use chrono::DateTime;
+use chrono::Utc;
 use crate::definitions::price_value::PriceValue;
+use crate::definitions::instrument_name::InstrumentName;
+use crate::definitions::decimal_number::DecimalNumber;
+use crate::definitions::stop_loss_details::StopLossDetails;
 use serde_inline_default::serde_inline_default;
+use crate::definitions::order_type::OrderType;
+use crate::definitions::trailing_stop_loss_details::TrailingStopLossDetails;
+use crate::definitions::take_profit_details::TakeProfitDetails;
+use crate::definitions::trade_id::TradeID;
+use crate::definitions::transaction_id::TransactionID;
+use chrono::DateTime;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 #[serde_inline_default]

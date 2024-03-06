@@ -1,13 +1,13 @@
-use crate::definitions::price_value::PriceValue;
-use crate::endpoints::trade::responses::client_extensions::ClientExtensions;
 use crate::definitions::trade_id::TradeID;
-use crate::definitions::time_in_force::TimeInForce;
-use chrono::Utc;
-use crate::definitions::order_trigger_condition::OrderTriggerCondition;
-use chrono::DateTime;
-use serde_inline_default::serde_inline_default;
+use crate::definitions::price_value::PriceValue;
 use crate::definitions::client_id::ClientID;
+use crate::definitions::time_in_force::TimeInForce;
 use crate::definitions::order_type::OrderType;
+use chrono::DateTime;
+use crate::definitions::order_trigger_condition::OrderTriggerCondition;
+use crate::endpoints::trade::responses::client_extensions::ClientExtensions;
+use chrono::Utc;
+use serde_inline_default::serde_inline_default;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 #[serde_inline_default]

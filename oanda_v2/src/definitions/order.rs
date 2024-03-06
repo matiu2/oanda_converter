@@ -1,9 +1,9 @@
 use chrono::DateTime;
-use crate::definitions::order_id::OrderID;
-use chrono::Utc;
-use crate::endpoints::trade::responses::client_extensions::ClientExtensions;
 use serde_inline_default::serde_inline_default;
 use crate::definitions::order_state::OrderState;
+use crate::definitions::order_id::OrderID;
+use crate::endpoints::trade::responses::client_extensions::ClientExtensions;
+use chrono::Utc;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 #[serde_inline_default]

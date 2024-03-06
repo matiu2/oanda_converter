@@ -1,6 +1,6 @@
 use crate::endpoints::position::Position;
-use crate::definitions::transaction_id::TransactionID;
 use serde_inline_default::serde_inline_default;
+use crate::definitions::transaction_id::TransactionID;
 /// The Account’s open Positions are provided.
 #[derive(Serialize, Deserialize)]
 #[serde_inline_default]

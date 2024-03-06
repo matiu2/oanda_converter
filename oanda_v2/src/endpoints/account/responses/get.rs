@@ -1,6 +1,6 @@
-use serde_inline_default::serde_inline_default;
-use crate::endpoints::account::Account;
 use crate::definitions::transaction_id::TransactionID;
+use crate::endpoints::account::Account;
+use serde_inline_default::serde_inline_default;
 /// The full Account details are provided
 #[derive(Serialize, Deserialize)]
 #[serde_inline_default]

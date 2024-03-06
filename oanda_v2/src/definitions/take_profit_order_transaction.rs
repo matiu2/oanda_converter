@@ -1,18 +1,18 @@
 use crate::definitions::transaction_id::TransactionID;
-use crate::definitions::transaction_type::TransactionType;
-use crate::endpoints::trade::responses::client_extensions::ClientExtensions;
-use chrono::Utc;
 use crate::definitions::order_id::OrderID;
+use crate::definitions::transaction_type::TransactionType;
 use crate::definitions::request_id::RequestID;
-use crate::definitions::client_id::ClientID;
-use crate::definitions::trade_id::TradeID;
-use crate::definitions::take_profit_order_reason::TakeProfitOrderReason;
-use crate::definitions::time_in_force::TimeInForce;
-use crate::definitions::order_trigger_condition::OrderTriggerCondition;
+use chrono::Utc;
 use serde_inline_default::serde_inline_default;
-use crate::definitions::account_id::AccountID;
+use crate::definitions::trade_id::TradeID;
 use chrono::DateTime;
+use crate::definitions::account_id::AccountID;
+use crate::definitions::take_profit_order_reason::TakeProfitOrderReason;
+use crate::endpoints::trade::responses::client_extensions::ClientExtensions;
+use crate::definitions::order_trigger_condition::OrderTriggerCondition;
+use crate::definitions::client_id::ClientID;
 use crate::definitions::price_value::PriceValue;
+use crate::definitions::time_in_force::TimeInForce;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 #[serde_inline_default]

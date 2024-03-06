@@ -9,17 +9,17 @@ edition = "2021"
 change-case = "0.2.0"
 error-stack = "0.4"
 model = { version = "0.1.0", path = "../model" }
-proc-macro2 = { version = "1.0.66", features = ["span-locations"] }
-quote = "1.0.29"
+proc-macro2 = { version = "1.0.78", features = ["span-locations"] }
+quote = "1.0.35"
 rust-format = { version = "0.3.4", features = ["token_stream", "prettyplease", "post_process", "pretty_please"] }
 rustfmt = "0.10.0"
-serde_yaml = "0.9.25"
-syn = "2.0.26"
-textwrap = "0.16.0"
-tracing = "0.1.37"
-tracing-subscriber = "0.3.17"
+serde_yaml = "0.9.32"
+syn = "2.0.52"
+textwrap = "0.16.1"
+tracing = "0.1.40"
+tracing-subscriber = "0.3.18"
 utils = { version = "0.1.0", path = "../utils" }
 
 [dev-dependencies]
-indoc = "2.0.3"
+indoc = "2.0.4"
 pretty_assertions = "1.4.0"

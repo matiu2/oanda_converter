@@ -1,6 +1,6 @@
-use crate::definitions::decimal_number::DecimalNumber;
 use crate::definitions::financing_day_of_week::FinancingDayOfWeek;
 use serde_inline_default::serde_inline_default;
+use crate::definitions::decimal_number::DecimalNumber;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 #[serde_inline_default]

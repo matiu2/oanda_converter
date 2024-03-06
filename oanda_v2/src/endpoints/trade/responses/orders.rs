@@ -1,16 +1,16 @@
-use crate::definitions::stop_loss_order_transaction::StopLossOrderTransaction;
+use crate::definitions::take_profit_order_reject_transaction::TakeProfitOrderRejectTransaction;
+use crate::definitions::transaction_id::TransactionID;
+use crate::definitions::guaranteed_stop_loss_order_transaction::GuaranteedStopLossOrderTransaction;
 use crate::definitions::order_cancel_reject_transaction::OrderCancelRejectTransaction;
-use crate::definitions::order_cancel_transaction::OrderCancelTransaction;
-use crate::definitions::trailing_stop_loss_order_reject_transaction::TrailingStopLossOrderRejectTransaction;
 use crate::definitions::guaranteed_stop_loss_order_reject_transaction::GuaranteedStopLossOrderRejectTransaction;
+use crate::definitions::take_profit_order_transaction::TakeProfitOrderTransaction;
+use crate::definitions::order_fill_transaction::OrderFillTransaction;
 use crate::definitions::trailing_stop_loss_order_transaction::TrailingStopLossOrderTransaction;
 use crate::definitions::stop_loss_order_reject_transaction::StopLossOrderRejectTransaction;
-use crate::definitions::transaction_id::TransactionID;
-use crate::definitions::take_profit_order_reject_transaction::TakeProfitOrderRejectTransaction;
-use crate::definitions::order_fill_transaction::OrderFillTransaction;
-use crate::definitions::take_profit_order_transaction::TakeProfitOrderTransaction;
-use crate::definitions::guaranteed_stop_loss_order_transaction::GuaranteedStopLossOrderTransaction;
 use serde_inline_default::serde_inline_default;
+use crate::definitions::order_cancel_transaction::OrderCancelTransaction;
+use crate::definitions::trailing_stop_loss_order_reject_transaction::TrailingStopLossOrderRejectTransaction;
+use crate::definitions::stop_loss_order_transaction::StopLossOrderTransaction;
 /// The Trade’s dependent Orders have been modified as
 /// requested.
 #[derive(Serialize, Deserialize)]

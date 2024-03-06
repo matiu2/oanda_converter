@@ -1,7 +1,7 @@
 use chrono::Utc;
 use crate::definitions::candlestick_data::CandlestickData;
-use serde_inline_default::serde_inline_default;
 use chrono::DateTime;
+use serde_inline_default::serde_inline_default;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 #[serde_inline_default]

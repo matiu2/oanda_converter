@@ -1,7 +1,7 @@
 use crate::endpoints::trade::responses::client_extensions::ClientExtensions;
 use crate::definitions::decimal_number::DecimalNumber;
-use crate::definitions::trade_id::TradeID;
 use crate::definitions::account_units::AccountUnits;
+use crate::definitions::trade_id::TradeID;
 use crate::definitions::price_value::PriceValue;
 use serde_inline_default::serde_inline_default;
 use serde::{Serialize, Deserialize};

@@ -1,8 +1,8 @@
+use crate::definitions::instrument_name::InstrumentName;
 use crate::definitions::order_book_bucket::OrderBookBucket;
 use crate::definitions::price_value::PriceValue;
-use serde_inline_default::serde_inline_default;
-use crate::definitions::instrument_name::InstrumentName;
 use chrono::DateTime;
+use serde_inline_default::serde_inline_default;
 use chrono::Utc;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]

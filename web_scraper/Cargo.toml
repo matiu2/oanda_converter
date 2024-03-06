@@ -6,21 +6,21 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-async-trait = "0.1.68"
+async-trait = "0.1.77"
 error-stack = { version = "0.3.1", features = ["spantrace"] }
-reqwest = { version = "0.11.16", default-features = false, features = ["gzip", "deflate", "brotli", "rustls-tls", "h3", "trust-dns"] }
+reqwest = { version = "0.11.24", default-features = false, features = ["gzip", "deflate", "brotli", "rustls-tls", "h3", "trust-dns"] }
 scraper = "0.16.0"
-thiserror = "1.0.40"
-tokio = { version = "1.27.0", features = ["macros", "net", "rt-multi-thread", "test-util"] }
+thiserror = "1.0.57"
+tokio = { version = "1.36.0", features = ["macros", "net", "rt-multi-thread", "test-util"] }
 model = { path = "../model" }
-pest = { version = "2.5.7", features = ["pretty-print"] }
-pest_derive = "2.5.7"
-pretty_assertions = "1.3.0"
-futures = "0.3.28"
-tracing = "0.1.37"
-tracing-subscriber = { version = "0.3.17", features = ["env-filter"] }
-serde = { version = "1.0.162", features = ["derive"] }
-url = { version = "2.3.1", features = ["serde"] }
-quote = "1.0.28"
-parse-display = "0.8.1"
-itertools = "0.12.0"
+pest = { version = "2.7.8", features = ["pretty-print"] }
+pest_derive = "2.7.8"
+pretty_assertions = "1.4.0"
+futures = "0.3.30"
+tracing = "0.1.40"
+tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
+serde = { version = "1.0.197", features = ["derive"] }
+url = { version = "2.5.0", features = ["serde"] }
+quote = "1.0.35"
+parse-display = "0.8.2"
+itertools = "0.12.1"
