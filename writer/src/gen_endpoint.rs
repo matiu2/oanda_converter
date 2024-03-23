@@ -321,14 +321,15 @@ impl<'a> Writer<'a> {
 }
 
 /// Given an `Endpoint` finds all the type names in the parameters that need to be imported
-fn get_parameter_type_names(endpoint: &Endpoint) -> Vec<&str> {
-    let hash: HashSet<&str> = endpoint
+fn get_parameter_type_names(endpoint: &Endpoint) -> Vec<String> {
+    let hash: HashSet<String> = endpoint
         .calls
         .iter()
         .flat_map(|call| call.parameters.iter())
         .map(|p| p.type_name.as_str())
         // Remove type_names that don't need to be imported
         .filter(|type_name| !["string", "List of"].contains(type_name))
+        .map(pascal_case)
         .collect();
     hash.into_iter().collect()
 }
@@ -341,6 +342,7 @@ mod unit_test {
         Error, Result,
     };
     use error_stack::ResultExt;
+    use itertools::Itertools;
     use model::{
         definition_docs::{Field, Schema, Struct},
         endpoint_docs::{Response, ResponseHeader},
@@ -408,7 +410,7 @@ impl Default for MyCall200 {
     }
 
     #[test]
-    fn test_find_types() {
+    fn test_get_parameter_type_names() {
         let contents = load_contents();
         let account_ep = get_endpoint(&contents, "account");
         let mut types = super::get_parameter_type_names(account_ep);
@@ -420,12 +422,18 @@ impl Default for MyCall200 {
 
     #[test]
     fn test_get_uses() {
+        tracing_subscriber::fmt().try_init().ok();
         let contents = load_contents();
         let account_ep = get_endpoint(&contents, "account");
 
         let writer = Writer::new(&contents);
         let tokens = writer.get_uses(&account_ep);
         let as_text = stream_to_string(&tokens).unwrap();
-        println!("{as_text}");
+        let expected = "use crate::definitions::account::AccountId;
+use crate::definitions::transaction::TransactionId;
+use crate::definitions::primitives::AcceptDatetimeFormat;";
+        let got_lines: Vec<&str> = as_text.lines().sorted().collect();
+        let expected_lines: Vec<&str> = expected.lines().sorted().collect();
+        assert_eq!(expected_lines, got_lines);
     }
 }

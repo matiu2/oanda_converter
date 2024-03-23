@@ -14,6 +14,7 @@ use rust_format::{Formatter, PrettyPlease};
 use std::borrow::Cow;
 use std::collections::{HashMap, HashSet};
 use std::path::Path;
+use tracing::instrument;
 
 #[derive(Debug)]
 pub struct Writer<'a> {
@@ -52,10 +53,14 @@ impl<'a> Writer<'a> {
 
     /// Given a type_name returns the location, (so you can generate uses clauses for it)
     /// If there are multiple uses it just returns the first one
+    #[instrument(skip(self))]
     pub fn type_name_to_location(&'a self, type_name: &'a str) -> Option<&'a Location> {
-        self.type_name_to_uses
+        let result = self
+            .type_name_to_uses
             .get(&Cow::from(type_name))
-            .and_then(|o| o.iter().next())
+            .and_then(|o| o.iter().next());
+        tracing::debug!("Found {result:?}");
+        result
     }
 
     /// Writes the Rest client definitions (json types) in rust
@@ -222,7 +227,17 @@ impl<'a> Location<'a> {
         let tokens: Vec<TokenStream> = self
             .path
             .iter()
-            .map(|part| Ident::new(part, Span::call_site()))
+            .enumerate()
+            .map(|(num, part)| {
+                if num == self.path.len() - 1 {
+                    // The last part of the path, is the type name so it should be PascalCase
+                    pascal_case(part)
+                } else {
+                    // All the parts leading up to the type name are module names so they are snake case
+                    snake_case(part)
+                }
+            })
+            .map(|part| Ident::new(&part, Span::call_site()))
             .map(|ident| quote! {#ident})
             .zip(separators)
             .map(|(ident, separator)| quote!(#ident #separator))
@@ -405,7 +420,7 @@ mod test {
     use model::Content;
     use utils::stream_to_string;
 
-    use crate::util::gen_all_mods;
+    use crate::util::{gen_all_mods, Location};
 
     use super::Writer;
 
@@ -415,6 +430,21 @@ mod test {
         let contents: Vec<Content> = serde_yaml::from_str(&content).unwrap();
         let locations = super::gen_map(&contents);
         println!("{locations:#?}");
+        let account_id = locations
+            .get(&Cow::from("AccountId"))
+            .expect("No AccountId!")
+            .iter()
+            .next()
+            .unwrap();
+        let expected = Location {
+            path: vec![
+                Cow::from("crate"),
+                Cow::from("definitions"),
+                Cow::from("account"),
+                Cow::from("AccountId"),
+            ],
+        };
+        assert_eq!(expected, *account_id);
         // Print the ones that have more than one location
         println!("\n## Double ups\n");
         locations
