@@ -5,32 +5,6 @@ use error_stack::ResultExt;
 use proc_macro2::{Ident, TokenStream};
 use quote::{format_ident, quote};
 use rust_format::{Config, Formatter, PrettyPlease};
-use std::path::Path;
-
-/// Writes a token_stream out to a file
-pub fn stream_to_file(stream: TokenStream, path: &str) -> Result<()> {
-    // Create the dir if it doesn't already exist
-    let path = Path::new(path);
-    if let Some(dir) = path.parent() {
-        std::fs::create_dir_all(dir)
-            .annotate_lazy(|| format!("Unable to create directory \"{dir:#?}\""))?;
-    }
-
-    let formatting_result = PrettyPlease::default()
-        .format_tokens(stream.clone())
-        .annotate_lazy(|| format!("Formatting code for {path:#?}"));
-    let formatted_code = match formatting_result {
-        Ok(code) => code,
-        Err(err) => {
-            tracing::error!("Unable to render token stream for {path:#?}. It has been rendered unformatted so you can inspect it: {err:#?}");
-            format!("{stream}")
-        }
-    };
-
-    std::fs::write(path, formatted_code)
-        .annotate_lazy(|| format!("Unable to write to \"{path:#?}\""))?;
-    Ok(())
-}
 
 /// Writes a token_stream into a string and makes it pretty if it can
 pub fn stream_to_string(stream: &TokenStream) -> Result<String> {

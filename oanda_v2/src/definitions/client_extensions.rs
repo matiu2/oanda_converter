@@ -1,7 +1,3 @@
-use crate::definitions::client_comment::ClientComment;
-use crate::definitions::client_tag::ClientTag;
-use serde_inline_default::serde_inline_default;
-use crate::definitions::client_id::ClientID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 #[serde_inline_default]

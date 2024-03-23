@@ -7,7 +7,10 @@ edition = "2021"
 
 [dependencies]
 change-case = "0.2.0"
+derive_deref = "1.1.1"
 error-stack = "0.4"
+itertools = "0.12.1"
+lazy_static = "1.4.0"
 model = { version = "0.1.0", path = "../model" }
 proc-macro2 = { version = "1.0.78", features = ["span-locations"] }
 quote = "1.0.35"

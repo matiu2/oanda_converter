@@ -1,8 +1,3 @@
-use crate::definitions::decimal_number::DecimalNumber;
-use crate::definitions::price_value::PriceValue;
-use crate::definitions::trade_id::TradeID;
-use serde_inline_default::serde_inline_default;
-use crate::definitions::account_units::AccountUnits;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 #[serde_inline_default]

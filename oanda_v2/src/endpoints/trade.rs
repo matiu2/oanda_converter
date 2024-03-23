@@ -1,9 +1,3 @@
-use crate::definitions::accept_datetime_format::AcceptDatetimeFormat;
-use crate::definitions::trade_state_filter::TradeStateFilter;
-use crate::definitions::trade_specifier::TradeSpecifier;
-use crate::Result;
-use crate::client::Client;
-use crate::definitions::instrument_name::InstrumentName;
 use serde::{Serialize, Deserialize};
 pub mod responses;
 struct Trade<'a> {

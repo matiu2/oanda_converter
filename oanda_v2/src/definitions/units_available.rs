@@ -1,5 +1,3 @@
-use serde_inline_default::serde_inline_default;
-use crate::definitions::units_available_details::UnitsAvailableDetails;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 #[serde_inline_default]

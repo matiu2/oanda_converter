@@ -3,7 +3,7 @@ mod gen_responses;
 
 pub use self::gen_responses::gen_responses_for_call;
 use crate::{
-    util::{field_name, ResponsesInfo},
+    util::{field_name, Location, ResponsesInfo, Writer},
     Error, Result,
 };
 use change_case::{lower_case, pascal_case, snake_case};
@@ -14,9 +14,9 @@ use model::{
 };
 use proc_macro2::{Ident, Span, TokenStream};
 use quote::quote;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use tracing::instrument;
-use utils::{pretty_doc_string, stream_to_file};
+use utils::pretty_doc_string;
 
 /// Because the model crate doesn't have an error type, and we want
 /// consistent methods that return errors on those types, we created
@@ -33,7 +33,7 @@ pub trait CallNames {
     fn response_struct_prefix(&self) -> Result<String> {
         Ok(pascal_case(&self.method_name_as_string()?))
     }
-    /// Returns the parts (from base_path) of the filename where the code for the response structs is stored
+    /// Returns the parts (from base_path) of the filename where the code for the response structs are stored
     /// eg. a filename for the `account` enpdoint and the `instruments` could be:
     /// format!("{base_path}/endpoints/account/responses/instruments.rs");
     /// .. In that case the reply to this call would be:
@@ -75,6 +75,7 @@ impl CallNames for RestCall {
     /// In cases where the last segment is a variable. eg. `/v3/accounts/{accountid}/transactions/{transactionid}`
     /// The method name becomes the HTTP verb, eg `GET` or `POST`
     fn method_name_as_string(&self) -> Result<String> {
+        // TODO: Remove this - it's in utils.rs now as `endpoint_method_name`
         // Get the last path part
         let (_, last_segment) = self.path.rsplit_once('/').ok_or_else(|| {
             Error::new(format!(
@@ -243,74 +244,107 @@ fn gen_params(call: &RestCall) -> Result<TokenStream> {
     Ok(quote! {#(#params),*})
 }
 
-#[instrument(skip(response_map))]
-pub fn gen_endpoint_responses(
-    base_path: &str,
-    endpoint_name: &str,
-    response_map: &HashMap<String, ResponsesInfo>,
-) -> Result<TokenStream> {
-    // A map of call names to all the info about their responses
-    // Used to generate the response structs, and then again to call them
-    // Make the Response type for each call
-    let modules = response_map
-        .keys()
-        .map(|key| Ident::new(key, Span::call_site()))
-        .collect::<Vec<Ident>>();
-    // Generate each of the responses sub-modules
-    for ResponsesInfo {
-        responses_module_parts,
-        token_stream,
-        ..
-    } in response_map.values()
-    {
-        let filename = format!(
-            "{base_path}/{parts}.rs",
-            parts = responses_module_parts.join("/")
-        );
-        stream_to_file(token_stream.clone(), &filename)
-            .attach_printable_lazy(|| format!("Saving endpoint to {filename}"))
-            .change_context_lazy(Error::default)?;
+impl<'a> Writer<'a> {
+    #[instrument(skip(response_map))]
+    pub fn gen_endpoint_responses(
+        &self,
+        base_path: &str,
+        endpoint_name: &str,
+        response_map: &HashMap<String, ResponsesInfo>,
+    ) -> Result<TokenStream> {
+        // A map of call names to all the info about their responses
+        // Used to generate the response structs, and then again to call them
+        // Make the Response type for each call
+        let modules = response_map
+            .keys()
+            .map(|key| Ident::new(key, Span::call_site()))
+            .collect::<Vec<Ident>>();
+        // Generate each of the responses sub-modules
+        for ResponsesInfo {
+            responses_module_parts,
+            token_stream,
+            ..
+        } in response_map.values()
+        {
+            let filename = format!(
+                "{base_path}/{parts}.rs",
+                parts = responses_module_parts.join("/")
+            );
+            self.stream_to_file(token_stream.clone(), &filename)
+                .attach_printable_lazy(|| format!("Saving endpoint to {filename}"))
+                .change_context_lazy(Error::default)?;
+        }
+        // Generate the responses module itself
+        Ok(quote!(
+            #(pub mod #modules);*;
+        ))
     }
-    // Generate the responses module itself
-    Ok(quote!(
-        #(pub mod #modules);*;
-    ))
+
+    pub fn gen_endpoint(&self, endpoint: &Endpoint) -> Result<TokenStream> {
+        let Endpoint { name, calls } = endpoint;
+        let struct_name = pascal_case(name);
+        let struct_ident = Ident::new(&struct_name, Span::call_site());
+        let calls = calls
+            .iter()
+            .map(|call| gen_call(call, name))
+            .collect::<Result<Vec<TokenStream>>>()?;
+
+        let uses = self.get_uses(endpoint);
+
+        Ok(quote!(
+            use serde::{Serialize, Deserialize};
+
+            pub mod responses;
+
+            struct #struct_ident<'a> {
+                client: &'a Client,
+            }
+
+            impl<'a> #struct_ident<'a> {
+                #(#calls)*
+            }
+        ))
+    }
+
+    /// Generates the token_stream for all the uses clauses for all the types used in this endpoint
+    fn get_uses(&self, endpoint: &Endpoint) -> TokenStream {
+        let type_names = get_parameter_type_names(endpoint);
+        let uses: HashSet<&Location<'_>> = type_names
+            .iter()
+            .flat_map(|tn| self.type_name_to_location(tn))
+            .collect();
+        let uses: Vec<TokenStream> = uses.iter().map(|l| l.as_uses()).collect();
+        quote! {
+            #(#uses)*
+        }
+    }
 }
 
-pub fn gen_endpoint(endpoint: &Endpoint) -> Result<TokenStream> {
-    let Endpoint { name, calls } = endpoint;
-    let struct_name = pascal_case(name);
-    let struct_ident = Ident::new(&struct_name, Span::call_site());
-    let calls = calls
+/// Given an `Endpoint` finds all the type names in the parameters that need to be imported
+fn get_parameter_type_names(endpoint: &Endpoint) -> Vec<&str> {
+    let hash: HashSet<&str> = endpoint
+        .calls
         .iter()
-        .map(|call| gen_call(call, name))
-        .collect::<Result<Vec<TokenStream>>>()?;
-
-    Ok(quote!(
-        use serde::{Serialize, Deserialize};
-
-        pub mod responses;
-
-        struct #struct_ident<'a> {
-            client: &'a Client,
-        }
-
-        impl<'a> #struct_ident<'a> {
-            #(#calls)*
-        }
-    ))
+        .flat_map(|call| call.parameters.iter())
+        .map(|p| p.type_name.as_str())
+        // Remove type_names that don't need to be imported
+        .filter(|type_name| !["string", "List of"].contains(type_name))
+        .collect();
+    hash.into_iter().collect()
 }
 
 #[cfg(test)]
 mod unit_test {
     use crate::{
         gen_endpoint::{gen_responses::gen_response, ResponseNames},
+        util::Writer,
         Error, Result,
     };
     use error_stack::ResultExt;
     use model::{
         definition_docs::{Field, Schema, Struct},
         endpoint_docs::{Response, ResponseHeader},
+        Content, Endpoint,
     };
     use pretty_assertions::assert_eq;
     use utils::stream_to_string;
@@ -358,5 +392,40 @@ impl Default for MyCall200 {
 "#
         );
         Ok(())
+    }
+
+    fn load_contents() -> Vec<Content> {
+        let yaml = std::fs::read_to_string("../content.yaml").expect("Opening content.yaml");
+        serde_yaml::from_str(&yaml).expect("Reading in content.yaml")
+    }
+
+    fn get_endpoint<'a>(contents: &'a [Content], endpoint_name: &str) -> &'a Endpoint {
+        contents
+            .iter()
+            .flat_map(Content::as_endpoint)
+            .find(|ep| ep.name == endpoint_name)
+            .expect("Couldn't find account endpoint in parsed content")
+    }
+
+    #[test]
+    fn test_find_types() {
+        let contents = load_contents();
+        let account_ep = get_endpoint(&contents, "account");
+        let mut types = super::get_parameter_type_names(account_ep);
+        let mut expected = vec!["TransactionID", "AcceptDatetimeFormat", "AccountID"];
+        types.sort();
+        expected.sort();
+        assert_eq!(expected, types);
+    }
+
+    #[test]
+    fn test_get_uses() {
+        let contents = load_contents();
+        let account_ep = get_endpoint(&contents, "account");
+
+        let writer = Writer::new(&contents);
+        let tokens = writer.get_uses(&account_ep);
+        let as_text = stream_to_string(&tokens).unwrap();
+        println!("{as_text}");
     }
 }

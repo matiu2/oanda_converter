@@ -1,13 +1,3 @@
-use crate::definitions::instrument_name::InstrumentName;
-use crate::definitions::pricing_component::PricingComponent;
-use crate::client::Client;
-use crate::definitions::decimal_number::DecimalNumber;
-use crate::definitions::candlestick_granularity::CandlestickGranularity;
-use crate::Result;
-use crate::definitions::weekly_alignment::WeeklyAlignment;
-use crate::definitions::accept_datetime_format::AcceptDatetimeFormat;
-use chrono::Utc;
-use chrono::DateTime;
 use serde::{Serialize, Deserialize};
 pub mod responses;
 struct Pricing<'a> {

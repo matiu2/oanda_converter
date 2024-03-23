@@ -1,5 +1,3 @@
-use crate::definitions::market_order_margin_closeout_reason::MarketOrderMarginCloseoutReason;
-use serde_inline_default::serde_inline_default;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 #[serde_inline_default]

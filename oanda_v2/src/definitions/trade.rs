@@ -1,17 +1,3 @@
-use crate::definitions::trade_state::TradeState;
-use crate::definitions::account_units::AccountUnits;
-use serde_inline_default::serde_inline_default;
-use chrono::DateTime;
-use crate::definitions::trailing_stop_loss_order::TrailingStopLossOrder;
-use crate::definitions::take_profit_order::TakeProfitOrder;
-use crate::definitions::trade_id::TradeID;
-use chrono::Utc;
-use crate::definitions::instrument_name::InstrumentName;
-use crate::definitions::transaction_id::TransactionID;
-use crate::definitions::stop_loss_order::StopLossOrder;
-use crate::endpoints::trade::responses::client_extensions::ClientExtensions;
-use crate::definitions::price_value::PriceValue;
-use crate::definitions::decimal_number::DecimalNumber;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 #[serde_inline_default]

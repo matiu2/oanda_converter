@@ -1,6 +1,3 @@
-use serde_inline_default::serde_inline_default;
-use crate::definitions::decimal_number::DecimalNumber;
-use crate::definitions::price_value::PriceValue;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 #[serde_inline_default]

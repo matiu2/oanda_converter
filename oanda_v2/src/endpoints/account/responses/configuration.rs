@@ -1,7 +1,3 @@
-use crate::definitions::client_configure_reject_transaction::ClientConfigureRejectTransaction;
-use serde_inline_default::serde_inline_default;
-use crate::definitions::client_configure_transaction::ClientConfigureTransaction;
-use crate::definitions::transaction_id::TransactionID;
 /// The Account was configured successfully.
 #[derive(Serialize, Deserialize)]
 #[serde_inline_default]

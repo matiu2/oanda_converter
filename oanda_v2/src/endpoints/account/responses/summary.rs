@@ -1,6 +1,3 @@
-use crate::definitions::transaction_id::TransactionID;
-use crate::definitions::account_summary::AccountSummary;
-use serde_inline_default::serde_inline_default;
 /// The Account summary are provided
 #[derive(Serialize, Deserialize)]
 #[serde_inline_default]

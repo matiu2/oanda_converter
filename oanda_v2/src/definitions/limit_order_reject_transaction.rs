@@ -1,24 +1,3 @@
-use crate::definitions::order_trigger_condition::OrderTriggerCondition;
-use crate::definitions::transaction_type::TransactionType;
-use crate::definitions::limit_order_reason::LimitOrderReason;
-use crate::definitions::transaction_id::TransactionID;
-use crate::definitions::instrument_name::InstrumentName;
-use crate::definitions::account_id::AccountID;
-use crate::definitions::decimal_number::DecimalNumber;
-use crate::definitions::guaranteed_stop_loss_details::GuaranteedStopLossDetails;
-use crate::definitions::trailing_stop_loss_details::TrailingStopLossDetails;
-use crate::definitions::take_profit_details::TakeProfitDetails;
-use crate::definitions::request_id::RequestID;
-use crate::definitions::time_in_force::TimeInForce;
-use crate::definitions::order_id::OrderID;
-use crate::endpoints::trade::responses::client_extensions::ClientExtensions;
-use chrono::DateTime;
-use crate::definitions::order_position_fill::OrderPositionFill;
-use crate::definitions::transaction_reject_reason::TransactionRejectReason;
-use chrono::Utc;
-use crate::definitions::stop_loss_details::StopLossDetails;
-use crate::definitions::price_value::PriceValue;
-use serde_inline_default::serde_inline_default;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 #[serde_inline_default]

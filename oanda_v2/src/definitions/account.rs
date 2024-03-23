@@ -1,16 +1,3 @@
-use serde_inline_default::serde_inline_default;
-use chrono::Utc;
-use crate::endpoints::position::Position;
-use crate::definitions::trade_summary::TradeSummary;
-use crate::definitions::guaranteed_stop_loss_order_mode::GuaranteedStopLossOrderMode;
-use crate::definitions::decimal_number::DecimalNumber;
-use crate::definitions::transaction_id::TransactionID;
-use crate::definitions::guaranteed_stop_loss_order_parameters::GuaranteedStopLossOrderParameters;
-use crate::definitions::currency::Currency;
-use crate::definitions::account_id::AccountID;
-use crate::definitions::account_units::AccountUnits;
-use crate::endpoints::order::Order;
-use chrono::DateTime;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 #[serde_inline_default]

@@ -28,7 +28,7 @@ pub fn gen_struct(s: &Struct, name: &str) -> Result<TokenStream> {
     })
 }
 
-/// Generates a with a single string inside
+/// Generates a type with a single string inside
 pub fn gen_typed_string(name: &str) -> Result<TokenStream> {
     let name = Ident::new(name, proc_macro2::Span::call_site());
     Ok(quote! {

@@ -1,11 +1,3 @@
-use crate::definitions::transaction_id::TransactionID;
-use crate::definitions::request_id::RequestID;
-use chrono::Utc;
-use crate::definitions::transaction_type::TransactionType;
-use crate::definitions::currency::Currency;
-use crate::definitions::account_id::AccountID;
-use chrono::DateTime;
-use serde_inline_default::serde_inline_default;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 #[serde_inline_default]

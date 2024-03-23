@@ -1,6 +1,3 @@
-use crate::definitions::transaction_id::TransactionID;
-use serde_inline_default::serde_inline_default;
-use crate::definitions::trade_id::TradeID;
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize)]
 #[serde_inline_default]
